@@ -1,0 +1,145 @@
+# ============================================
+# Rashtrotthana Yoga
+# WordPress Git Ignore
+# ============================================
+
+# --------------------------------------------
+# WordPress Core
+# --------------------------------------------
+/wp-admin/
+/wp-includes/
+/index.php
+/wp-activate.php
+/wp-blog-header.php
+/wp-comments-post.php
+/wp-cron.php
+/wp-links-opml.php
+/wp-load.php
+/wp-login.php
+/wp-mail.php
+/wp-settings.php
+/wp-signup.php
+/wp-trackback.php
+/async-upload.php
+/xmlrpc.php
+
+# WordPress configuration
+/wp-config.php
+/wp-config-sample.php
+
+# WordPress default documentation
+/license.txt
+/readme.html
+
+# --------------------------------------------
+# WordPress Studio / Local Development
+# --------------------------------------------
+/wp-content/database/
+/wp-content/mu-plugins/
+/wp-content/db.php
+
+# --------------------------------------------
+# WordPress Generated Files
+# --------------------------------------------
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/upgrade/
+/wp-content/backups/
+/wp-content/backup-db/
+/wp-content/debug.log
+
+# --------------------------------------------
+# Default WordPress Themes
+# --------------------------------------------
+/wp-content/themes/twentytwentythree/
+/wp-content/themes/twentytwentyfour/
+/wp-content/themes/twentytwentyfive/
+
+# --------------------------------------------
+# Default / Unused WordPress Plugins
+# --------------------------------------------
+/wp-content/plugins/akismet/
+/wp-content/plugins/hello.php
+
+# --------------------------------------------
+# Environment Variables / Secrets
+# --------------------------------------------
+.env
+.env.*
+!.env.example
+
+*.key
+*.pem
+*.secret
+*.credentials
+
+# --------------------------------------------
+# Local Databases
+# --------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+
+# --------------------------------------------
+# Logs
+# --------------------------------------------
+*.log
+
+# --------------------------------------------
+# Temporary Files
+# --------------------------------------------
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# --------------------------------------------
+# Node / JavaScript
+# --------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build Output
+dist/
+build/
+.next/
+out/
+
+# --------------------------------------------
+# IDE
+# --------------------------------------------
+.vscode/
+.idea/
+
+# --------------------------------------------
+# Operating System
+# --------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --------------------------------------------
+# Coverage / Testing
+# --------------------------------------------
+coverage/
+.nyc_output/
+
+# --------------------------------------------
+# PHP Tooling
+# --------------------------------------------
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# --------------------------------------------
+# Backup Archives
+# --------------------------------------------
+*.zip
+*.tar
+*.tar.gz
+
+/wp-content/database/
+/wp-content/mu-plugins/
+
