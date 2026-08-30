@@ -1,0 +1,23 @@
+/*
+Theme Name: Rashtrotthana Yoga
+Theme URI: https://example.com/
+Author: Rashtrotthana Yoga
+Description: Custom WordPress theme for Rashtrotthana Yoga.
+Version: 1.0.0
+Text Domain: rashtrotthana
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
