@@ -31,14 +31,14 @@
                 <span></span><span></span><span></span>
             </button>
             <div class="rs-navigation">
-                <a class="rs-nav-link active" href="<?php echo esc_url(home_url('/')); ?>">Home</a>
-                <a class="rs-nav-link" href="#">About Us</a>
-                <a class="rs-nav-link" href="#">Activities</a>
-                <a class="rs-nav-link" href="#">Centers</a>
-                <a class="rs-nav-link" href="#">Events</a>
-                <a class="rs-nav-link" href="#">Resources</a>
-                <a class="rs-nav-link" href="#">Gallery</a>
-                <a class="rs-nav-link" href="#">Contact Us</a>
+                <a class="rs-nav-link<?php echo is_front_page() ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/')); ?>">Home</a>
+                <a class="rs-nav-link<?php echo is_page('about-us') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/about-us/')); ?>">About Us</a>
+                <a class="rs-nav-link<?php echo is_page('activities') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/activities/')); ?>">Activities</a>
+                <a class="rs-nav-link<?php echo is_page('centers') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/centers/')); ?>">Centers</a>
+                <a class="rs-nav-link<?php echo is_page('events') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/events/')); ?>">Events</a>
+                <a class="rs-nav-link<?php echo is_page('resources') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/resources/')); ?>">Resources</a>
+                <a class="rs-nav-link<?php echo is_page('gallery') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/gallery/')); ?>">Gallery</a>
+                <a class="rs-nav-link<?php echo is_page('contact-us') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/contact-us/')); ?>">Contact Us</a>
                 <a class="rs-donate-button" href="#">Join Us / Donate</a>
             </div>
         </div>

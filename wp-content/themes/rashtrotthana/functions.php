@@ -6,7 +6,7 @@ function rashtrotthana_enqueue_assets() {
         'rashtrotthana-style',
         get_stylesheet_uri(),
         array(),
-        '1.0.0'
+        '1.0.6'
     );
 
     wp_enqueue_script(

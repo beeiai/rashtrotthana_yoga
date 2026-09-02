@@ -5,7 +5,7 @@
             <h1 class="rs-hero-title">Building a<br>Healthy &amp; Sustainable<br>Society</h1>
             <p class="rs-hero-description">Through Yoga, Education, Culture and Service, we strive for the holistic well-being of every individual and the upliftment of the society.</p>
             <div class="rs-hero-actions">
-                <a href="#" class="rs-btn rs-btn-primary">Explore Activities</a>
+                <a href="<?php echo esc_url( home_url('/activities/') ); ?>" class="rs-btn rs-btn-primary">Explore Activities</a>
                 <a href="#" class="rs-btn rs-btn-secondary">Find a Center</a>
             </div>
         </div>

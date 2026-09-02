@@ -13,7 +13,7 @@
                 <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.8 4.7 12 4.7 12 4.7s-5.8 0-7.6.5a2.8 2.8 0 0 0-2 2C2 9 2 12 2 12s0 3 .4 4.8a2.8 2.8 0 0 0 2 2c1.8.5 7.6.5 7.6.5s5.8 0 7.6-.5a2.8 2.8 0 0 0 2-2C22 15 22 12 22 12s0-3-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg></a>
             </div>
         </div>
-        <div><h3>Quick Links</h3><a href="#">About Us</a><a href="#">Activities</a><a href="#">Centers</a><a href="#">Events</a><a href="#">Resources</a><a href="#">Gallery</a></div>
+        <div><h3>Quick Links</h3><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About Us</a><a href="<?php echo esc_url( home_url( '/activities/' ) ); ?>">Activities</a><a href="<?php echo esc_url( home_url( '/centers/' ) ); ?>">Centers</a><a href="<?php echo esc_url( home_url( '/events/' ) ); ?>">Events</a><a href="<?php echo esc_url( home_url( '/resources/' ) ); ?>">Resources</a><a href="<?php echo esc_url( home_url( '/gallery/' ) ); ?>">Gallery</a></div>
         <div><h3>Support</h3><a href="#">Join Us</a><a href="#">Donate</a><a href="#">Volunteer</a><a href="#">Careers</a><a href="#">FAQ's</a></div>
         <div><h3>Contact Us</h3><p>#1, Rashtrotthana Complex,<br>Malleswaram, Bengaluru - 560003<br>Karnataka, India</p><p>+91 80 1234 5678<br>info@rashtrotthana.org</p></div>
     </div>

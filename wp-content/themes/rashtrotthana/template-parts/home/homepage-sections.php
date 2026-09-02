@@ -39,7 +39,7 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 
 <section class="rs-content-section">
     <div class="rs-container">
-        <div class="rs-section-row"><h2>Our Activities</h2><a class="rs-outline-link" href="#">View All Activities</a></div>
+        <div class="rs-section-row"><h2>Our Activities</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/activities/') ); ?>">View All Activities</a></div>
         <div class="rs-card-grid rs-activity-grid">
             <?php if ( $activities ) : foreach ( $activities as $post ) : setup_postdata( $post ); ?>
                 <article class="rs-activity-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><h3><?php the_title(); ?></h3><p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 14 ) ); ?></p></a></article>
@@ -62,7 +62,7 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 <section class="rs-centers rs-section">
     <div class="rs-container">
         <div class="rs-center-finder">
-            <div class="rs-center-intro"><span class="rs-kicker">OUR PRESENCE</span><h2>Find a Center</h2><a class="rs-center-button" href="#">View All Centers</a></div>
+            <div class="rs-center-intro"><span class="rs-kicker">OUR PRESENCE</span><h2>Find a Center</h2><a class="rs-center-button" href="<?php echo esc_url( home_url('/centers/') ); ?>">View All Centers</a></div>
             <div class="rs-center-cards">
             <?php if ( $centers ) : foreach ( $centers as $post ) : setup_postdata( $post ); ?>
                 <article class="rs-center-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><div class="rs-center-card-body"><h3><?php the_title(); ?></h3><p class="rs-center-location">Bengaluru, Karnataka</p><span class="rs-center-button">View Details</span></div></a></article>
@@ -77,7 +77,7 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 
 <section class="rs-content-section">
     <div class="rs-container">
-        <div class="rs-section-row"><h2>Upcoming Events</h2><a class="rs-outline-link" href="#">View All Events</a></div>
+        <div class="rs-section-row"><h2>Upcoming Events</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/events/') ); ?>">View All Events</a></div>
         <div class="rs-card-grid rs-event-grid">
             <?php if ( $events ) : foreach ( $events as $post ) : setup_postdata( $post ); ?>
                 <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
@@ -100,7 +100,7 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 </section>
 
 <section class="rs-content-section rs-gallery">
-    <div class="rs-container"><div class="rs-section-row"><h2>Moments of Inspiration</h2><a class="rs-outline-link" href="#">View Gallery</a></div><div class="rs-gallery-grid"><?php foreach ( $activity_fallbacks as $item ) : ?><img src="<?php echo esc_url( $item[2] ); ?>" alt="" loading="lazy"><?php endforeach; ?></div></div>
+    <div class="rs-container"><div class="rs-section-row"><h2>Moments of Inspiration</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/gallery/') ); ?>">View Gallery</a></div><div class="rs-gallery-grid"><?php foreach ( $activity_fallbacks as $item ) : ?><img src="<?php echo esc_url( $item[2] ); ?>" alt="" loading="lazy"><?php endforeach; ?></div></div>
 </section>
 
 <section class="rs-cta">
