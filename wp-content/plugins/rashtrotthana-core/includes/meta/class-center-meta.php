@@ -4,7 +4,7 @@ namespace Rashtrotthana\Core\Meta;
 class Center_Meta {
     public function init() {
         add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
-        add_action( 'save_post', [ $this, 'save_meta_boxes' ] );
+        add_action( 'save_post_center', [ $this, 'save_meta_boxes' ] );
     }
 
     public function add_meta_boxes() {
@@ -27,6 +27,7 @@ class Center_Meta {
         $pincode = get_post_meta( $post->ID, '_ry_pincode', true );
         $phone = get_post_meta( $post->ID, '_ry_phone', true );
         $email = get_post_meta( $post->ID, '_ry_email', true );
+        $opening_hours = get_post_meta( $post->ID, '_ry_opening_hours', true );
         $lat = get_post_meta( $post->ID, '_ry_location_lat', true );
         $lng = get_post_meta( $post->ID, '_ry_location_lng', true );
 
@@ -59,6 +60,10 @@ class Center_Meta {
                 <input type="email" id="ry_email" name="ry_email" value="<?php echo esc_attr( $email ); ?>" class="regular-text">
             </p>
         </div>
+        <p>
+            <label for="ry_opening_hours"><strong><?php _e( 'Opening Hours', 'rashtrotthana-core' ); ?></strong></label><br>
+            <textarea id="ry_opening_hours" name="ry_opening_hours" class="large-text" rows="2"><?php echo esc_textarea( $opening_hours ); ?></textarea>
+        </p>
         <hr>
         <h4><?php _e( 'Map Coordinates', 'rashtrotthana-core' ); ?></h4>
         <div style="display: flex; gap: 20px;">
@@ -94,6 +99,7 @@ class Center_Meta {
             'ry_pincode'       => 'sanitize_text_field',
             'ry_phone'         => 'sanitize_text_field',
             'ry_email'         => 'sanitize_email',
+            'ry_opening_hours' => 'sanitize_textarea_field',
             'ry_location_lat'  => 'sanitize_text_field',
             'ry_location_lng'  => 'sanitize_text_field',
         ];
