@@ -1,4 +1,14 @@
-<style>.rs-footer-brand:after{content:none}.rs-whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:1090;display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;box-shadow:0 8px 20px rgba(21,112,56,.34);transition:transform 180ms ease,box-shadow 180ms ease}.rs-whatsapp-float:hover{color:#fff;transform:translateY(-3px);box-shadow:0 12px 24px rgba(21,112,56,.4)}.rs-whatsapp-float svg{width:27px;height:27px;fill:currentColor}@media(max-width:600px){.rs-whatsapp-float{right:16px;bottom:16px;width:48px;height:48px}}</style>
+<style>
+.rs-footer-brand:after{content:none}
+.rs-footer-brand{display:flex;flex-direction:column;align-items:center;text-align:center}
+.rs-footer-logo{margin:0 auto 16px}
+.rs-footer-tagline{width:100%;margin:0 0 20px!important;text-align:center}
+.rs-socials{justify-content:center;width:100%;margin-top:0}
+.rs-whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:1090;display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;box-shadow:0 8px 20px rgba(21,112,56,.34);transition:transform 180ms ease,box-shadow 180ms ease}
+.rs-whatsapp-float:hover{color:#fff;transform:translateY(-3px);box-shadow:0 12px 24px rgba(21,112,56,.4)}
+.rs-whatsapp-float svg{width:27px;height:27px;fill:currentColor}
+@media(max-width:600px){.rs-whatsapp-float{right:16px;bottom:16px;width:48px;height:48px}}
+</style>
 <footer class="rs-footer">
     <div class="rs-container rs-footer-grid">
         <div class="rs-footer-brand">

@@ -17,15 +17,12 @@
     .rs-homepage .rs-center-heading h2 { font-size: clamp(1.9rem, 3vw, 2.7rem); }
     .rs-homepage .rs-center-card h3 { font-size: 1.1rem; }
     .rs-homepage .rs-center-location, .rs-homepage .rs-center-meta, .rs-homepage .rs-testimonial-grid p { font-size: .9rem; line-height: 1.55; }
-    .rs-homepage .rs-cta .rs-container { justify-content: space-between; }
-    .rs-homepage .rs-cta .rs-container > div { margin-right: auto; }
     @media (max-width: 600px) {
         .rs-homepage .rs-hero-title { font-size: 2.7rem; }
         .rs-homepage .rs-heading, .rs-homepage .rs-heading:after { text-align: left; }
         .rs-homepage .rs-section-row, .rs-homepage .rs-center-heading { align-items: flex-start; flex-direction: column; }
         .rs-homepage .rs-outline-link { margin-top: .35rem; }
         .rs-homepage .rs-value-card { padding: 1.5rem 1.25rem; }
-        .rs-homepage .rs-cta .rs-container { align-items: flex-start; }
     }
 </style>
 

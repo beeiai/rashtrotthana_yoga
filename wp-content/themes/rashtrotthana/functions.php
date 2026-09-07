@@ -6,14 +6,14 @@ function rashtrotthana_enqueue_assets() {
         'rashtrotthana-style',
         get_stylesheet_uri(),
         array(),
-        '1.0.6'
+        '1.0.8'
     );
 
     wp_enqueue_script(
         'rashtrotthana-navigation',
         get_template_directory_uri() . '/assets/js/navigation.js',
         array(),
-        '1.0.0',
+        '1.0.1',
         true
     );
 }

@@ -36,7 +36,6 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
         </div>
     </div>
 </section>
-
 <section class="rs-content-section">
     <div class="rs-container">
         <div class="rs-section-row"><h2>Our Activities</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/activities/') ); ?>">View All Activities</a></div>
@@ -49,7 +48,6 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
         </div>
     </div>
 </section>
-
 <section class="rs-stats" aria-label="Rashtrotthana impact">
     <div class="rs-container rs-stat-grid">
         <div class="rs-stat-heading"><h2>Our Impact in Numbers</h2><p>Creating a legacy of wellness, wisdom and service since 1972</p></div>
@@ -103,6 +101,3 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
     <div class="rs-container"><div class="rs-section-row"><h2>Moments of Inspiration</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/gallery/') ); ?>">View Gallery</a></div><div class="rs-gallery-grid"><?php foreach ( $activity_fallbacks as $item ) : ?><img src="<?php echo esc_url( $item[2] ); ?>" alt="" loading="lazy"><?php endforeach; ?></div></div>
 </section>
 
-<section class="rs-cta">
-    <div class="rs-container"><div><h2>Be a Part of the Change</h2><p>Join hands with Rashtrotthana in our mission<br>to create a healthier and better world.</p></div><a class="rs-btn rs-btn-primary" href="#">Join Us Today</a><a class="rs-btn rs-cta-donate" href="#">Donate Now</a></div>
-</section>

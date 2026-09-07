@@ -6,10 +6,12 @@ Version: 1.0.0
 Text Domain: rashtrotthana
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
 :root {
     /* Brand Colors */
     --color-maroon: #8F171D;
-    --color-maroon-dark: #5E0F14;
+    --color-maroon-dark: #8f171d;
 
     --color-saffron: #F36A21;
     --color-gold: #F9B72A;
@@ -64,9 +66,22 @@ body {
     background: var(--color-cream);
     color: var(--color-text);
 
-    font-family: Inter, "Source Sans 3", "Segoe UI", Arial, sans-serif;
+    font-family: "Poppins", sans-serif;
     font-size: 16px;
     line-height: 1.6;
+}
+
+html body * {
+    font-family: "Poppins", sans-serif !important;
+}
+
+html body h1,
+html body h2,
+html body h3,
+html body h4,
+html body h5,
+html body h6 {
+    font-family: Optima, sans-serif !important;
 }
 
 img {
@@ -92,7 +107,9 @@ select {
 ----------------------------- */
 
 .rs-container {
-    width: min(100% - 40px, var(--container-width));
+    width: 100% !important;
+    max-width: none;
+    padding-inline: clamp(20px, 4vw, 64px);
     margin-inline: auto;
 }
 
@@ -326,33 +343,17 @@ select {
     transform: scaleX(1);
 }
 
-/* ---------- Donate Button ---------- */
+/* ---------- Header Logo ---------- */
 
-.rs-donate-button {
+.rs-header-logo {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    min-height: 42px;
-    padding: 0 20px;
-
-    border-radius: var(--radius-pill);
-
-    background: var(--color-maroon);
-    color: var(--color-white);
-
-    font-size: 0.875rem;
-    font-weight: 600;
-
-    transition:
-        background-color 180ms ease,
-        transform 180ms ease;
-}
-
-.rs-donate-button:hover {
-    background: var(--color-maroon-dark);
-    color: var(--color-white);
-    transform: translateY(-1px);
+    width: 88px;
+    height: 58px;
+    overflow: hidden;
+    object-fit: contain;
 }
 
 /* ---------- Mobile Toggle ---------- */
@@ -555,6 +556,76 @@ select {
     object-fit: cover;
 }
 
+.rs-hero-slideshow {
+    isolation: isolate;
+}
+
+.rs-hero-slides {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.rs-hero-slides .rs-hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transform: scale(1.015);
+    transition: opacity 1.8s ease, transform 12s ease;
+}
+
+.rs-hero-slides .rs-hero-slide.is-active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.rs-hero-slide-dots {
+    position: absolute;
+    z-index: 4;
+    right: 28px;
+    bottom: 24px;
+    display: flex;
+    gap: 8px;
+}
+
+.rs-hero-slide-dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .55);
+    cursor: pointer;
+    transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.rs-hero-slide-dots button.is-active {
+    background: #fff;
+    transform: scale(1.45);
+}
+
+.rs-hero-slide-dots button:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+    .rs-hero-slide-dots {
+        right: 20px;
+        bottom: 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rs-hero-slides .rs-hero-slide {
+        transition: none;
+    }
+}
+
 /* ---------- Decorative Wave ---------- */
 
 .rs-hero-wave {
@@ -733,9 +804,349 @@ select {
 /* Header brand and hero copy alignment. */
 .rs-brand{display:flex;align-items:center}.rs-brand img{width:clamp(142px,14vw,218px);max-height:62px;object-fit:contain;object-position:left center}.rs-hero-content,.rs-hero-title,.rs-hero-description,.rs-hero-actions{text-align:left}.rs-hero-actions{justify-content:flex-start}@media(max-width:600px){.rs-brand img{width:142px;max-height:50px}.rs-hero-content{text-align:left}}
 
+/* Final hero composition: natural wrapping and a calmer display scale. */
+.rs-hero-title {
+    max-width: 620px;
+    font-size: clamp(3rem, 5vw, 4.8rem) !important;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .rs-hero-title {
+        max-width: 560px;
+        font-size: clamp(2.75rem, 5.7vw, 3.6rem) !important;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+    }
+}
+
+@media (max-width: 600px) {
+    .rs-hero-title {
+        max-width: 100%;
+        font-size: clamp(2.35rem, 10vw, 3rem) !important;
+        line-height: 1.08;
+    }
+}
+
+/* Desktop hero scale: give the headline room to breathe instead of stacking it too tightly. */
+@media (min-width: 601px) {
+    .rs-hero-content {
+        width: min(calc(100% - 96px), 760px);
+        max-width: 760px;
+    }
+
+    .rs-hero-title {
+        max-width: 760px;
+        font-size: clamp(2.75rem, 4.25vw, 4.1rem) !important;
+        line-height: 1.08;
+        letter-spacing: -0.025em;
+    }
+
+    .rs-hero-description {
+        max-width: 560px;
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .rs-hero-content {
+        width: calc(100% - 48px);
+    }
+
+    .rs-hero-title {
+        max-width: 680px;
+        font-size: clamp(2.5rem, 5vw, 3.35rem) !important;
+    }
+}
+
+/* Premium typography and spacing rhythm. */
+body {
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600 !important;
+    letter-spacing: -0.02em;
+}
+
+.rs-container {
+    padding-inline: clamp(24px, 5vw, 80px);
+}
+
+.rs-navbar-inner {
+    gap: clamp(24px, 4vw, 72px);
+}
+
+.rs-navigation {
+    gap: clamp(16px, 2.2vw, 34px);
+}
+
+.rs-nav-link {
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+}
+
+.rs-header-logo {
+    flex: 0 0 auto;
+    width: clamp(76px, 7vw, 104px);
+    height: 58px;
+}
+
+.rs-hero-content {
+    max-width: 610px;
+    padding-top: clamp(72px, 9vw, 124px);
+}
+
+.rs-hero-title {
+    max-width: 620px;
+    font-size: clamp(3.2rem, 5.4vw, 5.4rem) !important;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+}
+
+.rs-hero-description {
+    max-width: 510px;
+    margin: 26px 0 34px;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    line-height: 1.75;
+}
+
+.rs-heading,
+.rs-section-row,
+.rs-stat-heading {
+    max-width: 1280px;
+    margin-inline: auto;
+}
+
+.rs-heading h2,
+.rs-section-row h2,
+.rs-cta h2 {
+    font-size: clamp(2rem, 3.2vw, 3rem) !important;
+    line-height: 1.1;
+}
+
+.rs-heading:after {
+    max-width: 640px;
+    line-height: 1.65;
+}
+
+.rs-section-row {
+    align-items: end;
+    margin-bottom: 30px;
+}
+
+.rs-section-row h2:before {
+    margin-bottom: 16px;
+}
+
+.rs-value-card {
+    min-height: 300px;
+    padding: 30px 26px;
+}
+
+.rs-value-card h3,
+.rs-activity-card h3,
+.rs-event-card h3 {
+    font-size: 1.18rem !important;
+    line-height: 1.25;
+}
+
+.rs-value-card p,
+.rs-activity-card p,
+.rs-event-card p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.rs-card-grid,
+.rs-event-grid,
+.rs-gallery-grid {
+    gap: clamp(16px, 2vw, 28px);
+}
+
+.rs-activity-card,
+.rs-event-card {
+    border-radius: 16px;
+}
+
+.rs-activity-card h3,
+.rs-activity-card p {
+    margin-left: 22px;
+    margin-right: 22px;
+}
+
+.rs-activity-card h3 {
+    margin-top: 20px;
+}
+
+.rs-activity-card p {
+    margin-bottom: 24px;
+}
+
+.rs-event-card h3 {
+    margin-left: 22px;
+    margin-right: 22px;
+}
+
+.rs-event-card p {
+    margin-left: 22px;
+    margin-right: 22px;
+}
+
+.rs-register-button {
+    margin-inline: 22px;
+}
+
+.rs-center-copy h2 {
+    font-size: clamp(2rem, 3.2vw, 3rem) !important;
+    line-height: 1.1;
+}
+
+.rs-center-copy p {
+    max-width: 410px;
+    font-size: 0.98rem;
+    line-height: 1.75;
+}
+
+.rs-stat-grid strong {
+    font-size: clamp(2rem, 3.5vw, 3.4rem) !important;
+}
+
+.rs-stat-grid span {
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+
+.rs-footer-grid {
+    row-gap: 46px;
+}
+
+@media (max-width: 900px) {
+    .rs-container {
+        padding-inline: 32px;
+    }
+
+    .rs-navigation {
+        gap: 16px;
+    }
+
+    .rs-hero-content {
+        padding-top: 76px;
+    }
+
+    .rs-value-card {
+        min-height: 260px;
+    }
+}
+
+@media (max-width: 600px) {
+    .rs-container {
+        padding-inline: 20px;
+    }
+
+    .rs-navbar-inner {
+        gap: 12px;
+    }
+
+    .rs-header-logo {
+        width: 72px;
+        height: 50px;
+    }
+
+    .rs-hero-content {
+        padding-top: 48px;
+    }
+
+    .rs-hero-title {
+        font-size: clamp(2.65rem, 12vw, 3.4rem) !important;
+        line-height: 1.04;
+    }
+
+    .rs-hero-description {
+        margin: 20px 0 26px;
+        font-size: 0.98rem;
+    }
+
+    .rs-heading,
+    .rs-section-row {
+        text-align: left;
+    }
+
+    .rs-heading h2,
+    .rs-section-row h2,
+    .rs-cta h2 {
+        font-size: 2rem !important;
+    }
+
+    .rs-section-row {
+        margin-bottom: 22px;
+    }
+
+    .rs-section-row .rs-outline-link {
+        align-self: flex-start;
+    }
+
+    .rs-value-card {
+        min-height: 0;
+        padding: 26px 22px;
+    }
+
+    .rs-value-card h3,
+    .rs-activity-card h3,
+    .rs-event-card h3 {
+        font-size: 1.12rem !important;
+    }
+
+    .rs-stat-grid strong {
+        font-size: 2.35rem !important;
+    }
+}
+
 /* Anchor the whole hero content group to the left, not merely its text. */
 .rs-hero-content{margin-left:clamp(44px,5vw,100px);margin-right:0}
 @media(max-width:600px){.rs-hero-content{margin-left:20px;margin-right:20px}}
+
+/* Keep the hero composed at tablet widths instead of letting the display title dominate. */
+@media (min-width: 601px) and (max-width: 900px) {
+    .rs-hero-container {
+        min-height: 590px;
+    }
+
+    .rs-hero-content {
+        width: min(100% - 64px, 620px);
+        padding-top: 72px;
+    }
+
+    .rs-hero-title {
+        max-width: 590px;
+        font-size: clamp(3rem, 6vw, 3.8rem) !important;
+        line-height: 1.04;
+        letter-spacing: -0.035em;
+    }
+
+    .rs-hero-description {
+        max-width: 480px;
+        margin: 22px 0 28px;
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+
+    .rs-hero-image-wrapper,
+    .rs-hero-image-wrapper img {
+        min-height: 590px;
+        height: 590px;
+    }
+}
 
 /* Image-first center cards — informed by the compact, detailed property cards in the supplied reference. */
 .rs-centers{background:#f9f7f1}.rs-center-heading{align-items:end;margin-bottom:30px}.rs-center-heading h2{margin:7px 0 6px;color:#542019;font:700 clamp(2rem,3vw,2.7rem)/1.08 Georgia,serif;letter-spacing:-.03em}.rs-center-heading p{max-width:560px;margin:0;color:#756a61}.rs-center-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.rs-center-card{min-width:0;overflow:hidden;border:1px solid rgba(81,56,31,.1);border-radius:18px;background:#fffdf9;box-shadow:0 10px 25px rgba(67,48,28,.08);transition:transform 180ms ease,box-shadow 180ms ease}.rs-center-card:hover{transform:translateY(-5px);box-shadow:0 17px 32px rgba(67,48,28,.14)}.rs-center-card>img,.rs-center-card>a>img{width:100%;height:205px;object-fit:cover}.rs-center-card-body{padding:17px 18px 18px}.rs-center-card h3{margin:0;color:#36251d;font-size:1.05rem;line-height:1.3}.rs-center-location{margin:8px 0 13px;color:#736b62;font-size:.78rem}.rs-center-meta{display:flex;gap:10px;padding:10px 0 14px;border-top:1px solid #eee9df;color:#6b635b;font-size:.74rem}.rs-center-meta span{white-space:nowrap}.rs-center-button{display:inline-flex;align-items:center;gap:19px;padding:9px 15px;border-radius:999px;background:#597a36;color:#fff;font-size:.78rem;font-weight:700;transition:background 180ms ease,transform 180ms ease}.rs-center-card:hover .rs-center-button{background:#426524;transform:translateX(2px)}.rs-center-button b{font-size:1rem;line-height:1}.rs-slider-dots{display:flex;justify-content:center;gap:8px;margin-top:22px}.rs-slider-dots b,.rs-slider-dots i{display:block;width:8px;height:8px;border-radius:50%;background:#d4d0c7}.rs-slider-dots b{background:#597a36}@media(max-width:900px){.rs-center-cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.rs-center-heading{align-items:flex-start}.rs-center-cards{grid-template-columns:1fr;gap:16px}.rs-center-card>img,.rs-center-card>a>img{height:220px}.rs-center-meta{justify-content:space-between}}
