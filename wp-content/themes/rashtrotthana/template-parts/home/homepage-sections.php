@@ -51,8 +51,8 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 <section class="rs-stats" aria-label="Rashtrotthana impact">
     <div class="rs-container rs-stat-grid">
         <div class="rs-stat-heading"><h2>Our Impact in Numbers</h2><p>Creating a legacy of wellness, wisdom and service since 1972</p></div>
-        <?php foreach ( array( array( '1972', 'Since' ), array( '35+', 'Activities' ), array( '18', 'Projects' ), array( '23+', 'Centers' ), array( '1000+', 'Lives Impacted' ) ) as $stat ) : ?>
-            <div><strong><?php echo esc_html( $stat[0] ); ?></strong><span><?php echo esc_html( $stat[1] ); ?></span></div>
+        <?php foreach ( array( array( 1972, '', 'Since' ), array( 35, '+', 'Activities' ), array( 18, '', 'Projects' ), array( 23, '+', 'Centers' ), array( 1000, '+', 'Lives Impacted' ) ) as $stat ) : ?>
+            <div><strong class="rs-stat-value" data-count="<?php echo esc_attr( $stat[0] ); ?>" data-suffix="<?php echo esc_attr( $stat[1] ); ?>">0<?php echo esc_html( $stat[1] ); ?></strong><span><?php echo esc_html( $stat[2] ); ?></span></div>
         <?php endforeach; ?>
     </div>
 </section>
@@ -60,7 +60,17 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 <section class="rs-centers rs-section">
     <div class="rs-container">
         <div class="rs-center-finder">
-            <div class="rs-center-intro"><span class="rs-kicker">OUR PRESENCE</span><h2>Find a Center</h2><a class="rs-center-button" href="<?php echo esc_url( home_url('/centers/') ); ?>">View All Centers</a></div>
+                <div class="rs-center-intro">
+                    <span class="rs-kicker">OUR PRESENCE</span>
+                    <h2>Find a Center</h2>
+                    <form class="rs-center-search" role="search">
+                        <label class="screen-reader-text" for="rs-center-search-input">Search centers</label>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+                        <input id="rs-center-search-input" type="search" placeholder="Search by area or center" autocomplete="off">
+                    </form>
+                    <p class="rs-center-search-status" aria-live="polite"></p>
+                    <a class="rs-center-button" href="<?php echo esc_url( home_url('/centers/') ); ?>">View All Centers</a>
+                </div>
             <div class="rs-center-cards">
             <?php if ( $centers ) : foreach ( $centers as $post ) : setup_postdata( $post ); ?>
                 <article class="rs-center-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><div class="rs-center-card-body"><h3><?php the_title(); ?></h3><p class="rs-center-location">Bengaluru, Karnataka</p><span class="rs-center-button">View Details</span></div></a></article>
@@ -68,6 +78,7 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
                 <article class="rs-center-card"><img src="<?php echo esc_url( $center[2] ); ?>" alt="" loading="lazy"><div class="rs-center-card-body"><h3><?php echo esc_html( $center[0] ); ?></h3><p class="rs-center-location"><?php echo esc_html( $center[1] ); ?></p><a class="rs-center-button" href="#">View Details</a></div></article>
             <?php endforeach; endif; ?>
             </div>
+            <p class="rs-center-no-results" aria-live="polite" hidden>No centers match your search.</p>
             <a class="rs-center-locate" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7Zm0 10.1A3.1 3.1 0 1 1 12 5.9a3.1 3.1 0 0 1 0 6.2Z"/></svg><span>Locate Centers<br>Near You</span></a>
         </div>
     </div>
@@ -88,10 +99,22 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
 
 <section class="rs-testimonials rs-section">
     <div class="rs-container">
-        <div class="rs-heading"><h2>Voices of Trust</h2></div>
-        <div class="rs-testimonial-grid">
-            <?php foreach ( array( array( 'Ananya H.', 'Yoga Participant', 'Rashtrotthana programs have brought positivity and balance into my life. Truly life-changing!' ), array( 'Prasanna B.', 'Parent', 'The values and discipline I learned here continue to guide me every day.' ), array( 'Ramesh K.', 'Well-wisher', 'A wonderful platform for personality development and community service.' ) ) as $quote ) : ?>
-                <blockquote><p><?php echo esc_html( $quote[2] ); ?></p><cite><?php echo esc_html( $quote[0] ); ?><small><?php echo esc_html( $quote[1] ); ?></small></cite></blockquote>
+        <div class="rs-heading rs-team-heading"><h2>Our Members</h2><p>Meet the people who bring our vision to life through yoga, education, culture and service.</p></div>
+        <div class="rs-testimonial-grid rs-team-grid">
+            <?php
+            $team_image = get_template_directory_uri() . '/assets/images/hero-v3.png';
+            foreach ( array(
+                array( 'Ananya H.', 'Yoga & Wellness', 'Creating welcoming spaces where every person can find balance and strength.' ),
+                array( 'Prasanna B.', 'Education & Values', 'Nurturing confident learners through discipline, curiosity and timeless values.' ),
+                array( 'Ramesh K.', 'Community Service', 'Connecting people and purpose through meaningful service across our communities.' ),
+                array( 'Meera S.', 'Culture & Outreach', 'Sharing the richness of Indian culture while building a kinder, stronger society.' ),
+            ) as $member ) : ?>
+                <article class="rs-team-card">
+                    <img src="<?php echo esc_url( $team_image ); ?>" alt="<?php echo esc_attr( $member[0] ); ?>" loading="lazy">
+                    <h3><?php echo esc_html( $member[0] ); ?></h3>
+                    <p class="rs-team-role"><?php echo esc_html( $member[1] ); ?></p>
+                    <p><?php echo esc_html( $member[2] ); ?></p>
+                </article>
             <?php endforeach; ?>
         </div>
     </div>
