@@ -4,9 +4,12 @@
             <p class="rs-hero-eyebrow">RASHTROTTHANA YOGA</p>
             <h1 class="rs-hero-title">Building a Healthy &amp; Sustainable Society</h1>
             <p class="rs-hero-description">Through Yoga, Education, Culture and Service, we strive for the holistic well-being of every individual and the upliftment of the society.</p>
-            <div class="rs-hero-actions">
-                <a href="<?php echo esc_url( home_url('/activities/') ); ?>" class="rs-btn rs-btn-primary">Explore Activities</a>
-                <a href="#" class="rs-btn rs-btn-secondary">Find a Center</a>
+            <div class="rs-hero-action-row">
+                <img class="rs-hero-icon" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/icon.png' ); ?>" alt="" aria-hidden="true">
+                <div class="rs-hero-actions">
+                    <a href="<?php echo esc_url( home_url('/activities/') ); ?>" class="rs-btn rs-btn-primary">Explore Activities</a>
+                    <a href="#" class="rs-btn rs-btn-secondary">Find a Center</a>
+                </div>
             </div>
         </div>
         <div class="rs-hero-visual">
