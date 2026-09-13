@@ -1,0 +1,67 @@
+﻿[
+  {
+    "id": "greeting",
+    "keywords": ["hello", "hi", "namaste", "hey", "good morning", "good evening", "greet"],
+    "response": "Namaste \uD83D\uDE4F! Welcome to <b>Rashtrotthana Yoga</b>. I am here to help you with information about our classes, fees, timings, and registration. How can I assist you today?"
+  },
+  {
+    "id": "about",
+    "keywords": ["about", "who are you", "what is rashtrotthana", "organization", "rashtrotthana yoga", "info", "history"],
+    "response": "<b>Rashtrotthana Yoga</b> is a yoga institution dedicated to promoting holistic well-being through the practice of classical yoga. We offer structured programs for all age groups and experience levels, blending traditional wisdom with modern wellness practices."
+  },
+  {
+    "id": "classes",
+    "keywords": ["class", "classes", "course", "courses", "program", "programs", "yoga", "session", "batch", "group"],
+    "response": "We offer a wide range of yoga classes:\n\u2022 <b>Beginner Yoga</b> \u2013 Foundation postures and breathing\n\u2022 <b>Hatha Yoga</b> \u2013 Traditional postures and alignment\n\u2022 <b>Pranayama</b> \u2013 Breathing techniques and breath control\n\u2022 <b>Meditation</b> \u2013 Mindfulness and relaxation practices\n\u2022 <b>Advanced Asana</b> \u2013 For experienced practitioners\n\u2022 <b>Kids Yoga</b> \u2013 Fun and engaging sessions for children\n\u2022 <b>Yoga for Seniors</b> \u2013 Gentle and therapeutic yoga\n\nWould you like to know the timings or fees for any specific class?"
+  },
+  {
+    "id": "fees",
+    "keywords": ["fee", "fees", "cost", "price", "pricing", "charges", "how much", "payment", "pay", "affordable"],
+    "response": "Our fees are designed to be accessible for everyone:\n\u2022 <b>Monthly Membership</b> \u2013 \u20B9 800 per month\n\u2022 <b>Quarterly Plan</b> \u2013 \u20B9 2,100 (3 months)\n\u2022 <b>Half-Yearly Plan</b> \u2013 \u20B9 3,800 (6 months)\n\u2022 <b>Annual Plan</b> \u2013 \u20B9 6,500 (best value!)\n\u2022 <b>Drop-in Session</b> \u2013 \u20B9 200 per class\n\nAll plans include access to group sessions. Contact us for special discounts for students and senior citizens."
+  },
+  {
+    "id": "timings",
+    "keywords": ["time", "timings", "schedule", "timing", "when", "hours", "morning", "evening", "batch", "slots", "duration"],
+    "response": "Our class timings are:\n\u2022 <b>Morning Batch</b> \u2013 5:30 AM, 6:30 AM, 7:30 AM\n\u2022 <b>Evening Batch</b> \u2013 5:00 PM, 6:00 PM, 7:00 PM\n\u2022 <b>Weekend Special</b> \u2013 Saturday &amp; Sunday 8:00 AM\n\nEach session is approximately <b>60 minutes</b> long. Batches are available Monday to Saturday."
+  },
+  {
+    "id": "location",
+    "keywords": ["location", "address", "where", "place", "directions", "map", "how to reach", "reach", "find us", "located"],
+    "response": "\uD83D\uDCCD We are located at:\n<b>Rashtrotthana Yoga Centre</b>\nRashtrotthana Parishat Road,\nMalleshwaram, Bengaluru \u2013 560 003\nKarnataka, India\n\nWe are easily accessible by bus and metro. Look for us near the Malleshwaram 18th Cross stop."
+  },
+  {
+    "id": "register",
+    "keywords": ["register", "registration", "enroll", "enrolment", "join", "admission", "sign up", "signup", "how to join", "start"],
+    "response": "Ready to begin your yoga journey? \uD83C\uDF3F\n\n<b>To register:</b>\n1. Visit our centre in person at Malleshwaram, Bengaluru\n2. Call us to reserve your spot in a batch\n3. Fill out the online registration form on our website\n\nA trial class is available for first-time visitors absolutely <b>free of charge</b>!"
+  },
+  {
+    "id": "contact",
+    "keywords": ["contact", "call", "phone", "number", "email", "reach out", "talk", "speak", "enquiry", "inquiry", "whatsapp"],
+    "response": "\uD83D\uDCDE <b>Contact Us:</b>\n\u2022 Phone: +91-80-XXXX-XXXX\n\u2022 WhatsApp: Available via the chat button on this page\n\u2022 Email: info@rashtrotthana.org\n\nOur team is available Monday to Saturday, 5:30 AM to 8:00 PM."
+  },
+  {
+    "id": "online",
+    "keywords": ["online", "virtual", "zoom", "remote", "home", "digital", "live stream", "streaming"],
+    "response": "Yes! We offer <b>online yoga classes</b> via Zoom for students who cannot attend in person.\n\u2022 Same schedule as our in-person batches\n\u2022 Interactive live sessions with certified instructors\n\u2022 Recorded classes available on request\n\nContact us to get the Zoom link and joining instructions."
+  },
+  {
+    "id": "instructor",
+    "keywords": ["instructor", "teacher", "guru", "trainer", "coach", "qualified", "certified", "expert", "who teaches"],
+    "response": "Our instructors are highly qualified and certified yoga professionals with years of experience in classical yoga traditions. All our teachers hold certifications from recognized yoga institutes and undergo regular training and development."
+  },
+  {
+    "id": "benefits",
+    "keywords": ["benefit", "benefits", "why", "advantage", "health", "wellness", "good", "helps", "improve", "stress"],
+    "response": "Regular yoga practice offers incredible benefits:\n\u2022 \uD83D\uDCAA Improved strength and flexibility\n\u2022 \uD83E\uDDE0 Reduced stress and anxiety\n\u2022 \uD83D\uDCA4 Better sleep quality\n\u2022 \u2764\uFE0F Improved heart health\n\u2022 \uD83C\uDFAF Enhanced focus and concentration\n\u2022 \uD83C\uDF3F Mind-body harmony\n\nStart your journey today with a <b>free trial class</b>!"
+  },
+  {
+    "id": "trial",
+    "keywords": ["trial", "free", "first class", "demo", "try", "sample"],
+    "response": "\uD83C\uDF89 Great news! We offer a <b>FREE trial class</b> for all first-time visitors.\n\nSimply walk in during any of our class timings or contact us to schedule your trial session. No prior experience needed!"
+  },
+  {
+    "id": "thanks",
+    "keywords": ["thank", "thanks", "thank you", "thankyou", "great", "helpful", "awesome", "perfect"],
+    "response": "You're most welcome! \uD83D\uDE4F We are glad we could help. Feel free to ask anytime. <b>Namaste!</b>"
+  }
+]
