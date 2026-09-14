@@ -9,6 +9,21 @@ function rashtrotthana_enqueue_assets() {
         '1.0.8'
     );
 
+    wp_enqueue_style(
+        'rashtrotthana-inner-pages',
+        get_template_directory_uri() . '/assets/css/inner-pages.css',
+        array( 'rashtrotthana-style' ),
+        '2.1.0'
+    );
+
+    wp_enqueue_script(
+        'rashtrotthana-inner-pages',
+        get_template_directory_uri() . '/assets/js/inner-pages.js',
+        array(),
+        '1.0.0',
+        true
+    );
+
     wp_enqueue_script(
         'rashtrotthana-navigation',
         get_template_directory_uri() . '/assets/js/navigation.js',
@@ -16,6 +31,24 @@ function rashtrotthana_enqueue_assets() {
         '1.0.1',
         true
     );
+
+    /* Homepage-only and About Us visual effects */
+    if ( is_front_page() || is_page('about-us') ) {
+        wp_enqueue_style(
+            'rashtrotthana-homepage-effects',
+            get_template_directory_uri() . '/assets/css/homepage-effects.css',
+            array( 'rashtrotthana-style' ),
+            '2.0.0'
+        );
+
+        wp_enqueue_script(
+            'rashtrotthana-homepage-effects',
+            get_template_directory_uri() . '/assets/js/homepage-effects.js',
+            array(),
+            '2.0.0',
+            true
+        );
+    }
 }
 
 add_action('wp_enqueue_scripts', 'rashtrotthana_enqueue_assets');

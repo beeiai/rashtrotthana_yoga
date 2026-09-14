@@ -37,8 +37,7 @@
                 <a class="rs-nav-link<?php echo is_page('resources') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/resources/')); ?>">Resources</a>
                 <a class="rs-nav-link<?php echo is_page('gallery') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/gallery/')); ?>">Gallery</a>
                 <a class="rs-nav-link<?php echo is_page('contact-us') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/contact-us/')); ?>">Contact Us</a>
-                <?php $header_logo = file_exists( get_template_directory() . '/assets/images/header-logo.png' ) ? 'header-logo.png' : '60_years_logo.png'; ?>
-                <img class="rs-header-logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/' . $header_logo ); ?>" alt="Rashtrotthana">
+            
             </div>
         </div>
     </nav>
