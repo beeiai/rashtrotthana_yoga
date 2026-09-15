@@ -144,7 +144,7 @@ body:not(.home) [class*="-numbers"] strong,
 body:not(.home) [class*="-stats"]   strong {
     font-size: clamp(1.6rem, 3vw, 3rem) !important;
     color: var(--color-maroon);
-    font-family: Georgia, serif;
+    font-family: 'Poppins',sans-serif;
 }
 
 /* ----------------------------------------------------------
@@ -174,7 +174,7 @@ body:not(.home) [class*="-section-heading"] h2 {
     padding-top: 18px;
     color: #542019;
     font-size: clamp(1.9rem, 3.2vw, 2.8rem) !important;
-    font-family: Georgia, serif !important;
+    font-family: 'Poppins',sans-serif !important;
     line-height: 1.12;
     letter-spacing: -.035em;
 }
@@ -327,7 +327,7 @@ body:not(.home) .rs-activity-category h3 {
     margin: 0 0 10px;
     color: #542019;
     font-size: 1.18rem !important;
-    font-family: Georgia, serif !important;
+    font-family: 'Poppins',sans-serif !important;
     line-height: 1.25;
 }
 
@@ -482,7 +482,7 @@ body:not(.home) .rs-news-grid h3 {
     color: #542019;
     font-size: 1.1rem !important;
     line-height: 1.28;
-    font-family: Georgia, serif !important;
+    font-family: 'Poppins',sans-serif !important;
 }
 
 body:not(.home) .rs-event-list-body > div {
@@ -632,7 +632,7 @@ body:not(.home) .rs-about-journey h3 {
     margin: 0 0 8px;
     color: #542019 !important;
     font-size: 1.25rem !important;
-    font-family: Georgia, serif !important;
+    font-family: 'Poppins',sans-serif !important;
 }
 
 body:not(.home) .rs-about-journey p {
@@ -669,7 +669,7 @@ body:not(.home) .rs-about-quote-mark {
     font-size: 5rem;
     line-height: .8;
     color: var(--color-saffron);
-    font-family: Georgia, serif;
+    font-family: 'Poppins',sans-serif;
     opacity: .6;
 }
 
@@ -680,7 +680,7 @@ body:not(.home) .rs-about-message blockquote {
     font-size: 1.05rem;
     font-style: italic;
     line-height: 1.7;
-    font-family: Georgia, serif;
+    font-family: 'Poppins',sans-serif;
     border: 0;
 }
 
@@ -688,7 +688,7 @@ body:not(.home) .rs-about-signature strong {
     display: block;
     color: #542019;
     font-size: 1rem;
-    font-family: Georgia, serif;
+    font-family: 'Poppins',sans-serif;
 }
 
 body:not(.home) .rs-about-signature span {
@@ -1004,3 +1004,4 @@ body:not(.home) main[class$="-page"] h3 {
         transition: none;
     }
 }
+

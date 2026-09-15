@@ -64,7 +64,7 @@
     .rs-homepage .rs-center-intro, .rs-homepage .rs-center-locate { display: flex; flex-direction: column; justify-content: center; min-height: 15.5rem; padding: 1.65rem; border-radius: .8rem; background: #fff5df; }
     .rs-homepage .rs-center-intro, .rs-homepage .rs-center-locate { display: flex; flex-direction: column; justify-content: center; min-height: 15.5rem; padding: 1.65rem; border-radius: .8rem; }
     .rs-homepage .rs-center-intro { justify-content: flex-start; padding-top: 1.35rem; background: linear-gradient(145deg, #fff0d2, #ffe2ad); }
-    .rs-homepage .rs-center-intro h2 { margin: .35rem 0 .75rem; color: #542019; font: 700 clamp(1.65rem, 2.2vw, 2.15rem)/1.08 Georgia, serif; }
+    .rs-homepage .rs-center-intro h2 { margin: .35rem 0 .75rem; color: #542019; font: 700 clamp(1.65rem, 2.2vw, 2.15rem)/1.08 'Poppins',sans-serif; }
     .rs-homepage .rs-center-intro p { margin: 0 0 1.4rem; color: #67574c; font-size: .85rem; line-height: 1.55; }
     .rs-homepage .rs-center-intro .rs-center-button { align-self: flex-start; }
         .rs-homepage .rs-center-search { position: relative; width: 100%; margin: 0 0 .45rem; }
@@ -78,12 +78,12 @@
     .rs-homepage .rs-center-card[hidden] { display: none !important; }
     .rs-homepage .rs-center-card > img, .rs-homepage .rs-center-card > a > img { height: 8.8rem; object-fit: cover; }
     .rs-homepage .rs-center-card-body { display: flex; flex: 1; flex-direction: column; padding: 1rem 1rem 1.05rem; }
-    .rs-homepage .rs-center-card h3 { margin: 0; color: #542019; font: 700 1rem/1.28 Georgia, serif; }
+    .rs-homepage .rs-center-card h3 { margin: 0; color: #542019; font: 700 1rem/1.28 'Poppins',sans-serif; }
     .rs-homepage .rs-center-location { margin: .4rem 0 0; color: #756a61; font-size: .78rem; line-height: 1.4; }
     .rs-homepage .rs-center-meta { gap: .5rem; padding: .55rem 0 0; font-size: .68rem; }
     .rs-homepage .rs-center-card .rs-center-button { display: none; }
-    .rs-homepage .rs-center-locate { align-items: center; text-align: center; color: #8f171d; font: 700 1rem/1.4 Georgia, serif; transition: background-color 180ms ease, color 180ms ease; }
-    .rs-homepage .rs-center-locate { align-items: center; text-align: center; color: #fff8ec; font: 700 1rem/1.4 Georgia, serif; background: linear-gradient(145deg, #8f171d, #5d1116); box-shadow: 0 10px 22px rgba(93,17,22,.16); transition: transform 180ms ease, box-shadow 180ms ease; }
+    .rs-homepage .rs-center-locate { align-items: center; text-align: center; color: #8f171d; font: 700 1rem/1.4 'Poppins',sans-serif; transition: background-color 180ms ease, color 180ms ease; }
+    .rs-homepage .rs-center-locate { align-items: center; text-align: center; color: #fff8ec; font: 700 1rem/1.4 'Poppins',sans-serif; background: linear-gradient(145deg, #8f171d, #5d1116); box-shadow: 0 10px 22px rgba(93,17,22,.16); transition: transform 180ms ease, box-shadow 180ms ease; }
     .rs-homepage .rs-center-locate:hover { color: #fff; transform: translateY(-3px); box-shadow: 0 15px 28px rgba(93,17,22,.24); }
     @media (max-width: 1100px) {
         .rs-homepage .rs-center-finder { grid-template-columns: 1fr repeat(2, 1.25fr); }
@@ -1222,7 +1222,7 @@
     body.home .rs-atmosphere-flower,
     body.home .rs-atmosphere-lotus {
         color: rgba(179, 27, 27, .42);
-        font-family: Georgia, serif;
+        font-family: 'Poppins',sans-serif;
         line-height: 1;
         text-shadow: 5px 7px 8px rgba(85, 0, 0, .16), 0 0 12px rgba(249, 183, 42, .3);
     }
@@ -1556,28 +1556,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <main class="rs-homepage">
 
-    <div class="rs-home-atmosphere" aria-hidden="true">
-        <span class="rs-atmosphere-ring rs-atmosphere-ring-one"></span>
-        <span class="rs-atmosphere-ring rs-atmosphere-ring-two"></span>
-        <span class="rs-atmosphere-petal rs-atmosphere-petal-one"></span>
-        <span class="rs-atmosphere-petal rs-atmosphere-petal-two"></span>
-        <span class="rs-atmosphere-petal rs-atmosphere-petal-three"></span>
-        <span class="rs-atmosphere-petal rs-atmosphere-petal-four"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-five"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-six"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-seven"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-eight"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-nine"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-ten"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-eleven"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-twelve"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-thirteen"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-fourteen"></span><span class="rs-atmosphere-petal rs-atmosphere-petal-fifteen"></span>
-        <span class="rs-atmosphere-leaf rs-atmosphere-leaf-one"></span>
-        <span class="rs-atmosphere-leaf rs-atmosphere-leaf-two"></span>
-        <span class="rs-atmosphere-leaf rs-atmosphere-leaf-three"></span>
-        <span class="rs-atmosphere-leaf rs-atmosphere-leaf-four"></span>
-        <span class="rs-atmosphere-leaf rs-atmosphere-leaf-five"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-six"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-seven"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-eight"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-nine"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-ten"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-eleven"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-twelve"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-thirteen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-fourteen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-fifteen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-sixteen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-seventeen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-eighteen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-nineteen"></span><span class="rs-atmosphere-leaf rs-atmosphere-leaf-twenty"></span>
-        <span class="rs-atmosphere-flower rs-atmosphere-flower-one">✿</span>
-        <span class="rs-atmosphere-flower rs-atmosphere-flower-two">✿</span>
-        <span class="rs-atmosphere-flower rs-atmosphere-flower-three">✦</span>
-        <span class="rs-atmosphere-lotus rs-atmosphere-lotus-two">☯</span>
-        <span class="rs-atmosphere-yoga rs-atmosphere-yoga-one">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-two">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-three">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-four">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-five">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-six">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-seven">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-eight">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-nine">🧘</span><span class="rs-atmosphere-yoga rs-atmosphere-yoga-ten">🧘</span>
-    </div>
-
     <?php get_template_part('template-parts/home/hero'); ?>
     <?php get_template_part('template-parts/home/homepage-sections'); ?>
 
 </main>
 
 <?php get_footer(); ?>
+
