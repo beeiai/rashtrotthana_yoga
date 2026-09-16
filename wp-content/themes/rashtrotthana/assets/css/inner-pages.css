@@ -1,0 +1,1007 @@
+﻿/* ==========================================================
+   Inner Pages — Comprehensive Visual System
+   Applies homepage theme (warm palette, glassmorphic surfaces,
+   bold typography, micro-animations) to all non-home pages.
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   1. PAGE BACKGROUND — warm cream with ambient orb gradients
+   ---------------------------------------------------------- */
+body:not(.home) {
+    background: #fffaf2;
+}
+
+body:not(.home) main[class$="-page"] {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 90% 6%,  rgba(249,183,42,.16),  transparent 30rem),
+        radial-gradient(circle at 5%  70%, rgba(143,23,29,.08),   transparent 24rem),
+        radial-gradient(circle at 55% 110%,rgba(243,106,33,.10),  transparent 28rem),
+        #fffaf2;
+}
+
+/* ----------------------------------------------------------
+   2. STICKY GLASSMORPHIC NAVBAR — identical to homepage
+   ---------------------------------------------------------- */
+body:not(.home) .rs-site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+    box-shadow: 0 3px 14px rgba(67,27,15,.10);
+}
+
+body:not(.home) .rs-navbar {
+    background: rgba(255, 248, 236, .78);
+    border-bottom: 1px solid rgba(143, 23, 29, .14);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    backdrop-filter: blur(22px) saturate(145%);
+    transition: box-shadow 300ms ease, border-color 300ms ease;
+}
+
+body:not(.home) .rs-navbar.is-scrolled {
+    box-shadow: 0 8px 32px rgba(67,27,15,.14);
+    border-color: rgba(143,23,29,.22);
+}
+
+/* ----------------------------------------------------------
+   3. HERO SECTIONS — dramatic, warm, branded
+   ---------------------------------------------------------- */
+
+/* Base hero sizing */
+body:not(.home) [class*="-hero"] {
+    position: relative;
+    min-height: 580px;
+    overflow: hidden;
+}
+
+body:not(.home) [class*="-hero-inner"] {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    min-height: 580px;
+}
+
+/* Hero overlay image – warm cream gradient wash */
+body:not(.home) [class*="-hero-image"] {
+    background-position: 65% center !important;
+    background-size: cover !important;
+}
+
+/* All hero H1 titles – bold, crisp, no blur */
+body:not(.home) [class*="-hero"] h1 {
+    font-size: clamp(3rem, 5.5vw, 5rem) !important;
+    line-height: 1.04 !important;
+    letter-spacing: -.045em !important;
+    text-wrap: balance;
+    color: #420e12;
+    -webkit-text-fill-color: unset !important;
+    background: none !important;
+    background-clip: unset !important;
+    text-shadow: 0 2px 20px rgba(255,248,236,.85), 0 0 50px rgba(143,23,29,.10);
+}
+
+body:not(.home) [class*="-hero"] h1 em {
+    color: var(--color-saffron);
+    font-style: normal;
+}
+
+/* Hero subtitles */
+body:not(.home) [class*="-hero"] h2 {
+    font-size: clamp(.95rem, 1.4vw, 1.18rem) !important;
+    line-height: 1.7 !important;
+    color: #5a4840;
+    font-weight: 500 !important;
+}
+
+/* Hero body copy */
+body:not(.home) [class*="-hero"] p {
+    font-size: 1rem;
+    line-height: 1.72;
+    color: #5a4840;
+}
+
+/* Hero kicker / breadcrumb */
+body:not(.home) [class*="-kicker"],
+body:not(.home) [class*="-breadcrumb"] {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--color-saffron);
+}
+
+/* Hero CTAs */
+body:not(.home) [class*="-hero"] a,
+body:not(.home) [class*="-hero"] button {
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+body:not(.home) [class*="-hero"] a:hover,
+body:not(.home) [class*="-hero"] button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(143,23,29,.22);
+}
+
+/* ----------------------------------------------------------
+   4. FLOATING STAT STRIPS (numbers bar below hero)
+   ---------------------------------------------------------- */
+body:not(.home) [class*="-numbers"] > div > div,
+body:not(.home) [class*="-options"] > div > div,
+body:not(.home) [class*="-filter"] > div > div,
+body:not(.home) [class*="-tabs"] nav,
+body:not(.home) [class*="-tab-list"] {
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 16px;
+    background: rgba(255,253,249,.96);
+    box-shadow: 0 14px 32px rgba(83,37,16,.09);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+body:not(.home) [class*="-numbers"] strong,
+body:not(.home) [class*="-stats"]   strong {
+    font-size: clamp(1.6rem, 3vw, 3rem) !important;
+    color: var(--color-maroon);
+    font-family: 'Poppins',sans-serif;
+}
+
+/* ----------------------------------------------------------
+   5. SECTION HEADINGS — orange accent bar + Georgia serif
+   ---------------------------------------------------------- */
+body:not(.home) main p[class*="-kicker"],
+body:not(.home) main [class*="-heading"] p,
+body:not(.home) main [class*="-section-heading"] p,
+body:not(.home) main [class*="-activities-heading"] p {
+    margin: 0 0 8px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    color: var(--color-saffron);
+    text-transform: uppercase;
+}
+
+body:not(.home) [class*="-section"] h2,
+body:not(.home) [class*="-directory"] h2,
+body:not(.home) [class*="-categories"] h2,
+body:not(.home) [class*="-resources"] h2,
+body:not(.home) .rs-gallery-section-title h2,
+body:not(.home) [class*="-heading"] h2,
+body:not(.home) [class*="-section-heading"] h2 {
+    position: relative;
+    margin: 0 0 8px;
+    padding-top: 18px;
+    color: #542019;
+    font-size: clamp(1.9rem, 3.2vw, 2.8rem) !important;
+    font-family: 'Poppins',sans-serif !important;
+    line-height: 1.12;
+    letter-spacing: -.035em;
+}
+
+/* Orange accent bar above headings */
+body:not(.home) [class*="-section"] h2::before,
+body:not(.home) [class*="-directory"] h2::before,
+body:not(.home) [class*="-categories"] h2::before,
+body:not(.home) [class*="-heading"] h2::before,
+body:not(.home) [class*="-section-heading"] h2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--color-maroon), var(--color-saffron));
+    transition: width 500ms cubic-bezier(.25,.8,.25,1) 80ms;
+}
+
+body:not(.home) [class*="-section"] h2.rsi-visible::before,
+body:not(.home) [class*="-directory"] h2.rsi-visible::before,
+body:not(.home) [class*="-categories"] h2.rsi-visible::before,
+body:not(.home) [class*="-heading"] h2.rsi-visible::before,
+body:not(.home) [class*="-section-heading"] h2.rsi-visible::before {
+    width: 40px;
+}
+
+/* Orange bar on the "after" style headings already in use */
+body:not(.home) [class*="-section"] h2::after,
+body:not(.home) [class*="-directory"] h2::after,
+body:not(.home) [class*="-categories"] h2::after,
+body:not(.home) .rs-gallery-section-title h2::after {
+    display: none; /* using ::before instead */
+}
+
+/* ----------------------------------------------------------
+   6. CARDS — glassmorphic surface, hover lift + shimmer
+   ---------------------------------------------------------- */
+body:not(.home) article[class*="card"],
+body:not(.home) article[class*="category"],
+body:not(.home) .rs-download-grid article,
+body:not(.home) .rs-news-grid article {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 16px;
+    background: rgba(255,253,249,.95);
+    box-shadow: 0 12px 32px rgba(84,35,10,.08);
+    transition: transform 240ms cubic-bezier(.25,.8,.25,1), box-shadow 240ms ease, border-color 240ms ease;
+}
+
+body:not(.home) article[class*="card"]:hover,
+body:not(.home) article[class*="category"]:hover,
+body:not(.home) .rs-download-grid article:hover,
+body:not(.home) .rs-news-grid article:hover {
+    transform: translateY(-7px);
+    border-color: rgba(243,106,33,.50);
+    box-shadow: 0 22px 44px rgba(84,35,10,.15);
+}
+
+/* Shimmer sweep on card hover */
+body:not(.home) article[class*="card"]::after,
+body:not(.home) article[class*="category"]::after,
+body:not(.home) .rs-download-grid article::after,
+body:not(.home) .rs-news-grid article::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 25%,
+        rgba(255,255,255,.48) 50%,
+        transparent 75%
+    );
+    transform: translateX(-110%);
+    transition: transform 0ms;
+    pointer-events: none;
+    z-index: 5;
+    border-radius: inherit;
+}
+
+body:not(.home) article[class*="card"]:hover::after,
+body:not(.home) article[class*="category"]:hover::after,
+body:not(.home) .rs-download-grid article:hover::after,
+body:not(.home) .rs-news-grid article:hover::after {
+    transform: translateX(110%);
+    transition: transform 560ms ease;
+}
+
+/* Card images — zoom on hover */
+body:not(.home) article[class*="card"] img,
+body:not(.home) article[class*="category"] img,
+body:not(.home) .rs-news-grid article img,
+body:not(.home) .rs-photo-grid img,
+body:not(.home) .rs-video-grid img {
+    transition: transform 340ms cubic-bezier(.25,.8,.25,1), filter 340ms ease;
+}
+
+body:not(.home) article[class*="card"]:hover img,
+body:not(.home) article[class*="category"]:hover img,
+body:not(.home) .rs-news-grid article:hover img,
+body:not(.home) .rs-photo-grid img:hover,
+body:not(.home) .rs-video-grid article:hover img {
+    transform: scale(1.06);
+    filter: brightness(1.05) saturate(1.10);
+}
+
+/* Card heading color */
+body:not(.home) article[class*="card"] h3,
+body:not(.home) article[class*="category"] h3 {
+    color: #542019;
+    line-height: 1.25;
+}
+
+/* ----------------------------------------------------------
+   7. ACTIVITY CATEGORY CARDS (activities page)
+   ---------------------------------------------------------- */
+body:not(.home) .rs-activity-category {
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 16px;
+    padding: 28px 24px;
+    background: rgba(255,253,249,.95);
+    box-shadow: 0 12px 32px rgba(84,35,10,.08);
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+body:not(.home) .rs-activity-category:hover {
+    transform: translateY(-7px);
+    border-color: rgba(243,106,33,.50);
+    box-shadow: 0 22px 44px rgba(84,35,10,.15);
+}
+
+body:not(.home) .rs-activity-category > i {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,227,190,.9), rgba(255,200,140,.7));
+    color: var(--color-maroon);
+    font-size: 1.6rem;
+    font-style: normal;
+    border: 1px solid rgba(143,23,29,.14);
+}
+
+body:not(.home) .rs-activity-category h3 {
+    margin: 0 0 10px;
+    color: #542019;
+    font-size: 1.18rem !important;
+    font-family: 'Poppins',sans-serif !important;
+    line-height: 1.25;
+}
+
+body:not(.home) .rs-activity-category p {
+    margin: 0 0 14px;
+    color: #756a61;
+    font-size: .88rem;
+    line-height: 1.65;
+}
+
+body:not(.home) .rs-activity-category ul {
+    margin: 0 0 18px;
+    padding-left: 16px;
+    color: #5a4840;
+    font-size: .82rem;
+    line-height: 1.8;
+}
+
+body:not(.home) .rs-activity-category > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(143,23,29,.22);
+    color: var(--color-maroon);
+    font-size: .78rem;
+    font-weight: 700;
+    transition: background-color 180ms ease, color 180ms ease, gap 180ms ease;
+}
+
+body:not(.home) .rs-activity-category > a:hover {
+    background: var(--color-maroon);
+    color: #fff;
+    gap: 10px;
+}
+
+/* ----------------------------------------------------------
+   8. ACTIVITIES GRID layout
+   ---------------------------------------------------------- */
+body:not(.home) .rs-activities-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 24px);
+}
+
+/* ----------------------------------------------------------
+   9. PHOTO GRID (Gallery page) — bento layout
+   ---------------------------------------------------------- */
+body:not(.home) .rs-photo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+body:not(.home) .rs-photo-grid .rs-media-item {
+    aspect-ratio: 1 / .82;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 26px rgba(82,38,18,.09);
+    transition: transform 240ms ease, box-shadow 240ms ease;
+}
+
+body:not(.home) .rs-photo-grid .rs-media-item:hover {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 18px 36px rgba(82,38,18,.15);
+}
+
+body:not(.home) .rs-photo-grid .rs-media-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 340ms ease, filter 340ms ease;
+}
+
+body:not(.home) .rs-photo-grid .rs-media-item:hover img {
+    transform: scale(1.07);
+    filter: brightness(1.06) saturate(1.10);
+}
+
+/* ----------------------------------------------------------
+   10. VIDEO GRID
+   ---------------------------------------------------------- */
+body:not(.home) .rs-video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 26px);
+}
+
+body:not(.home) .rs-video-grid article {
+    overflow: hidden;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 16px;
+    background: rgba(255,253,249,.95);
+    box-shadow: 0 12px 30px rgba(84,35,10,.08);
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+body:not(.home) .rs-video-grid article:hover {
+    transform: translateY(-5px);
+    border-color: rgba(243,106,33,.48);
+    box-shadow: 0 20px 40px rgba(84,35,10,.14);
+}
+
+/* ----------------------------------------------------------
+   11. EVENTS & NEWS GRID
+   ---------------------------------------------------------- */
+body:not(.home) .rs-events-card-grid,
+body:not(.home) .rs-news-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 26px);
+    align-items: stretch;
+}
+
+body:not(.home) [class*="-list-card"],
+body:not(.home) .rs-news-grid article {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+body:not(.home) .rs-event-list-body,
+body:not(.home) .rs-news-grid article > div {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 20px 22px 22px;
+}
+
+body:not(.home) .rs-event-card-image,
+body:not(.home) .rs-news-grid article > img {
+    overflow: hidden;
+}
+
+body:not(.home) .rs-event-card-image img,
+body:not(.home) .rs-news-grid article > img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    transition: transform 340ms ease, filter 340ms ease;
+}
+
+body:not(.home) .rs-event-list-card:hover .rs-event-card-image img,
+body:not(.home) .rs-news-grid article:hover > img {
+    transform: scale(1.06);
+    filter: brightness(1.05) saturate(1.08);
+}
+
+body:not(.home) .rs-event-list-body h3,
+body:not(.home) .rs-news-grid h3 {
+    color: #542019;
+    font-size: 1.1rem !important;
+    line-height: 1.28;
+    font-family: 'Poppins',sans-serif !important;
+}
+
+body:not(.home) .rs-event-list-body > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+}
+
+/* ----------------------------------------------------------
+   12. RESOURCE CARDS
+   ---------------------------------------------------------- */
+body:not(.home) .rs-resource-category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+body:not(.home) .rs-resource-category-grid button {
+    min-height: 190px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 16px;
+    background: rgba(255,253,249,.95);
+    box-shadow: 0 12px 30px rgba(82,38,18,.08);
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+body:not(.home) .rs-resource-category-grid button:hover,
+body:not(.home) .rs-resource-category-grid button.is-active {
+    transform: translateY(-6px);
+    border-color: rgba(243,106,33,.5);
+    box-shadow: 0 22px 42px rgba(82,38,18,.14);
+}
+
+body:not(.home) .rs-featured-grid,
+body:not(.home) .rs-download-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 26px);
+}
+
+body:not(.home) .rs-featured-grid article {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+body:not(.home) .rs-featured-grid article > div {
+    overflow: hidden;
+}
+
+body:not(.home) .rs-featured-grid article img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+body:not(.home) .rs-featured-grid article h3,
+body:not(.home) .rs-featured-grid article p,
+body:not(.home) .rs-featured-grid article small {
+    margin-inline: 20px;
+}
+
+body:not(.home) .rs-download-grid article {
+    position: relative;
+    min-height: 230px;
+    padding: 24px;
+}
+
+body:not(.home) .rs-download-grid article > a {
+    position: absolute;
+    right: 22px;
+    bottom: 22px;
+}
+
+/* ----------------------------------------------------------
+   13. DIRECTORY CARDS (Centers page)
+   ---------------------------------------------------------- */
+body:not(.home) .rs-directory-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 14px;
+    background: rgba(255,253,249,.96);
+    box-shadow: 0 10px 26px rgba(75,43,18,.07);
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+body:not(.home) .rs-directory-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(243,106,33,.45);
+    box-shadow: 0 18px 36px rgba(75,43,18,.13);
+}
+
+body:not(.home) .rs-directory-card img {
+    transition: transform 340ms ease;
+}
+
+body:not(.home) .rs-directory-card:hover img {
+    transform: scale(1.05);
+}
+
+/* ----------------------------------------------------------
+   14. ABOUT PAGE — timeline cards and message card
+   ---------------------------------------------------------- */
+body:not(.home) .rs-about-journey {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin-top: 40px;
+}
+
+body:not(.home) .rs-about-journey article {
+    position: relative;
+    overflow: hidden;
+    padding: 26px 22px 24px;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 16px;
+    background: rgba(255,253,249,.96);
+    box-shadow: 0 10px 26px rgba(84,35,10,.07);
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+body:not(.home) .rs-about-journey article:hover {
+    transform: translateY(-6px);
+    border-color: rgba(243,106,33,.48);
+    box-shadow: 0 20px 40px rgba(84,35,10,.13);
+}
+
+body:not(.home) .rs-about-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,227,190,.9), rgba(255,200,140,.7));
+    color: var(--color-maroon);
+    font-size: 1.4rem;
+    border: 1px solid rgba(143,23,29,.14);
+}
+
+body:not(.home) .rs-about-journey h3 {
+    margin: 0 0 8px;
+    color: #542019 !important;
+    font-size: 1.25rem !important;
+    font-family: 'Poppins',sans-serif !important;
+}
+
+body:not(.home) .rs-about-journey p {
+    margin: 0;
+    color: #756a61;
+    font-size: .86rem;
+    line-height: 1.6;
+}
+
+/* About message / quote card */
+body:not(.home) .rs-about-message {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 36px;
+    align-items: center;
+    margin-top: 56px;
+    padding: 36px;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(255,255,255,.85), rgba(255,248,236,.7));
+    box-shadow: 0 16px 44px rgba(84,35,10,.09);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+body:not(.home) .rs-about-message-image {
+    min-height: 300px;
+    border-radius: 14px;
+    background: url('../../images/hero-v3.png') center/cover no-repeat;
+}
+
+body:not(.home) .rs-about-quote-mark {
+    display: block;
+    font-size: 5rem;
+    line-height: .8;
+    color: var(--color-saffron);
+    font-family: 'Poppins',sans-serif;
+    opacity: .6;
+}
+
+body:not(.home) .rs-about-message blockquote {
+    margin: 0 0 20px;
+    padding: 0;
+    color: #3d2418;
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.7;
+    font-family: 'Poppins',sans-serif;
+    border: 0;
+}
+
+body:not(.home) .rs-about-signature strong {
+    display: block;
+    color: #542019;
+    font-size: 1rem;
+    font-family: 'Poppins',sans-serif;
+}
+
+body:not(.home) .rs-about-signature span {
+    display: block;
+    margin-top: 4px;
+    color: #756a61;
+    font-size: .8rem;
+    line-height: 1.5;
+}
+
+/* ----------------------------------------------------------
+   15. CONTACT PAGE — form + options strip
+   ---------------------------------------------------------- */
+body:not(.home) .rs-contact-options article {
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    transition: background-color 180ms ease;
+}
+
+body:not(.home) .rs-contact-options article:hover {
+    background: rgba(255,248,236,.6);
+    transform: none;
+}
+
+body:not(.home) .rs-contact-message form input,
+body:not(.home) .rs-contact-message form select,
+body:not(.home) .rs-contact-message form textarea {
+    border-color: rgba(143,23,29,.18);
+    border-radius: 10px;
+    background: rgba(255,255,255,.88);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+body:not(.home) .rs-contact-message form input:focus,
+body:not(.home) .rs-contact-message form select:focus,
+body:not(.home) .rs-contact-message form textarea:focus {
+    border-color: var(--color-maroon);
+    box-shadow: 0 0 0 4px rgba(143,23,29,.10);
+    outline: 0;
+}
+
+body:not(.home) .rs-contact-center-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+body:not(.home) .rs-contact-center-grid article {
+    overflow: hidden;
+    border: 1px solid rgba(143,23,29,.12);
+    border-radius: 14px;
+    background: rgba(255,253,249,.96);
+    box-shadow: 0 8px 20px rgba(75,42,18,.07);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+body:not(.home) .rs-contact-center-grid article:hover {
+    transform: translateY(-4px);
+    border-color: rgba(243,106,33,.45);
+    box-shadow: 0 16px 32px rgba(75,42,18,.13);
+}
+
+body:not(.home) .rs-contact-center-grid article img {
+    transition: transform 340ms ease;
+}
+
+body:not(.home) .rs-contact-center-grid article:hover img {
+    transform: scale(1.06);
+}
+
+/* FAQ details/summary styling */
+body:not(.home) .rs-contact-faq details {
+    border-radius: 10px;
+    border: 1px solid rgba(143,23,29,.12);
+    background: rgba(255,253,249,.96);
+    margin-bottom: 10px;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+body:not(.home) .rs-contact-faq details[open] {
+    border-color: rgba(243,106,33,.35);
+    box-shadow: 0 8px 22px rgba(84,35,10,.08);
+}
+
+body:not(.home) .rs-contact-faq summary {
+    padding: 14px 18px;
+    font-size: .88rem;
+    font-weight: 600;
+    color: #542019;
+    border-radius: 10px;
+}
+
+body:not(.home) .rs-contact-faq details p {
+    padding: 0 18px 14px;
+    color: #756a61;
+    font-size: .84rem;
+}
+
+/* ----------------------------------------------------------
+   16. CTA STRIPS (subscribe, finder, assistance)
+   ---------------------------------------------------------- */
+body:not(.home) [class*="-subscribe"] > div > div,
+body:not(.home) [class*="-assistance"] > div > div,
+body:not(.home) [class*="-finder"] > div > div,
+body:not(.home) [class*="-help"] > div > div {
+    border-radius: 16px;
+    background: linear-gradient(110deg, #fff4e0, #fff9ef, #fff0d8);
+    border: 1px solid rgba(243,106,33,.16);
+    box-shadow: 0 10px 28px rgba(84,35,10,.07);
+}
+
+/* ----------------------------------------------------------
+   17. BUTTONS — consistent ripple-ready + hover aura
+   ---------------------------------------------------------- */
+body:not(.home) a[class*="primary"],
+body:not(.home) button[class*="primary"],
+body:not(.home) [class*="-register"],
+body:not(.home) [class*="-center-button"] {
+    transition: transform 160ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+}
+
+body:not(.home) a[class*="primary"]:hover,
+body:not(.home) button[class*="primary"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(143,23,29,.28) !important;
+}
+
+body:not(.home) .rs-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ripple element (injected by inner-pages.js) */
+.rsi-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,.38);
+    transform: scale(0);
+    animation: rsi-ripple-anim 580ms linear forwards;
+    pointer-events: none;
+}
+
+@keyframes rsi-ripple-anim {
+    to { transform: scale(4.5); opacity: 0; }
+}
+
+/* ----------------------------------------------------------
+   18. INNER PAGE SCROLL-REVEAL (enhanced from navigation.js)
+   ---------------------------------------------------------- */
+body:not(.home) .rs-page-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 650ms cubic-bezier(.25,.8,.25,1) var(--reveal-delay, 0ms),
+        transform 650ms cubic-bezier(.25,.8,.25,1) var(--reveal-delay, 0ms);
+}
+
+body:not(.home) .rs-page-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* ----------------------------------------------------------
+   19. TYPOGRAPHY — consistent body rhythm
+   ---------------------------------------------------------- */
+body:not(.home) main[class$="-page"] p {
+    font-size: .9rem;
+    line-height: 1.72;
+}
+
+body:not(.home) main[class$="-page"] h2 {
+    letter-spacing: -.035em;
+}
+
+body:not(.home) main[class$="-page"] h3 {
+    font-size: 1.18rem !important;
+    line-height: 1.28;
+}
+
+/* ----------------------------------------------------------
+   20. CUSTOM CURSOR (pointer devices — always shown on inner pages)
+   ---------------------------------------------------------- */
+@media (pointer: fine) {
+    .rsi-cursor-dot {
+        position: fixed;
+        z-index: 10001;
+        top: 0; left: 0;
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: var(--color-saffron, #F36A21);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: width 160ms ease, height 160ms ease, opacity 160ms ease;
+        mix-blend-mode: multiply;
+        will-change: transform;
+    }
+
+    .rsi-cursor-ring {
+        position: fixed;
+        z-index: 10000;
+        top: 0; left: 0;
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(243,106,33,.42);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: width 200ms ease, height 200ms ease, border-color 200ms ease, background-color 200ms ease;
+        will-change: transform;
+    }
+
+    .rsi-cursor-ring.is-hovering {
+        width: 46px; height: 46px;
+        border-color: rgba(143,23,29,.62);
+        background: rgba(249,183,42,.07);
+    }
+
+    .rsi-cursor-dot.is-hovering {
+        width: 4px; height: 4px;
+        opacity: .6;
+    }
+}
+
+/* ----------------------------------------------------------
+   21. RESPONSIVE BREAKPOINTS
+   ---------------------------------------------------------- */
+@media (max-width: 1100px) {
+    body:not(.home) .rs-activities-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    body:not(.home) [class*="-hero"],
+    body:not(.home) [class*="-hero-inner"] {
+        min-height: 510px;
+    }
+
+    body:not(.home) .rs-activities-grid,
+    body:not(.home) .rs-events-card-grid,
+    body:not(.home) .rs-news-grid,
+    body:not(.home) .rs-featured-grid,
+    body:not(.home) .rs-download-grid,
+    body:not(.home) .rs-video-grid,
+    body:not(.home) .rs-contact-center-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body:not(.home) .rs-resource-category-grid,
+    body:not(.home) .rs-photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body:not(.home) .rs-about-journey {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body:not(.home) .rs-about-message {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    body:not(.home) [class*="-hero"] h1 {
+        font-size: clamp(2.5rem, 13vw, 3.5rem) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body:not(.home) [class*="-hero"],
+    body:not(.home) [class*="-hero-inner"] {
+        min-height: 560px;
+    }
+
+    body:not(.home) .rs-activities-grid,
+    body:not(.home) .rs-events-card-grid,
+    body:not(.home) .rs-news-grid,
+    body:not(.home) .rs-featured-grid,
+    body:not(.home) .rs-download-grid,
+    body:not(.home) .rs-video-grid,
+    body:not(.home) .rs-resource-category-grid,
+    body:not(.home) .rs-photo-grid,
+    body:not(.home) .rs-contact-center-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body:not(.home) .rs-about-journey {
+        grid-template-columns: 1fr;
+    }
+
+    body:not(.home) .rs-event-list-body,
+    body:not(.home) .rs-news-grid article > div {
+        padding: 18px 16px;
+    }
+
+    body:not(.home) .rs-event-list-body > div {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:not(.home) .rs-page-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    body:not(.home) article[class*="card"],
+    body:not(.home) article[class*="category"],
+    body:not(.home) .rs-activity-category,
+    body:not(.home) .rs-directory-card {
+        transition: none;
+    }
+}
+

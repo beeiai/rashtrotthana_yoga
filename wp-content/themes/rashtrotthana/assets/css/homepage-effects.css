@@ -1,0 +1,516 @@
+﻿/* ============================================================
+   Homepage Effects v2 — Additive layer only
+   ============================================================ */
+
+/* -------------------------------------------------------
+   0. Reduced-motion guard
+   ------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+/* -------------------------------------------------------
+   1. Hero – floating ambient orbs
+   ------------------------------------------------------- */
+.rs-hero::before {
+    content: "";
+    position: absolute;
+    width: clamp(280px, 32vw, 440px);
+    height: clamp(280px, 32vw, 440px);
+    top: -100px;
+    right: -120px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(249,183,42,.20) 0%, rgba(243,106,33,.10) 55%, transparent 76%);
+    animation: rse-float 14s ease-in-out infinite;
+}
+
+/* NOTE: body.home already defines a ::after on .rs-hero-content area;
+   we add a second ambient orb using a wrapper pseudo */
+.rs-hero-content::after {
+    content: "";
+    position: absolute;
+    width: clamp(130px, 14vw, 210px);
+    height: clamp(130px, 14vw, 210px);
+    bottom: -20px;
+    left: -30px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(circle, rgba(143,23,29,.10) 0%, transparent 70%);
+    animation: rse-float 10s ease-in-out infinite reverse;
+}
+
+@keyframes rse-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(20px, -24px) scale(1.05); }
+    66%       { transform: translate(-14px, 16px) scale(0.96); }
+}
+
+/* -------------------------------------------------------
+   2. Hero title — FIX blur by NOT using background-clip.
+      Instead use a clean color with a soft text-shadow glow.
+      The front-page.php already sets the right color; this
+      adds the glow that makes it "wow" without any blur.
+   ------------------------------------------------------- */
+body.home .rs-hero-title {
+    /* Override any -webkit-text-fill-color that causes blur */
+    -webkit-text-fill-color: unset !important;
+    background: none !important;
+    background-clip: unset !important;
+    -webkit-background-clip: unset !important;
+    color: #550000 !important;
+    text-shadow:
+        0 2px 16px rgba(255,248,236,.9),
+        0 0 40px rgba(143,23,29,.14);
+    animation: rse-title-glow 5s ease-in-out infinite;
+}
+
+@keyframes rse-title-glow {
+    0%, 100% { text-shadow: 0 2px 16px rgba(255,248,236,.9), 0 0 40px rgba(143,23,29,.12); }
+    50%       { text-shadow: 0 2px 20px rgba(255,248,236,1),  0 0 55px rgba(143,23,29,.22); }
+}
+
+/* -------------------------------------------------------
+   3. Hero eyebrow badge – animated shimmer sweep
+   ------------------------------------------------------- */
+.rs-hero-eyebrow {
+    position: relative;
+    overflow: hidden;
+}
+
+.rs-hero-eyebrow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: translateX(-100%);
+    animation: rse-sweep 3.5s ease-in-out infinite;
+}
+
+@keyframes rse-sweep {
+    0%       { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(220%); }
+}
+
+/* -------------------------------------------------------
+   4. Hero image – breathing glow
+   ------------------------------------------------------- */
+.rs-hero-image-wrapper {
+    animation: rse-glow-pulse 6s ease-in-out infinite;
+}
+
+@keyframes rse-glow-pulse {
+    0%, 100% { box-shadow: 18px 20px 0 rgba(143,23,29,.10), 0 25px 55px rgba(87,36,13,.15); }
+    50%       { box-shadow: 20px 22px 0 rgba(143,23,29,.20), 0 34px 72px rgba(87,36,13,.28); }
+}
+
+/* -------------------------------------------------------
+   5. Floating hero particles (injected by JS)
+   ------------------------------------------------------- */
+@keyframes rse-ptcl {
+    0%   { opacity: 0;   transform: translateY(0)   scale(0.6); }
+    15%  { opacity: .85; }
+    80%  { opacity: .4;  transform: translateY(-70px) scale(1); }
+    100% { opacity: 0;   transform: translateY(-95px) scale(0.5); }
+}
+
+/* -------------------------------------------------------
+   6. Scroll-reveal base (JS adds .rs-sr-visible)
+      IMPORTANT: Only applied to elements NOT inside carousel
+   ------------------------------------------------------- */
+.rs-sr {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 600ms cubic-bezier(.25,.8,.25,1) var(--sr-delay, 0ms),
+        transform 600ms cubic-bezier(.25,.8,.25,1) var(--sr-delay, 0ms);
+}
+
+.rs-sr-left {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition:
+        opacity 600ms cubic-bezier(.25,.8,.25,1) var(--sr-delay, 0ms),
+        transform 600ms cubic-bezier(.25,.8,.25,1) var(--sr-delay, 0ms);
+}
+
+.rs-sr-right {
+    opacity: 0;
+    transform: translateX(28px);
+    transition:
+        opacity 600ms cubic-bezier(.25,.8,.25,1) var(--sr-delay, 0ms),
+        transform 600ms cubic-bezier(.25,.8,.25,1) var(--sr-delay, 0ms);
+}
+
+.rs-sr.rs-sr-visible,
+.rs-sr-left.rs-sr-visible,
+.rs-sr-right.rs-sr-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* -------------------------------------------------------
+   7. Value cards – shimmer highlight on hover
+   ------------------------------------------------------- */
+.rs-value-card {
+    overflow: hidden;
+}
+
+/* -------------------------------------------------------
+   8. Activity & event cards – image zoom on hover
+      (safe: does NOT conflict with carousel scroll)
+   ------------------------------------------------------- */
+.rs-activity-card img,
+.rs-event-image img {
+    transition: transform 380ms cubic-bezier(.25,.8,.25,1), filter 380ms ease !important;
+}
+
+.rs-activity-card:hover img,
+.rs-event-card:hover .rs-event-image img {
+    transform: scale(1.07) !important;
+    filter: brightness(1.05) saturate(1.12);
+}
+
+/* Activity card gradient overlay */
+.rs-activity-card .rse-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(143,23,29,.30) 100%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 340ms ease;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.rs-activity-card:hover .rse-overlay {
+    opacity: 1;
+}
+
+/* -------------------------------------------------------
+   9. Drag cursor for horizontal scroll carousels
+   ------------------------------------------------------- */
+.rs-activity-grid,
+.rs-event-grid,
+.rs-gallery-grid {
+    cursor: grab;
+}
+
+.rse-dragging {
+    cursor: grabbing !important;
+    user-select: none;
+}
+
+/* -------------------------------------------------------
+   10. Gallery images – zoom and saturation on hover
+   ------------------------------------------------------- */
+.rs-gallery-grid img {
+    transition: transform 320ms ease, filter 320ms ease, box-shadow 320ms ease !important;
+}
+
+.rs-gallery-grid img:hover {
+    transform: scale(1.07) !important;
+    filter: brightness(1.07) saturate(1.14);
+    box-shadow: 0 14px 32px rgba(67,48,28,.24);
+}
+
+/* -------------------------------------------------------
+   11. Buttons – ripple click effect
+   ------------------------------------------------------- */
+.rs-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.rs-btn-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,.40);
+    transform: scale(0);
+    animation: rse-ripple 580ms linear forwards;
+    pointer-events: none;
+}
+
+@keyframes rse-ripple {
+    to { transform: scale(4.5); opacity: 0; }
+}
+
+/* -------------------------------------------------------
+   12. Primary button – hover glow aura
+   ------------------------------------------------------- */
+.rs-btn-primary {
+    transition:
+        transform 120ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease !important;
+}
+
+.rs-btn-primary:hover {
+    box-shadow: 0 10px 28px rgba(143,23,29,.34) !important;
+}
+
+/* -------------------------------------------------------
+   13. Hero icon – spin on row hover
+   ------------------------------------------------------- */
+.rs-hero-icon {
+    transition: transform 500ms cubic-bezier(.25,.8,.25,1) !important;
+}
+
+.rs-hero-action-row:hover .rs-hero-icon {
+    transform: rotate(15deg) scale(1.1) !important;
+}
+
+/* -------------------------------------------------------
+   14. Team cards – image zoom + border glow on hover
+   ------------------------------------------------------- */
+.rs-team-card img {
+    transition: transform 320ms ease, filter 320ms ease !important;
+}
+
+.rs-team-card:hover img {
+    transform: scale(1.06) !important;
+    filter: brightness(1.06) saturate(1.10);
+}
+
+.rs-team-card {
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease !important;
+}
+
+.rs-team-card:hover {
+    border-color: rgba(243,106,33,.52) !important;
+    box-shadow: 0 18px 38px rgba(82,38,18,.17) !important;
+}
+
+/* -------------------------------------------------------
+   15. Center cards – glow border + lift on hover
+   ------------------------------------------------------- */
+.rs-center-card {
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease !important;
+}
+
+.rs-center-card:hover {
+    border-color: rgba(243,106,33,.48) !important;
+    box-shadow: 0 22px 44px rgba(67,48,28,.20) !important;
+}
+
+/* -------------------------------------------------------
+   16. Stats section – warm halo pulse
+   ------------------------------------------------------- */
+.rs-stats {
+    position: relative;
+    overflow: hidden;
+}
+
+.rs-stats::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 70%;
+    height: 200%;
+    background: radial-gradient(ellipse, rgba(249,183,42,.08) 0%, transparent 65%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: rse-halo 8s ease-in-out infinite;
+}
+
+@keyframes rse-halo {
+    0%, 100% { opacity: .5; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 1;  transform: translate(-50%, -53%) scale(1.07); }
+}
+
+/* -------------------------------------------------------
+   17. Stat numbers – color shift on hover
+   ------------------------------------------------------- */
+.rs-stat-grid > div:not(.rs-stat-heading) strong {
+    transition: color 280ms ease;
+}
+
+.rs-stat-grid > div:not(.rs-stat-heading):hover strong {
+    color: #c3371c;
+}
+
+/* -------------------------------------------------------
+   18. Kicker / eyebrow in sections – shimmer sweep
+   ------------------------------------------------------- */
+.rs-kicker {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.rs-kicker::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(243,106,33,.22), transparent);
+    transform: translateX(-100%);
+    animation: rse-sweep 4.5s ease-in-out infinite 1s;
+}
+
+/* -------------------------------------------------------
+   19. Section heading accent bar grows on scroll-reveal
+   ------------------------------------------------------- */
+.rs-section-row h2::before {
+    width: 0 !important;
+    transition: width 500ms cubic-bezier(.25,.8,.25,1) 80ms !important;
+}
+
+.rs-section-row.rs-sr-visible h2::before {
+    width: 38px !important;
+}
+
+/* -------------------------------------------------------
+   20. Register / center buttons – right-nudge on hover
+   ------------------------------------------------------- */
+.rs-register-button,
+.rs-center-button {
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease !important;
+}
+
+.rs-register-button:hover {
+    transform: translateX(3px) !important;
+}
+
+/* -------------------------------------------------------
+   21. Outline-link – spacing nudge on hover
+   ------------------------------------------------------- */
+.rs-outline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 180ms ease, color 180ms ease, gap 180ms ease !important;
+}
+
+.rs-outline-link:hover {
+    gap: 10px !important;
+}
+
+/* -------------------------------------------------------
+   22. Fancy gradient border on focused inputs
+   ------------------------------------------------------- */
+.rs-center-search input:focus {
+    box-shadow: 0 0 0 3px rgba(243,106,33,.22) !important;
+}
+
+/* -------------------------------------------------------
+   23. Value cards section – staggered card lift animation
+       (plays once when section scrolls into view)
+   ------------------------------------------------------- */
+.rs-value-grid:hover .rs-value-card {
+    transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease !important;
+}
+
+/* -------------------------------------------------------
+   24. Hero section – gradient border shimmer on image frame
+   ------------------------------------------------------- */
+.rs-hero-image-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    z-index: -1;
+    background: linear-gradient(
+        135deg,
+        rgba(249,183,42,.0) 0%,
+        rgba(243,106,33,.6) 40%,
+        rgba(143,23,29,.4) 70%,
+        rgba(249,183,42,.0) 100%
+    );
+    background-size: 300% 300%;
+    animation: rse-border-spin 6s linear infinite;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+@keyframes rse-border-spin {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* -------------------------------------------------------
+   25. Homepage sections – alternating subtle background glow
+   ------------------------------------------------------- */
+.rs-values {
+    position: relative;
+}
+
+.rs-values::after {
+    content: "";
+    position: absolute;
+    bottom: -60px;
+    right: -80px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,183,42,.10) 0%, transparent 70%);
+    pointer-events: none;
+    animation: rse-float 12s ease-in-out infinite 3s;
+}
+
+} /* end @media prefers-reduced-motion: no-preference */
+
+/* -------------------------------------------------------
+   26. Custom cursor (pointer devices only — always shown)
+   ------------------------------------------------------- */
+@media (pointer: fine) {
+    .rse-cursor-dot {
+        position: fixed;
+        z-index: 10001;
+        top: 0;
+        left: 0;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--color-saffron, #F36A21);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: width 160ms ease, height 160ms ease, opacity 160ms ease;
+        mix-blend-mode: multiply;
+        will-change: transform;
+    }
+
+    .rse-cursor-ring {
+        position: fixed;
+        z-index: 10000;
+        top: 0;
+        left: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(243,106,33,.42);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: width 200ms ease, height 200ms ease, border-color 200ms ease, background-color 200ms ease;
+        will-change: transform;
+    }
+
+    .rse-cursor-ring.is-hovering {
+        width: 46px;
+        height: 46px;
+        border-color: rgba(143,23,29,.62);
+        background: rgba(249,183,42,.07);
+    }
+
+    .rse-cursor-dot.is-hovering {
+        width: 4px;
+        height: 4px;
+        opacity: .6;
+    }
+}
+
+/* -------------------------------------------------------
+   27. Drag-grab cursor for carousels (always shown)
+   ------------------------------------------------------- */
+.rs-activity-grid,
+.rs-event-grid,
+.rs-gallery-grid {
+    cursor: grab;
+}
+
+.rse-dragging,
+.rse-dragging * {
+    cursor: grabbing !important;
+}
