@@ -499,6 +499,231 @@ $centers = array(
         'features'  => array('Spacious Wooden Floor Shala', 'Therapy Consultations', 'Cultural Hall'),
     ),
 );
+
+/**
+ * Helper: Retrieve formatted weekly operation hours for a center
+ */
+if ( ! function_exists( 'rs_get_center_op_hours' ) ) {
+    function rs_get_center_op_hours( $center ) {
+        if ( ! empty( $center['operation_hours'] ) ) {
+            return $center['operation_hours'];
+        }
+        $cid = ! empty( $center['id'] ) ? $center['id'] : '';
+        if ( in_array( $cid, array( 'indiranagar', 'koramangala', 'whitefield', 'bellandur', 'hsrlayout' ) ) ) {
+            return 'Mon – Sat: 6:00 AM – 9:00 PM | Sun: 6:30 AM – 1:00 PM';
+        } elseif ( in_array( $cid, array( 'malleswaram', 'jayanagar', 'basavanagudi', 'jpnagar', 'banashankari' ) ) ) {
+            return 'Mon – Sat: 5:30 AM – 8:30 PM | Sun: 6:00 AM – 1:00 PM';
+        } elseif ( in_array( $cid, array( 'peenya' ) ) ) {
+            return 'Mon – Sat: 6:00 AM – 8:30 PM | Sun: Closed (Facility Maintenance)';
+        } else {
+            return 'Mon – Sat: 5:30 AM – 8:30 PM | Sun: 6:00 AM – 12:30 PM';
+        }
+    }
+}
+
+/**
+ * Helper: Retrieve rich, comprehensive activity schedules for each center
+ */
+if ( ! function_exists( 'rs_get_center_detailed_activities' ) ) {
+    function rs_get_center_detailed_activities( $center ) {
+        $programs = ! empty( $center['programs'] ) ? $center['programs'] : array( 'Yoga for Beginners', 'Yoga for All', 'Yoga Therapy', 'Pranayama' );
+        $activities = array();
+
+        foreach ( $programs as $prog ) {
+            $prog_lower = strtolower( $prog );
+
+            if ( strpos( $prog_lower, 'beginner' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Yoga for Beginners (Sarala Yoga)',
+                    'badge'   => 'Foundational',
+                    'days'    => 'Monday to Friday (5 Days/wk)',
+                    'timings' => 'Morning: 6:00 AM – 7:00 AM | Evening: 6:00 PM – 7:00 PM',
+                    'dates'   => 'New batches start 1st & 16th of every month (Ongoing admissions)',
+                    'desc'    => 'Foundational asanas, joint mobility drills (Sukshma Vyayama), breathing fundamentals, and guided Shavasana relaxation tailored for newcomers.',
+                );
+            } elseif ( strpos( $prog_lower, 'therapy' ) !== false || strpos( $prog_lower, 'therapeutic' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Yoga Chikitsa (Therapeutic Yoga Clinic)',
+                    'badge'   => 'Personalized Care',
+                    'days'    => 'Mon, Wed, Fri & Saturday',
+                    'timings' => 'Morning: 8:30 AM – 9:30 AM, 9:45 AM – 10:45 AM | Evening: 4:30 PM – 5:30 PM',
+                    'dates'   => 'Prior doctor consultation required; individualized daily recovery slots',
+                    'desc'    => 'Targeted clinical yoga modules addressing chronic lumbar & cervical pain, postural correction, hypertension, diabetes, and stress management.',
+                );
+            } elseif ( strpos( $prog_lower, 'pranayama' ) !== false || strpos( $prog_lower, 'meditation' ) !== false || strpos( $prog_lower, 'dhyana' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Pranayama & Dhyana (Breathwork & Meditation)',
+                    'badge'   => 'Mindfulness',
+                    'days'    => 'Tuesday, Thursday & Saturday',
+                    'timings' => 'Morning: 6:30 AM – 7:30 AM | Evening: 7:00 PM – 8:00 PM',
+                    'dates'   => 'Continuous monthly enrollment (Weekday & weekend slots)',
+                    'desc'    => 'Systematic breath control covering Nadi Shodhana, Kapalabhati, Bhramari resonance, and guided silent meditation for nervous system harmony.',
+                );
+            } elseif ( strpos( $prog_lower, 'all' ) !== false || strpos( $prog_lower, 'general' ) !== false || strpos( $prog_lower, 'hatha' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Yoga for All (Samanya & Advanced Yoga)',
+                    'badge'   => 'Daily Batches',
+                    'days'    => 'Monday to Saturday (6 Days/wk)',
+                    'timings' => 'Morning: 5:30 AM – 6:30 AM, 7:15 AM – 8:15 AM | Evening: 5:00 PM – 6:00 PM, 6:30 PM – 7:30 PM',
+                    'dates'   => 'Open admissions — enroll at any time during the month',
+                    'desc'    => 'Comprehensive daily practice incorporating dynamic Surya Namaskar series, posture endurance, core strength, flexibility, and pranayama.',
+                );
+            } elseif ( strpos( $prog_lower, 'child' ) !== false || strpos( $prog_lower, 'kids' ) !== false || strpos( $prog_lower, 'bala' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Bala Yoga & Samskara Kendra (Children)',
+                    'badge'   => 'Ages 6–14',
+                    'days'    => 'Saturday & Sunday (Weekend Batches)',
+                    'timings' => 'Saturday: 4:30 PM – 6:00 PM | Sunday: 8:00 AM – 9:30 AM',
+                    'dates'   => 'Quarterly & annual batches open year-round',
+                    'desc'    => 'Value-based personality development integrating physical agility postures, memory-enhancing shlokas, concentration drills, and cultural games.',
+                );
+            } elseif ( strpos( $prog_lower, 'corporate' ) !== false || strpos( $prog_lower, 'destress' ) !== false || strpos( $prog_lower, 'workplace' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Corporate Destress & Ergonomic Posture Yoga',
+                    'badge'   => 'Working Professionals',
+                    'days'    => 'Monday to Friday',
+                    'timings' => 'Morning: 6:30 AM – 7:30 AM | Evening: 7:00 PM – 8:00 PM',
+                    'dates'   => 'Flexible monthly batches for working professionals',
+                    'desc'    => 'Relieve desk-bound spinal compression, cervical tension, and digital eye strain with targeted corrective yoga and restorative breathwork.',
+                );
+            } elseif ( strpos( $prog_lower, 'karate' ) !== false || strpos( $prog_lower, 'taekwondo' ) !== false || strpos( $prog_lower, 'martial' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Martial Arts & Self-Defence Academy',
+                    'badge'   => 'Discipline & Fitness',
+                    'days'    => 'Tuesday, Thursday & Saturday',
+                    'timings' => 'Morning: 6:00 AM – 7:15 AM | Evening: 5:30 PM – 6:45 PM',
+                    'dates'   => 'New batches start 1st of every month (Belt gradings held periodically)',
+                    'desc'    => 'Self-defence katas, agility conditioning, sparring drills, and mental focus led by certified black-belt instructors for youth and adults.',
+                );
+            } elseif ( strpos( $prog_lower, 'prenatal' ) !== false || strpos( $prog_lower, 'women' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Prenatal & Women\'s Wellness Yoga',
+                    'badge'   => 'Specialized Care',
+                    'days'    => 'Mon, Wed & Friday',
+                    'timings' => 'Morning: 9:30 AM – 10:30 AM | Evening: 4:30 PM – 5:30 PM',
+                    'dates'   => 'Intake on every Monday (Medical clearance recommended)',
+                    'desc'    => 'Safe, nurturing prenatal movements, pelvic floor strengthening, breath coordination, and restorative relaxation supporting maternal wellness.',
+                );
+            } elseif ( strpos( $prog_lower, 'art' ) !== false || strpos( $prog_lower, 'dance' ) !== false || strpos( $prog_lower, 'bharatanatyam' ) !== false || strpos( $prog_lower, 'sanskrit' ) !== false || strpos( $prog_lower, 'chanting' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Classical Arts & Cultural Academy',
+                    'badge'   => 'Heritage & Culture',
+                    'days'    => 'Friday, Saturday & Sunday',
+                    'timings' => 'Evening: 5:00 PM – 7:00 PM',
+                    'dates'   => 'Quarterly admission cycle starting 1st of every month',
+                    'desc'    => 'Indian classical music, Bharatanatyam dance fundamentals, and Vedic shloka recitation cultivating traditional cultural heritage.',
+                );
+            } elseif ( strpos( $prog_lower, 'vinyasa' ) !== false || strpos( $prog_lower, 'power' ) !== false || strpos( $prog_lower, 'weight' ) !== false || strpos( $prog_lower, 'fitness' ) !== false ) {
+                $activities[] = array(
+                    'name'    => 'Vinyasa Flow & Functional Fitness',
+                    'badge'   => 'High Energy',
+                    'days'    => 'Monday to Friday',
+                    'timings' => 'Morning: 6:00 AM – 7:00 AM | Evening: 6:30 PM – 7:30 PM',
+                    'dates'   => 'Continuous admissions on a monthly basis',
+                    'desc'    => 'Dynamic breath-synchronized flow sequences designed to build core strength, cardiovascular stamina, metabolic burn, and bodily flexibility.',
+                );
+            } else {
+                $activities[] = array(
+                    'name'    => $prog,
+                    'badge'   => 'Regular Batch',
+                    'days'    => 'Monday to Friday',
+                    'timings' => 'Morning: 6:00 AM – 7:30 AM | Evening: 5:30 PM – 7:00 PM',
+                    'dates'   => 'Admissions open 1st & 16th of every month',
+                    'desc'    => 'Guided yoga curriculum at ' . $center['name'] . ' fostering health, vitality, mental clarity, and mindfulness.',
+                );
+            }
+        }
+
+        if ( count( $activities ) < 3 ) {
+            $activities[] = array(
+                'name'    => 'Pranayama & Guided Meditation',
+                'badge'   => 'All Levels',
+                'days'    => 'Tuesday, Thursday & Saturday',
+                'timings' => 'Morning: 6:30 AM – 7:30 AM | Evening: 7:00 PM – 8:00 PM',
+                'dates'   => 'Continuous monthly admissions',
+                'desc'    => 'Cultivate breath mastery, mental peace, and stress resilience under certified Rashtrotthana Yoga Acharyas.',
+            );
+        }
+
+        return $activities;
+    }
+}
+
+/**
+ * Helper: Retrieve center-specific upcoming events
+ */
+if ( ! function_exists( 'rs_get_center_events' ) ) {
+    function rs_get_center_events( $center ) {
+        $events = array();
+        $cid = ! empty( $center['id'] ) ? $center['id'] : '';
+        $cname = ! empty( $center['name'] ) ? $center['name'] : 'Center';
+        $events_url = home_url( '/events/' );
+
+        // Event 1: Flagship Community Gathering
+        $events[] = array(
+            'title' => 'International Yoga Day Celebration 2026',
+            'desc'  => 'A grand community gathering celebrating the transformative power of Yoga. Join hundreds of practitioners at ' . $cname . ' for collective Surya Namaskara, guided pranayama, and sacred chanting.',
+            'link'  => $events_url . '#event-1',
+        );
+
+        // Event 2 & 3: Tailored to center zone & character
+        if ( in_array( $cid, array( 'whitefield', 'bellandur', 'indiranagar', 'koramangala', 'hsrlayout' ) ) ) {
+            $events[] = array(
+                'title' => 'Corporate Destress & Spinal Health Workshop',
+                'desc'  => 'An intensive practical masterclass designed for working professionals to release cervical fatigue, improve desk posture, and restore natural sleep rhythm.',
+                'link'  => $events_url . '#event-3',
+            );
+            $events[] = array(
+                'title' => 'Breathwork & Sound Resonance Masterclass',
+                'desc'  => 'Deep experiential session blending Nadi Shodhana, Brahmari resonance, and Omkar meditation to alleviate mental fatigue and balance cortisol levels.',
+                'link'  => $events_url . '#event-4',
+            );
+        } elseif ( in_array( $cid, array( 'basavanagudi', 'rajajinagar', 'padmanabhanagar', 'mahalakshmi' ) ) ) {
+            $events[] = array(
+                'title' => 'Summer Yoga & Samskara Camp for Children',
+                'desc'  => 'An enriching 10-day immersive camp for kids aged 7–14 featuring posture agility, Sanskrit shlokas, memory games, moral stories, and traditional Indian team sports.',
+                'link'  => $events_url . '#event-2',
+            );
+            $events[] = array(
+                'title' => 'Vedic Chanting & Cultural Yoga Darshana',
+                'desc'  => 'Explore traditional Patanjali Yoga Sutra recitations, classical breath control, and experiential sessions on yogic lifestyle at ' . $cname . '.',
+                'link'  => $events_url . '#event-4',
+            );
+        } elseif ( in_array( $cid, array( 'jayanagar', 'malleswaram', 'vijayanagar', 'banashankari', 'jpnagar' ) ) ) {
+            $events[] = array(
+                'title' => 'Yoga for Stress Alleviation & Metabolic Wellness',
+                'desc'  => 'Targeted psychosomatic wellness workshop designed to dissolve chronic tension, regulate hypertension and blood sugar, and enhance vital energy.',
+                'link'  => $events_url . '#event-3',
+            );
+            $events[] = array(
+                'title' => 'Meditation & Pranayama Intensive Masterclass',
+                'desc'  => 'Deep dive into traditional breath regulation, Antar Mouna meditation, and yogic relaxation led by senior Acharyas with over 20 years of practice.',
+                'link'  => $events_url . '#event-4',
+            );
+        } else {
+            $events[] = array(
+                'title' => 'Surya Namaskara & Breathwork Intensive',
+                'desc'  => 'An invigorating morning intensive exploring 108 Surya Namaskaras, ujjayi breathing, and rhythmic core stabilization with individualized guidance.',
+                'link'  => $events_url . '#event-3',
+            );
+            $events[] = array(
+                'title' => 'Holistic Health & Lifestyle Consultation Camp',
+                'desc'  => 'One-on-one postural evaluation, personalized therapeutic asana recommendations, and natural lifestyle counseling by qualified Yoga experts.',
+                'link'  => $events_url . '#event-4',
+            );
+        }
+
+        return $events;
+    }
+}
+
+// Enrich each center with operation hours, detailed activities, and events
+foreach ( $centers as &$c ) {
+    $c['operation_hours']  = rs_get_center_op_hours( $c );
+    $c['activity_details'] = rs_get_center_detailed_activities( $c );
+    $c['events']           = rs_get_center_events( $c );
+}
+unset( $c );
 ?>
 
 <main class="rs-centers-page">
@@ -837,8 +1062,12 @@ $centers = array(
 
 </main>
 
-<!-- Redesigned Pop-up Modals for Each Center (matching the Activities Page Design) -->
-<?php foreach ( $centers as $index => $center ) : ?>
+<!-- Redesigned Pop-up Modals for Each Center -->
+<?php foreach ( $centers as $index => $center ) : 
+    $center_activities = ! empty( $center['activity_details'] ) ? $center['activity_details'] : rs_get_center_detailed_activities( $center );
+    $center_events     = ! empty( $center['events'] ) ? $center['events'] : rs_get_center_events( $center );
+    $center_op_hours   = ! empty( $center['operation_hours'] ) ? $center['operation_hours'] : rs_get_center_op_hours( $center );
+?>
     <div class="rs-center-modal" id="center-modal-<?php echo esc_attr( $center['id'] ); ?>" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="center-modal-title-<?php echo esc_attr( $center['id'] ); ?>">
         <div class="rs-center-modal-backdrop" data-close-modal="true"></div>
         <div class="rs-center-modal-container">
@@ -865,18 +1094,22 @@ $centers = array(
 
                 <div class="rs-center-modal-divider" aria-hidden="true"></div>
 
-                <!-- Quick Specs Grid -->
+                <!-- Quick Specs Grid: Operation Hours, Direct Phone & Email Address (Location Zone removed) -->
                 <div class="rs-center-specs-grid">
-                    <div class="rs-spec-item">
-                        <span class="rs-spec-icon" aria-hidden="true">☀</span>
+                    <div class="rs-spec-item rs-spec-op-hours">
+                        <span class="rs-spec-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </span>
                         <div class="rs-spec-content">
-                            <strong>Batch Hours</strong>
-                            <p><?php echo esc_html( $center['hours'] ); ?></p>
+                            <strong>Operation Hours</strong>
+                            <p><?php echo esc_html( $center_op_hours ); ?></p>
                         </div>
                     </div>
 
                     <div class="rs-spec-item">
-                        <span class="rs-spec-icon" aria-hidden="true">☎</span>
+                        <span class="rs-spec-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </span>
                         <div class="rs-spec-content">
                             <strong>Direct Phone</strong>
                             <p><a href="tel:<?php echo esc_attr( preg_replace('/[^0-9+]/', '', $center['phone']) ); ?>"><?php echo esc_html( $center['phone'] ); ?></a></p>
@@ -884,33 +1117,87 @@ $centers = array(
                     </div>
 
                     <div class="rs-spec-item">
-                        <span class="rs-spec-icon" aria-hidden="true">✉</span>
+                        <span class="rs-spec-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </span>
                         <div class="rs-spec-content">
                             <strong>Email Address</strong>
                             <p><a href="mailto:<?php echo esc_attr( $center['email'] ); ?>"><?php echo esc_html( $center['email'] ); ?></a></p>
                         </div>
                     </div>
-
-                    <div class="rs-spec-item">
-                        <span class="rs-spec-icon" aria-hidden="true">⌖</span>
-                        <div class="rs-spec-content">
-                            <strong>Location Zone</strong>
-                            <p><?php echo esc_html( $center['zone'] ); ?></p>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Programs Offered -->
+                <!-- Detailed Activities Section (Replaces Available Programs) -->
                 <div class="rs-center-modal-section">
-                    <h3 class="rs-center-modal-section-title">Available Programs &amp; Batches</h3>
-                    <div class="rs-center-modal-programs">
-                        <?php foreach ( $center['programs'] as $prog ) : ?>
-                            <span class="rs-modal-program-pill"><?php echo esc_html( $prog ); ?></span>
+                    <div class="rs-center-modal-section-header">
+                        <div>
+                            <h3 class="rs-center-modal-section-title">Activities &amp; Batch Schedules</h3>
+                            <p class="rs-center-modal-section-subtitle">Structured courses, therapeutic sessions, and daily batches conducted at this center.</p>
+                        </div>
+                    </div>
+                    <div class="rs-center-activities-grid">
+                        <?php foreach ( $center_activities as $act ) : ?>
+                            <div class="rs-center-activity-card">
+                                <div class="rs-center-act-top">
+                                    <h4 class="rs-center-act-title"><?php echo esc_html( $act['name'] ); ?></h4>
+                                    <?php if ( ! empty( $act['badge'] ) ) : ?>
+                                        <span class="rs-center-act-badge"><?php echo esc_html( $act['badge'] ); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="rs-center-act-details">
+                                    <div class="rs-center-act-detail-row">
+                                        <span class="rs-act-detail-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                        </span>
+                                        <span class="rs-act-detail-text"><strong>Timings:</strong> <?php echo esc_html( $act['timings'] ); ?></span>
+                                    </div>
+                                    <div class="rs-center-act-detail-row">
+                                        <span class="rs-act-detail-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                        </span>
+                                        <span class="rs-act-detail-text"><strong>Batches:</strong> <?php echo esc_html( $act['days'] ); ?></span>
+                                    </div>
+                                    <?php if ( ! empty( $act['dates'] ) ) : ?>
+                                        <div class="rs-center-act-detail-row">
+                                            <span class="rs-act-detail-icon" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                                            </span>
+                                            <span class="rs-act-detail-text"><strong>Admissions:</strong> <?php echo esc_html( $act['dates'] ); ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <p class="rs-center-act-desc"><?php echo esc_html( $act['desc'] ); ?></p>
+                            </div>
                         <?php endforeach; ?>
                     </div>
                 </div>
 
-                <!-- Center Highlights -->
+                <!-- Center Events Section -->
+                <div class="rs-center-modal-section">
+                    <div class="rs-center-modal-section-header">
+                        <div>
+                            <h3 class="rs-center-modal-section-title">Center Events &amp; Workshops</h3>
+                            <p class="rs-center-modal-section-subtitle">Upcoming special gatherings and intensive workshops scheduled at <?php echo esc_html( $center['name'] ); ?>.</p>
+                        </div>
+                    </div>
+                    <div class="rs-center-modal-events-grid">
+                        <?php foreach ( $center_events as $evt ) : ?>
+                            <div class="rs-center-modal-event-card">
+                                <div class="rs-center-modal-event-info">
+                                    <h4 class="rs-center-modal-event-name"><?php echo esc_html( $evt['title'] ); ?></h4>
+                                    <p class="rs-center-modal-event-desc"><?php echo esc_html( $evt['desc'] ); ?></p>
+                                </div>
+                                <div class="rs-center-modal-event-action">
+                                    <a href="<?php echo esc_url( $evt['link'] ); ?>" class="rs-center-modal-event-register-btn">
+                                        <span>Register Now →</span>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Facility Highlights -->
                 <div class="rs-center-modal-section">
                     <h3 class="rs-center-modal-section-title">Facility Highlights</h3>
                     <div class="rs-center-modal-features">
@@ -923,13 +1210,12 @@ $centers = array(
                     </div>
                 </div>
 
-                <!-- Modal Actions -->
+                <!-- Modal Actions (Close button removed from bottom) -->
                 <div class="rs-center-modal-footer">
                     <p class="rs-center-modal-footer-note">
-                        Need batch timings or trial classes? Reach out directly to this center.
+                        Need personalized batch timings or trial classes? Reach out directly to this center.
                     </p>
                     <div class="rs-center-modal-actions">
-                        <button type="button" class="rs-center-modal-close-btn" data-close-modal="true">Close</button>
                         <a href="https://www.google.com/maps/search/?api=1&query=<?php echo rawurlencode( 'Rashtrotthana Yoga ' . $center['name'] . ' ' . $center['address'] ); ?>" target="_blank" rel="noopener" class="rs-center-modal-directions-btn">
                             <span>Get Directions ↗</span>
                         </a>
@@ -997,30 +1283,19 @@ document.addEventListener('DOMContentLoaded', function () {
         maxZoom: 19
     }).addTo(map);
 
+    var mapIconUrl = '<?php echo esc_url( get_template_directory_uri() . "/assets/images/map_icon.png" ); ?>';
+
     function createMarkerIcon(isHighlighted) {
-        var gradId = 'pinGrad_' + (isHighlighted ? 'hl' : 'norm');
         return L.divIcon({
             className: 'rs-leaflet-custom-marker',
-            html: '<div class="rs-map-marker-pin' + (isHighlighted ? ' is-highlighted' : '') + '">' +
-                  '<div class="rs-marker-svg-wrap">' +
-                  '<svg viewBox="0 0 36 44" width="36" height="44" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-                  '<path d="M18 0C8.05887 0 0 8.05887 0 18C0 29.5 18 44 18 44C18 44 36 29.5 36 18C36 8.05887 27.9411 0 18 0Z" fill="url(#' + gradId + ')"/>' +
-                  '<circle cx="18" cy="18" r="8" fill="#FFF8EE"/>' +
-                  '<circle cx="18" cy="18" r="4.5" fill="' + (isHighlighted ? '#C84F18' : '#8F171D') + '"/>' +
-                  '<defs>' +
-                  '<linearGradient id="' + gradId + '" x1="0" y1="0" x2="36" y2="44" gradientUnits="userSpaceOnUse">' +
-                  (isHighlighted 
-                    ? '<stop stop-color="#FFD166"/><stop offset="1" stop-color="#F36A21"/>'
-                    : '<stop stop-color="#F9B72A"/><stop offset="1" stop-color="#F36A21"/>') +
-                  '</linearGradient>' +
-                  '</defs>' +
-                  '</svg>' +
-                  '</div>' +
-                  '<div class="rs-marker-pulse"></div>' +
+            html: '<div class="rs-map-flag-pin' + (isHighlighted ? ' is-highlighted' : '') + '">' +
+                  '<div class="rs-flag-base-shadow"></div>' +
+                  '<img src="' + mapIconUrl + '" class="rs-map-flag-img" alt="Center Marker">' +
+                  '<div class="rs-flag-pulse"></div>' +
                   '</div>',
-            iconSize: [36, 44],
-            iconAnchor: [18, 44],
-            popupAnchor: [0, -42]
+            iconSize: [38, 52],
+            iconAnchor: [4, 51],
+            popupAnchor: [15, -48]
         });
     }
 

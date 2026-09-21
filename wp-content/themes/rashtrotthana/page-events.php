@@ -1293,7 +1293,31 @@ get_header();
 .rs-modal-event-details span {
     display: inline-flex;
     align-items: center;
-    gap: .35rem;
+    gap: .4rem;
+}
+
+.rs-modal-detail-icon {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: var(--color-maroon);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+.rs-modal-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 480px) {
+    .rs-modal-row {
+        grid-template-columns: 1fr;
+        gap: .85rem;
+    }
 }
 
 /* Modal Form Fields */
@@ -1997,9 +2021,18 @@ $news_dataset = array(
             <span class="rs-modal-badge" id="rs-modal-category-text">Special Event</span>
             <h2 class="rs-modal-title" id="rs-modal-event-title">Event Title</h2>
             <div class="rs-modal-event-details">
-                <span id="rs-modal-date-text">📅 Date</span>
-                <span id="rs-modal-time-text">⏰ Time</span>
-                <span id="rs-modal-venue-text">📍 Venue</span>
+                <span>
+                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span id="rs-modal-date-text">Date</span>
+                </span>
+                <span>
+                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="rs-modal-time-text">Time</span>
+                </span>
+                <span>
+                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span id="rs-modal-venue-text">Venue</span>
+                </span>
             </div>
         </div>
 
@@ -2009,6 +2042,22 @@ $news_dataset = array(
             <div class="rs-modal-field">
                 <label for="reg-full-name">Your Full Name *</label>
                 <input type="text" id="reg-full-name" required placeholder="e.g. Anand Sharma">
+            </div>
+
+            <div class="rs-modal-row">
+                <div class="rs-modal-field">
+                    <label for="reg-age">Age *</label>
+                    <input type="number" id="reg-age" name="age" required min="5" max="120" placeholder="e.g. 28">
+                </div>
+                <div class="rs-modal-field">
+                    <label for="reg-gender">Gender *</label>
+                    <select id="reg-gender" name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
             </div>
 
             <div class="rs-modal-field">
@@ -2060,7 +2109,10 @@ $news_dataset = array(
             <span class="rs-modal-badge" id="rs-article-modal-category">News</span>
             <h2 class="rs-modal-title" id="rs-article-modal-title">Article Title</h2>
             <div class="rs-modal-event-details">
-                <span id="rs-article-modal-date">📅 May 20, 2026</span>
+                <span>
+                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span id="rs-article-modal-date">May 20, 2026</span>
+                </span>
                 <span>•</span>
                 <span>Rashtrotthana Editorial</span>
             </div>
@@ -2387,9 +2439,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         hiddenEventIdInput.value = ev.id;
         modalEventTitle.textContent = ev.title;
-        modalDateText.textContent = '📅 ' + ev.day + ' ' + ev.month + ' ' + ev.year;
-        modalTimeText.textContent = '⏰ ' + ev.time;
-        modalVenueText.textContent = '📍 ' + ev.venue;
+        modalDateText.textContent = ev.day + ' ' + ev.month + ' ' + ev.year;
+        modalTimeText.textContent = ev.time;
+        modalVenueText.textContent = ev.venue;
         modalCategoryText.textContent = ev.category + ' (' + ev.fee + ')';
 
         regForm.reset();
@@ -2454,7 +2506,7 @@ document.addEventListener('DOMContentLoaded', function () {
         articleImg.alt = nw.title;
         articleTitle.textContent = nw.title;
         articleCategory.textContent = nw.category;
-        articleDate.textContent = '📅 ' + nw.date + ' (' + nw.read_time + ')';
+        articleDate.textContent = nw.date + ' (' + nw.read_time + ')';
         articleContent.innerHTML = '<p>' + nw.full_text + '</p><p>For inquiries, press coverage, or collaborations, contact the Rashtrotthana Media Cell at info@rashtrotthana.org.</p>';
 
         articleModal.classList.add('is-active');

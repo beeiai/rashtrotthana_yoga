@@ -593,12 +593,16 @@ $faqs_dataset = array(
 }
 
 .rs-form-alert.is-success {
-    display: flex;
+    display: none;
     align-items: flex-start;
     gap: .75rem;
     background: #f1f8ea;
     border: 1px solid #b5d89b;
     color: #2b5717;
+}
+
+.rs-form-alert.is-success.is-visible {
+    display: flex;
 }
 
 .rs-form-alert.is-success strong {
@@ -1464,8 +1468,8 @@ $faqs_dataset = array(
                         </div>
                     </form>
 
-                    <!-- Success Feedback Alert -->
-                    <div class="rs-form-alert is-success" id="rs-contact-success-alert" role="alert">
+                    <!-- Success Feedback Alert (Hidden by default, shown only after submit) -->
+                    <div class="rs-form-alert is-success" id="rs-contact-success-alert" role="alert" style="display: none;">
                         <svg style="width: 24px; height: 24px; stroke: #2b5717; stroke-width: 2.2; fill: none; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         <div>
                             <strong>Thank you for reaching out!</strong>
@@ -1642,24 +1646,19 @@ document.addEventListener('DOMContentLoaded', function () {
         // Centers dataset for map markers
         var mapCenters = <?php echo json_encode( $flagship_centers ); ?>;
 
+        var mapIconUrl = '<?php echo esc_url( get_template_directory_uri() . "/assets/images/map_icon.png" ); ?>';
+
         function createCustomPin(isHQ) {
-            var pinColor = isHQ ? '#8F171D' : '#F36A21';
-            var strokeColor = isHQ ? '#F9B72A' : '#ffffff';
-            var letter = isHQ ? '★' : '🧘';
-
-            var svgHtml = '<div class="rs-leaflet-pin-wrap' + (isHQ ? ' is-hq' : '') + '">' +
-                '<svg class="rs-pin-svg" viewBox="0 0 38 48" width="38" height="48">' +
-                    '<path d="M19 0C8.5 0 0 8.5 0 19c0 14.5 19 29 19 29s19-14.5 19-29C38 8.5 29.5 0 19 0z" fill="' + pinColor + '" stroke="' + strokeColor + '" stroke-width="2"/>' +
-                '</svg>' +
-                '<div class="rs-pin-badge">' + letter + '</div>' +
-            '</div>';
-
             return L.divIcon({
                 className: 'rs-leaflet-custom-marker',
-                html: svgHtml,
-                iconSize: [38, 48],
-                iconAnchor: [19, 46],
-                popupAnchor: [0, -42]
+                html: '<div class="rs-map-flag-pin' + (isHQ ? ' is-highlighted' : '') + '">' +
+                      '<div class="rs-flag-base-shadow"></div>' +
+                      '<img src="' + mapIconUrl + '" class="rs-map-flag-img" alt="Center Marker">' +
+                      (isHQ ? '<div class="rs-flag-pulse"></div>' : '') +
+                      '</div>',
+                iconSize: [38, 52],
+                iconAnchor: [4, 51],
+                popupAnchor: [15, -48]
             });
         }
 
@@ -1729,10 +1728,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (successAlert) {
                     successAlert.style.display = 'flex';
+                    successAlert.classList.add('is-visible');
                     successAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
                     setTimeout(function () {
                         successAlert.style.display = 'none';
+                        successAlert.classList.remove('is-visible');
                     }, 8000);
                 }
             }, 900);

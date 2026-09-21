@@ -584,78 +584,31 @@ get_header();
 }
 
 /* ============================================================
-   5. OUR FOUNDER SECTION
+   5. OUR MEMBERS SECTION
    ============================================================ */
-.rs-founder-grid {
+.rs-team-grid {
     display: grid;
-    grid-template-columns: 38% 62%;
-    gap: 3.25rem;
-    align-items: center;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.4rem;
 }
 
-.rs-founder-portrait-wrap {
+.rs-team-card {
     position: relative;
-    border-radius: 1.35rem;
     overflow: hidden;
-    border: 1px solid rgba(143, 23, 29, .18);
-    box-shadow: 0 18px 42px rgba(89, 37, 24, .12), inset 0 1px 0 rgba(255, 255, 255, .9);
-    background: var(--color-sand);
-}
-
-.rs-founder-portrait-wrap::after {
-    position: absolute;
-    top: 0;
-    right: 1.5rem;
-    width: 5rem;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 14px rgba(249, 183, 42, .85);
-    content: "";
-}
-
-.rs-founder-portrait-wrap img {
-    width: 100%;
-    height: 100%;
-    max-height: 480px;
-    object-fit: cover;
-    transition: transform 500ms ease;
-}
-
-.rs-founder-portrait-wrap:hover img {
-    transform: scale(1.05);
-}
-
-.rs-founder-content p {
-    color: #67574c;
-    font-size: 1.02rem;
-    line-height: 1.75;
-    margin: 0 0 1.25rem;
-}
-
-.rs-founder-content p strong {
-    color: #542019;
-    font-weight: 700;
-}
-
-/* Elevated Quote Card */
-.rs-founder-quote-card {
-    position: relative;
-    margin-top: 2rem;
-    padding: 1.75rem 2rem;
-    border-radius: 1.25rem;
-    background: linear-gradient(135deg, rgba(255, 245, 228, .9), rgba(255, 253, 249, .95));
-    border: 1px solid rgba(143, 23, 29, .15);
-    box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 #fff;
+    padding: .85rem .85rem 1.35rem;
+    border: 1px solid rgba(143, 23, 29, .15) !important;
+    border-radius: 1.15rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(255, 248, 236, .75));
+    box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    display: flex;
-    gap: 1.25rem;
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
 
-.rs-founder-quote-card::after {
+.rs-team-card::after {
     position: absolute;
     top: 0;
-    right: 2rem;
+    right: 1.2rem;
     width: 4rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
@@ -663,33 +616,47 @@ get_header();
     content: "";
 }
 
-.rs-quote-mark {
-    font-size: 3.5rem;
-    line-height: .9;
-    color: var(--color-saffron);
-    font-weight: 900;
-    font-family: Georgia, serif;
-    flex-shrink: 0;
+.rs-team-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(243, 106, 33, .48) !important;
+    box-shadow: 0 22px 42px rgba(89, 37, 24, .14), inset 0 1px 0 rgba(255, 255, 255, .9);
 }
 
-.rs-quote-body {
-    display: flex;
-    flex-direction: column;
+.rs-team-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+    border-radius: .75rem;
+    background: var(--color-sand);
+    transition: transform 400ms ease, filter 400ms ease;
 }
 
-.rs-quote-text {
-    font-size: 1.1rem;
-    font-style: italic;
-    font-weight: 600;
-    line-height: 1.7;
+.rs-team-card:hover img {
+    transform: scale(1.04);
+}
+
+.rs-team-card h3 {
+    margin: .95rem .35rem .25rem;
     color: #542019;
-    margin-bottom: .65rem;
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.25;
 }
 
-.rs-quote-author {
-    font-size: .92rem;
-    font-weight: 700;
-    color: var(--color-maroon);
+.rs-team-card .rs-team-role {
+    margin: 0 .35rem .65rem;
+    color: var(--color-saffron);
+    font-size: .84rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.rs-team-card > p:last-child {
+    margin: 0 .35rem;
+    color: #67574c;
+    font-size: .86rem;
+    line-height: 1.55;
 }
 
 /* ============================================================
@@ -780,10 +747,13 @@ get_header();
    ============================================================ */
 @media (max-width: 1024px) {
     .rs-background-grid,
-    .rs-history-grid,
-    .rs-founder-grid {
+    .rs-history-grid {
         grid-template-columns: 1fr;
         gap: 2.5rem;
+    }
+    .rs-team-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem 1rem;
     }
     .rs-values-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -808,10 +778,8 @@ get_header();
     .rs-timeline-node {
         flex: 0 0 100%;
     }
-    .rs-founder-quote-card {
-        flex-direction: column;
-        gap: .5rem;
-        padding: 1.35rem 1.5rem;
+    .rs-team-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -1046,44 +1014,33 @@ get_header();
     </section>
 
     <!-- ============================================================
-         6. OUR FOUNDER SECTION
+         6. OUR MEMBERS SECTION
          ============================================================ -->
-    <section class="rs-about-section" id="founder-section">
+    <section class="rs-about-section" id="members-section">
         <div class="rs-container">
-            <div class="rs-founder-grid">
-                <div class="rs-founder-portrait-wrap">
-                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=700&q=80" alt="Dr. D. Veerendra Heggade - Founder, Rashtrotthana Parishat" loading="lazy">
-                </div>
+            <div class="rs-about-section-header text-center">
+                <h2>Our <em>Members</em></h2>
+                <p class="rs-about-section-desc mx-auto">
+                    Meet the people who bring our vision to life through yoga, education, culture and service.
+                </p>
+            </div>
 
-                <div class="rs-founder-content">
-                    <div class="rs-about-section-header">
-                        <h2>Our Visionary <em>Founder</em></h2>
-                        <p class="rs-about-section-desc">
-                            The guiding philosophy behind the Rashtrotthana Yoga movement.
-                        </p>
-                    </div>
-
-                    <p>
-                        <strong>Dr. D. Veerendra Heggade</strong>, the revered Dharmadhikari of Dharmasthala and the founding inspiration behind Rashtrotthana Parishat, has been the beacon guiding this widespread Yoga movement.
-                    </p>
-                    <p>
-                        His steadfast conviction that Yoga possesses the intrinsic power to transform individuals, heal bodily ailments, and foster socially conscious citizens has catalyzed the growth of our extensive network of community centers.
-                    </p>
-                    <p>
-                        Under his inspiring guidance, Rashtrotthana Yoga remains steadfastly dedicated to service, integrity, and building a vigorous, harmonious nation.
-                    </p>
-
-                    <!-- Quote Card -->
-                    <div class="rs-founder-quote-card">
-                        <div class="rs-quote-mark" aria-hidden="true">&ldquo;</div>
-                        <div class="rs-quote-body">
-                            <div class="rs-quote-text">
-                                Yoga is not just an exercise; it is a way of life. It connects body, mind, and spirit to create a balanced, meaningful, and joyful existence.
-                            </div>
-                            <span class="rs-quote-author">&ndash; Dr. D. Veerendra Heggade</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="rs-team-grid">
+                <?php
+                $team_image = get_template_directory_uri() . '/assets/images/hero-v3.png';
+                foreach ( array(
+                    array( 'Ananya H.', 'Yoga & Wellness', 'Creating welcoming spaces where every person can find balance and strength.' ),
+                    array( 'Prasanna B.', 'Education & Values', 'Nurturing confident learners through discipline, curiosity and timeless values.' ),
+                    array( 'Ramesh K.', 'Community Service', 'Connecting people and purpose through meaningful service across our communities.' ),
+                    array( 'Meera S.', 'Culture & Outreach', 'Sharing the richness of Indian culture while building a kinder, stronger society.' ),
+                ) as $member ) : ?>
+                    <article class="rs-team-card">
+                        <img src="<?php echo esc_url( $team_image ); ?>" alt="<?php echo esc_attr( $member[0] ); ?>" loading="lazy">
+                        <h3><?php echo esc_html( $member[0] ); ?></h3>
+                        <p class="rs-team-role"><?php echo esc_html( $member[1] ); ?></p>
+                        <p><?php echo esc_html( $member[2] ); ?></p>
+                    </article>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>

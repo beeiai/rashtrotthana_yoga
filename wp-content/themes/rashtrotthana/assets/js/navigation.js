@@ -88,19 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (eventSearchButton) eventSearchButton.addEventListener('click', filterEvents);
   }
 
-  const resourcePage = document.querySelector('.rs-resources-page');
-  if (resourcePage) {
-    const search = resourcePage.querySelector('.rs-resource-search input');
-    const cards = Array.from(resourcePage.querySelectorAll('[data-category]'));
-    if (search) {
-      search.addEventListener('input', function () {
-        const query = search.value.toLowerCase().trim();
-        cards.forEach(function (card) {
-          card.hidden = Boolean(query) && !card.textContent.toLowerCase().includes(query);
-        });
-      });
-    }
-  }
+
 
   const galleryPage = document.querySelector('.rs-gallery-page');
   if (galleryPage) {

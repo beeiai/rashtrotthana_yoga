@@ -57,30 +57,57 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
     </div>
 </section>
 
-<section class="rs-centers rs-section">
-    <div class="rs-container">
-        <div class="rs-center-finder">
-                <div class="rs-center-intro">
-                    <span class="rs-kicker">OUR PRESENCE</span>
-                    <h2>Find a Center</h2>
-                    <form class="rs-center-search" role="search">
-                        <label class="screen-reader-text" for="rs-center-search-input">Search centers</label>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
-                        <input id="rs-center-search-input" type="search" placeholder="Search by area or center" autocomplete="off">
-                    </form>
-                    <p class="rs-center-search-status" aria-live="polite"></p>
-                    <a class="rs-center-button" href="<?php echo esc_url( home_url('/centers/') ); ?>">View All Centers</a>
-                </div>
-            <div class="rs-center-cards">
-            <?php if ( $centers ) : foreach ( $centers as $post ) : setup_postdata( $post ); ?>
-                <article class="rs-center-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><div class="rs-center-card-body"><h3><?php the_title(); ?></h3><p class="rs-center-location">Bengaluru, Karnataka</p><span class="rs-center-button">View Details</span></div></a></article>
-            <?php endforeach; wp_reset_postdata(); else : foreach ( array( array( 'Malleswaram Yoga Center', 'Malleswaram, Bengaluru', 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=700&q=80' ), array( 'Jayanagar Wellness Center', 'Jayanagar, Bengaluru', 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=80' ), array( 'Kengeri Community Center', 'Kengeri, Bengaluru', 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=700&q=80' ) ) as $center ) : ?>
-                <article class="rs-center-card"><img src="<?php echo esc_url( $center[2] ); ?>" alt="" loading="lazy"><div class="rs-center-card-body"><h3><?php echo esc_html( $center[0] ); ?></h3><p class="rs-center-location"><?php echo esc_html( $center[1] ); ?></p><a class="rs-center-button" href="#">View Details</a></div></article>
-            <?php endforeach; endif; ?>
+<section class="rs-centers rs-section" id="centers-section">
+    <div class="rs-container rs-center-finder">
+        <!-- Top Header Bar: Title on Left, Search & Locate on Right -->
+        <div class="rs-centers-top-bar">
+            <div class="rs-centers-title-col">
+                <span class="rs-kicker">OUR PRESENCE</span>
+                <h2 class="rs-centers-heading">Find a Center</h2>
+                <p class="rs-centers-subheading">Our 23 centers bring wellness, learning and community closer to you.</p>
             </div>
-            <p class="rs-center-no-results" aria-live="polite" hidden>No centers match your search.</p>
-            <a class="rs-center-locate" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7Zm0 10.1A3.1 3.1 0 1 1 12 5.9a3.1 3.1 0 0 1 0 6.2Z"/></svg><span>Locate Centers<br>Near You</span></a>
+            <div class="rs-centers-action-col">
+                <form class="rs-center-search-box" role="search">
+                    <label class="screen-reader-text" for="rs-center-search-input">Search centers</label>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input id="rs-center-search-input" type="search" placeholder="Search by area or center..." autocomplete="off">
+                </form>
+                <a class="rs-center-locate-btn" href="<?php echo esc_url( home_url('/centers/') ); ?>">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7Zm0 10.1A3.1 3.1 0 1 1 12 5.9a3.1 3.1 0 0 1 0 6.2Z"/></svg>
+                    <span>Locate Centers Near You</span>
+                </a>
+            </div>
         </div>
+
+        <p class="rs-center-search-status" aria-live="polite"></p>
+
+        <!-- 4-Card Horizontal Grid -->
+        <div class="rs-center-cards">
+            <?php
+            $center_cards_data = array(
+                array( 'Malleswaram Yoga Center', 'Bengaluru', 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=700&q=80' ),
+                array( 'Jayanagar Wellness Center', 'Bengaluru', 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=80' ),
+                array( 'Kengeri Community Center', 'Bengaluru', 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=700&q=80' ),
+                array( 'Rajarajeshwari Center', 'Bengaluru', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=700&q=80' ),
+            );
+            foreach ( $center_cards_data as $center ) : ?>
+                <article class="rs-center-card">
+                    <div class="rs-center-card-img-wrap">
+                        <img src="<?php echo esc_url( $center[2] ); ?>" alt="<?php echo esc_attr( $center[0] ); ?>" loading="lazy">
+                    </div>
+                    <div class="rs-center-card-body">
+                        <h3><?php echo esc_html( $center[0] ); ?></h3>
+                        <p class="rs-center-location"><?php echo esc_html( $center[1] ); ?></p>
+                        <a class="rs-center-button" href="<?php echo esc_url( home_url('/centers/') ); ?>">
+                            <span>View Details</span>
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+
+        <p class="rs-center-no-results" aria-live="polite" hidden>No centers match your search.</p>
     </div>
 </section>
 
@@ -97,25 +124,42 @@ $centers    = rashtrotthana_home_collection( array( 'center', 'centers' ), 3 );
     </div>
 </section>
 
-<section class="rs-testimonials rs-section">
+<section class="rs-founder-section rs-section" id="founder-section">
     <div class="rs-container">
-        <div class="rs-heading rs-team-heading"><h2>Our Members</h2><p>Meet the people who bring our vision to life through yoga, education, culture and service.</p></div>
-        <div class="rs-testimonial-grid rs-team-grid">
-            <?php
-            $team_image = get_template_directory_uri() . '/assets/images/hero-v3.png';
-            foreach ( array(
-                array( 'Ananya H.', 'Yoga & Wellness', 'Creating welcoming spaces where every person can find balance and strength.' ),
-                array( 'Prasanna B.', 'Education & Values', 'Nurturing confident learners through discipline, curiosity and timeless values.' ),
-                array( 'Ramesh K.', 'Community Service', 'Connecting people and purpose through meaningful service across our communities.' ),
-                array( 'Meera S.', 'Culture & Outreach', 'Sharing the richness of Indian culture while building a kinder, stronger society.' ),
-            ) as $member ) : ?>
-                <article class="rs-team-card">
-                    <img src="<?php echo esc_url( $team_image ); ?>" alt="<?php echo esc_attr( $member[0] ); ?>" loading="lazy">
-                    <h3><?php echo esc_html( $member[0] ); ?></h3>
-                    <p class="rs-team-role"><?php echo esc_html( $member[1] ); ?></p>
-                    <p><?php echo esc_html( $member[2] ); ?></p>
-                </article>
-            <?php endforeach; ?>
+        <div class="rs-founder-grid">
+            <div class="rs-founder-portrait-wrap">
+                <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=700&q=80" alt="Dr. D. Veerendra Heggade - Founder, Rashtrotthana Parishat" loading="lazy">
+            </div>
+
+            <div class="rs-founder-content">
+                <div class="rs-about-section-header">
+                    <h2>Our Visionary <em>Founder</em></h2>
+                    <p class="rs-about-section-desc">
+                        The guiding philosophy behind the Rashtrotthana Yoga movement.
+                    </p>
+                </div>
+
+                <p>
+                    <strong>Dr. D. Veerendra Heggade</strong>, the revered Dharmadhikari of Dharmasthala and the founding inspiration behind Rashtrotthana Parishat, has been the beacon guiding this widespread Yoga movement.
+                </p>
+                <p>
+                    His steadfast conviction that Yoga possesses the intrinsic power to transform individuals, heal bodily ailments, and foster socially conscious citizens has catalyzed the growth of our extensive network of community centers.
+                </p>
+                <p>
+                    Under his inspiring guidance, Rashtrotthana Yoga remains steadfastly dedicated to service, integrity, and building a vigorous, harmonious nation.
+                </p>
+
+                <!-- Quote Card -->
+                <div class="rs-founder-quote-card">
+                    <div class="rs-quote-mark" aria-hidden="true">&ldquo;</div>
+                    <div class="rs-quote-body">
+                        <div class="rs-quote-text">
+                            Yoga is not just an exercise; it is a way of life. It connects body, mind, and spirit to create a balanced, meaningful, and joyful existence.
+                        </div>
+                        <span class="rs-quote-author">&ndash; Dr. D. Veerendra Heggade</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

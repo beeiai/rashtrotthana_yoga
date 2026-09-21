@@ -65,10 +65,46 @@ $activity_categories = array(
         'text'     => 'Yoga practices that build physical strength, flexibility, mental clarity, and inner calm across all age groups.',
         'image'    => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Yoga for Beginners', 'desc' => 'Foundational asanas, mindful breathing techniques (pranayama), and relaxation for newcomers.', 'badge' => 'Beginner' ),
-            array( 'name' => 'Yoga for All', 'desc' => 'Daily structured morning and evening batches for stamina, flexibility, and sustained daily energy.', 'badge' => 'Daily Batches' ),
-            array( 'name' => 'Yoga Therapy Sessions', 'desc' => 'Customized therapeutic yoga addressing chronic back pain, diabetes, hypertension, and stress.', 'badge' => 'Therapeutic' ),
-            array( 'name' => 'Prenatal Yoga', 'desc' => 'Safe, nurturing practices guided by certified instructors to support expectant mothers.', 'badge' => 'Specialized' ),
+            array(
+                'name'        => 'Yoga for Beginners (Sarala Yoga)',
+                'badge'       => 'Foundational',
+                'desc'        => 'Gentle joint mobility movements (Sukshma Vyayama), fundamental standing and sitting asanas, basic pranayama, and guided Shavasana relaxation.',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Vijayanagar, Indiranagar, Whitefield, HSR Layout, JP Nagar, Sahakarnagar',
+                'batches'     => 'Morning: 6:00 AM – 7:00 AM, 7:15 AM – 8:15 AM | Evening: 6:00 PM – 7:00 PM',
+                'duration'    => '60 Mins / Class | 3-Month Foundation Course',
+                'frequency'   => '5 Days / Week (Monday – Friday)',
+                'eligibility' => 'Beginners & All Age Groups (Ages 12+)',
+            ),
+            array(
+                'name'        => 'Yoga for All (Samanya & Advanced Yoga)',
+                'badge'       => 'Daily Batches',
+                'desc'        => 'Comprehensive daily practice incorporating dynamic Surya Namaskar cycles, posture endurance, core strength, flexibility, and vital energy pranayama.',
+                'centers'     => 'Available at all 23 Rashtrotthana Centers across Bengaluru',
+                'batches'     => 'Morning: 5:30 AM – 6:30 AM, 7:00 AM – 8:00 AM | Evening: 5:00 PM – 6:00 PM, 6:30 PM – 7:30 PM',
+                'duration'    => '60 Mins / Class | Ongoing Monthly Enrollment',
+                'frequency'   => '6 Days / Week (Monday – Saturday)',
+                'eligibility' => 'All practitioners seeking sustained daily stamina & wellness',
+            ),
+            array(
+                'name'        => 'Yoga Therapy Sessions (Yoga Chikitsa)',
+                'badge'       => 'Therapeutic',
+                'desc'        => 'Customized clinical yoga modules addressing chronic lumbar and cervical back pain, postural correction, diabetes, hypertension, and workplace stress.',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Banashankari, Vijayanagar, JP Nagar, Sahakarnagar, RT Nagar',
+                'batches'     => 'Morning: 8:30 AM – 9:30 AM, 9:45 AM – 10:45 AM | Evening: 4:30 PM – 5:30 PM',
+                'duration'    => '60 Mins / Session | Tailored 12-Week Recovery Regimen',
+                'frequency'   => '4 Days / Week (Mon, Wed, Fri & Sat)',
+                'eligibility' => 'Individuals with chronic ailments or doctor-recommended therapy',
+            ),
+            array(
+                'name'        => 'Prenatal & Postnatal Yoga Care',
+                'badge'       => 'Specialized Care',
+                'desc'        => 'Safe, nurturing prenatal movements, pelvic floor strengthening, breath coordination, and restorative relaxation supporting maternal wellness.',
+                'centers'     => 'Jayanagar, Basavanagudi, Chandra Layout, Malleswaram, Indiranagar',
+                'batches'     => 'Morning: 9:30 AM – 10:30 AM | Evening: 4:30 PM – 5:30 PM',
+                'duration'    => '60 Mins / Class | Trimester-Wise Supervised Modules',
+                'frequency'   => '3 Days / Week (Mon, Wed, Fri)',
+                'eligibility' => 'Expectant mothers from 2nd trimester (Medical clearance required)',
+            ),
         ),
     ),
     array(
@@ -79,10 +115,46 @@ $activity_categories = array(
         'text'     => 'Nurturing creativity and harmony through classical and contemporary vocal and instrumental music learning.',
         'image'    => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Carnatic Music', 'desc' => 'Classical vocal and swara practice rooted in sacred ragas, talas, and traditional compositions.', 'badge' => 'Classical Vocal' ),
-            array( 'name' => 'Keyboard Lessons', 'desc' => 'Structured training covering foundational notations, western chords, and Indian melodic pieces.', 'badge' => 'Instrumental' ),
-            array( 'name' => 'Light Music (Sugama Sangeetha)', 'desc' => 'Soulful rendition of Bhavageethe, devotionals, and cultural melodies with lyrical expression.', 'badge' => 'Vocal' ),
-            array( 'name' => 'Flute (Bansuri)', 'desc' => 'Bamboo flute lessons from fundamental breath control and finger placement to classical ragas.', 'badge' => 'Instrumental' ),
+            array(
+                'name'        => 'Carnatic Classical Vocal',
+                'badge'       => 'Classical Vocal',
+                'desc'        => 'Traditional Swara practice, Sarali, Janti varases, Geethams, and sacred Keerthanas rooted in sacred ragas, talas, and classic compositions.',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Vijayanagar, Padmanabhanagar',
+                'batches'     => 'Evening: 5:00 PM – 6:00 PM, 6:15 PM – 7:15 PM | Weekend: 9:00 AM – 10:30 AM',
+                'duration'    => '60 Mins / Class | Annual Examination & Certification',
+                'frequency'   => '2 to 3 Days / Week',
+                'eligibility' => 'Ages 6+ & Adults (Beginner to Senior Vidwat)',
+            ),
+            array(
+                'name'        => 'Keyboard Lessons (Classical & Western)',
+                'badge'       => 'Instrumental',
+                'desc'        => 'Structured finger dexterity training covering foundational notations, western chord theory, and Indian devotional and melodic pieces.',
+                'centers'     => 'Malleswaram, Jayanagar, Basavanagudi, Vijayanagar, Yelahanka',
+                'batches'     => 'Evening: 4:30 PM – 5:30 PM, 5:45 PM – 6:45 PM | Weekend Batches',
+                'duration'    => '60 Mins / Class | Grade 1 to 8 Structured Syllabi',
+                'frequency'   => '2 Days / Week',
+                'eligibility' => 'Ages 7+ & Adults (Instruments provided in studio)',
+            ),
+            array(
+                'name'        => 'Light Music (Sugama Sangeetha)',
+                'badge'       => 'Vocal',
+                'desc'        => 'Soulful rendition of Kannada Bhavageethe, devotionals, Dasa Sahitya, and cultural melodies with lyrical expression and voice culture.',
+                'centers'     => 'Basavanagudi, Jayanagar, Malleswaram, Banashankari',
+                'batches'     => 'Evening: 5:30 PM – 6:30 PM | Weekend: 10:30 AM – 12:00 PM',
+                'duration'    => '60 Mins / Class | 6-Month Certificate Course',
+                'frequency'   => '2 Days / Week (Friday & Saturday)',
+                'eligibility' => 'Open to all music enthusiasts (Ages 8+)',
+            ),
+            array(
+                'name'        => 'Flute (Classical Bansuri)',
+                'badge'       => 'Instrumental',
+                'desc'        => 'Bamboo flute training starting from fundamental breath control, blowing technique, and finger placement to classical ragas and improvisations.',
+                'centers'     => 'Malleswaram, Jayanagar, Basavanagudi',
+                'batches'     => 'Weekend: Saturday 4:00 PM – 5:30 PM, Sunday 8:00 AM – 9:30 AM',
+                'duration'    => '90 Mins / Class | Traditional Guru-Shishya Guidance',
+                'frequency'   => '2 Days / Week (Saturday & Sunday)',
+                'eligibility' => 'Ages 10+ with dedication to wind instruments',
+            ),
         ),
     ),
     array(
@@ -93,10 +165,46 @@ $activity_categories = array(
         'text'     => 'Traditional dance forms and creative movement preserving India\'s rich cultural heritage and rhythm.',
         'image'    => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Bharatanatyam', 'desc' => 'Sacred South Indian classical dance cultivating mudras, rhythm, adavus, and abhinaya.', 'badge' => 'Classical' ),
-            array( 'name' => 'Kathak', 'desc' => 'North Indian classical dance celebrated for intricate footwork, swift chakkars, and expressions.', 'badge' => 'Classical' ),
-            array( 'name' => 'Folk Dance', 'desc' => 'Vibrant regional dances celebrating Indian harvest, seasons, and cultural festivities.', 'badge' => 'Folk Heritage' ),
-            array( 'name' => 'Contemporary Dance', 'desc' => 'Expressive modern movement combining rhythm, bodily agility, and creative storytelling.', 'badge' => 'Modern' ),
+            array(
+                'name'        => 'Bharatanatyam (Kalakshetra / Pandanallur)',
+                'badge'       => 'Classical',
+                'desc'        => 'Sacred classical Indian dance cultivating precise footwork, adavus, hastamudras, rhythmic tala patterns, and expressive abhinaya storytelling.',
+                'centers'     => 'Basavanagudi, Jayanagar, Malleswaram, Mahalakshmi Layout, Vijayanagar',
+                'batches'     => 'Evening: 4:30 PM – 5:30 PM, 5:45 PM – 6:45 PM | Weekend: 9:00 AM – 11:00 AM',
+                'duration'    => '60 Mins / Class | Alankar to Rangapravesha Certification',
+                'frequency'   => '3 Days / Week',
+                'eligibility' => 'Ages 5+ to Adults',
+            ),
+            array(
+                'name'        => 'Kathak (North Indian Classical)',
+                'badge'       => 'Classical',
+                'desc'        => 'North Indian classical dance celebrated for intricate ghungroo footwork (Tatkar), swift pirouettes (Chakkars), padhant recitation, and lyrical Radha-Krishna themes.',
+                'centers'     => 'Malleswaram, Indiranagar, Jayanagar',
+                'batches'     => 'Evening: 5:00 PM – 6:30 PM | Weekend: 10:00 AM – 11:30 AM',
+                'duration'    => '75 Mins / Class | Systematic Gharana Pedagogy',
+                'frequency'   => '2 Days / Week',
+                'eligibility' => 'Ages 7+ & Adults',
+            ),
+            array(
+                'name'        => 'Folk Dance (Janapada Nritya)',
+                'badge'       => 'Folk Heritage',
+                'desc'        => 'Vibrant regional folk dances of Karnataka and India including Kolata, Dollu Kunitha rhythms, harvest festivities, and group synchronization.',
+                'centers'     => 'Basavanagudi, Malleswaram, Padmanabhanagar, Yelahanka',
+                'batches'     => 'Weekend: Saturday & Sunday 3:30 PM – 5:00 PM',
+                'duration'    => '90 Mins / Class | Festival Showcase & Annual Production',
+                'frequency'   => '2 Days / Week (Weekends)',
+                'eligibility' => 'Ages 6 to 18',
+            ),
+            array(
+                'name'        => 'Contemporary Dance & Creative Movement',
+                'badge'       => 'Modern Movement',
+                'desc'        => 'Expressive modern movement combining bodily agility, floorwork, rhythmic musicality, creative storytelling, and stamina building.',
+                'centers'     => 'Indiranagar, Koramangala, Whitefield, HSR Layout',
+                'batches'     => 'Evening: 6:30 PM – 7:45 PM | Weekend: 11:00 AM – 12:30 PM',
+                'duration'    => '75 Mins / Class | Foundation & Intermediate Levels',
+                'frequency'   => '2 to 3 Days / Week',
+                'eligibility' => 'Teens & Young Adults (Ages 12+)',
+            ),
         ),
     ),
     array(
@@ -107,10 +215,46 @@ $activity_categories = array(
         'text'     => 'Self-defence and discipline-building through structured physical training, mental focus, and ancient techniques.',
         'image'    => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Karate', 'desc' => 'Speed, power, self-defence katas, and belt grading under certified black belt instructors.', 'badge' => 'All Belts' ),
-            array( 'name' => 'Taekwondo', 'desc' => 'Dynamic kicks, flexibility, mental fortitude, and Olympic-style sparring drills.', 'badge' => 'Fitness' ),
-            array( 'name' => 'Kalaripayattu', 'desc' => 'Ancient Indian martial art emphasizing animal stances, fluid movement, and body conditioning.', 'badge' => 'Traditional' ),
-            array( 'name' => 'Self Defence Workshops', 'desc' => 'Practical situational awareness, evasion tactics, and reflexive defence for women and youth.', 'badge' => 'Workshops' ),
+            array(
+                'name'        => 'Karate (Shotokan / Goju-Ryu)',
+                'badge'       => 'All Belts',
+                'desc'        => 'Speed, power, self-defence katas, bunkai analysis, and official belt grading examinations conducted under certified black belt masters.',
+                'centers'     => 'Marathahalli, Sahakarnagar, Vijayanagar, Yelahanka, Kengeri, Rajajinagar',
+                'batches'     => 'Morning: 6:00 AM – 7:15 AM | Evening: 5:30 PM – 6:45 PM',
+                'duration'    => '75 Mins / Class | Continuous Belt Grading Cycle',
+                'frequency'   => '3 Days / Week (Tue, Thu, Sat)',
+                'eligibility' => 'Ages 6+ to Adults',
+            ),
+            array(
+                'name'        => 'Taekwondo (Korean Martial Art)',
+                'badge'       => 'Agility & Sparring',
+                'desc'        => 'Dynamic high kicks, core agility, mental fortitude, speed breaking, and Olympic-style sparring drills with protective gear.',
+                'centers'     => 'Sahakarnagar, Marathahalli, Bellandur, HSR Layout',
+                'batches'     => 'Morning: 6:30 AM – 7:30 AM | Evening: 5:00 PM – 6:15 PM',
+                'duration'    => '60 Mins / Class | Olympic Sparring Curriculum',
+                'frequency'   => '3 Days / Week (Mon, Wed, Fri)',
+                'eligibility' => 'Ages 7+ to Youth',
+            ),
+            array(
+                'name'        => 'Kalaripayattu (Ancient Indian Martial Art)',
+                'badge'       => 'Traditional',
+                'desc'        => 'Ancient Indian warrior art emphasizing animal postures (Ashta Vadivu), body flexibility, oil massages, fluid footwork, and traditional wooden staff forms.',
+                'centers'     => 'Basavanagudi, Malleswaram, Indiranagar',
+                'batches'     => 'Morning: 6:00 AM – 7:30 AM | Weekend: 7:00 AM – 8:30 AM',
+                'duration'    => '90 Mins / Class | Body Conditioning & Combat Conditioning',
+                'frequency'   => '3 Days / Week',
+                'eligibility' => 'Ages 10+ (Physical readiness required)',
+            ),
+            array(
+                'name'        => 'Self Defence Workshops',
+                'badge'       => 'Modular Workshops',
+                'desc'        => 'Practical situational awareness, wrist release techniques, evasion tactics, and reflexive defence strategies designed for real-world personal safety.',
+                'centers'     => 'Available across all 23 Centers (Special modular batches)',
+                'batches'     => 'Weekend: Saturday 4:00 PM – 6:00 PM, Sunday 10:00 AM – 12:00 PM',
+                'duration'    => '4-Week Intensive Certificate Bootcamp',
+                'frequency'   => 'Weekend Sessions',
+                'eligibility' => 'Women, College Students & Corporate Professionals',
+            ),
         ),
     ),
     array(
@@ -121,10 +265,46 @@ $activity_categories = array(
         'text'     => 'Value-based education and holistic development programs designed to spark curiosity and strong character in children.',
         'image'    => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Samskrita Bala Kendra', 'desc' => 'Interactive Sanskrit learning through joyful stories, rhymes, shlokas, and cultural activities.', 'badge' => 'Ages 5-12' ),
-            array( 'name' => 'Bala Samskara Kendra', 'desc' => 'Character building, moral stories, Indian heritage values, and cooperative games.', 'badge' => 'Weekly Batches' ),
-            array( 'name' => 'Personality Development', 'desc' => 'Public speaking, emotional resilience, teamwork, and confidence workshops for youth.', 'badge' => 'Teens & Youth' ),
-            array( 'name' => 'Summer & Holiday Camps', 'desc' => 'Engaging vacation camps featuring arts, crafts, science experiments, yoga, and nature walks.', 'badge' => 'Camps' ),
+            array(
+                'name'        => 'Samskrita Bala Kendra',
+                'badge'       => 'Ages 5-12',
+                'desc'        => 'Interactive, playful Sanskrit learning through joyful stories, rhymes, shlokas, conversational dialogues, and cultural value games.',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Vijayanagar, Rajajinagar, Padmanabhanagar',
+                'batches'     => 'Weekend: Saturday 4:00 PM – 5:30 PM | Sunday 9:00 AM – 10:30 AM',
+                'duration'    => '90 Mins / Class | Annual Academic Cycle',
+                'frequency'   => '2 Days / Week (Weekends)',
+                'eligibility' => 'Children aged 5 to 12',
+            ),
+            array(
+                'name'        => 'Bala Samskara Kendra',
+                'badge'       => 'Weekly Mentorship',
+                'desc'        => 'Character building, moral stories from Indian epics, civic duties, patriotic songs, shloka chanting, and cooperative traditional Indian sports.',
+                'centers'     => 'Available at 18+ Residential Neighborhood Centers',
+                'batches'     => 'Sunday Morning: 8:00 AM – 10:00 AM',
+                'duration'    => '2 Hours / Session | Continuous Character Mentorship',
+                'frequency'   => 'Weekly (Every Sunday)',
+                'eligibility' => 'Children aged 6 to 14',
+            ),
+            array(
+                'name'        => 'Personality Development & Public Speaking',
+                'badge'       => 'Teens & Youth',
+                'desc'        => 'Public speaking skills, emotional balance, critical thinking, leadership exercises, stage confidence, and interpersonal team workshops.',
+                'centers'     => 'Jayanagar, Malleswaram, Koramangala, Indiranagar, Basavanagudi',
+                'batches'     => 'Weekend: Saturday 3:30 PM – 5:30 PM | Vacation Batches',
+                'duration'    => '8-Week Modular Workshop Series',
+                'frequency'   => 'Weekly Sessions',
+                'eligibility' => 'Teens & Youth aged 12 to 19',
+            ),
+            array(
+                'name'        => 'Summer & Vacation Camps',
+                'badge'       => 'Holiday Camps',
+                'desc'        => 'Multi-activity vacation camps featuring arts, crafts, science experiments, yoga, Vedic mathematics, nature trails, and life skills.',
+                'centers'     => 'All 23 Centers across Bengaluru',
+                'batches'     => 'Holiday Seasons: Morning 9:00 AM – 1:00 PM (Daily)',
+                'duration'    => '10 to 15 Days Immersive Vacation Camp',
+                'frequency'   => 'Monday to Saturday during School Vacations',
+                'eligibility' => 'Children aged 6 to 15',
+            ),
         ),
     ),
     array(
@@ -135,10 +315,46 @@ $activity_categories = array(
         'text'     => 'Build physical strength, stamina, and confidence with modern sports facilities and expert fitness coaching.',
         'image'    => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Modern Gym & Strength', 'desc' => 'Full-suite cardio and resistance training equipment guided by certified fitness instructors.', 'badge' => 'Coached' ),
-            array( 'name' => 'Swimming Pool & Coaching', 'desc' => 'Hygienic, regulated swimming pools with certified coaching for beginners and lap swimmers.', 'badge' => 'All Levels' ),
-            array( 'name' => 'Table Tennis', 'desc' => 'Professional indoor tables, coaching clinics, and intra-center tournaments for all ages.', 'badge' => 'Indoor Sports' ),
-            array( 'name' => 'Chess Academy', 'desc' => 'Strategic calculation, openings theory, and tournament preparation led by rated coaches.', 'badge' => 'Mind Sport' ),
+            array(
+                'name'        => 'Modern Gym & Strength Conditioning',
+                'badge'       => 'Coached Fitness',
+                'desc'        => 'Full-suite cardio, resistance, and functional training guided by certified trainers, with posture tracking and personal fitness roadmaps.',
+                'centers'     => 'Marathahalli, Sahakarnagar, Kengeri, Vijayanagar, Yelahanka',
+                'batches'     => 'Morning: 5:30 AM – 10:30 AM | Evening: 5:00 PM – 9:30 PM',
+                'duration'    => 'Flexible Workout Slots (Monthly & Annual Plans)',
+                'frequency'   => '6 Days / Week (Monday – Saturday)',
+                'eligibility' => 'Ages 16+ (Cardio & Resistance Guidance)',
+            ),
+            array(
+                'name'        => 'Swimming Pool & Professional Coaching',
+                'badge'       => 'All Levels',
+                'desc'        => 'Hygienic, regulated swimming pools with certified coaching for beginners, stroke perfection for intermediate swimmers, and dedicated lap lanes.',
+                'centers'     => 'Marathahalli Sports Wing, Kengeri Campus',
+                'batches'     => 'Morning: 6:00 AM – 9:00 AM | Evening: 4:00 PM – 7:00 PM',
+                'duration'    => '45 Mins Coaching Slot | Monthly Batches',
+                'frequency'   => '6 Days / Week (Dedicated Ladies & Kids Batches)',
+                'eligibility' => 'Ages 5+ to Adults',
+            ),
+            array(
+                'name'        => 'Table Tennis Academy',
+                'badge'       => 'Indoor Sports',
+                'desc'        => 'Tournament-grade indoor tables, grip and spin technique coaching, match strategy, and intra-center ranking tournaments for amateur and competitive players.',
+                'centers'     => 'Malleswaram Complex, Marathahalli, Sahakarnagar, Jayanagar',
+                'batches'     => 'Morning: 6:30 AM – 9:00 AM | Evening: 4:30 PM – 8:30 PM',
+                'duration'    => '60 Mins Table Slot | Coaching Clinics Available',
+                'frequency'   => 'Daily Slots & Weekend Leagues',
+                'eligibility' => 'All Age Groups',
+            ),
+            array(
+                'name'        => 'Chess Academy (Grandmaster Strategy)',
+                'badge'       => 'Mind Sport',
+                'desc'        => 'Strategic opening theory, tactical puzzle solving, endgame calculation, and tournament readiness taught by FIDE rated coaches.',
+                'centers'     => 'Jayanagar, Malleswaram, Basavanagudi, Vijayanagar',
+                'batches'     => 'Weekend: Saturday 4:00 PM – 6:00 PM, Sunday 9:30 AM – 11:30 AM',
+                'duration'    => '2 Hours / Class | Beginner to Advanced Syllabus',
+                'frequency'   => '2 Days / Week (Weekends)',
+                'eligibility' => 'Ages 6+ to Adults',
+            ),
         ),
     ),
     array(
@@ -149,10 +365,46 @@ $activity_categories = array(
         'text'     => 'Therapeutic programs and natural healing therapies restoring physical harmony, mental peace, and vital health.',
         'image'    => 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Counselling Centre', 'desc' => 'Confidential psychological consultation, stress alleviation, and family wellness support.', 'badge' => 'Confidential' ),
-            array( 'name' => 'Acupressure & Colour Therapy', 'desc' => 'Non-invasive, meridian-based natural therapies promoting organ balance and relief.', 'badge' => 'Natural' ),
-            array( 'name' => 'Yoga Therapy & Naturopathy', 'desc' => 'Integrated lifestyle modification, diet counselling, and targeted yogic cleansing.', 'badge' => 'Therapeutic' ),
-            array( 'name' => 'Therapeutic Body Massage', 'desc' => 'Traditional restorative herbal oil massages improving circulation and muscle recovery.', 'badge' => 'Restorative' ),
+            array(
+                'name'        => 'Holistic Psychological Counselling',
+                'badge'       => 'Confidential',
+                'desc'        => 'Confidential consultation, emotional stress alleviation, family counselling, and adolescent guidance guided by certified psychologists.',
+                'centers'     => 'Jayanagar, Malleswaram, Basavanagudi, Vijayanagar',
+                'batches'     => 'By Appointment: Monday – Saturday 10:00 AM – 6:00 PM',
+                'duration'    => '45 to 60 Mins per Confidential Session',
+                'frequency'   => 'Weekly or Bi-weekly Follow-ups',
+                'eligibility' => 'Individuals, Youth, Couples & Families',
+            ),
+            array(
+                'name'        => 'Acupressure & Colour Therapy',
+                'badge'       => 'Natural Healing',
+                'desc'        => 'Non-invasive, meridian-based natural therapies promoting internal organ equilibrium, migraine relief, and digestive rejuvenation.',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Banashankari',
+                'batches'     => 'Morning: 9:00 AM – 12:30 PM | Evening: 4:00 PM – 7:00 PM',
+                'duration'    => '30 to 45 Mins / Treatment Session',
+                'frequency'   => 'Course of 7 to 14 Therapy Sessions',
+                'eligibility' => 'All ages seeking drugless holistic therapy',
+            ),
+            array(
+                'name'        => 'Yoga Therapy & Naturopathy Desk',
+                'badge'       => 'Clinical Care',
+                'desc'        => 'Integrated lifestyle disease reversal protocols, mud packs, hydrotherapy advice, diet counselling, and targeted therapeutic yogic cleansing (Shatkriyas).',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Banashankari, JP Nagar, Vijayanagar',
+                'batches'     => 'Morning: 8:00 AM – 11:30 AM | Evening: 4:30 PM – 7:30 PM',
+                'duration'    => '60 Mins / Consultation & Regimen',
+                'frequency'   => 'Daily / Alternate Days (Mon – Sat)',
+                'eligibility' => 'Patients with metabolic, spinal, or psychosomatic disorders',
+            ),
+            array(
+                'name'        => 'Therapeutic Ayurvedic Body Massage',
+                'badge'       => 'Restorative',
+                'desc'        => 'Traditional restorative herbal oil massages (Abhyanga) improving blood circulation, relieving chronic muscular fatigue, and promoting deep sleep.',
+                'centers'     => 'Jayanagar, Malleswaram, Basavanagudi Health Desks',
+                'batches'     => 'By Prior Booking: Monday – Saturday 8:00 AM – 5:00 PM',
+                'duration'    => '60 to 90 Mins / Authentic Abhyanga Session',
+                'frequency'   => 'Weekly or Recommended Therapy Cycle',
+                'eligibility' => 'Men & Women (Separate dedicated treatment suites)',
+            ),
         ),
     ),
     array(
@@ -163,10 +415,46 @@ $activity_categories = array(
         'text'     => 'Inspiring programs celebrating timeless wisdom, regional languages, Indian philosophy, and cultural values.',
         'image'    => 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80',
         'items'    => array(
-            array( 'name' => 'Kannada Coaching', 'desc' => 'Structured language learning from spoken conversational fluency to reading and literature.', 'badge' => 'Language' ),
-            array( 'name' => 'Vishwa Samskrama Classes', 'desc' => 'Thought-provoking discourses on Indian civilizational history, ethics, and world thought.', 'badge' => 'Heritage' ),
-            array( 'name' => 'Bhagavadgita Study Circles', 'desc' => 'Verse-by-verse chanting, philosophical inquiry, and practical life applications for modern living.', 'badge' => 'Wisdom' ),
-            array( 'name' => 'Calligraphy & Vedic Arts', 'desc' => 'Mindful handwritten script artistry, Devanagari lettering, and Indian geometric motifs.', 'badge' => 'Artistry' ),
+            array(
+                'name'        => 'Kannada Coaching (Spoken & Written)',
+                'badge'       => 'Language',
+                'desc'        => 'Structured language learning from everyday conversational fluency to functional reading and classic Kannada literature appreciation.',
+                'centers'     => 'Indiranagar, Koramangala, Whitefield, Bellandur, HSR Layout, Malleswaram',
+                'batches'     => 'Weekend: Saturday 4:00 PM – 5:30 PM, Sunday 10:00 AM – 11:30 AM | Weekday Evenings',
+                'duration'    => '3-Month Conversational & Reading Certification',
+                'frequency'   => '2 Days / Week',
+                'eligibility' => 'Non-Kannada speakers, New Residents & Professionals',
+            ),
+            array(
+                'name'        => 'Vishwa Samskrama Cultural Classes',
+                'badge'       => 'Civilizational Heritage',
+                'desc'        => 'Inspiring discourses on Indian civilizational history, ethics, universal dharma, and global contributions of ancient Indian wisdom.',
+                'centers'     => 'Basavanagudi, Malleswaram, Jayanagar, Rajajinagar',
+                'batches'     => 'Weekend Evening: Saturday 6:00 PM – 7:30 PM',
+                'duration'    => '90 Mins Lecture & Interactive Discussion',
+                'frequency'   => 'Weekly Sessions',
+                'eligibility' => 'Youth, Scholars & Cultural Seekers',
+            ),
+            array(
+                'name'        => 'Bhagavadgita Study Circles',
+                'badge'       => 'Wisdom Circle',
+                'desc'        => 'Verse-by-verse chanting, Sanskrit grammatical meaning, philosophical inquiry, and practical life applications for peaceful, purposeful modern living.',
+                'centers'     => 'Jayanagar, Basavanagudi, Malleswaram, Vijayanagar, Padmanabhanagar, Banashankari',
+                'batches'     => 'Sunday Morning: 7:30 AM – 9:00 AM | Friday Evening: 6:30 PM – 7:30 PM',
+                'duration'    => '75 Mins / Session | Continuous Chapter-by-Chapter Study',
+                'frequency'   => 'Weekly Sessions',
+                'eligibility' => 'Open to All Seekers',
+            ),
+            array(
+                'name'        => 'Calligraphy & Vedic Arts',
+                'badge'       => 'Artistry',
+                'desc'        => 'Mindful handwritten script artistry, Devanagari lettering, sacred Yantra geometry, and traditional Indian motif illustrations.',
+                'centers'     => 'Malleswaram, Basavanagudi, Jayanagar',
+                'batches'     => 'Weekend: Saturday 3:00 PM – 5:00 PM',
+                'duration'    => '2 Hours / Workshop | 8-Week Masterclass',
+                'frequency'   => 'Weekly Sessions',
+                'eligibility' => 'Ages 10+ to Adults',
+            ),
         ),
     ),
 );
@@ -266,27 +554,24 @@ $activity_categories = array(
             <div class="rs-act-modal-divider" aria-hidden="true"></div>
             <div class="rs-act-modal-body">
                 <div class="rs-act-section-heading">
-                    <h3>Available Programs &amp; Classes</h3>
-                </div>
-                <div class="rs-act-programs-grid" id="rs-modal-programs">
-                    <!-- Injected dynamically via JS -->
-                </div>
-                <div class="rs-act-centers-banner">
-                    <div class="rs-act-centers-info">
-                        <span class="rs-act-centers-icon" aria-hidden="true">⌖</span>
-                        <div class="rs-act-centers-text">
-                            <strong>Offered Across Rashtrotthana Centers</strong>
-                            <p>Available at 23+ centers across Bengaluru with flexible morning &amp; evening batches.</p>
-                        </div>
+                    <div>
+                        <h3>Detailed Programs &amp; Class Schedules</h3>
+                        <p class="rs-act-section-sub">Comprehensive details covering timings, weekly schedules, certified centers, and prerequisites.</p>
                     </div>
-                    <a href="<?php echo esc_url( home_url('/centers/') ); ?>" class="rs-act-centers-btn">View Centers →</a>
+                </div>
+                <div class="rs-act-subactivities-grid" id="rs-modal-programs">
+                    <!-- Injected dynamically via JS with complete sub-activity details -->
                 </div>
             </div>
             <div class="rs-act-modal-footer">
-                <p class="rs-act-modal-footer-note">Personalized guidance by certified Rashtrotthana instructors.</p>
+                <p class="rs-act-modal-footer-note">Personalized batch guidance &amp; consultations available at our center reception desks.</p>
                 <div class="rs-act-modal-footer-actions">
-                    <button type="button" class="rs-act-modal-close-btn" data-close-modal="true">Close</button>
-                    <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-act-modal-cta-btn">Enquire / Register Now →</a>
+                    <a href="<?php echo esc_url( home_url('/centers/') ); ?>" class="rs-act-modal-centers-link">
+                        <span>View All 23 Centers ↗</span>
+                    </a>
+                    <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-act-modal-cta-btn">
+                        <span>Enquire / Register Now →</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -327,14 +612,75 @@ document.addEventListener('DOMContentLoaded', function () {
         modalPrograms.innerHTML = '';
         if (category.items && category.items.length) {
             category.items.forEach(function (item) {
-                var itemEl = document.createElement('div');
-                itemEl.className = 'rs-act-program-item';
+                var itemEl = document.createElement('article');
+                itemEl.className = 'rs-act-subactivity-card';
+
+                var enquireUrl = '<?php echo esc_url( home_url('/contact-us/') ); ?>?activity=' + encodeURIComponent(item.name);
+
                 itemEl.innerHTML =
-                    '<div class="rs-act-program-header">' +
-                        '<h4 class="rs-act-program-title">' + escapeHtml(item.name) + '</h4>' +
-                        (item.badge ? '<span class="rs-act-program-badge">' + escapeHtml(item.badge) + '</span>' : '') +
+                    '<div class="rs-act-subact-header">' +
+                        '<div class="rs-act-subact-title-wrap">' +
+                            '<h4 class="rs-act-subact-title">' + escapeHtml(item.name) + '</h4>' +
+                            (item.badge ? '<span class="rs-act-subact-badge">' + escapeHtml(item.badge) + '</span>' : '') +
+                        '</div>' +
+                        '<a href="' + enquireUrl + '" class="rs-act-subact-join-btn">Enquire →</a>' +
                     '</div>' +
-                    '<p class="rs-act-program-desc">' + escapeHtml(item.desc) + '</p>';
+                    '<p class="rs-act-subact-desc">' + escapeHtml(item.desc) + '</p>' +
+                    '<div class="rs-act-subact-specs">' +
+                        (item.centers ? 
+                            '<div class="rs-act-spec-item rs-spec-full">' +
+                                '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>' +
+                                '</span>' +
+                                '<div class="rs-act-spec-content">' +
+                                    '<strong>Available at Centers:</strong>' +
+                                    '<span class="rs-spec-val-centers">' + escapeHtml(item.centers) + '</span>' +
+                                '</div>' +
+                            '</div>' : '') +
+                        '<div class="rs-act-specs-subgrid">' +
+                            (item.batches ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Batches &amp; Timings:</strong>' +
+                                        '<span>' + escapeHtml(item.batches) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                            (item.frequency ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Frequency:</strong>' +
+                                        '<span>' + escapeHtml(item.frequency) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                            (item.duration ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Duration:</strong>' +
+                                        '<span>' + escapeHtml(item.duration) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                            (item.eligibility ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Eligibility / Focus:</strong>' +
+                                        '<span>' + escapeHtml(item.eligibility) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                        '</div>' +
+                    '</div>';
+
                 modalPrograms.appendChild(itemEl);
             });
         }
