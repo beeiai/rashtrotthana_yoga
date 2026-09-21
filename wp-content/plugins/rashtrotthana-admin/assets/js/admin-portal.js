@@ -290,6 +290,8 @@
     var editRegInput  = document.getElementById( 'radm-edit-event-reg-open' );
     var editRegLbl    = document.getElementById( 'radm-edit-reg-label' );
     var editSaveBtn   = document.getElementById( 'radm-edit-event-save' );
+    var editUseGoogleForm = document.getElementById( 'radm-edit-use-google-form' );
+    var editGoogleFormUrl = document.getElementById( 'radm-edit-google-form-url' );
 
     function openEditEventModal( btn ) {
         if ( !editOverlay ) return;
@@ -298,6 +300,8 @@
         editDateInput.value = btn.dataset.date   || '';
         var open = btn.dataset.status === 'open';
         editRegInput.checked = open;
+        if ( editUseGoogleForm ) editUseGoogleForm.checked = btn.dataset.useGoogleForm === '1';
+        if ( editGoogleFormUrl ) editGoogleFormUrl.value   = btn.dataset.googleFormUrl || '';
         if ( editRegLbl ) editRegLbl.textContent = open ? 'Registrations are open' : 'Registrations are closed';
         editOverlay.setAttribute( 'aria-hidden', 'false' );
         editOverlay.classList.add( 'radm-modal-open' );
@@ -331,7 +335,7 @@
             if ( !evNm ) { radmToast( 'Event name is required.', 'error' ); return; }
             setLoading( editSaveBtn, true );
             ajaxPost( 'radm_update_event', {
-                event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp
+                event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (editUseGoogleForm && editUseGoogleForm.checked ? 1 : 0), google_form_url: (editGoogleFormUrl ? editGoogleFormUrl.value : " \)
             }, function ( res ) {
                 setLoading( editSaveBtn, false );
                 if ( res.success ) {

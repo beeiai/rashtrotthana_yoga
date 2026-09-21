@@ -158,6 +158,11 @@ function radm_ajax_create_event(): void {
     update_post_meta( $post_id, '_ry_reg_last_date',    $reg_last_date );
     update_post_meta( $post_id, '_ry_registration_open', $reg_open );
     update_post_meta( $post_id, '_ry_event_centers',       $centers );
+    
+    // Save Google Form settings
+    update_post_meta( $post_id, '_ry_use_google_form',   $use_google_form );
+    update_post_meta( $post_id, '_ry_google_form_url',   $google_form_url );
+    
     // Mark this event as requiring registration (used by Registration_Manager)
     update_post_meta( $post_id, '_ry_requires_registration', 1 );
 
@@ -218,6 +223,12 @@ function radm_ajax_update_event(): void {
     }
     if ( isset( $_POST['reg_last_date'] ) ) {
         update_post_meta( $post_id, '_ry_reg_last_date', sanitize_text_field( $_POST['reg_last_date'] ) );
+    }
+    if ( isset( $_POST['use_google_form'] ) ) {
+        update_post_meta( $post_id, '_ry_use_google_form', sanitize_text_field( $_POST['use_google_form'] ) ? 1 : 0 );
+    }
+    if ( isset( $_POST['google_form_url'] ) ) {
+        update_post_meta( $post_id, '_ry_google_form_url', esc_url_raw( $_POST['google_form_url'] ) );
     }
 
     // Re-derive status for the response

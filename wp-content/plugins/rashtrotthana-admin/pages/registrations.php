@@ -193,6 +193,32 @@ if ( $view === 'create' ) :
                 </div>
             </div>
         </div>
+        
+        <!-- Google Form Options -->
+        <div class="radm-form-row cols-2" style="margin-top:20px; border-top: 1px dashed #cbd5e1; padding-top: 20px;">
+            <div>
+                <label class="radm-label">Use Google Form? (External)</label>
+                <div class="radm-toggle-row" style="margin-top:4px;">
+                    <label class="radm-toggle">
+                        <input type="checkbox" name="use_google_form" id="radm-use-google-form-toggle" value="1">
+                        <span class="radm-toggle-track"></span>
+                    </label>
+                </div>
+            </div>
+            <div>
+                <label class="radm-label" for="radm-google-form-url">
+                    Google Form URL
+                </label>
+                <div class="radm-input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                    <input id="radm-google-form-url" name="google_form_url" type="url" class="radm-input" placeholder="https://docs.google.com/forms/...">
+                </div>
+            </div>
+        </div>
 
     </div><!-- /.radm-form-card -->
 
@@ -243,6 +269,8 @@ else :
         $reg_last_date = get_post_meta( $post->ID, '_ry_reg_last_date', true );
         $start_time    = get_post_meta( $post->ID, '_ry_start_time', true );
         $end_time      = get_post_meta( $post->ID, '_ry_end_time', true );
+        $use_google_form = get_post_meta( $post->ID, '_ry_use_google_form', true );
+        $google_form_url = get_post_meta( $post->ID, '_ry_google_form_url', true );
 
         $reg_count = (int) $wpdb->get_var( $wpdb->prepare(
             "SELECT COUNT(*) FROM {$reg_table} WHERE event_id = %d AND status NOT IN ('cancelled','rejected')",
@@ -253,15 +281,17 @@ else :
         $status   = $is_open ? 'open' : 'closed';
 
         $events[] = [
-            'id'         => $post->ID,
-            'num'        => $i + 1,
-            'name'       => $post->post_title,
-            'date'       => $event_date ? date( 'd M Y', strtotime( $event_date ) ) : '—',
-            'date_raw'   => $event_date ?: '',
-            'start_time' => $start_time,
-            'end_time'   => $end_time,
-            'reg_count'  => $reg_count,
-            'status'     => $status,
+            'id'              => $post->ID,
+            'num'             => $i + 1,
+            'name'            => $post->post_title,
+            'date'            => $event_date ? date( 'd M Y', strtotime( $event_date ) ) : '—',
+            'date_raw'        => $event_date ?: '',
+            'start_time'      => $start_time,
+            'end_time'        => $end_time,
+            'reg_count'       => $reg_count,
+            'status'          => $status,
+            'use_google_form' => $use_google_form,
+            'google_form_url' => $google_form_url,
         ];
     }
 
@@ -399,7 +429,9 @@ else :
                                     data-date="<?php echo esc_attr( $ev['date_raw'] ); ?>"
                                     data-start="<?php echo esc_attr( $ev['start_time'] ?? '' ); ?>"
                                     data-end="<?php echo esc_attr( $ev['end_time'] ?? '' ); ?>"
-                                    data-status="<?php echo esc_attr( $ev['status'] ); ?>">
+                                    data-status="<?php echo esc_attr( $ev['status'] ); ?>"
+                                    data-use-google-form="<?php echo esc_attr( $ev['use_google_form'] ); ?>"
+                                    data-google-form-url="<?php echo esc_attr( $ev['google_form_url'] ); ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
@@ -771,6 +803,21 @@ endif;
             <div class="radm-form-group" style="margin-bottom:16px;">
                 <label class="radm-label" for="radm-edit-event-date">Event Date</label>
                 <input type="date" id="radm-edit-event-date" class="radm-input">
+            </div>
+
+            <div class="radm-form-group" style="margin-bottom:16px;">
+                <label class="radm-label">Use Google Form? (External)</label>
+                <div class="radm-toggle-row" style="margin-top:4px;">
+                    <label class="radm-toggle">
+                        <input type="checkbox" id="radm-edit-use-google-form">
+                        <span class="radm-toggle-track"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="radm-form-group" style="margin-bottom:16px;">
+                <label class="radm-label" for="radm-edit-google-form-url">Google Form URL</label>
+                <input type="url" id="radm-edit-google-form-url" class="radm-input" placeholder="https://docs.google.com/forms/...">
             </div>
 
             <div class="radm-form-group" style="margin-bottom:4px;">

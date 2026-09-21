@@ -14,12 +14,41 @@ require_once __DIR__ . '/ajax-handlers.php';
 // Shortcodes (form-group)
 require_once RADM_PLUGIN_DIR . 'shortcodes/form-group.php';
 
-// ── Menu Registration ─────────────────────────────────────────────────────────
+// Shortcodes (ongoing-events)
+require_once RADM_PLUGIN_DIR . 'shortcodes/ongoing-events.php';
+
+// ── Roles Initialization ───────────────────────────────────────────────────────
+function radm_create_roles(): void {
+    // Admin Role (Can manage content and registrations, but NOT options/roles)
+    if ( ! get_role( 'radm_admin' ) ) {
+        add_role( 'radm_admin', 'Portal Admin', [
+            'read'                      => true,
+            'edit_posts'                => true,
+            'edit_pages'                => true,
+            'edit_others_posts'         => true,
+            'edit_others_pages'         => true,
+            'manage_ry_registrations'   => true, // Custom cap for registrations
+            'upload_files'              => true,
+        ] );
+    }
+
+    // Gallery Management Role (Can only upload files and read)
+    if ( ! get_role( 'radm_gallery' ) ) {
+        add_role( 'radm_gallery', 'Gallery Manager', [
+            'read'                      => true,
+            'upload_files'              => true,
+        ] );
+    }
+}
+add_action( 'admin_init', 'radm_create_roles' );
+
+// ── Menu Registration ────────────────────────────────────────────────────────
 function radm_register_menu(): void {
+    // Base capability for the portal is manage_ry_registrations (Admins & Super Admins)
     add_menu_page(
         'Rashtrotthana Portal',
         'Rashtrotthana',
-        'manage_options',
+        'manage_ry_registrations',
         'radm-dashboard',
         'radm_page_dashboard',
         'none',
@@ -27,16 +56,16 @@ function radm_register_menu(): void {
     );
 
     $pages = [
-        [ 'radm-dashboard',     'Dashboard',               'radm_page_dashboard'     ],
-        [ 'radm-registrations', 'Registrations',           'radm_page_registrations' ],
-        [ 'radm-form-groups',   'Form Groups',             'radm_page_form_groups'   ],
-        [ 'radm-whatsapp',      'WhatsApp (WATI)',          'radm_page_whatsapp'      ],
-        [ 'radm-roles',         'Roles & Responsibilities', 'radm_page_roles'         ],
-        [ 'radm-settings',      'Settings',                'radm_page_settings'      ],
+        [ 'radm-dashboard',     'Dashboard',               'manage_ry_registrations', 'radm_page_dashboard'     ],
+        [ 'radm-registrations', 'Registrations',           'manage_ry_registrations', 'radm_page_registrations' ],
+        [ 'radm-form-groups',   'Form Groups',             'manage_ry_registrations', 'radm_page_form_groups'   ],
+        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'manage_ry_registrations', 'radm_page_whatsapp'      ],
+        [ 'radm-roles',         'Roles & Responsibilities','manage_options',          'radm_page_roles'         ],
+        [ 'radm-settings',      'Settings',                'manage_options',          'radm_page_settings'      ],
     ];
 
-    foreach ( $pages as [ $slug, $title, $callback ] ) {
-        add_submenu_page( 'radm-dashboard', $title, $title, 'manage_options', $slug, $callback );
+    foreach ( $pages as [ $slug, $title, $cap, $callback ] ) {
+        add_submenu_page( 'radm-dashboard', $title, $title, $cap, $slug, $callback );
     }
 }
 add_action( 'admin_menu', 'radm_register_menu' );
