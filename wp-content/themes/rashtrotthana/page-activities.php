@@ -1,4 +1,4 @@
-<?php get_header(); ?>
+﻿<?php get_header(); ?>
 
 <style>
 /* ============================================================
@@ -56,120 +56,11 @@
 </style>
 
 <?php
-$activity_categories = array(
-    array(
-        'slug'     => 'yoga-wellness',
-        'icon'     => '☯',
-        'title'    => 'Yoga & Wellness',
-        'tagline'  => 'Strength, Balance & Inner Peace',
-        'text'     => 'Yoga practices that build physical strength, flexibility, mental clarity, and inner calm across all age groups.',
-        'image'    => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Yoga for Beginners', 'desc' => 'Foundational asanas, mindful breathing techniques (pranayama), and relaxation for newcomers.', 'badge' => 'Beginner' ),
-            array( 'name' => 'Yoga for All', 'desc' => 'Daily structured morning and evening batches for stamina, flexibility, and sustained daily energy.', 'badge' => 'Daily Batches' ),
-            array( 'name' => 'Yoga Therapy Sessions', 'desc' => 'Customized therapeutic yoga addressing chronic back pain, diabetes, hypertension, and stress.', 'badge' => 'Therapeutic' ),
-            array( 'name' => 'Prenatal Yoga', 'desc' => 'Safe, nurturing practices guided by certified instructors to support expectant mothers.', 'badge' => 'Specialized' ),
-        ),
-    ),
-    array(
-        'slug'     => 'arts-music',
-        'icon'     => '♫',
-        'title'    => 'Arts & Music',
-        'tagline'  => 'Creativity, Harmony & Soul',
-        'text'     => 'Nurturing creativity and harmony through classical and contemporary vocal and instrumental music learning.',
-        'image'    => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Carnatic Music', 'desc' => 'Classical vocal and swara practice rooted in sacred ragas, talas, and traditional compositions.', 'badge' => 'Classical Vocal' ),
-            array( 'name' => 'Keyboard Lessons', 'desc' => 'Structured training covering foundational notations, western chords, and Indian melodic pieces.', 'badge' => 'Instrumental' ),
-            array( 'name' => 'Light Music (Sugama Sangeetha)', 'desc' => 'Soulful rendition of Bhavageethe, devotionals, and cultural melodies with lyrical expression.', 'badge' => 'Vocal' ),
-            array( 'name' => 'Flute (Bansuri)', 'desc' => 'Bamboo flute lessons from fundamental breath control and finger placement to classical ragas.', 'badge' => 'Instrumental' ),
-        ),
-    ),
-    array(
-        'slug'     => 'dance',
-        'icon'     => '♬',
-        'title'    => 'Dance',
-        'tagline'  => 'Grace, Rhythm & Heritage',
-        'text'     => 'Traditional dance forms and creative movement preserving India\'s rich cultural heritage and rhythm.',
-        'image'    => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Bharatanatyam', 'desc' => 'Sacred South Indian classical dance cultivating mudras, rhythm, adavus, and abhinaya.', 'badge' => 'Classical' ),
-            array( 'name' => 'Kathak', 'desc' => 'North Indian classical dance celebrated for intricate footwork, swift chakkars, and expressions.', 'badge' => 'Classical' ),
-            array( 'name' => 'Folk Dance', 'desc' => 'Vibrant regional dances celebrating Indian harvest, seasons, and cultural festivities.', 'badge' => 'Folk Heritage' ),
-            array( 'name' => 'Contemporary Dance', 'desc' => 'Expressive modern movement combining rhythm, bodily agility, and creative storytelling.', 'badge' => 'Modern' ),
-        ),
-    ),
-    array(
-        'slug'     => 'martial-arts',
-        'icon'     => '★',
-        'title'    => 'Martial Arts',
-        'tagline'  => 'Discipline, Agility & Self-Defence',
-        'text'     => 'Self-defence and discipline-building through structured physical training, mental focus, and ancient techniques.',
-        'image'    => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Karate', 'desc' => 'Speed, power, self-defence katas, and belt grading under certified black belt instructors.', 'badge' => 'All Belts' ),
-            array( 'name' => 'Taekwondo', 'desc' => 'Dynamic kicks, flexibility, mental fortitude, and Olympic-style sparring drills.', 'badge' => 'Fitness' ),
-            array( 'name' => 'Kalaripayattu', 'desc' => 'Ancient Indian martial art emphasizing animal stances, fluid movement, and body conditioning.', 'badge' => 'Traditional' ),
-            array( 'name' => 'Self Defence Workshops', 'desc' => 'Practical situational awareness, evasion tactics, and reflexive defence for women and youth.', 'badge' => 'Workshops' ),
-        ),
-    ),
-    array(
-        'slug'     => 'children-programs',
-        'icon'     => '☺',
-        'title'    => 'Children Programs',
-        'tagline'  => 'Values, Character & Joyful Learning',
-        'text'     => 'Value-based education and holistic development programs designed to spark curiosity and strong character in children.',
-        'image'    => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Samskrita Bala Kendra', 'desc' => 'Interactive Sanskrit learning through joyful stories, rhymes, shlokas, and cultural activities.', 'badge' => 'Ages 5-12' ),
-            array( 'name' => 'Bala Samskara Kendra', 'desc' => 'Character building, moral stories, Indian heritage values, and cooperative games.', 'badge' => 'Weekly Batches' ),
-            array( 'name' => 'Personality Development', 'desc' => 'Public speaking, emotional resilience, teamwork, and confidence workshops for youth.', 'badge' => 'Teens & Youth' ),
-            array( 'name' => 'Summer & Holiday Camps', 'desc' => 'Engaging vacation camps featuring arts, crafts, science experiments, yoga, and nature walks.', 'badge' => 'Camps' ),
-        ),
-    ),
-    array(
-        'slug'     => 'fitness-sports',
-        'icon'     => '⌁',
-        'title'    => 'Fitness & Sports',
-        'tagline'  => 'Stamina, Strength & Sportsmanship',
-        'text'     => 'Build physical strength, stamina, and confidence with modern sports facilities and expert fitness coaching.',
-        'image'    => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Modern Gym & Strength', 'desc' => 'Full-suite cardio and resistance training equipment guided by certified fitness instructors.', 'badge' => 'Coached' ),
-            array( 'name' => 'Swimming Pool & Coaching', 'desc' => 'Hygienic, regulated swimming pools with certified coaching for beginners and lap swimmers.', 'badge' => 'All Levels' ),
-            array( 'name' => 'Table Tennis', 'desc' => 'Professional indoor tables, coaching clinics, and intra-center tournaments for all ages.', 'badge' => 'Indoor Sports' ),
-            array( 'name' => 'Chess Academy', 'desc' => 'Strategic calculation, openings theory, and tournament preparation led by rated coaches.', 'badge' => 'Mind Sport' ),
-        ),
-    ),
-    array(
-        'slug'     => 'health-therapy',
-        'icon'     => '✿',
-        'title'    => 'Health & Therapy',
-        'tagline'  => 'Natural Healing & Holistic Care',
-        'text'     => 'Therapeutic programs and natural healing therapies restoring physical harmony, mental peace, and vital health.',
-        'image'    => 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Counselling Centre', 'desc' => 'Confidential psychological consultation, stress alleviation, and family wellness support.', 'badge' => 'Confidential' ),
-            array( 'name' => 'Acupressure & Colour Therapy', 'desc' => 'Non-invasive, meridian-based natural therapies promoting organ balance and relief.', 'badge' => 'Natural' ),
-            array( 'name' => 'Yoga Therapy & Naturopathy', 'desc' => 'Integrated lifestyle modification, diet counselling, and targeted yogic cleansing.', 'badge' => 'Therapeutic' ),
-            array( 'name' => 'Therapeutic Body Massage', 'desc' => 'Traditional restorative herbal oil massages improving circulation and muscle recovery.', 'badge' => 'Restorative' ),
-        ),
-    ),
-    array(
-        'slug'     => 'knowledge-culture',
-        'icon'     => '▤',
-        'title'    => 'Knowledge & Culture',
-        'tagline'  => 'Wisdom, Heritage & Lifelong Learning',
-        'text'     => 'Inspiring programs celebrating timeless wisdom, regional languages, Indian philosophy, and cultural values.',
-        'image'    => 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80',
-        'items'    => array(
-            array( 'name' => 'Kannada Coaching', 'desc' => 'Structured language learning from spoken conversational fluency to reading and literature.', 'badge' => 'Language' ),
-            array( 'name' => 'Vishwa Samskrama Classes', 'desc' => 'Thought-provoking discourses on Indian civilizational history, ethics, and world thought.', 'badge' => 'Heritage' ),
-            array( 'name' => 'Bhagavadgita Study Circles', 'desc' => 'Verse-by-verse chanting, philosophical inquiry, and practical life applications for modern living.', 'badge' => 'Wisdom' ),
-            array( 'name' => 'Calligraphy & Vedic Arts', 'desc' => 'Mindful handwritten script artistry, Devanagari lettering, and Indian geometric motifs.', 'badge' => 'Artistry' ),
-        ),
-    ),
-);
+/**
+ * Activities data — loaded from data/activities-data.php.
+ * To swap in DB data, update rs_get_activity_categories() in inc/data-helpers.php.
+ */
+$activity_categories = rs_get_activity_categories();
 ?>
 
 <main class="rs-activities-page">
@@ -266,27 +157,24 @@ $activity_categories = array(
             <div class="rs-act-modal-divider" aria-hidden="true"></div>
             <div class="rs-act-modal-body">
                 <div class="rs-act-section-heading">
-                    <h3>Available Programs &amp; Classes</h3>
-                </div>
-                <div class="rs-act-programs-grid" id="rs-modal-programs">
-                    <!-- Injected dynamically via JS -->
-                </div>
-                <div class="rs-act-centers-banner">
-                    <div class="rs-act-centers-info">
-                        <span class="rs-act-centers-icon" aria-hidden="true">⌖</span>
-                        <div class="rs-act-centers-text">
-                            <strong>Offered Across Rashtrotthana Centers</strong>
-                            <p>Available at 23+ centers across Bengaluru with flexible morning &amp; evening batches.</p>
-                        </div>
+                    <div>
+                        <h3>Detailed Programs &amp; Class Schedules</h3>
+                        <p class="rs-act-section-sub">Comprehensive details covering timings, weekly schedules, certified centers, and prerequisites.</p>
                     </div>
-                    <a href="<?php echo esc_url( home_url('/centers/') ); ?>" class="rs-act-centers-btn">View Centers →</a>
+                </div>
+                <div class="rs-act-subactivities-grid" id="rs-modal-programs">
+                    <!-- Injected dynamically via JS with complete sub-activity details -->
                 </div>
             </div>
             <div class="rs-act-modal-footer">
-                <p class="rs-act-modal-footer-note">Personalized guidance by certified Rashtrotthana instructors.</p>
+                <p class="rs-act-modal-footer-note">Personalized batch guidance &amp; consultations available at our center reception desks.</p>
                 <div class="rs-act-modal-footer-actions">
-                    <button type="button" class="rs-act-modal-close-btn" data-close-modal="true">Close</button>
-                    <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-act-modal-cta-btn">Enquire / Register Now →</a>
+                    <a href="<?php echo esc_url( home_url('/centers/') ); ?>" class="rs-act-modal-centers-link">
+                        <span>View All 23 Centers ↗</span>
+                    </a>
+                    <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-act-modal-cta-btn">
+                        <span>Enquire / Register Now →</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -327,14 +215,75 @@ document.addEventListener('DOMContentLoaded', function () {
         modalPrograms.innerHTML = '';
         if (category.items && category.items.length) {
             category.items.forEach(function (item) {
-                var itemEl = document.createElement('div');
-                itemEl.className = 'rs-act-program-item';
+                var itemEl = document.createElement('article');
+                itemEl.className = 'rs-act-subactivity-card';
+
+                var enquireUrl = '<?php echo esc_url( home_url('/contact-us/') ); ?>?activity=' + encodeURIComponent(item.name);
+
                 itemEl.innerHTML =
-                    '<div class="rs-act-program-header">' +
-                        '<h4 class="rs-act-program-title">' + escapeHtml(item.name) + '</h4>' +
-                        (item.badge ? '<span class="rs-act-program-badge">' + escapeHtml(item.badge) + '</span>' : '') +
+                    '<div class="rs-act-subact-header">' +
+                        '<div class="rs-act-subact-title-wrap">' +
+                            '<h4 class="rs-act-subact-title">' + escapeHtml(item.name) + '</h4>' +
+                            (item.badge ? '<span class="rs-act-subact-badge">' + escapeHtml(item.badge) + '</span>' : '') +
+                        '</div>' +
+                        '<a href="' + enquireUrl + '" class="rs-act-subact-join-btn">Enquire →</a>' +
                     '</div>' +
-                    '<p class="rs-act-program-desc">' + escapeHtml(item.desc) + '</p>';
+                    '<p class="rs-act-subact-desc">' + escapeHtml(item.desc) + '</p>' +
+                    '<div class="rs-act-subact-specs">' +
+                        (item.centers ? 
+                            '<div class="rs-act-spec-item rs-spec-full">' +
+                                '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>' +
+                                '</span>' +
+                                '<div class="rs-act-spec-content">' +
+                                    '<strong>Available at Centers:</strong>' +
+                                    '<span class="rs-spec-val-centers">' + escapeHtml(item.centers) + '</span>' +
+                                '</div>' +
+                            '</div>' : '') +
+                        '<div class="rs-act-specs-subgrid">' +
+                            (item.batches ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Batches &amp; Timings:</strong>' +
+                                        '<span>' + escapeHtml(item.batches) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                            (item.frequency ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Frequency:</strong>' +
+                                        '<span>' + escapeHtml(item.frequency) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                            (item.duration ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Duration:</strong>' +
+                                        '<span>' + escapeHtml(item.duration) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                            (item.eligibility ? 
+                                '<div class="rs-act-spec-item">' +
+                                    '<span class="rs-act-spec-icon" aria-hidden="true">' +
+                                        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>' +
+                                    '</span>' +
+                                    '<div class="rs-act-spec-content">' +
+                                        '<strong>Eligibility / Focus:</strong>' +
+                                        '<span>' + escapeHtml(item.eligibility) + '</span>' +
+                                    '</div>' +
+                                '</div>' : '') +
+                        '</div>' +
+                    '</div>';
+
                 modalPrograms.appendChild(itemEl);
             });
         }

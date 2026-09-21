@@ -5689,6 +5689,77 @@ body.rs-center-modal-open {
     border: 0 !important;
 }
 
+/* Flagpole Map Marker using map_icon.png */
+.rs-map-flag-pin {
+    position: relative;
+    width: 38px;
+    height: 52px;
+    cursor: pointer;
+    transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: 4px 51px;
+}
+
+.rs-map-flag-img {
+    width: 38px;
+    height: 52px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 4px 10px rgba(84, 32, 25, 0.38));
+    transition: filter 220ms ease, transform 220ms ease;
+}
+
+.rs-flag-base-shadow {
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    width: 14px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.28);
+    filter: blur(2px);
+    pointer-events: none;
+}
+
+.rs-map-flag-pin:hover {
+    transform: scale(1.18);
+}
+
+.rs-map-flag-pin:hover .rs-map-flag-img {
+    filter: drop-shadow(0 6px 14px rgba(243, 106, 33, 0.65));
+}
+
+.rs-map-flag-pin.is-highlighted {
+    transform: scale(1.28);
+    z-index: 1000 !important;
+}
+
+.rs-map-flag-pin.is-highlighted .rs-map-flag-img {
+    filter: drop-shadow(0 8px 20px rgba(243, 106, 33, 0.85)) brightness(1.06);
+}
+
+.rs-flag-pulse {
+    position: absolute;
+    bottom: -4px;
+    left: 4px;
+    transform: translate(-50%, 0);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(243, 106, 33, 0.65);
+    pointer-events: none;
+    display: none;
+}
+
+.rs-map-flag-pin.is-highlighted .rs-flag-pulse {
+    display: block;
+    animation: rs-flag-ripple 1.6s infinite;
+}
+
+@keyframes rs-flag-ripple {
+    0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0.95; }
+    100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
+}
+
 .rs-map-marker-pin {
     position: relative;
     width: 36px;
@@ -5854,40 +5925,40 @@ body.rs-center-modal-open {
 .rs-center-modal-container {
     position: relative;
     z-index: 2;
-    width: 100%;
-    max-width: 680px;
-    max-height: calc(100vh - 48px);
+    width: min(1140px, 94vw);
+    max-width: 1140px;
+    max-height: calc(100vh - 40px);
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(143, 23, 29, 0.3) transparent;
+    scrollbar-color: rgba(143, 23, 29, 0.35) transparent;
 }
 
 .rs-center-modal-card {
     position: relative;
-    border-radius: 28px;
-    background: rgba(255, 253, 249, 0.98);
+    border-radius: 26px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 50%, #FFF9F0 100%);
     border: 1.5px solid rgba(143, 23, 29, 0.18);
-    box-shadow: 0 28px 70px rgba(54, 20, 15, 0.38), 0 4px 16px rgba(54, 20, 15, 0.08);
-    padding: 36px 36px 30px;
+    box-shadow: 0 32px 80px rgba(54, 20, 15, 0.42), 0 4px 20px rgba(54, 20, 15, 0.08);
+    padding: clamp(28px, 3.2vw, 44px) clamp(24px, 3.8vw, 48px);
     animation: rs-modal-pop 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes rs-modal-pop {
-    0% { transform: scale(0.92); opacity: 0; }
+    0% { transform: scale(0.94); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
 
 .rs-center-modal-close {
     position: absolute;
-    top: 20px;
-    right: 22px;
-    width: 38px;
-    height: 38px;
+    top: 22px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1.5px solid rgba(143, 23, 29, 0.2);
     background: #FFF5E8;
     color: #542019;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -5905,8 +5976,8 @@ body.rs-center-modal-open {
 }
 
 .rs-center-modal-header {
-    padding-right: 48px;
-    margin-bottom: 20px;
+    padding-right: 54px;
+    margin-bottom: 22px;
 }
 
 .rs-center-modal-meta {
@@ -5918,12 +5989,12 @@ body.rs-center-modal-open {
 
 .rs-center-modal-zone-badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 3px 12px;
     border-radius: 999px;
     background: rgba(243, 106, 33, 0.12);
     border: 1px solid rgba(243, 106, 33, 0.28);
     color: #C84F18;
-    font: 700 0.72rem 'Poppins', sans-serif;
+    font: 700 0.74rem 'Poppins', sans-serif;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
@@ -5934,14 +6005,14 @@ body.rs-center-modal-open {
 
 .rs-center-modal-kicker {
     color: #8F171D;
-    font: 700 0.72rem 'Poppins', sans-serif;
+    font: 700 0.74rem 'Poppins', sans-serif;
     letter-spacing: 0.1em;
 }
 
 .rs-center-modal-title {
     margin: 0 0 8px;
     color: #542019;
-    font: 700 clamp(1.6rem, 2.5vw, 2.15rem)/1.2 'Poppins', sans-serif;
+    font: 800 clamp(1.7rem, 2.6vw, 2.35rem)/1.2 'Poppins', sans-serif;
     letter-spacing: -0.02em;
 }
 
@@ -5951,7 +6022,7 @@ body.rs-center-modal-open {
     align-items: flex-start;
     gap: 8px;
     color: #5A483E;
-    font: 500 0.88rem/1.55 'Poppins', sans-serif;
+    font: 500 0.9rem/1.55 'Poppins', sans-serif;
 }
 
 .rs-center-modal-address svg {
@@ -5962,48 +6033,62 @@ body.rs-center-modal-open {
 
 .rs-center-modal-divider {
     height: 1px;
-    background: linear-gradient(90deg, rgba(143, 23, 29, 0.2) 0%, rgba(243, 106, 33, 0.15) 50%, transparent 100%);
-    margin-bottom: 24px;
+    background: linear-gradient(90deg, rgba(143, 23, 29, 0.2) 0%, rgba(243, 106, 33, 0.18) 50%, transparent 100%);
+    margin-bottom: 26px;
 }
 
-/* Quick Specs Grid */
+/* Quick Specs Grid (3 items: Operation Hours, Direct Phone, Email Address) */
 .rs-center-specs-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
 }
 
 .rs-spec-item {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 14px 16px;
     border-radius: 14px;
     background: #FFF8EE;
-    border: 1px solid rgba(243, 106, 33, 0.18);
+    border: 1px solid rgba(243, 106, 33, 0.2);
+}
+
+.rs-spec-item.rs-spec-op-hours {
+    background: #FFF5E6;
+    border-color: rgba(243, 106, 33, 0.32);
 }
 
 .rs-spec-icon {
-    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(243, 106, 33, 0.12);
     color: #C84F18;
     flex-shrink: 0;
-    margin-top: 1px;
+}
+
+.rs-spec-icon svg {
+    stroke-width: 2.2;
 }
 
 .rs-spec-content strong {
     display: block;
-    color: #542019;
+    color: #8F171D;
     font: 700 0.74rem 'Poppins', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 2px;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
 }
 
 .rs-spec-content p {
     margin: 0;
-    color: #5E4E45;
-    font: 500 0.82rem/1.45 'Poppins', sans-serif;
+    color: #4A3B32;
+    font: 600 0.84rem/1.45 'Poppins', sans-serif;
 }
 
 .rs-spec-content a {
@@ -6019,52 +6104,211 @@ body.rs-center-modal-open {
 
 /* Modal Sections */
 .rs-center-modal-section {
-    margin-bottom: 22px;
+    margin-bottom: 28px;
+}
+
+.rs-center-modal-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
 }
 
 .rs-center-modal-section-title {
-    margin: 0 0 12px;
+    margin: 0 0 4px;
     color: #542019;
-    font: 700 0.94rem 'Poppins', sans-serif;
+    font: 700 1.08rem 'Poppins', sans-serif;
     letter-spacing: -0.01em;
 }
 
-.rs-center-modal-programs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+.rs-center-modal-section-subtitle {
+    margin: 0;
+    color: #7B685D;
+    font: 400 0.82rem/1.5 'Poppins', sans-serif;
 }
 
-.rs-modal-program-pill {
-    padding: 5px 12px;
+/* Detailed Activities Section */
+.rs-center-activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.rs-center-activity-card {
+    background: #FFFFFF;
+    border: 1.5px solid rgba(143, 23, 29, 0.12);
+    border-left: 4.5px solid #F36A21;
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 14px rgba(89, 37, 24, 0.04);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.rs-center-activity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(89, 37, 24, 0.09);
+    border-left-color: #8F171D;
+}
+
+.rs-center-act-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.rs-center-act-title {
+    margin: 0;
+    color: #542019;
+    font: 700 0.98rem/1.35 'Poppins', sans-serif;
+}
+
+.rs-center-act-badge {
+    display: inline-block;
+    padding: 3px 10px;
     border-radius: 999px;
     background: #FFF3E0;
     border: 1px solid rgba(243, 106, 33, 0.28);
-    color: #8F340A;
-    font: 600 0.76rem 'Poppins', sans-serif;
+    color: #9A380A;
+    font: 700 0.68rem 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
+.rs-center-act-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+    background: #FFFDF9;
+    border-radius: 10px;
+    border: 1px dashed rgba(143, 23, 29, 0.14);
+}
+
+.rs-center-act-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font: 400 0.78rem/1.45 'Poppins', sans-serif;
+    color: #5E4E45;
+}
+
+.rs-act-detail-icon {
+    color: #F36A21;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: inline-flex;
+}
+
+.rs-act-detail-text strong {
+    color: #542019;
+    font-weight: 600;
+}
+
+.rs-center-act-desc {
+    margin: 0;
+    color: #6D5B50;
+    font: 400 0.82rem/1.55 'Poppins', sans-serif;
+}
+
+/* Center Events Section */
+.rs-center-modal-events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.rs-center-modal-event-card {
+    background: #FFFBF5;
+    border: 1.5px solid rgba(143, 23, 29, 0.14);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 4px 14px rgba(89, 37, 24, 0.04);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.rs-center-modal-event-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(143, 23, 29, 0.32);
+    box-shadow: 0 10px 24px rgba(89, 37, 24, 0.1);
+}
+
+.rs-center-modal-event-name {
+    margin: 0 0 8px;
+    color: #542019;
+    font: 700 1.05rem/1.35 'Poppins', sans-serif;
+}
+
+.rs-center-modal-event-desc {
+    margin: 0;
+    color: #67574c;
+    font: 400 0.84rem/1.6 'Poppins', sans-serif;
+}
+
+.rs-center-modal-event-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(143, 23, 29, 0.16);
+}
+
+.rs-center-modal-event-register-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 22px;
+    border-radius: 999px;
+    background: #8F171D;
+    color: #FFFFFF !important;
+    font: 700 0.82rem 'Poppins', sans-serif;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(143, 23, 29, 0.25);
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.rs-center-modal-event-register-btn:hover {
+    background: #F36A21;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(243, 106, 33, 0.38);
+    color: #FFFFFF !important;
+}
+
+/* Facility Highlights */
 .rs-center-modal-features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 12px;
 }
 
 .rs-modal-feature-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 10px 14px;
     border-radius: 12px;
     background: #FFFFFF;
     border: 1px solid rgba(143, 23, 29, 0.12);
     color: #542019;
-    font: 500 0.76rem 'Poppins', sans-serif;
+    font: 500 0.8rem 'Poppins', sans-serif;
 }
 
 .rs-feature-check {
     color: #F36A21;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 }
 
 /* Modal Footer */
@@ -6073,7 +6317,7 @@ body.rs-center-modal-open {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding-top: 20px;
+    padding-top: 22px;
     border-top: 1px solid rgba(143, 23, 29, 0.12);
     flex-wrap: wrap;
 }
@@ -6081,42 +6325,26 @@ body.rs-center-modal-open {
 .rs-center-modal-footer-note {
     margin: 0;
     color: #79665B;
-    font: 400 0.74rem 'Poppins', sans-serif;
-    max-width: 250px;
+    font: 400 0.8rem 'Poppins', sans-serif;
+    max-width: 320px;
 }
 
 .rs-center-modal-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.rs-center-modal-close-btn {
-    padding: 10px 18px;
-    border-radius: 999px;
-    border: 1.5px solid rgba(143, 23, 29, 0.24);
-    background: transparent;
-    color: #542019;
-    font: 600 0.82rem 'Poppins', sans-serif;
-    cursor: pointer;
-    transition: background 180ms ease, color 180ms ease;
-}
-
-.rs-center-modal-close-btn:hover {
-    background: rgba(143, 23, 29, 0.08);
-    color: #8F171D;
+    gap: 12px;
 }
 
 .rs-center-modal-directions-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 18px;
+    padding: 11px 22px;
     border-radius: 999px;
     border: 1.5px solid rgba(143, 23, 29, 0.25);
     background: #FFF5E5;
     color: #8F171D;
-    font: 700 0.82rem 'Poppins', sans-serif;
+    font: 700 0.84rem 'Poppins', sans-serif;
     text-decoration: none;
     transition: all 180ms ease;
 }
@@ -6130,11 +6358,11 @@ body.rs-center-modal-open {
 .rs-center-modal-enquire-btn {
     display: inline-flex;
     align-items: center;
-    padding: 10px 22px;
+    padding: 11px 24px;
     border-radius: 999px;
     background: linear-gradient(135deg, #F9B72A 0%, #F36A21 100%);
     color: #2E0B04 !important;
-    font: 700 0.84rem 'Poppins', sans-serif;
+    font: 700 0.86rem 'Poppins', sans-serif;
     text-decoration: none;
     box-shadow: 0 6px 18px rgba(243, 106, 33, 0.38);
     transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
@@ -6347,12 +6575,17 @@ body.rs-center-modal-open {
         grid-template-columns: 1fr;
     }
 
+    .rs-center-activities-grid,
+    .rs-center-modal-events-grid {
+        grid-template-columns: 1fr;
+    }
+
     .rs-center-modal-features {
         grid-template-columns: 1fr;
     }
 
     .rs-center-modal-card {
-        padding: 28px 20px 24px;
+        padding: 28px 18px 24px;
         border-radius: 20px;
     }
 
@@ -6366,7 +6599,6 @@ body.rs-center-modal-open {
         width: 100%;
     }
 
-    .rs-center-modal-close-btn,
     .rs-center-modal-directions-btn,
     .rs-center-modal-enquire-btn {
         width: 100%;
@@ -6530,20 +6762,23 @@ body.rs-modal-open .rs-site-header {
     position: relative;
     display: flex;
     flex-direction: column;
-    border-radius: 18px;
-    background: #FFFFFF;
-    border: 1px solid rgba(143, 23, 29, 0.12);
-    box-shadow: 0 10px 28px rgba(82, 38, 18, 0.06);
+    border-radius: 20px;
+    background: rgba(255, 253, 249, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 12px 30px rgba(78, 30, 15, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
     overflow: hidden;
     transform: perspective(1000px) rotateX(var(--card-rotate-x)) rotateY(var(--card-rotate-y)) translateY(var(--card-lift));
-    transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 260ms ease, border-color 260ms ease;
+    transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 260ms ease, border-color 260ms ease, background 260ms ease;
     transform-style: preserve-3d;
 }
 
 .rs-activity-card:hover {
     --card-lift: -8px;
-    border-color: rgba(243, 106, 33, 0.48);
-    box-shadow: 0 22px 42px rgba(89, 37, 24, 0.14), 0 0 0 1px rgba(243, 106, 33, 0.15);
+    background: rgba(255, 253, 249, 0.9);
+    border-color: rgba(243, 106, 33, 0.45);
+    box-shadow: 0 24px 46px rgba(89, 37, 24, 0.14), 0 0 0 1px rgba(243, 106, 33, 0.22), inset 0 1px 0 #FFFFFF;
 }
 
 .rs-activity-card-media {
@@ -6615,49 +6850,52 @@ body.rs-modal-open .rs-site-header {
 }
 
 .rs-activity-card-body {
-    padding: 20px 20px 22px;
+    padding: 16px 18px 18px;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
-.rs-activity-card-title {
-    margin: 0 0 6px;
-    color: #542019;
-    font: 700 1.2rem/1.25 'Poppins', sans-serif;
-}
-
 .rs-activity-card-tagline {
-    margin: 0 0 10px;
+    margin: 0 0 6px;
     color: var(--color-saffron);
-    font: 600 0.74rem 'Poppins', sans-serif;
+    font: 600 0.72rem 'Poppins', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
+.rs-activity-card-title {
+    margin: 0 0 6px;
+    color: #542019;
+    font: 700 1.18rem/1.25 'Poppins', sans-serif;
+}
+
 .rs-activity-card-desc {
-    margin: 0 0 16px;
+    margin: 0 0 12px;
     color: #6a5a51;
-    font: 400 0.84rem/1.6 'Poppins', sans-serif;
-    flex: 1;
+    font: 400 0.82rem/1.55 'Poppins', sans-serif;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .rs-activity-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 20px;
+    gap: 5px;
+    margin-bottom: 14px;
     list-style: none;
     padding: 0;
 }
 
 .rs-activity-tag {
-    padding: 4px 9px;
+    padding: 3px 8px;
     border-radius: 999px;
-    background: #FFF5E5;
-    border: 1px solid rgba(243, 106, 33, 0.22);
+    background: rgba(255, 245, 229, 0.75);
+    border: 1px solid rgba(243, 106, 33, 0.2);
     color: #793A17;
-    font: 500 0.72rem 'Poppins', sans-serif;
+    font: 500 0.7rem 'Poppins', sans-serif;
     white-space: nowrap;
 }
 
@@ -6667,7 +6905,7 @@ body.rs-modal-open .rs-site-header {
     justify-content: center;
     gap: 8px;
     width: 100%;
-    padding: 11px 18px;
+    padding: 10px 16px;
     border-radius: 999px;
     background: #8F171D;
     color: #FFFFFF;
@@ -6677,6 +6915,7 @@ body.rs-modal-open .rs-site-header {
     box-shadow: 0 6px 18px rgba(143, 23, 29, 0.2);
     transition: all 200ms ease;
     text-decoration: none;
+    margin-top: auto;
 }
 
 .rs-card-btn span {
@@ -6696,7 +6935,7 @@ body.rs-modal-open .rs-site-header {
     transform: translateX(4px);
 }
 
-/* Activities Popup Modal with Full Background Blur */
+/* Activities Popup Modal with Expansive Layout */
 #rs-activity-modal.rs-act-modal {
     position: fixed;
     inset: 0;
@@ -6704,7 +6943,7 @@ body.rs-modal-open .rs-site-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
+    padding: 20px 16px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1), visibility 280ms ease;
@@ -6718,7 +6957,7 @@ body.rs-modal-open .rs-site-header {
 .rs-act-modal-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(30, 10, 8, 0.65);
+    background: rgba(28, 10, 8, 0.68);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     cursor: pointer;
@@ -6727,8 +6966,8 @@ body.rs-modal-open .rs-site-header {
 .rs-act-modal-container {
     position: relative;
     z-index: 2;
-    width: 100%;
-    max-width: 840px;
+    width: min(1160px, 94vw);
+    max-width: 1160px;
     display: flex;
     justify-content: center;
 }
@@ -6738,16 +6977,16 @@ body.rs-modal-open .rs-site-header {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
-    max-width: 840px !important;
-    max-height: 88vh;
+    max-width: 1160px !important;
+    max-height: calc(100vh - 44px);
     overflow-y: auto;
     overflow-x: hidden;
     background: #FFFDF9;
-    border: 1px solid rgba(143, 23, 29, 0.18);
-    border-radius: 24px;
-    box-shadow: 0 28px 80px rgba(45, 12, 8, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
-    padding: 34px 36px 30px;
-    transform: scale(0.92) translateY(20px);
+    border: 1.5px solid rgba(143, 23, 29, 0.18);
+    border-radius: 26px;
+    box-shadow: 0 32px 90px rgba(45, 12, 8, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+    padding: clamp(28px, 3vw, 40px) clamp(24px, 3.5vw, 44px);
+    transform: scale(0.94) translateY(18px);
     transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
     scrollbar-width: thin;
     scrollbar-color: rgba(143, 23, 29, 0.25) transparent;
@@ -6769,10 +7008,10 @@ body.rs-modal-open .rs-site-header {
 /* Modal Close Button */
 .rs-act-modal-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 38px;
-    height: 38px;
+    top: 22px;
+    right: 22px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid rgba(143, 23, 29, 0.18);
     background: #FFF5EA;
@@ -6810,8 +7049,8 @@ body.rs-modal-open .rs-site-header {
 }
 
 .rs-act-modal-icon {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     flex-shrink: 0;
     border-radius: 14px;
     background: linear-gradient(135deg, #FFF0D9, #FFE4C7);
@@ -6820,14 +7059,14 @@ body.rs-modal-open .rs-site-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.55rem;
     box-shadow: 0 4px 14px rgba(243, 106, 33, 0.16);
 }
 
 .rs-act-modal-tagline {
     display: inline-block;
     color: var(--color-saffron);
-    font: 700 0.76rem 'Poppins', sans-serif;
+    font: 700 0.78rem 'Poppins', sans-serif;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -6835,7 +7074,7 @@ body.rs-modal-open .rs-site-header {
 .rs-act-modal-title {
     margin: 0 0 8px;
     color: #542019;
-    font: 700 clamp(1.6rem, 2.5vw, 2.15rem)/1.18 'Poppins', sans-serif;
+    font: 700 clamp(1.65rem, 2.6vw, 2.25rem)/1.18 'Poppins', sans-serif;
     letter-spacing: -0.02em;
 }
 
@@ -6843,7 +7082,7 @@ body.rs-modal-open .rs-site-header {
     margin: 0;
     color: #64554c;
     font: 400 0.92rem/1.65 'Poppins', sans-serif;
-    max-width: 720px;
+    max-width: 840px;
 }
 
 .rs-act-modal-divider {
@@ -6863,150 +7102,186 @@ body.rs-modal-open .rs-site-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 14px;
+    margin: 0 0 10px;
 }
 
 .rs-act-section-heading h3 {
     margin: 0;
     color: #542019;
-    font: 700 1.05rem 'Poppins', sans-serif;
+    font: 700 1.12rem 'Poppins', sans-serif;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
 }
 
 .rs-act-section-heading h3::before {
     content: "";
     display: inline-block;
     width: 4px;
-    height: 16px;
+    height: 18px;
     background: var(--color-saffron);
     border-radius: 2px;
 }
 
-.rs-act-programs-grid {
+.rs-act-section-sub {
+    margin: 4px 0 0 13px;
+    color: #796d65;
+    font: 400 0.82rem 'Poppins', sans-serif;
+}
+
+/* Detailed Sub-Activities Grid & Cards */
+.rs-act-subactivities-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 18px;
 }
 
-.rs-act-program-item {
+.rs-act-subactivity-card {
     background: #FFFFFF;
-    border: 1px solid rgba(143, 23, 29, 0.12);
-    border-radius: 16px;
-    padding: 18px 20px;
+    border: 1.5px solid rgba(143, 23, 29, 0.12);
+    border-radius: 18px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 14px rgba(82, 38, 18, 0.04);
-    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+    gap: 13px;
+    box-shadow: 0 4px 18px rgba(82, 38, 18, 0.05);
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
-.rs-act-program-item:hover {
-    transform: translateY(-2px);
-    border-color: rgba(243, 106, 33, 0.42);
-    box-shadow: 0 10px 22px rgba(89, 37, 24, 0.09);
+.rs-act-subactivity-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(243, 106, 33, 0.45);
+    box-shadow: 0 12px 28px rgba(89, 37, 24, 0.1);
 }
 
-.rs-act-program-header {
+.rs-act-subact-header {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
+    justify-content: space-between;
     gap: 12px;
-    margin-bottom: 8px;
 }
 
-.rs-act-program-title {
-    margin: 0;
-    color: #542019;
-    font: 700 0.98rem/1.3 'Poppins', sans-serif;
+.rs-act-subact-title-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     flex: 1;
 }
 
-.rs-act-program-badge {
-    padding: 3px 11px;
+.rs-act-subact-title {
+    margin: 0;
+    color: #542019;
+    font: 700 1.05rem/1.3 'Poppins', sans-serif;
+}
+
+.rs-act-subact-badge {
+    padding: 3px 10px;
     border-radius: 999px;
     background: #FFF5E5;
     border: 1px solid rgba(243, 106, 33, 0.28);
     color: #7A3916;
-    font: 600 0.7rem 'Poppins', sans-serif;
+    font: 600 0.68rem 'Poppins', sans-serif;
+    letter-spacing: 0.02em;
     white-space: nowrap;
-    flex-shrink: 0;
 }
 
-.rs-act-program-desc {
-    margin: 0;
-    color: #66574f;
-    font: 400 0.82rem/1.6 'Poppins', sans-serif;
-}
-
-/* Centers Banner in Modal */
-.rs-act-centers-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 16px 22px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #FFF1DA, #FFF8ED);
-    border: 1px solid rgba(243, 106, 33, 0.25);
-    box-shadow: 0 6px 18px rgba(243, 106, 33, 0.06);
-}
-
-.rs-act-centers-info {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.rs-act-centers-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    border: 1px solid rgba(243, 106, 33, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-saffron);
-    font-size: 1.25rem;
-    flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-}
-
-.rs-act-centers-text strong {
-    display: block;
-    color: #542019;
-    font: 700 0.9rem 'Poppins', sans-serif;
-}
-
-.rs-act-centers-text p {
-    margin: 3px 0 0;
-    color: #66574f;
-    font: 400 0.8rem 'Poppins', sans-serif;
-}
-
-.rs-act-centers-btn {
+.rs-act-subact-join-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 9px 20px;
+    gap: 4px;
+    padding: 6px 14px;
     border-radius: 999px;
-    background: #8F171D;
-    color: #FFFFFF !important;
-    font: 700 0.8rem 'Poppins', sans-serif;
+    background: rgba(143, 23, 29, 0.08);
+    color: #8F171D;
+    font: 700 0.74rem 'Poppins', sans-serif;
     text-decoration: none;
     white-space: nowrap;
-    flex-shrink: 0;
-    box-shadow: 0 4px 14px rgba(143, 23, 29, 0.25);
     transition: all 180ms ease;
+    border: 1px solid rgba(143, 23, 29, 0.15);
+    flex-shrink: 0;
 }
 
-.rs-act-centers-btn:hover {
-    background: #F36A21;
+.rs-act-subact-join-btn:hover {
+    background: #8F171D;
     color: #FFFFFF !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(243, 106, 33, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(143, 23, 29, 0.2);
+}
+
+.rs-act-subact-desc {
+    margin: 0;
+    color: #64554d;
+    font: 400 0.84rem/1.62 'Poppins', sans-serif;
+}
+
+.rs-act-subact-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(143, 23, 29, 0.15);
+}
+
+.rs-act-specs-subgrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.rs-act-spec-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    background: #FFFBF7;
+    border: 1px solid rgba(143, 23, 29, 0.08);
+    border-radius: 12px;
+    padding: 9px 12px;
+}
+
+.rs-spec-full {
+    width: 100%;
+    background: linear-gradient(135deg, #FFF8EE, #FFF3E2);
+    border-color: rgba(243, 106, 33, 0.24);
+}
+
+.rs-act-spec-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(243, 106, 33, 0.12);
+    color: var(--color-saffron);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.rs-act-spec-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.rs-act-spec-content strong {
+    color: #793A17;
+    font: 700 0.7rem 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.rs-act-spec-content span {
+    color: #3b2823;
+    font: 500 0.8rem/1.45 'Poppins', sans-serif;
+    word-break: break-word;
+}
+
+.rs-spec-val-centers {
+    color: #542019 !important;
+    font-weight: 600 !important;
 }
 
 /* Modal Footer */
@@ -7016,37 +7291,41 @@ body.rs-modal-open .rs-site-header {
     justify-content: space-between;
     gap: 16px;
     margin-top: 10px;
-    padding-top: 18px;
+    padding-top: 20px;
     border-top: 1px solid rgba(143, 23, 29, 0.12);
 }
 
 .rs-act-modal-footer-note {
     margin: 0;
     color: #796d65;
-    font: 500 0.78rem 'Poppins', sans-serif;
+    font: 500 0.8rem 'Poppins', sans-serif;
 }
 
 .rs-act-modal-footer-actions {
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
 }
 
-.rs-act-modal-close-btn {
+.rs-act-modal-centers-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 999px;
     background: #FFF6EC;
     color: #542019;
     border: 1px solid rgba(143, 23, 29, 0.2);
-    border-radius: 999px;
-    padding: 10px 22px;
-    font: 600 0.84rem 'Poppins', sans-serif;
-    cursor: pointer;
+    font: 600 0.82rem 'Poppins', sans-serif;
+    text-decoration: none;
     transition: all 180ms ease;
+    white-space: nowrap;
 }
 
-.rs-act-modal-close-btn:hover {
+.rs-act-modal-centers-link:hover {
+    background: #FFEEDB;
     border-color: #8F171D;
     color: #8F171D;
-    background: #FFEEDB;
 }
 
 .rs-act-modal-cta-btn {
@@ -7062,6 +7341,7 @@ body.rs-modal-open .rs-site-header {
     gap: 8px;
     box-shadow: 0 6px 18px rgba(143, 23, 29, 0.25);
     transition: all 200ms ease;
+    white-space: nowrap;
 }
 
 .rs-act-modal-cta-btn:hover {
@@ -7290,32 +7570,36 @@ body.rs-modal-open .rs-site-header {
         padding-right: 36px;
     }
 
-    .rs-act-programs-grid {
+    .rs-act-programs-grid,
+    .rs-act-subactivities-grid {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
 
-    .rs-act-centers-banner {
-        flex-direction: column;
-        align-items: flex-start;
+    .rs-act-specs-subgrid {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
 
-    .rs-act-centers-btn {
-        width: 100%;
+    .rs-act-subactivity-card {
+        padding: 16px 18px;
     }
 
     .rs-act-modal-footer {
         flex-direction: column-reverse;
-        gap: 10px;
+        gap: 14px;
         align-items: stretch;
     }
 
     .rs-act-modal-footer-actions {
         width: 100%;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .rs-act-modal-close-btn,
+    .rs-act-modal-centers-link,
     .rs-act-modal-cta-btn {
-        flex: 1;
+        width: 100%;
         justify-content: center;
         text-align: center;
     }
