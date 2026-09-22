@@ -120,4 +120,43 @@ foreach ($activity_categories as $cat) {
     }
 }
 
+echo "\nPopulating Core Pages...\n";
+$core_pages = [
+    ['title' => 'Home', 'slug' => 'home', 'template' => 'front-page.php'],
+    ['title' => 'About Us', 'slug' => 'about-us', 'template' => 'page-about-us.php'],
+    ['title' => 'Activities', 'slug' => 'activities', 'template' => 'page-activities.php'],
+    ['title' => 'Centers', 'slug' => 'centers', 'template' => 'page-centers.php'],
+    ['title' => 'Events', 'slug' => 'events', 'template' => 'page-events.php'],
+    ['title' => 'Gallery', 'slug' => 'gallery', 'template' => 'page-gallery.php'],
+    ['title' => 'Contact Us', 'slug' => 'contact-us', 'template' => 'page-contact-us.php'],
+];
+
+foreach ($core_pages as $p) {
+    $existing = get_page_by_path($p['slug']);
+    if (!$existing) {
+        $page_id = wp_insert_post([
+            'post_title' => $p['title'],
+            'post_name' => $p['slug'],
+            'post_status' => 'publish',
+            'post_type' => 'page'
+        ]);
+        update_post_meta($page_id, '_wp_page_template', $p['template']);
+        echo " - Created page: " . $p['title'] . "\n";
+        
+        // If it's the home page, set it as the front page
+        if ($p['slug'] === 'home') {
+            update_option('show_on_front', 'page');
+            update_option('page_on_front', $page_id);
+        }
+    } else {
+        update_post_meta($existing->ID, '_wp_page_template', $p['template']);
+        echo " - Page exists: " . $p['title'] . " (Template assigned)\n";
+        
+        if ($p['slug'] === 'home') {
+            update_option('show_on_front', 'page');
+            update_option('page_on_front', $existing->ID);
+        }
+    }
+}
+
 echo "CMS Population Complete!\n";
