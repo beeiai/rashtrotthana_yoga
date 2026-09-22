@@ -20,7 +20,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'wellness'),
         'address'   => 'No. 12, 4th Block, Jayanagar, Bengaluru – 560011',
         'email'     => 'jayanagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08484.jpg',
         'features'  => array('Spacious Yoga Shala', 'Certified Instructors', 'Ayurveda & Therapy Desk'),
     ),
     array(
@@ -39,7 +39,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'children', 'wellness'),
         'address'   => 'No. 34, Bull Temple Road, Basavanagudi, Bengaluru – 560004',
         'email'     => 'basavanagudi@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08572.jpg',
         'features'  => array('Historic Cultural Hall', 'Prenatal & Therapy Care', 'Library & Reading Room'),
     ),
     array(
@@ -58,7 +58,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'culture', 'wellness'),
         'address'   => 'Rashtrotthana Complex, 18th Cross, Margosa Road, Malleswaram, Bengaluru – 560003',
         'email'     => 'malleswaram@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg',
         'features'  => array('Multi-Storey Complex', 'Full Yoga Studio', 'Cultural Academy'),
     ),
     array(
@@ -77,7 +77,7 @@ $centers = array(
         'activities'=> array('yoga', 'fitness', 'therapy', 'wellness'),
         'address'   => 'New Town Main Road, Yelahanka, Bengaluru – 560064',
         'email'     => 'yelahanka@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/08-02-22-rathasaptami-celebration-yoga-centres-bengaluru-5-.jpg',
         'features'  => array('Modern Open Space', 'Yoga Equipment Available', 'Dedicated Parking'),
     ),
     array(
@@ -96,7 +96,7 @@ $centers = array(
         'activities'=> array('yoga', 'wellness', 'fitness'),
         'address'   => '100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru – 560038',
         'email'     => 'indiranagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/05-01-25-kutumba-milana-rysri-jayanagar-3-.jpg',
         'features'  => array('Premium Studio Flooring', 'Airy Natural Light', 'Individual Consultation'),
     ),
     array(
@@ -115,7 +115,7 @@ $centers = array(
         'activities'=> array('yoga', 'fitness', 'wellness'),
         'address'   => '80 Feet Road, 5th Block, Koramangala, Bengaluru – 560095',
         'email'     => 'koramangala@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg',
         'features'  => array('Central Location', 'Special Youth Programs', 'Weekend Intensive Workshops'),
     ),
     array(
@@ -134,7 +134,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'wellness'),
         'address'   => '100 Feet Ring Road, 2nd Stage, Banashankari, Bengaluru – 560070',
         'email'     => 'banashankari@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/rysri-kundalahalli-1-.jpg',
         'features'  => array('Senior Citizen Friendly', 'Gentle Therapy Focus', 'Spiritual Study Circle'),
     ),
     array(
@@ -153,7 +153,7 @@ $centers = array(
         'activities'=> array('yoga', 'children', 'therapy', 'culture'),
         'address'   => 'Dr. Rajkumar Road, 1st Block, Rajajinagar, Bengaluru – 560010',
         'email'     => 'rajajinagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08484.jpg',
         'features'  => array('Traditional Gurukula Spirit', 'Holistic Women Wellness', 'Weekend Seminars'),
     ),
     array(
@@ -172,7 +172,7 @@ $centers = array(
         'activities'=> array('yoga', 'fitness', 'children', 'wellness'),
         'address'   => '27th Main Road, Sector 2, HSR Layout, Bengaluru – 560102',
         'email'     => 'hsr@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08572.jpg',
         'features'  => array('Tech-Professional Batches', 'Postural Correction Clinics', 'Shower Facilities'),
     ),
     array(
@@ -191,7 +191,7 @@ $centers = array(
         'activities'=> array('yoga', 'wellness', 'therapy'),
         'address'   => 'Near Hope Farm Junction, ITPL Main Road, Whitefield, Bengaluru – 560066',
         'email'     => 'whitefield@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg',
         'features'  => array('Ergonomic Posture Focus', 'Stress Relief Audio Lab', 'Evening Stretch Batches'),
     ),
     array(
@@ -210,7 +210,7 @@ $centers = array(
         'activities'=> array('yoga', 'martial-arts', 'fitness', 'therapy'),
         'address'   => 'Varthur Main Road, Near Bridge, Marathahalli, Bengaluru – 560037',
         'email'     => 'marathahalli@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/08-02-22-rathasaptami-celebration-yoga-centres-bengaluru-5-.jpg',
         'features'  => array('Integrated Sports Wing', 'Kids Martial Arts Arena', 'Physical Fitness Labs'),
     ),
     array(
@@ -229,7 +229,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'children', 'wellness'),
         'address'   => '17th Cross, MC Layout, Vijayanagar, Bengaluru – 560040',
         'email'     => 'vijayanagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/05-01-25-kutumba-milana-rysri-jayanagar-3-.jpg',
         'features'  => array('Close to Metro Station', 'Experienced Senior Gurus', 'Ayur-Diet Consultation'),
     ),
     array(
@@ -248,7 +248,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'wellness'),
         'address'   => 'Bellary Road, Near Hebbal Flyover, Bengaluru – 560024',
         'email'     => 'hebbal@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg',
         'features'  => array('Serene Green Ambience', 'Spine & Backache Clinics', 'Yoga Mats Provided'),
     ),
     array(
@@ -267,7 +267,7 @@ $centers = array(
         'activities'=> array('yoga', 'martial-arts', 'wellness'),
         'address'   => 'F Block, Sahakarnagar Main Road, Bengaluru – 560092',
         'email'     => 'sahakarnagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/rysri-kundalahalli-1-.jpg',
         'features'  => array('Spacious Training Grounds', 'Self-Defence Academy', 'Community Health Camps'),
     ),
     array(
@@ -286,7 +286,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'wellness'),
         'address'   => 'Dinnur Main Road, RT Nagar, Bengaluru – 560032',
         'email'     => 'rtnagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08484.jpg',
         'features'  => array('Metabolic Health Specialists', 'Individual Progress Tracking', 'Quiet Study Ambience'),
     ),
     array(
@@ -305,7 +305,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'children', 'culture'),
         'address'   => '15th Main, Padmanabhanagar, Bengaluru – 560070',
         'email'     => 'padmanabhanagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08572.jpg',
         'features'  => array('Sanskrit & Culture Wing', 'Senior Citizen Care', 'Herbal Garden Campus'),
     ),
     array(
@@ -324,7 +324,7 @@ $centers = array(
         'activities'=> array('yoga', 'fitness', 'therapy', 'wellness'),
         'address'   => 'Satellite Town Main Road, Kengeri, Bengaluru – 560060',
         'email'     => 'kengeri@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg',
         'features'  => array('Expansive Green Campus', 'Residential Yoga Retreats', 'Direct Metro Connectivity'),
     ),
     array(
@@ -343,7 +343,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'wellness', 'fitness'),
         'address'   => 'Near BDA Complex, 2nd Stage, Nagarbhavi, Bengaluru – 560072',
         'email'     => 'nagarbhavi@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/08-02-22-rathasaptami-celebration-yoga-centres-bengaluru-5-.jpg',
         'features'  => array('Natural Ventilation Halls', 'Kriya Cleansing Workshops', 'Youth Sports Clubs'),
     ),
     array(
@@ -362,7 +362,7 @@ $centers = array(
         'activities'=> array('yoga', 'culture', 'therapy', 'wellness'),
         'address'   => '12th Main Road, Mahalakshmi Layout, Bengaluru – 560086',
         'email'     => 'mahalakshmi@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/05-01-25-kutumba-milana-rysri-jayanagar-3-.jpg',
         'features'  => array('Elevated Panoramic Shala', 'Classical Dance Wing', 'Spiritual Discourse Hall'),
     ),
     array(
@@ -381,7 +381,7 @@ $centers = array(
         'activities'=> array('yoga', 'wellness', 'therapy'),
         'address'   => 'Peenya Industrial Area, 2nd Stage, Bengaluru – 560058',
         'email'     => 'peenya@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg',
         'features'  => array('Industrial Shift Batches', 'Occupational Health Clinics', 'Soundproof Yoga Hall'),
     ),
     array(
@@ -400,7 +400,7 @@ $centers = array(
         'activities'=> array('yoga', 'wellness', 'children'),
         'address'   => '1st Main Road, Chandra Layout, Vijayanagar, Bengaluru – 560040',
         'email'     => 'chandralayout@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/rysri-kundalahalli-1-.jpg',
         'features'  => array('Neighbourhood Yoga Sanctuary', 'Maternal Yoga Batches', 'Boutique Studio'),
     ),
     array(
@@ -419,7 +419,7 @@ $centers = array(
         'activities'=> array('yoga', 'fitness', 'wellness', 'therapy'),
         'address'   => 'Green Glen Layout, Bellandur, Bengaluru – 560103',
         'email'     => 'bellandur@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08484.jpg',
         'features'  => array('Tech Corridor Location', 'Ergonomic Desk Relief', 'Mindfulness Sessions'),
     ),
     array(
@@ -438,7 +438,7 @@ $centers = array(
         'activities'=> array('yoga', 'therapy', 'children', 'wellness'),
         'address'   => '24th Main Road, 6th Phase, JP Nagar, Bengaluru – 560078',
         'email'     => 'jpnagar@rashtrotthana.org',
-        'image'     => 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08572.jpg',
         'features'  => array('Spacious Wooden Floor Shala', 'Therapy Consultations', 'Cultural Hall'),
     ),
 );
