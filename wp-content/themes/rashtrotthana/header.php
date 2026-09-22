@@ -49,7 +49,6 @@
                 <a class="rs-nav-link<?php echo is_page('activities') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/activities/')); ?>">Activities</a>
                 <a class="rs-nav-link<?php echo is_page('centers') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/centers/')); ?>">Centers</a>
                 <a class="rs-nav-link<?php echo is_page('events') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/events/')); ?>">Events</a>
-                <a class="rs-nav-link<?php echo is_page('resources') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/resources/')); ?>">Resources</a>
                 <a class="rs-nav-link<?php echo is_page('gallery') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/gallery/')); ?>">Gallery</a>
                 <a class="rs-nav-link<?php echo is_page('contact-us') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/contact-us/')); ?>">Contact Us</a>
             

@@ -1,79 +1,46 @@
 <?php
+/**
+ * Rashtrotthana Yoga — functions.php
+ *
+ * This file is the theme bootstrap. It loads modular inc/ files:
+ *   • inc/enqueue.php        — all wp_enqueue_style / wp_enqueue_script calls
+ *   • inc/cpt-registration.php — Custom Post Type registrations
+ *   • inc/data-helpers.php   — data query functions (teammate's integration point)
+ *
+ * IMPORTANT: Do NOT add business logic here. Use the appropriate inc/ file.
+ */
 
-function rashtrotthana_enqueue_assets() {
+// ── Modular Includes ──────────────────────────────────────────────────────────
+require_once get_template_directory() . '/inc/enqueue.php';
+require_once get_template_directory() . '/inc/cpt-registration.php';
+require_once get_template_directory() . '/inc/data-helpers.php';
 
-    wp_enqueue_style(
-        'rashtrotthana-style',
-        get_stylesheet_uri(),
-        array(),
-        '1.0.8'
-    );
-
-    wp_enqueue_style(
-        'rashtrotthana-inner-pages',
-        get_template_directory_uri() . '/assets/css/inner-pages.css',
-        array( 'rashtrotthana-style' ),
-        '2.1.0'
-    );
-
-    wp_enqueue_script(
-        'rashtrotthana-inner-pages',
-        get_template_directory_uri() . '/assets/js/inner-pages.js',
-        array(),
-        '1.0.0',
-        true
-    );
-
-    wp_enqueue_script(
-        'rashtrotthana-navigation',
-        get_template_directory_uri() . '/assets/js/navigation.js',
-        array(),
-        '1.0.1',
-        true
-    );
-
-    /* Homepage-only and About Us visual effects */
-    if ( is_front_page() || is_page('about-us') ) {
-        wp_enqueue_style(
-            'rashtrotthana-homepage-effects',
-            get_template_directory_uri() . '/assets/css/homepage-effects.css',
-            array( 'rashtrotthana-style' ),
-            '2.0.0'
-        );
-
-        wp_enqueue_script(
-            'rashtrotthana-homepage-effects',
-            get_template_directory_uri() . '/assets/js/homepage-effects.js',
-            array(),
-            '2.0.0',
-            true
-        );
-    }
-}
-
-add_action('wp_enqueue_scripts', 'rashtrotthana_enqueue_assets');
+// ── Theme Setup ───────────────────────────────────────────────────────────────
+if ( ! function_exists( 'rashtrotthana_theme_setup' ) ) :
 
 function rashtrotthana_theme_setup() {
-
-    add_theme_support('title-tag');
-    add_theme_support('post-thumbnails');
-    add_theme_support('custom-logo');
-    add_theme_support('html5', array(
+    add_theme_support( 'title-tag' );
+    add_theme_support( 'post-thumbnails' );
+    add_theme_support( 'custom-logo' );
+    add_theme_support( 'html5', array(
         'search-form',
         'comment-form',
         'comment-list',
         'gallery',
         'caption',
-    ));
+    ) );
 
-    register_nav_menus(array(
-        'primary' => __('Primary Menu', 'rashtrotthana'),
-        'footer'  => __('Footer Menu', 'rashtrotthana'),
-    ));
+    register_nav_menus( array(
+        'primary' => __( 'Primary Menu', 'rashtrotthana' ),
+        'footer'  => __( 'Footer Menu', 'rashtrotthana' ),
+    ) );
 }
 
-add_action('after_setup_theme', 'rashtrotthana_theme_setup');
+add_action( 'after_setup_theme', 'rashtrotthana_theme_setup' );
 
+endif;
+
+// ── Legacy Homepage Collection Helper ────────────────────────────────────────
 /**
  * Return published content for a homepage collection, without requiring a CPT.
  * A future content integration can register any of the supplied post types; until
@@ -90,14 +57,12 @@ function rashtrotthana_home_collection( $post_types, $limit = 5 ) {
         return array();
     }
 
-    return get_posts(
-        array(
-            'post_type'           => $available_types,
-            'post_status'         => 'publish',
-            'posts_per_page'      => absint( $limit ),
-            'orderby'             => 'menu_order date',
-            'order'               => 'DESC',
-            'ignore_sticky_posts' => true,
-        )
-    );
+    return get_posts( array(
+        'post_type'           => $available_types,
+        'post_status'         => 'publish',
+        'posts_per_page'      => absint( $limit ),
+        'orderby'             => 'menu_order date',
+        'order'               => 'DESC',
+        'ignore_sticky_posts' => true,
+    ) );
 }
