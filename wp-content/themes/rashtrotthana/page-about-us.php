@@ -858,7 +858,7 @@ get_header();
                 </div>
 
                 <div class="rs-framed-image">
-                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80" alt="Rashtrotthana Yoga Yogashala Campus" loading="lazy">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg' ); ?>" alt="Rashtrotthana Yoga Yogashala Campus" loading="lazy">
                 </div>
             </div>
         </div>
@@ -1007,7 +1007,7 @@ get_header();
                 </div>
 
                 <div class="rs-framed-image">
-                    <img src="https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=1200&q=80" alt="Rashtrotthana Yoga Shala History" loading="lazy">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/rysri-kundalahalli-1-.jpg' ); ?>" alt="Rashtrotthana Yoga Shala History" loading="lazy">
                 </div>
             </div>
         </div>
