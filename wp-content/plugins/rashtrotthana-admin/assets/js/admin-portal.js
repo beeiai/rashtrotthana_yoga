@@ -335,7 +335,7 @@
             if ( !evNm ) { radmToast( 'Event name is required.', 'error' ); return; }
             setLoading( editSaveBtn, true );
             ajaxPost( 'radm_update_event', {
-                event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (editUseGoogleForm && editUseGoogleForm.checked ? 1 : 0), google_form_url: (editGoogleFormUrl ? editGoogleFormUrl.value : " \)
+                event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (editUseGoogleForm && editUseGoogleForm.checked ? 1 : 0), google_form_url: (editGoogleFormUrl ? editGoogleFormUrl.value : "")
             }, function ( res ) {
                 setLoading( editSaveBtn, false );
                 if ( res.success ) {
@@ -838,7 +838,7 @@
 
             setLoading( fgSaveBtn, true );
             ajaxPost( 'radm_save_form_group', {
-                group_id: gid, title: title, slug: slug, description: desc, action_mode: mode, ui_layout: layout, centres: centres
+                group_id: gid, title: title, slug: slug, description: desc, action_mode: mode, ui_layout: layout, centres: JSON.stringify(centres)
             }, function ( res ) {
                 setLoading( fgSaveBtn, false );
                 if ( res.success ) {

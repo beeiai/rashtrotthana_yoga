@@ -556,7 +556,12 @@ function radm_ajax_save_form_group(): void {
     $ui_layout   = in_array( $_POST['ui_layout'] ?? 'cards', [ 'cards', 'dropdown' ], true )
                     ? sanitize_key( $_POST['ui_layout'] )
                     : 'cards';
-    $raw_centres = isset( $_POST['centres'] ) && is_array( $_POST['centres'] ) ? $_POST['centres'] : [];
+                    
+    $centres_input = $_POST['centres'] ?? '';
+    $raw_centres   = is_string($centres_input) ? json_decode(stripslashes($centres_input), true) : [];
+    if (!is_array($raw_centres)) {
+        $raw_centres = [];
+    }
 
     if ( ! $title ) {
         wp_send_json_error( [ 'message' => 'Form Group title is required.' ], 400 );
