@@ -1481,6 +1481,10 @@ $news_dataset   = rs_get_news();
 
 <main class="rs-events-page" id="main-content">
 
+<div class="rs-events-notice" style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 15px 20px; text-align: center; color: #0369a1; font-weight: 500;">
+   Looking to register for a current event or camp? <a href="/ongoing-registrations/" style="color: #0284c7; text-decoration: underline; font-weight: 600;">Click here to view open registrations</a>.
+</div>
+
     <!-- ============================================================
          Refined Header Block (Zero Hero Banner — Activities/Centers Style)
          ============================================================ -->
