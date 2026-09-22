@@ -17,7 +17,7 @@ $flagship_centers = array(
         'lat'       => 12.9250,
         'lng'       => 77.5938,
         'is_hq'     => true,
-        'image'     => 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08484.jpg',
     ),
     array(
         'id'        => 'basavanagudi',
@@ -30,7 +30,7 @@ $flagship_centers = array(
         'lat'       => 12.9432,
         'lng'       => 77.5681,
         'is_hq'     => false,
-        'image'     => 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=700&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08572.jpg',
     ),
     array(
         'id'        => 'malleswaram',
@@ -43,7 +43,7 @@ $flagship_centers = array(
         'lat'       => 13.0068,
         'lng'       => 77.5713,
         'is_hq'     => false,
-        'image'     => 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=700&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/dsc08548-2-.png',
     ),
     array(
         'id'        => 'yelahanka',
@@ -56,7 +56,7 @@ $flagship_centers = array(
         'lat'       => 13.0990,
         'lng'       => 77.5980,
         'is_hq'     => false,
-        'image'     => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=700&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg',
     ),
     array(
         'id'        => 'sadashivanagar',
@@ -69,7 +69,7 @@ $flagship_centers = array(
         'lat'       => 13.0075,
         'lng'       => 77.5815,
         'is_hq'     => false,
-        'image'     => 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=700&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/20200529-182250.jpg',
     ),
     array(
         'id'        => 'indiranagar',
@@ -82,7 +82,7 @@ $flagship_centers = array(
         'lat'       => 12.9784,
         'lng'       => 77.6408,
         'is_hq'     => false,
-        'image'     => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=700&q=80',
+        'image'     => get_template_directory_uri() . '/assets/images/client/08-02-22-rathasaptami-celebration-yoga-centres-bengaluru-5-.jpg',
     ),
 );
 

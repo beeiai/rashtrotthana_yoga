@@ -10,7 +10,7 @@ $activity_categories = array(
         'title'    => 'Yoga & Wellness',
         'tagline'  => 'Strength, Balance & Inner Peace',
         'text'     => 'Yoga practices that build physical strength, flexibility, mental clarity, and inner calm across all age groups.',
-        'image'    => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/05-01-25-kutumba-milana-rysri-jayanagar-3-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Yoga for Beginners (Sarala Yoga)',
@@ -60,7 +60,7 @@ $activity_categories = array(
         'title'    => 'Arts & Music',
         'tagline'  => 'Creativity, Harmony & Soul',
         'text'     => 'Nurturing creativity and harmony through classical and contemporary vocal and instrumental music learning.',
-        'image'    => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/18-01-25-suggi-sambhrama-kolata-in-rysri-kg-nagar-1-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Carnatic Classical Vocal',
@@ -110,7 +110,7 @@ $activity_categories = array(
         'title'    => 'Dance',
         'tagline'  => 'Grace, Rhythm & Heritage',
         'text'     => 'Traditional dance forms and creative movement preserving India\'s rich cultural heritage and rhythm.',
-        'image'    => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/18-02-23-cultural-heritage-tour-for-rysri-yoga-practitioners-1-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Bharatanatyam (Kalakshetra / Pandanallur)',
@@ -160,7 +160,7 @@ $activity_categories = array(
         'title'    => 'Martial Arts',
         'tagline'  => 'Discipline, Agility & Self-Defence',
         'text'     => 'Self-defence and discipline-building through structured physical training, mental focus, and ancient techniques.',
-        'image'    => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/05-01-25-gou-puja-sambhrama-rysri-yoga-jayanagar-1-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Karate (Shotokan / Goju-Ryu)',
@@ -210,7 +210,7 @@ $activity_categories = array(
         'title'    => 'Children Programs',
         'tagline'  => 'Values, Character & Joyful Learning',
         'text'     => 'Value-based education and holistic development programs designed to spark curiosity and strong character in children.',
-        'image'    => 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/21-06-22-idy-celebration-12-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Samskrita Bala Kendra',
@@ -260,7 +260,7 @@ $activity_categories = array(
         'title'    => 'Fitness & Sports',
         'tagline'  => 'Stamina, Strength & Sportsmanship',
         'text'     => 'Build physical strength, stamina, and confidence with modern sports facilities and expert fitness coaching.',
-        'image'    => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/21-06-24-idy-celebration-by-rysri-jayanagar-1-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Modern Gym & Strength Conditioning',
@@ -310,7 +310,7 @@ $activity_categories = array(
         'title'    => 'Health & Therapy',
         'tagline'  => 'Natural Healing & Holistic Care',
         'text'     => 'Therapeutic programs and natural healing therapies restoring physical harmony, mental peace, and vital health.',
-        'image'    => 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/07-04-24-summer-camp-in-rysri-yoga-centres-1-.jpg',
         'items'    => array(
             array(
                 'name'        => 'Holistic Psychological Counselling',
@@ -360,7 +360,7 @@ $activity_categories = array(
         'title'    => 'Knowledge & Culture',
         'tagline'  => 'Wisdom, Heritage & Lifelong Learning',
         'text'     => 'Inspiring programs celebrating timeless wisdom, regional languages, Indian philosophy, and cultural values.',
-        'image'    => 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80',
+        'image'    => get_template_directory_uri() . '/assets/images/client/dsc08484.jpg',
         'items'    => array(
             array(
                 'name'        => 'Kannada Coaching (Spoken & Written)',
