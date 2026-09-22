@@ -66,3 +66,4 @@ function rashtrotthana_home_collection( $post_types, $limit = 5 ) {
         'ignore_sticky_posts' => true,
     ) );
 }
+require_once get_template_directory() . '/inc/acf-setup.php'; 
