@@ -1,4 +1,4 @@
-<?php get_header(); ?>
+﻿<?php get_header(); ?>
 
 <style>
     .rs-homepage { font-size: 16px; }
@@ -412,7 +412,7 @@
         color: var(--home-ink);
         background:
             linear-gradient(90deg, rgba(255, 248, 236, .84), rgba(255, 248, 236, .72)),
-            url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/bg.jpg' ); ?>") center top / cover fixed no-repeat;
+            url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") center top / cover fixed no-repeat;
         animation: rs-nature-drift 24s ease-in-out infinite alternate;
     }
 

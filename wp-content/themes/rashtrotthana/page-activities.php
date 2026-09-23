@@ -10,7 +10,7 @@
     color: var(--color-text);
     background: 
         linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/bg.jpg' ); ?>") center top / cover fixed no-repeat !important;
+        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") center top / cover fixed no-repeat !important;
     animation: rs-nature-drift 24s ease-in-out infinite alternate;
 }
 .rs-activities-page::before,
