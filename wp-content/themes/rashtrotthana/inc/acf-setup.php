@@ -228,3 +228,69 @@ function ry_register_acf_field_groups() {
         ),
     ));
 }
+
+// Append this inside ry_register_acf_field_groups() or as a new hooked function
+add_action('acf/init', 'ry_register_cpt_acf_field_groups');
+function ry_register_cpt_acf_field_groups() {
+    
+    // ---------------------------------------------------------
+    // 1. CENTER FIELDS
+    // ---------------------------------------------------------
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_center_fields',
+        'title' => 'Center Details',
+        'fields' => array(
+            array('key' => 'field_c_area', 'label' => 'Area / Locality', 'name' => 'area', 'type' => 'text', 'required' => 1),
+            array('key' => 'field_c_zone', 'label' => 'Zone', 'name' => 'zone', 'type' => 'select', 'choices' => array('South Bengaluru' => 'South Bengaluru', 'North Bengaluru' => 'North Bengaluru', 'East Bengaluru' => 'East Bengaluru', 'West Bengaluru' => 'West Bengaluru', 'Central Bengaluru' => 'Central Bengaluru')),
+            array('key' => 'field_c_address', 'label' => 'Full Address', 'name' => 'address', 'type' => 'textarea', 'rows' => 3),
+            array('key' => 'field_c_phone', 'label' => 'Phone', 'name' => 'phone', 'type' => 'text'),
+            array('key' => 'field_c_email', 'label' => 'Email', 'name' => 'email', 'type' => 'email'),
+            array('key' => 'field_c_hours', 'label' => 'Working Hours', 'name' => 'hours', 'type' => 'text', 'instructions' => 'e.g. Morning: 5:30 AM - 10:30 AM | Evening: 4:30 PM - 8:30 PM'),
+            array('key' => 'field_c_lat', 'label' => 'Latitude', 'name' => 'lat', 'type' => 'number', 'step' => 'any'),
+            array('key' => 'field_c_lng', 'label' => 'Longitude', 'name' => 'lng', 'type' => 'number', 'step' => 'any'),
+            array('key' => 'field_c_is_hq', 'label' => 'Is Head Office?', 'name' => 'is_hq', 'type' => 'true_false', 'ui' => 1),
+            array('key' => 'field_c_is_featured', 'label' => 'Show on Homepage?', 'name' => 'is_featured', 'type' => 'true_false', 'ui' => 1),
+            array('key' => 'field_c_programs', 'label' => 'Programs Offered', 'name' => 'programs', 'type' => 'repeater', 'sub_fields' => array(
+                array('key' => 'field_c_prog_name', 'label' => 'Program Name', 'name' => 'program_name', 'type' => 'text')
+            )),
+            array('key' => 'field_c_features', 'label' => 'Features / Highlights', 'name' => 'features', 'type' => 'repeater', 'sub_fields' => array(
+                array('key' => 'field_c_feat_name', 'label' => 'Feature', 'name' => 'feature_name', 'type' => 'text')
+            ))
+        ),
+        'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'center'))),
+    ));
+
+    // ---------------------------------------------------------
+    // 2. EVENT FIELDS
+    // ---------------------------------------------------------
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_event_fields',
+        'title' => 'Event Details',
+        'fields' => array(
+            array('key' => 'field_e_date', 'label' => 'Event Date', 'name' => 'event_date', 'type' => 'date_picker', 'display_format' => 'F j, Y', 'return_format' => 'Y-m-d', 'required' => 1),
+            array('key' => 'field_e_time', 'label' => 'Time', 'name' => 'event_time', 'type' => 'text', 'instructions' => 'e.g. 6:30 AM - 9:00 AM'),
+            array('key' => 'field_e_venue', 'label' => 'Venue / Center', 'name' => 'event_venue', 'type' => 'post_object', 'post_type' => array('center'), 'allow_null' => 1, 'multiple' => 0, 'return_format' => 'object', 'instructions' => 'Select a registered center, or leave blank to type a custom venue below.'),
+            array('key' => 'field_e_venue_custom', 'label' => 'Custom Venue', 'name' => 'event_venue_custom', 'type' => 'text', 'conditional_logic' => array(array(array('field' => 'field_e_venue', 'operator' => '==empty')))),
+            array('key' => 'field_e_mode', 'label' => 'Mode', 'name' => 'event_mode', 'type' => 'select', 'choices' => array('In-Person' => 'In-Person', 'Online' => 'Online', 'Hybrid Mode' => 'Hybrid Mode')),
+            array('key' => 'field_e_fee', 'label' => 'Fee / Status', 'name' => 'event_fee', 'type' => 'text', 'instructions' => 'e.g. Free & Open for All'),
+        ),
+        'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'event'))),
+    ));
+
+    // ---------------------------------------------------------
+    // 3. ACTIVITY FIELDS
+    // ---------------------------------------------------------
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_activity_fields',
+        'title' => 'Activity Details',
+        'fields' => array(
+            array('key' => 'field_a_badge', 'label' => 'Badge / Tag', 'name' => 'badge', 'type' => 'text', 'instructions' => 'e.g. Foundational, Therapeutic'),
+            array('key' => 'field_a_centers', 'label' => 'Available at Centers', 'name' => 'centers', 'type' => 'relationship', 'post_type' => array('center'), 'return_format' => 'object'),
+            array('key' => 'field_a_batches', 'label' => 'Batches', 'name' => 'batches', 'type' => 'text', 'instructions' => 'e.g. Morning: 6:00 AM - 7:00 AM | Evening...'),
+            array('key' => 'field_a_duration', 'label' => 'Duration', 'name' => 'duration', 'type' => 'text'),
+            array('key' => 'field_a_frequency', 'label' => 'Frequency', 'name' => 'frequency', 'type' => 'text'),
+            array('key' => 'field_a_eligibility', 'label' => 'Eligibility', 'name' => 'eligibility', 'type' => 'text'),
+        ),
+        'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'activity'))),
+    ));
+}
