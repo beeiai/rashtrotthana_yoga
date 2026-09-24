@@ -42,7 +42,7 @@ $faqs_dataset     = rs_get_faqs();
         radial-gradient(circle at 10% 8%, rgba(249, 183, 42, .24), transparent 28rem),
         radial-gradient(circle at 90% 12%, rgba(243, 106, 33, .16), transparent 32rem),
         linear-gradient(180deg, rgba(255, 248, 236, .94) 0%, rgba(255, 248, 236, .84) 40%, rgba(255, 248, 236, .96) 100%),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/bg.jpg' ); ?>") !important;
+        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") !important;
     background-position: center top, center top, center top, center top !important;
     background-size: auto, auto, auto, 1920px auto !important;
     background-repeat: no-repeat, no-repeat, no-repeat, repeat-y !important;
