@@ -34,6 +34,7 @@ class Plugin {
         ( new Post_Types\Resource() )->register();
         ( new Post_Types\Testimonial() )->register();
         ( new Post_Types\Faq() )->register();
+        ( new Post_Types\Gallery() )->register();
     }
 
     private function init_taxonomies() {
@@ -72,6 +73,7 @@ class Plugin {
         ( new Post_Types\Resource() )->register_post_type();
         ( new Post_Types\Testimonial() )->register_post_type();
         ( new Post_Types\Faq() )->register_post_type();
+        ( new Post_Types\Gallery() )->register_post_type();
         
         ( new Taxonomies\Activity_Category() )->register_taxonomy();
         ( new Taxonomies\Resource_Category() )->register_taxonomy();

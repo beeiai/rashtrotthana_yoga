@@ -294,3 +294,95 @@ function ry_register_cpt_acf_field_groups() {
         'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'activity'))),
     ));
 }
+// Append to acf-setup.php
+
+add_action('acf/init', 'ry_register_remaining_acf_field_groups');
+function ry_register_remaining_acf_field_groups() {
+
+    // ---------------------------------------------------------
+    // 1. GALLERY ALBUM FIELDS
+    // ---------------------------------------------------------
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_gallery_album_fields',
+        'title' => 'Album Media',
+        'fields' => array(
+            array('key' => 'field_g_photos', 'label' => 'Photos', 'name' => 'photos', 'type' => 'repeater', 'button_label' => 'Add Photo', 'sub_fields' => array(
+                array('key' => 'field_g_photo_title', 'label' => 'Title', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_g_photo_url', 'label' => 'Photo', 'name' => 'url', 'type' => 'image', 'return_format' => 'url'),
+                array('key' => 'field_g_photo_caption', 'label' => 'Caption', 'name' => 'caption', 'type' => 'text'),
+            )),
+            array('key' => 'field_g_videos', 'label' => 'Videos', 'name' => 'videos', 'type' => 'repeater', 'button_label' => 'Add Video', 'sub_fields' => array(
+                array('key' => 'field_g_video_title', 'label' => 'Title', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_g_video_subtitle', 'label' => 'Subtitle', 'name' => 'subtitle', 'type' => 'text'),
+                array('key' => 'field_g_video_duration', 'label' => 'Duration', 'name' => 'duration', 'type' => 'text', 'instructions' => 'e.g. 02:45'),
+                array('key' => 'field_g_video_thumb', 'label' => 'Thumbnail', 'name' => 'thumb', 'type' => 'image', 'return_format' => 'url'),
+                array('key' => 'field_g_video_url', 'label' => 'YouTube Embed URL', 'name' => 'embed_url', 'type' => 'url'),
+            )),
+        ),
+        'location' => array(array(array('param' => 'post_type', 'operator' => '==', 'value' => 'gallery_album'))),
+    ));
+
+    // ---------------------------------------------------------
+    // 2. ACTIVITY CATEGORY TAXONOMY FIELDS
+    // ---------------------------------------------------------
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_activity_cat_fields',
+        'title' => 'Category Details',
+        'fields' => array(
+            array('key' => 'field_acat_icon', 'label' => 'Icon / Emoji', 'name' => 'icon', 'type' => 'text', 'instructions' => 'e.g. ☯, ♫, ♬, ★'),
+            array('key' => 'field_acat_tagline', 'label' => 'Tagline', 'name' => 'tagline', 'type' => 'text'),
+            array('key' => 'field_acat_text', 'label' => 'Short Description', 'name' => 'text', 'type' => 'text'),
+            array('key' => 'field_acat_image', 'label' => 'Banner Image', 'name' => 'image', 'type' => 'image', 'return_format' => 'url'),
+        ),
+        'location' => array(array(array('param' => 'taxonomy', 'operator' => '==', 'value' => 'activity_category'))),
+    ));
+
+    // ---------------------------------------------------------
+    // 3. HOMEPAGE & ABOUT US (OPTIONS) MISSING FIELDS
+    // ---------------------------------------------------------
+    
+    // Homepage - Impact Stats & Founder
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_home_extra_fields',
+        'title' => 'Homepage Extra Sections',
+        'fields' => array(
+            array('key' => 'field_hx_tab_stats', 'label' => 'Impact Statistics', 'type' => 'tab'),
+            array('key' => 'field_hx_stats', 'label' => 'Stats List', 'name' => 'ry_home_stats', 'type' => 'repeater', 'sub_fields' => array(
+                array('key' => 'field_hx_stat_val', 'label' => 'Value', 'name' => 'value', 'type' => 'text', 'instructions' => 'e.g. 1972'),
+                array('key' => 'field_hx_stat_suf', 'label' => 'Suffix', 'name' => 'suffix', 'type' => 'text', 'instructions' => 'e.g. +, yrs'),
+                array('key' => 'field_hx_stat_lbl', 'label' => 'Label', 'name' => 'label', 'type' => 'text', 'instructions' => 'e.g. Lives Impacted'),
+            )),
+            array('key' => 'field_hx_tab_founder', 'label' => 'Founder Section', 'type' => 'tab'),
+            array('key' => 'field_hx_f_name', 'label' => 'Founder Name', 'name' => 'ry_home_founder_name', 'type' => 'text'),
+            array('key' => 'field_hx_f_title', 'label' => 'Founder Title', 'name' => 'ry_home_founder_title', 'type' => 'text'),
+            array('key' => 'field_hx_f_sub', 'label' => 'Founder Subtitle', 'name' => 'ry_home_founder_subtitle', 'type' => 'text'),
+            array('key' => 'field_hx_f_img', 'label' => 'Founder Photo', 'name' => 'ry_home_founder_photo', 'type' => 'image', 'return_format' => 'url'),
+            array('key' => 'field_hx_f_bio', 'label' => 'Biography Paragraphs', 'name' => 'ry_home_founder_bio', 'type' => 'wysiwyg', 'media_upload' => 0),
+            array('key' => 'field_hx_f_quote', 'label' => 'Signature Quote', 'name' => 'ry_home_founder_quote', 'type' => 'text'),
+            array('key' => 'field_hx_f_qattr', 'label' => 'Quote Attribution', 'name' => 'ry_home_founder_quote_attr', 'type' => 'text'),
+        ),
+        'location' => array(array(array('param' => 'options_page', 'operator' => '==', 'value' => 'acf-options-homepage'))),
+    ));
+
+    // About Us - Timeline & Members
+    acf_add_local_field_group(array(
+        'key' => 'group_ry_about_extra_fields',
+        'title' => 'About Us Extra Sections',
+        'fields' => array(
+            array('key' => 'field_ax_tab_time', 'label' => 'Timeline', 'type' => 'tab'),
+            array('key' => 'field_ax_timeline', 'label' => 'Timeline Entries', 'name' => 'ry_about_timeline', 'type' => 'repeater', 'sub_fields' => array(
+                array('key' => 'field_ax_time_yr', 'label' => 'Year / Period', 'name' => 'year', 'type' => 'text', 'instructions' => 'e.g. 1995 - 2000'),
+                array('key' => 'field_ax_time_t', 'label' => 'Title', 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_ax_time_d', 'label' => 'Description', 'name' => 'desc', 'type' => 'textarea', 'rows' => 3),
+            )),
+            array('key' => 'field_ax_tab_team', 'label' => 'Team Members', 'type' => 'tab'),
+            array('key' => 'field_ax_team', 'label' => 'Members List', 'name' => 'ry_about_team', 'type' => 'repeater', 'sub_fields' => array(
+                array('key' => 'field_ax_tm_name', 'label' => 'Name', 'name' => 'name', 'type' => 'text'),
+                array('key' => 'field_ax_tm_role', 'label' => 'Role', 'name' => 'role', 'type' => 'text'),
+                array('key' => 'field_ax_tm_desc', 'label' => 'Description', 'name' => 'desc', 'type' => 'textarea', 'rows' => 2),
+                array('key' => 'field_ax_tm_img', 'label' => 'Photo', 'name' => 'photo', 'type' => 'image', 'return_format' => 'url'),
+            )),
+        ),
+        'location' => array(array(array('param' => 'options_page', 'operator' => '==', 'value' => 'acf-options-about-us'))),
+    ));
+}

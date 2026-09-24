@@ -67,3 +67,37 @@ function rashtrotthana_home_collection( $post_types, $limit = 5 ) {
     ) );
 }
 require_once get_template_directory() . '/inc/acf-setup.php'; 
+/**
+ * Auto-calculate Read Time for posts
+ */
+add_action( 'save_post', 'ry_auto_calculate_read_time', 10, 3 );
+function ry_auto_calculate_read_time( $post_id, $post, $update ) {
+    // Only apply to standard posts
+    if ( $post->post_type !== 'post' ) {
+        return;
+    }
+
+    // Check if it's an autosave
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    // Check permissions
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    $content = $post->post_content;
+    $word_count = str_word_count( strip_tags( $content ) );
+    
+    // Average reading speed: 200 words per minute
+    $minutes = ceil( $word_count / 200 );
+    
+    if ( $minutes == 0 ) {
+        $minutes = 1;
+    }
+    
+    $read_time_str = $minutes . ' min read';
+    
+    update_post_meta( $post_id, '_ry_read_time', $read_time_str );
+}
