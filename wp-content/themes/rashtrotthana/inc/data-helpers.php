@@ -105,11 +105,63 @@ function rs_get_faqs() {
 
 // ── Activities ───────────────────────────────────────────────────────────────
 
+
 function rs_get_activity_categories() {
-    // Return original array if no CPTs are fully configured, 
-    // since populate-cms didn't fully configure activities.
-    require get_template_directory() . '/data/activities-data.php';
-    return $activity_categories;
+    $categories = array();
+    
+    // Get all activity category terms
+    $terms = get_terms( array(
+        'taxonomy' => 'activity_category',
+        'hide_empty' => false,
+    ) );
+    
+    if ( is_wp_error( $terms ) || empty( $terms ) ) {
+        require get_template_directory() . '/data/activities-data.php';
+        return $activity_categories;
+    }
+    
+    foreach ( $terms as $term ) {
+        $term_id = 'activity_category_' . $term->term_id;
+        $cat_data = array(
+            'slug'    => $term->slug,
+            'icon'    => get_field('icon', $term_id),
+            'title'   => $term->name,
+            'tagline' => get_field('tagline', $term_id),
+            'text'    => get_field('text', $term_id),
+            'image'   => get_field('image', $term_id),
+            'items'   => array()
+        );
+        
+        // Get activities for this term
+        $activities = get_posts( array(
+            'post_type' => 'activity',
+            'posts_per_page' => -1,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'activity_category',
+                    'field'    => 'term_id',
+                    'terms'    => $term->term_id,
+                ),
+            ),
+        ) );
+        
+        foreach ( $activities as $act ) {
+            $cat_data['items'][] = array(
+                'name'        => $act->post_title,
+                'badge'       => get_field('badge', $act->ID),
+                'desc'        => $act->post_content,
+                'centers'     => get_field('centers', $act->ID) ?: 'All major centers',
+                'batches'     => get_field('batches', $act->ID),
+                'duration'    => get_field('duration', $act->ID),
+                'frequency'   => get_field('frequency', $act->ID),
+                'eligibility' => get_field('eligibility', $act->ID)
+            );
+        }
+        
+        $categories[] = $cat_data;
+    }
+    
+    return $categories;
 }
 
 // ── Events ───────────────────────────────────────────────────────────────────

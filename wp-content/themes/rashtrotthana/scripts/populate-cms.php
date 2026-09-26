@@ -42,7 +42,7 @@ update_field('ry_hero_button_url', '/activities/', 'option');
 
 if (isset($rs_home_founder)) {
     update_field('ry_home_founder_name', $rs_home_founder['name'], 'option');
-    update_field('ry_home_founder_title', $rs_home_founder['role'], 'option');
+    update_field('ry_home_founder_title', $rs_home_founder['title'], 'option');
     update_field('ry_home_founder_subtitle', $rs_home_founder['subtitle'], 'option');
     update_field('ry_home_founder_photo', $rs_home_founder['image'], 'option');
     update_field('ry_home_founder_bio', implode("\n\n", $rs_home_founder['paragraphs']), 'option');
