@@ -35,7 +35,7 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
         <div class="rs-section-row"><h2>Our Activities</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/activities/') ); ?>">View All Activities</a></div>
         <div class="rs-card-grid rs-activity-grid">
             <?php if ( $activities ) : foreach ( $activities as $post ) : setup_postdata( $post ); ?>
-                <article class="rs-activity-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><h3><?php the_title(); ?></h3><p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 14 ) ); ?></p></a></article>
+                <article class="rs-activity-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } else { echo '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg' ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy">'; } ?><h3><?php the_title(); ?></h3><p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 14 ) ); ?></p></a></article>
             <?php endforeach; wp_reset_postdata(); endif; ?>
         </div>
     </div>
@@ -101,7 +101,7 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
         <div class="rs-section-row"><h2>Upcoming Events</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/events/') ); ?>">View All Events</a></div>
         <div class="rs-card-grid rs-event-grid">
             <?php if ( $events ) : foreach ( $events as $post ) : setup_postdata( $post ); ?>
-                <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
+                <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } else { echo '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/client/dsc08572.jpg' ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy">'; } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
             <?php endforeach; wp_reset_postdata(); endif; ?>
         </div>
     </div>
