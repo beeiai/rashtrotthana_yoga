@@ -102,8 +102,6 @@ function rs_register_post_types() {
         'menu_icon'     => 'dashicons-format-gallery',
         'supports'      => array( 'title', 'thumbnail', 'excerpt', 'editor', 'custom-fields', 'page-attributes' ),
     ) );
-}
-
 
     // ── rs_inquiry ────────────────────────────────────────────────────────────
     register_post_type( 'rs_inquiry', array(
@@ -120,6 +118,9 @@ function rs_register_post_types() {
         'supports'      => array( 'title', 'editor', 'custom-fields' ),
         'menu_icon'     => 'dashicons-email',
     ) );
+
+}
+
 
 add_action( 'init', 'rs_register_post_types' );
 
