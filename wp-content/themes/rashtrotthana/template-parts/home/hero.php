@@ -27,9 +27,9 @@ if ( ! $btn_url ) $btn_url = home_url('/activities/');
         <div class="rs-hero-visual">
             <div class="rs-hero-image-wrapper rs-hero-slideshow" data-slide-interval="4000">
                 <div class="rs-hero-slides">
-                    <img class="rs-hero-slide is-active" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/21-06-22-idy-celebration-12-.jpg' ); ?>" alt="Yoga practice at Rashtrotthana" fetchpriority="high">
-                    <img class="rs-hero-slide" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/18-01-25-suggi-sambhrama-kolata-in-rysri-kg-nagar-1-.jpg' ); ?>" alt="Cultural Gathering" loading="lazy">
-                    <img class="rs-hero-slide" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/07-04-24-summer-camp-in-rysri-yoga-centres-1-.jpg' ); ?>" alt="Summer Camp" loading="lazy">
+                    <img class="rs-hero-slide is-active" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/dsc08484.jpg' ); ?>" alt="Yoga practice at Rashtrotthana" fetchpriority="high">
+                    <img class="rs-hero-slide" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/dsc08548-2-.png' ); ?>" alt="Cultural Gathering" loading="lazy">
+                    <img class="rs-hero-slide" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/dsc08572.jpg' ); ?>" alt="Summer Camp" loading="lazy">
                 </div>
                 <div class="rs-hero-slide-dots" aria-label="Hero slideshow controls">
                     <button class="is-active" type="button" aria-label="Show slide 1" aria-current="true"></button>

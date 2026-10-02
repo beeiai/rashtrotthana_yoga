@@ -36,9 +36,7 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
         <div class="rs-card-grid rs-activity-grid">
             <?php if ( $activities ) : foreach ( $activities as $post ) : setup_postdata( $post ); ?>
                 <article class="rs-activity-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><h3><?php the_title(); ?></h3><p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 14 ) ); ?></p></a></article>
-            <?php endforeach; wp_reset_postdata(); else : foreach ( $activity_fallbacks as $item ) : ?>
-                <article class="rs-activity-card"><img src="<?php echo esc_url( $item[2] ); ?>" alt="" loading="lazy"><h3><?php echo esc_html( $item[0] ); ?></h3><p><?php echo esc_html( $item[1] ); ?></p></article>
-            <?php endforeach; endif; ?>
+            <?php endforeach; wp_reset_postdata(); endif; ?>
         </div>
     </div>
 </section>
@@ -58,7 +56,7 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
             <div class="rs-centers-title-col">
                 <span class="rs-kicker">OUR PRESENCE</span>
                 <h2 class="rs-centers-heading">Find a Center</h2>
-                <p class="rs-centers-subheading">Our 23 centers bring wellness, learning and community closer to you.</p>
+                <p class="rs-centers-subheading">Our <?php echo count(rs_get_centers()); ?> centers bring wellness, learning and community closer to you.</p>
             </div>
             <div class="rs-centers-action-col">
                 <form class="rs-center-search-box" role="search">
@@ -104,9 +102,7 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
         <div class="rs-card-grid rs-event-grid">
             <?php if ( $events ) : foreach ( $events as $post ) : setup_postdata( $post ); ?>
                 <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
-            <?php endforeach; wp_reset_postdata(); else : foreach ( $event_fallbacks as $event ) : ?>
-                <article class="rs-event-card"><div class="rs-event-image"><img src="<?php echo esc_url( $event['image'] ); ?>" alt="" loading="lazy"><span><b><?php echo esc_html( $event['day'] ); ?></b><?php echo esc_html( $event['month'] ); ?></span></div><h3><?php echo esc_html( $event['title'] ); ?></h3><p><?php echo esc_html( $event['time'] . ' | ' . $event['venue'] ); ?></p><a class="rs-register-button" href="#">Register Now</a></article>
-            <?php endforeach; endif; ?>
+            <?php endforeach; wp_reset_postdata(); endif; ?>
         </div>
     </div>
 </section>
@@ -145,3 +141,47 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
     <div class="rs-container"><div class="rs-section-row"><h2>Moments of Inspiration</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/gallery/') ); ?>">View Gallery</a></div><div class="rs-gallery-grid"><?php foreach ( $activity_fallbacks as $item ) : ?><img src="<?php echo esc_url( $item[2] ); ?>" alt="" loading="lazy"><?php endforeach; ?></div></div>
 </section>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var body = document.body;
+    
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        if (!modal) return;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        body.classList.add('rs-center-modal-open');
+        var closeBtn = modal.querySelector('.rs-center-modal-close');
+        if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal() {
+        document.querySelectorAll('.rs-center-modal.is-open').forEach(function (modal) {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+        });
+        body.classList.remove('rs-center-modal-open');
+    }
+
+    document.addEventListener('click', function (e) {
+        var openBtn = e.target.closest('.rs-open-center-modal-btn');
+        if (openBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            var modalId = openBtn.dataset.modal;
+            if (modalId) openModal(modalId);
+            return;
+        }
+
+        if (e.target.matches('[data-close-modal="true"]') || e.target.closest('[data-close-modal="true"]')) {
+            e.preventDefault();
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
+});
+</script>

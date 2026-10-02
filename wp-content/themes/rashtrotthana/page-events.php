@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Template Name: Events Page
  * Template for displaying Events & News with matching Home/Activities/Centers design system.
@@ -1472,7 +1472,7 @@ get_header();
 
 <?php
 /**
- * Events and news data — loaded from data/events-data.php.
+ * Events and news data � loaded from data/events-data.php.
  * To swap in DB data, update rs_get_events() and rs_get_news() in inc/data-helpers.php.
  */
 $events_dataset = rs_get_events();
@@ -1484,7 +1484,7 @@ $news_dataset   = rs_get_news();
 
 
     <!-- ============================================================
-         Refined Header Block (Zero Hero Banner — Activities/Centers Style)
+         Refined Header Block (Zero Hero Banner � Activities/Centers Style)
          ============================================================ -->
     <section class="rs-events-header-section" aria-labelledby="events-page-heading">
         <div class="rs-container">
@@ -1495,7 +1495,7 @@ $news_dataset   = rs_get_news();
                 </div>
                 <h1 id="events-page-heading" class="rs-events-page-title">Events &amp; <em>News</em></h1>
                 <p class="rs-events-page-subtitle">
-                    Experience transformative yoga celebrations, skill-building workshops, and inspiring community stories across our 23+ Bengaluru centers. Find your next milestone below.
+                    Experience transformative yoga celebrations, skill-building workshops, and inspiring community stories across our 12 Bengaluru centers. Find your next milestone below.
                 </p>
 
                 <!-- Quick Highlights Stat Bar (Small icons removed per user request) -->
@@ -1505,7 +1505,7 @@ $news_dataset   = rs_get_news();
                         <span>Scheduled Events</span>
                     </div>
                     <div class="rs-events-stat-pill">
-                        <strong>23+</strong>
+                        <strong>12</strong>
                         <span>Bengaluru Centers</span>
                     </div>
                     <div class="rs-events-stat-pill">
@@ -1539,7 +1539,7 @@ $news_dataset   = rs_get_news();
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                         <input type="search" id="rs-events-search-input" placeholder="Search events, workshops, centers, or news..." aria-label="Search events and news" autocomplete="off">
-                        <button type="button" id="rs-events-clear-search" class="rs-events-search-clear" aria-label="Clear search">✕</button>
+                        <button type="button" id="rs-events-clear-search" class="rs-events-search-clear" aria-label="Clear search">?</button>
                     </div>
                 </div>
 
@@ -1566,7 +1566,7 @@ $news_dataset   = rs_get_news();
                     </select>
 
                     <button type="button" id="rs-filter-reset-btn" class="rs-events-reset-btn" aria-label="Reset all filters">
-                        <span aria-hidden="true">↺</span> Reset Filters
+                        <span aria-hidden="true">?</span> Reset Filters
                     </button>
 
                     <div class="rs-events-status-indicator" id="rs-filter-count-text" aria-live="polite">
@@ -1591,7 +1591,7 @@ $news_dataset   = rs_get_news();
                 </div>
                 <div class="rs-events-header-controls">
                     <button type="button" class="rs-view-toggle-btn" id="rs-events-view-toggle" aria-expanded="false" data-target="events-carousel-stage">
-                        <span class="toggle-text">View All Events in Grid</span> <span aria-hidden="true">⊞</span>
+                        <span class="toggle-text">View All Events in Grid</span> <span aria-hidden="true">?</span>
                     </button>
                 </div>
             </div>
@@ -1647,7 +1647,7 @@ $news_dataset   = rs_get_news();
                                     
                                     <?php if ( $event['type'] !== 'past' ) : ?>
                                         <button type="button" class="rs-register-btn rs-open-register-modal" data-event-id="<?php echo esc_attr( $event['id'] ); ?>">
-                                            <span>Register Now</span> <span aria-hidden="true">→</span>
+                                            <span>Register Now</span> <span aria-hidden="true">?</span>
                                         </button>
                                     <?php else : ?>
                                         <span class="rs-event-concluded-badge">Completed</span>
@@ -1666,7 +1666,7 @@ $news_dataset   = rs_get_news();
 
             <!-- Empty State for Events -->
             <div class="rs-events-empty-state" id="events-empty-state">
-                <span class="empty-icon">🔍</span>
+                <span class="empty-icon">??</span>
                 <h3>No Events Found</h3>
                 <p>No upcoming events match your selected filters. Try choosing "All Categories" or resetting your search.</p>
                 <button type="button" class="rs-events-reset-btn rs-trigger-reset">Clear Filters</button>
@@ -1698,7 +1698,7 @@ $news_dataset   = rs_get_news();
                 </div>
                 <div class="rs-events-header-controls">
                     <button type="button" class="rs-view-toggle-btn" id="rs-news-view-toggle" aria-expanded="false" data-target="news-carousel-stage">
-                        <span class="toggle-text">View All News in Grid</span> <span aria-hidden="true">⊞</span>
+                        <span class="toggle-text">View All News in Grid</span> <span aria-hidden="true">?</span>
                     </button>
                 </div>
             </div>
@@ -1737,7 +1737,7 @@ $news_dataset   = rs_get_news();
 
                                 <div class="rs-news-footer">
                                     <button type="button" class="rs-news-read-link rs-open-article-modal" data-news-id="<?php echo esc_attr( $article['id'] ); ?>">
-                                        <span>Read Full Article</span> <span aria-hidden="true">→</span>
+                                        <span>Read Full Article</span> <span aria-hidden="true">?</span>
                                     </button>
                                 </div>
                             </div>
@@ -1753,7 +1753,7 @@ $news_dataset   = rs_get_news();
 
             <!-- Empty State for News -->
             <div class="rs-events-empty-state" id="news-empty-state">
-                <span class="empty-icon">📰</span>
+                <span class="empty-icon">??</span>
                 <h3>No News Articles Found</h3>
                 <p>No news stories match your current search criteria. Try modifying your query.</p>
                 <button type="button" class="rs-events-reset-btn rs-trigger-reset">Reset Filters</button>
@@ -1778,7 +1778,7 @@ $news_dataset   = rs_get_news();
         <div class="rs-container">
             <div class="rs-events-newsletter-card">
                 <div class="rs-events-newsletter-content">
-                    <div class="rs-events-newsletter-icon" aria-hidden="true">✉</div>
+                    <div class="rs-events-newsletter-icon" aria-hidden="true">?</div>
                     <div class="rs-events-newsletter-text">
                         <h3>Stay Informed. Stay Inspired.</h3>
                         <p>Subscribe to our monthly newsletter and never miss an update on upcoming yoga celebrations, health workshops, and inspiring community programs.</p>
@@ -1789,7 +1789,7 @@ $news_dataset   = rs_get_news();
                     <label for="rs-newsletter-email" class="screen-reader-text" style="position:absolute;width:1px;height:1px;overflow:hidden;">Email Address</label>
                     <input type="email" id="rs-newsletter-email" placeholder="Enter your email address..." required autocomplete="email">
                     <button type="submit">
-                        <span>Subscribe</span> <span aria-hidden="true">→</span>
+                        <span>Subscribe</span> <span aria-hidden="true">?</span>
                     </button>
                     <div class="rs-newsletter-msg" id="rs-newsletter-status" aria-live="polite"></div>
                 </form>
@@ -1805,7 +1805,7 @@ $news_dataset   = rs_get_news();
 <div id="rs-registration-modal" class="rs-event-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-modal-event-title">
     <div class="rs-event-modal-backdrop" data-close-modal="true"></div>
     <div class="rs-event-modal-card">
-        <button type="button" class="rs-modal-close-btn" aria-label="Close registration dialog" data-close-modal="true">✕</button>
+        <button type="button" class="rs-modal-close-btn" aria-label="Close registration dialog" data-close-modal="true">?</button>
         
         <div class="rs-modal-header">
             <span class="rs-modal-badge" id="rs-modal-category-text">Special Event</span>
@@ -1874,10 +1874,10 @@ $news_dataset   = rs_get_news();
             </div>
 
             <button type="submit" class="rs-modal-submit-btn" id="rs-submit-reg-btn">
-                Confirm Registration →
+                Confirm Registration ?
             </button>
             <div class="rs-modal-success-alert" id="rs-modal-reg-success" aria-live="polite">
-                ✓ Thank you! Your registration has been received. Our center team will contact you with program batch guidelines shortly.
+                ? Thank you! Your registration has been received. Our center team will contact you with program batch guidelines shortly.
             </div>
         </form>
     </div>
@@ -1889,7 +1889,7 @@ $news_dataset   = rs_get_news();
 <div id="rs-article-modal" class="rs-event-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-article-modal-title">
     <div class="rs-event-modal-backdrop" data-close-modal="true"></div>
     <div class="rs-event-modal-card rs-article-modal-card">
-        <button type="button" class="rs-modal-close-btn" aria-label="Close article dialog" data-close-modal="true">✕</button>
+        <button type="button" class="rs-modal-close-btn" aria-label="Close article dialog" data-close-modal="true">?</button>
         
         <div class="rs-article-modal-media">
             <img id="rs-article-modal-img" src="" alt="">
@@ -1903,7 +1903,7 @@ $news_dataset   = rs_get_news();
                     <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     <span id="rs-article-modal-date">May 20, 2026</span>
                 </span>
-                <span>•</span>
+                <span>�</span>
                 <span>Rashtrotthana Editorial</span>
             </div>
         </div>
@@ -2187,7 +2187,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     textSpan.textContent = isGrid ? 'View as Carousel' : ('View All ' + (type === 'events' ? 'Events' : 'News') + ' in Grid');
                 }
                 var iconSpan = toggleBtn.querySelector('span:last-child');
-                if (iconSpan) iconSpan.textContent = isGrid ? '⇄' : '⊞';
+                if (iconSpan) iconSpan.textContent = isGrid ? '?' : '?';
                 updateState();
             });
         }
@@ -2267,11 +2267,11 @@ document.addEventListener('DOMContentLoaded', function () {
             submitBtn.disabled = true;
 
             setTimeout(function () {
-                submitBtn.textContent = 'Registration Confirmed ✓';
+                submitBtn.textContent = 'Registration Confirmed ?';
                 regSuccessAlert.style.display = 'block';
                 setTimeout(function () {
                     closeRegModal();
-                    submitBtn.textContent = 'Confirm Registration →';
+                    submitBtn.textContent = 'Confirm Registration ?';
                     submitBtn.disabled = false;
                 }, 2200);
             }, 700);
@@ -2344,7 +2344,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             var emailVal = document.getElementById('rs-newsletter-email').value;
             newsletterStatus.className = 'rs-newsletter-msg is-success';
-            newsletterStatus.textContent = '✓ Subscribed! Welcome to Rashtrotthana community updates.';
+            newsletterStatus.textContent = '? Subscribed! Welcome to Rashtrotthana community updates.';
             newsletterForm.reset();
             setTimeout(function () { newsletterStatus.style.display = 'none'; }, 4000);
         });

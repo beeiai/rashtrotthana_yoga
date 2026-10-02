@@ -684,8 +684,9 @@ function radm_ajax_submit_contact() {
         wp_send_json_error( [ 'message' => 'Please fill all required fields.' ], 400 );
     }
 
-    $admin_email = function_exists('get_field') ? get_field('ry_email_primary', 'option') : get_option('admin_email');
-    if ( ! $admin_email ) {
+    // Get the email from the custom portal settings (Public Contact Email or System Admin Email)
+    $admin_email = get_option('radm_contact_email');
+    if ( empty($admin_email) ) {
         $admin_email = get_option('admin_email');
     }
 
@@ -701,9 +702,27 @@ function radm_ajax_submit_contact() {
 
     // Note: in local environments wp_mail might fail without an SMTP plugin, 
     // but the system will act like it succeeds, which is correct for testing.
+    // Insert into database as rs_inquiry post type
+    $post_id = wp_insert_post([
+        'post_title'   => sanitize_text_field($name . ' - ' . $subject),
+        'post_content' => "Name: " . sanitize_text_field($name) . "\n" .
+                          "Email: " . sanitize_email($email) . "\n" .
+                          "Phone: " . sanitize_text_field($phone) . "\n" .
+                          "Subject: " . sanitize_text_field($subject) . "\n\n" .
+                          "Message:\n" . sanitize_textarea_field($message),
+        'post_status'  => 'publish',
+        'post_type'    => 'rs_inquiry',
+        'meta_input'   => [
+            'inquiry_name'    => sanitize_text_field($name),
+            'inquiry_email'   => sanitize_email($email),
+            'inquiry_phone'   => sanitize_text_field($phone),
+            'inquiry_subject' => sanitize_text_field($subject),
+        ]
+    ]);
+
     $sent = wp_mail( $admin_email, $email_subject, $email_body, $headers );
 
-    if ( $sent ) {
+    if ( $post_id || $sent ) {
         wp_send_json_success( [ 'message' => 'Thank you for reaching out. We will get back to you soon.' ] );
     } else {
         wp_send_json_error( [ 'message' => 'Failed to send message. Please try again later.' ], 500 );

@@ -90,6 +90,13 @@ function ry_register_acf_field_groups() {
                 'name' => 'ry_twitter_url',
                 'type' => 'url',
             ),
+            array(
+                'key' => 'field_ry_carto_api_key',
+                'label' => 'CARTO Maps API Key',
+                'name' => 'ry_carto_api_key',
+                'type' => 'text',
+                'instructions' => 'Enter your CARTO Maps API key to authorize map tile usage.',
+            ),
         ),
         'location' => array(
             array(
@@ -251,7 +258,12 @@ function ry_register_cpt_acf_field_groups() {
             array('key' => 'field_c_is_hq', 'label' => 'Is Head Office?', 'name' => 'is_hq', 'type' => 'true_false', 'ui' => 1),
             array('key' => 'field_c_is_featured', 'label' => 'Show on Homepage?', 'name' => 'is_featured', 'type' => 'true_false', 'ui' => 1),
             array('key' => 'field_c_programs', 'label' => 'Programs Offered', 'name' => 'programs', 'type' => 'repeater', 'sub_fields' => array(
-                array('key' => 'field_c_prog_name', 'label' => 'Program Name', 'name' => 'program_name', 'type' => 'text')
+                array('key' => 'field_c_prog_name', 'label' => 'Program Name', 'name' => 'program_name', 'type' => 'text'),
+                array('key' => 'field_c_prog_badge', 'label' => 'Badge', 'name' => 'badge', 'type' => 'text'),
+                array('key' => 'field_c_prog_days', 'label' => 'Days', 'name' => 'days', 'type' => 'text'),
+                array('key' => 'field_c_prog_timings', 'label' => 'Timings', 'name' => 'timings', 'type' => 'text'),
+                array('key' => 'field_c_prog_dates', 'label' => 'Dates', 'name' => 'dates', 'type' => 'text'),
+                array('key' => 'field_c_prog_desc', 'label' => 'Description', 'name' => 'desc', 'type' => 'text')
             )),
             array('key' => 'field_c_features', 'label' => 'Features / Highlights', 'name' => 'features', 'type' => 'repeater', 'sub_fields' => array(
                 array('key' => 'field_c_feat_name', 'label' => 'Feature', 'name' => 'feature_name', 'type' => 'text')

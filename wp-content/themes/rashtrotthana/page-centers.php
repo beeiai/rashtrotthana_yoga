@@ -1,4 +1,4 @@
-﻿<?php get_header(); ?>
+<?php get_header(); ?>
 
 <!-- Leaflet CSS & JS for Interactive Centers Map -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -288,7 +288,7 @@ if ( ! function_exists( 'rs_get_center_events' ) ) {
 // Enrich each center with operation hours, detailed activities, and events
 foreach ( $centers as &$c ) {
     $c['operation_hours']  = rs_get_center_op_hours( $c );
-    $c['activity_details'] = rs_get_center_detailed_activities( $c );
+    $c['activity_details'] = !empty($c['activity_details']) ? $c['activity_details'] : rs_get_center_detailed_activities( $c );
     $c['events']           = rs_get_center_events( $c );
 }
 unset( $c );
@@ -306,7 +306,7 @@ unset( $c );
                 </div>
                 <h1 class="rs-centers-main-title">Explore Our Centers</h1>
                 <p class="rs-centers-main-subtitle">
-                    Discover 23+ vibrant centers across Bengaluru offering certified yoga, holistic therapy, and cultural programs. Find your nearest location, check batch timings, and join our community.
+                    Discover 12+ vibrant centers across Bengaluru offering certified yoga, holistic therapy, and cultural programs. Find your nearest location, check batch timings, and join our community.
                 </p>
             </div>
 
@@ -474,7 +474,7 @@ unset( $c );
                         <div class="rs-map-header-bar">
                             <div class="rs-map-header-title">
                                 <span class="rs-map-pulse-indicator"></span>
-                                <span id="rs-map-title-text">All 23 Centers on Map</span>
+                                <span id="rs-map-title-text">All 12 Centers on Map</span>
                             </div>
                             <button type="button" id="rs-map-reset-view" class="rs-map-reset-view-btn" title="Show All Centers">
                                 <span>⟲ All Centers</span>
@@ -589,7 +589,7 @@ unset( $c );
             <div id="rs-centers-no-results" class="rs-centers-no-results" style="display: none;">
                 <div class="rs-no-results-icon">⌕</div>
                 <h3>No centers match your filters</h3>
-                <p>Try searching for a different area or clear your filter criteria to see all 23+ locations across Bengaluru.</p>
+                <p>Try searching for a different area or clear your filter criteria to see all 12+ locations across Bengaluru.</p>
                 <button type="button" id="rs-reset-filters-btn" class="rs-reset-filters-btn">Reset All Filters</button>
             </div>
 
@@ -845,8 +845,9 @@ document.addEventListener('DOMContentLoaded', function () {
         zoomControl: true
     }).setView([12.9716, 77.5946], 11);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    var tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    L.tileLayer(tileUrl, {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
@@ -869,7 +870,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var allMarkersLayer = L.featureGroup().addTo(map);
 
-    // Create Leaflet markers for all 23 centers
+    // Create Leaflet markers for all 12 Centers
     centersData.forEach(function (center) {
         if (!center.lat || !center.lng) return;
 
@@ -951,7 +952,7 @@ document.addEventListener('DOMContentLoaded', function () {
         activeMarkerId = null;
         cards.forEach(function (c) { c.classList.remove('is-active'); });
         if (mapTitleText) {
-            mapTitleText.textContent = 'All 23 Centers on Map';
+            mapTitleText.textContent = 'All 12 Centers on Map';
         }
         if (allMarkersLayer.getLayers().length > 0) {
             map.fitBounds(allMarkersLayer.getBounds(), { padding: [36, 36] });
@@ -1187,6 +1188,73 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial render
     updateCardVisibility();
+
+    // Hash checking logic
+    if (window.location.hash) {
+        var hashId = window.location.hash.substring(1);
+        if (hashId.startsWith('center-')) {
+            // Strip 'center-' to get the slug
+            var slug = hashId.substring(7);
+            setTimeout(function() {
+                openModal('center-modal-' + slug);
+            }, 300);
+        }
+    }
+
+    // Check url params for locate logic from homepage
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('locate') === '1') {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                sortByProximity(lat, lng);
+            });
+        }
+    }
+
+    function sortByProximity(userLat, userLng) {
+        // Calculate distance for all cards
+        cards.forEach(function(card) {
+            var cLat = parseFloat(card.dataset.lat);
+            var cLng = parseFloat(card.dataset.lng);
+            if (!isNaN(cLat) && !isNaN(cLng)) {
+                // simple euclidean distance for small area (Bengaluru)
+                card.distance = Math.pow(cLat - userLat, 2) + Math.pow(cLng - userLng, 2);
+            } else {
+                card.distance = 9999;
+            }
+        });
+
+        // Sort DOM elements
+        cards.sort(function(a, b) {
+            return a.distance - b.distance;
+        });
+
+        // Re-append all to top grid to show them all sorted
+        var fragment = document.createDocumentFragment();
+        cards.forEach(function(card) {
+            card.style.display = 'flex'; // Make them visible
+            fragment.appendChild(card);
+        });
+
+        topGrid.innerHTML = '';
+        topGrid.appendChild(fragment);
+        if (moreGrid) moreGrid.innerHTML = '';
+        if (seeMoreWrap) seeMoreWrap.style.display = 'none';
+
+        // Update bounds for map
+        var sortedBounds = L.latLngBounds([]);
+        cards.forEach(function(card) {
+            if (!isNaN(parseFloat(card.dataset.lat))) {
+                sortedBounds.extend([parseFloat(card.dataset.lat), parseFloat(card.dataset.lng)]);
+            }
+        });
+        if (map && sortedBounds.isValid()) {
+            map.fitBounds(sortedBounds, { padding: [40, 40] });
+        }
+    }
+
 });
 </script>
 

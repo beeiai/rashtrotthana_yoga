@@ -1,8 +1,8 @@
-﻿<?php get_header(); ?>
+<?php get_header(); ?>
 
 <style>
 /* ============================================================
-   Activities Page — Synced with Homepage & About Us Design System
+   Activities Page � Synced with Homepage & About Us Design System
    ============================================================ */
 .rs-activities-page {
     position: relative;
@@ -57,7 +57,7 @@
 
 <?php
 /**
- * Activities data — loaded from data/activities-data.php.
+ * Activities data � loaded from data/activities-data.php.
  * To swap in DB data, update rs_get_activity_categories() in inc/data-helpers.php.
  */
 $activity_categories = rs_get_activity_categories();
@@ -90,7 +90,7 @@ $activity_categories = rs_get_activity_categories();
                                 <?php endforeach; ?>
                             </ul>
                             <button type="button" class="rs-card-btn rs-open-modal-btn" data-index="<?php echo esc_attr( $index ); ?>" aria-haspopup="dialog">
-                                View Activities <span aria-hidden="true">→</span>
+                                View Activities <span aria-hidden="true">?</span>
                             </button>
                         </div>
                     </article>
@@ -118,9 +118,9 @@ $activity_categories = rs_get_activity_categories();
                         <h2 class="rs-finder-title">Looking for a specific activity near you?</h2>
                         <p class="rs-finder-desc">Discover which programs, batches, and certified instructors are available at your nearest Rashtrotthana center across Bengaluru.</p>
                         <div class="rs-finder-perks">
-                            <span class="rs-finder-perk">✓ 23+ Centers in Bengaluru</span>
-                            <span class="rs-finder-perk">✓ Morning &amp; Evening Batches</span>
-                            <span class="rs-finder-perk">✓ Certified Instructors</span>
+                            <span class="rs-finder-perk">? 23+ Centers in Bengaluru</span>
+                            <span class="rs-finder-perk">? Morning &amp; Evening Batches</span>
+                            <span class="rs-finder-perk">? Certified Instructors</span>
                         </div>
                     </div>
                 </div>
@@ -145,10 +145,10 @@ $activity_categories = rs_get_activity_categories();
     <div class="rs-act-modal-backdrop" data-close-modal="true"></div>
     <div class="rs-act-modal-container">
         <div class="rs-act-modal-card">
-            <button type="button" class="rs-act-modal-close" aria-label="Close activity details" data-close-modal="true">✕</button>
+            <button type="button" class="rs-act-modal-close" aria-label="Close activity details" data-close-modal="true">?</button>
             <div class="rs-act-modal-header">
                 <div class="rs-act-modal-meta">
-                    <div class="rs-act-modal-icon" id="rs-modal-icon" aria-hidden="true">☯</div>
+                    <div class="rs-act-modal-icon" id="rs-modal-icon" aria-hidden="true">?</div>
                     <span class="rs-act-modal-tagline" id="rs-modal-category">CATEGORY</span>
                 </div>
                 <h2 class="rs-act-modal-title" id="rs-act-modal-title">Category Title</h2>
@@ -170,10 +170,10 @@ $activity_categories = rs_get_activity_categories();
                 <p class="rs-act-modal-footer-note">Personalized batch guidance &amp; consultations available at our center reception desks.</p>
                 <div class="rs-act-modal-footer-actions">
                     <a href="<?php echo esc_url( home_url('/centers/') ); ?>" class="rs-act-modal-centers-link">
-                        <span>View All 23 Centers ↗</span>
+                        <span>View All 12 Centers ?</span>
                     </a>
                     <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-act-modal-cta-btn">
-                        <span>Enquire / Register Now →</span>
+                        <span>Enquire / Register Now ?</span>
                     </a>
                 </div>
             </div>
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         lastFocusedElement = document.activeElement;
 
-        modalIcon.textContent = category.icon || '✿';
+        modalIcon.textContent = category.icon || '?';
         modalCategory.textContent = category.tagline || 'ACTIVITY CATEGORY';
         modalTitle.textContent = category.title || '';
         modalLead.textContent = category.text || '';
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             '<h4 class="rs-act-subact-title">' + escapeHtml(item.name) + '</h4>' +
                             (item.badge ? '<span class="rs-act-subact-badge">' + escapeHtml(item.badge) + '</span>' : '') +
                         '</div>' +
-                        '<a href="' + enquireUrl + '" class="rs-act-subact-join-btn">Enquire →</a>' +
+                        '<a href="' + enquireUrl + '" class="rs-act-subact-join-btn">Enquire ?</a>' +
                     '</div>' +
                     '<p class="rs-act-subact-desc">' + escapeHtml(item.desc) + '</p>' +
                     '<div class="rs-act-subact-specs">' +

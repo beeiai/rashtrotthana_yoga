@@ -8,52 +8,76 @@
 
 function rs_get_centers( $zone_slug = '' ) {
     $args = array(
-        'post_type'      => 'center',
+        'post_type'      => 'rs_center',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
     );
-    if ( $zone_slug ) {
-        // Find centers by zone_slug mapping
-        // We'll filter in PHP to be safe since zone_slug isn't directly an ACF field (it's derived from zone name)
-    }
-    
     $posts = get_posts( $args );
     $centers = array();
 
     foreach ( $posts as $p ) {
         $zone = get_field('zone', $p->ID) ?: 'South Bengaluru';
-        $z_slug = strtolower(explode(' ', $zone)[0]); // south, north, etc.
+        $z_slug = strtolower(explode(' ', $zone)[0]);
         
-        if ( $zone_slug && $z_slug !== $zone_slug ) {
-            continue;
-        }
+        if ( $zone_slug && $z_slug !== $zone_slug ) continue;
 
         $programs = [];
-        $prog_rows = get_field('programs', $p->ID);
-        if ($prog_rows) {
+        $activity_details = [];
+                $prog_rows = get_field('programs', $p->ID);
+        if ( is_numeric($prog_rows) || is_string($prog_rows) ) {
+            $count = intval($prog_rows);
+            $prog_rows = [];
+            for ( $i = 0; $i < $count; $i++ ) {
+                $prog_rows[] = [
+                    'program_name' => get_post_meta($p->ID, 'programs_' . $i . '_program_name', true),
+                    'badge'        => get_post_meta($p->ID, 'programs_' . $i . '_badge', true),
+                    'days'         => get_post_meta($p->ID, 'programs_' . $i . '_days', true),
+                    'timings'      => get_post_meta($p->ID, 'programs_' . $i . '_timings', true),
+                    'dates'        => get_post_meta($p->ID, 'programs_' . $i . '_dates', true),
+                    'desc'         => get_post_meta($p->ID, 'programs_' . $i . '_desc', true),
+                ];
+            }
+        }
+        if (is_array($prog_rows)) {
             foreach ($prog_rows as $row) {
                 $programs[] = $row['program_name'];
+                $activity_details[] = array(
+                    'name' => $row['program_name'],
+                    'badge' => !empty($row['badge']) ? $row['badge'] : 'Regular Batch',
+                    'days' => !empty($row['days']) ? $row['days'] : 'As per schedule',
+                    'timings' => !empty($row['timings']) ? $row['timings'] : '',
+                    'dates' => !empty($row['dates']) ? $row['dates'] : 'Ongoing',
+                    'desc' => !empty($row['desc']) ? $row['desc'] : 'Certified instruction.'
+                );
             }
         }
         
         $features = [];
-        $feat_rows = get_field('features', $p->ID);
-        if ($feat_rows) {
+                $feat_rows = get_field('features', $p->ID);
+        if ( is_numeric($feat_rows) || is_string($feat_rows) ) {
+            $count = intval($feat_rows);
+            $feat_rows = [];
+            for ( $i = 0; $i < $count; $i++ ) {
+                $feat_rows[] = [
+                    'feature_name' => get_post_meta($p->ID, 'features_' . $i . '_feature_name', true),
+                ];
+            }
+        }
+        if (is_array($feat_rows)) {
             foreach ($feat_rows as $row) {
                 $features[] = $row['feature_name'];
             }
         }
 
-        // Fallback to old meta if ACF is empty
-        $lat = get_field('lat', $p->ID) ?: get_post_meta($p->ID, '_ry_center_lat', true);
-        $lng = get_field('lng', $p->ID) ?: get_post_meta($p->ID, '_ry_center_lng', true);
-        $hours = get_field('hours', $p->ID) ?: get_post_meta($p->ID, '_ry_center_hours', true);
-        $phone = get_field('phone', $p->ID) ?: get_post_meta($p->ID, '_ry_center_phone', true);
-        $email = get_field('email', $p->ID) ?: get_post_meta($p->ID, '_ry_center_email', true);
-        $area = get_field('area', $p->ID) ?: get_post_meta($p->ID, '_ry_center_area', true);
+        $lat = get_field('lat', $p->ID) ?: 12.9716;
+        $lng = get_field('lng', $p->ID) ?: 77.5946;
+        $hours = get_field('hours', $p->ID) ?: 'Please refer to batch timings';
+        $phone = get_field('phone', $p->ID) ?: '';
+        $email = get_field('email', $p->ID) ?: 'info@rashtrotthana.org';
+        $area = get_field('area', $p->ID) ?: '';
 
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
-        if (!$img) $img = get_template_directory_uri() . '/assets/images/client/21-06-22-idy-celebration-12-.jpg';
+        if (!$img) $img = get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg';
 
         $centers[] = array(
             'id' => $p->post_name,
@@ -65,14 +89,15 @@ function rs_get_centers( $zone_slug = '' ) {
             'lng' => $lng,
             'phone' => $phone,
             'hours' => $hours,
-            'timing' => 'both', // Hardcoded as per original
+            'timing' => 'both',
             'timing_label' => 'Morning & Evening',
             'programs' => !empty($programs) ? $programs : ['Yoga for Beginners', 'Pranayama'],
             'activities' => ['yoga', 'wellness'],
             'address' => get_field('address', $p->ID) ?: $p->post_content,
             'email' => $email,
             'image' => $img,
-            'features' => !empty($features) ? $features : ['Experienced Instructors', 'Serene Environment'],
+            'features' => !empty($features) ? $features : ['Certified Instructors', 'Spacious Shala'],
+            'activity_details' => $activity_details,
             'is_hq' => get_field('is_hq', $p->ID) ?: false,
         );
     }
@@ -96,10 +121,7 @@ function rs_get_faqs() {
         );
     }
     // Fallback if none exist
-    if ( empty($faqs) ) {
-        require get_template_directory() . '/data/contact-data.php';
-        return isset($faqs_dataset) ? $faqs_dataset : array();
-    }
+    
     return $faqs;
 }
 
@@ -115,10 +137,7 @@ function rs_get_activity_categories() {
         'hide_empty' => false,
     ) );
     
-    if ( is_wp_error( $terms ) || empty( $terms ) ) {
-        require get_template_directory() . '/data/activities-data.php';
-        return $activity_categories;
-    }
+    
     
     foreach ( $terms as $term ) {
         $term_id = 'activity_category_' . $term->term_id;
@@ -128,7 +147,7 @@ function rs_get_activity_categories() {
             'title'   => $term->name,
             'tagline' => get_field('tagline', $term_id),
             'text'    => get_field('text', $term_id),
-            'image'   => get_field('image', $term_id),
+            'image'   => get_field('image', $term_id) ?: get_term_meta($term->term_id, 'image_url', true),
             'items'   => array()
         );
         
@@ -173,6 +192,10 @@ function rs_get_events( $type = '' ) {
         $date_iso = get_field('event_date', $p->ID) ?: get_post_meta($p->ID, '_ry_event_date', true);
         if (!$date_iso) $date_iso = current_time('Y-m-d');
         
+        // ACF date could be Ymd (e.g., 20261015) or Y-m-d
+        if (preg_match('/^(\d{4})(\d{2})(\d{2})$/', $date_iso, $m)) {
+            $date_iso = $m[1] . '-' . $m[2] . '-' . $m[3];
+        }
         $ts = strtotime($date_iso);
         
         $time = get_field('event_time', $p->ID);
@@ -188,7 +211,9 @@ function rs_get_events( $type = '' ) {
         $venue_obj = get_field('event_venue', $p->ID);
         $venue = $venue_obj ? $venue_obj->post_title : (get_field('event_venue_custom', $p->ID) ?: 'Rashtrotthana Center');
 
-        $is_past = $ts < current_time('timestamp');
+        // Compare using midnight to ensure today's events are not marked past
+        $today_midnight = strtotime(current_time('Y-m-d 00:00:00'));
+        $is_past = $ts < $today_midnight;
         $e_type = $is_past ? 'past' : 'upcoming';
 
         if ( $type && $type !== $e_type ) {
@@ -215,10 +240,7 @@ function rs_get_events( $type = '' ) {
         );
     }
     
-    if ( empty($events) ) {
-        require get_template_directory() . '/data/events-data.php';
-        return $type ? array_values(array_filter($events_dataset, fn($e) => $e['type'] === $type)) : $events_dataset;
-    }
+    
     return $events;
 }
 
@@ -247,17 +269,14 @@ function rs_get_news() {
             'full_text' => wpautop($p->post_content)
         );
     }
-    if ( empty($news) ) {
-        require get_template_directory() . '/data/events-data.php';
-        return isset($news_dataset) ? $news_dataset : array();
-    }
+    
     return $news;
 }
 
 // ── Gallery ──────────────────────────────────────────────────────────────────
 
 function rs_get_gallery_albums() {
-    $posts = get_posts( array('post_type' => 'gallery_album', 'posts_per_page' => -1, 'post_status' => 'publish') );
+    $posts = get_posts( array('post_type' => 'rs_gallery_album', 'posts_per_page' => -1, 'post_status' => 'publish') );
     $albums = array();
     foreach ( $posts as $p ) {
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_template_directory_uri() . '/assets/images/client/07-04-24-summer-camp-in-rysri-yoga-centres-1-.jpg';
@@ -278,20 +297,30 @@ function rs_get_gallery_albums() {
             'videos' => $videos
         );
     }
-    if ( empty($albums) ) {
-        require get_template_directory() . '/data/gallery-data.php';
-        return $gallery_events;
-    }
+    
     return $albums;
 }
 
 // ── Homepage ─────────────────────────────────────────────────────────────────
 
 function rs_get_homepage_data() {
+    $rs_home_center_cards = [];
+    $rs_home_stats = [];
+    $rs_home_values = [];
+    $rs_home_founder = [];
+    $rs_activity_fallbacks = [];
+    $rs_event_fallbacks = [];
     // Merge ACF options with original arrays
-    require get_template_directory() . '/data/homepage-data.php';
+    
     
     // Values
+    $rs_home_values = array(
+        array( 'title' => 'Our Vision',  'text' => 'To build a healthy, harmonious and sustainable society rooted in Indian values.' ),
+        array( 'title' => 'Our Mission', 'text' => 'To empower individuals through Yoga, Education, Culture and Service for personal growth and social transformation.' ),
+        array( 'title' => 'Our Values',  'text' => 'Integrity, compassion, discipline, selfless service and excellence in everything we do.' ),
+        array( 'title' => 'Our Impact',  'text' => 'Building stronger communities through meaningful service and lifelong learning.' ),
+    );
+
     $v_title = get_field('ry_about_vision_title', 'option');
     $v_text = get_field('ry_about_vision_text', 'option');
     $m_title = get_field('ry_about_mission_title', 'option');
@@ -302,8 +331,15 @@ function rs_get_homepage_data() {
     }
     
     // Stats
+    $rs_home_stats = array(
+        array( 'value' => 1972, 'suffix' => '',  'label' => 'Since' ),
+        array( 'value' => 35,   'suffix' => '+', 'label' => 'Activities' ),
+        array( 'value' => 18,   'suffix' => '',  'label' => 'Projects' ),
+        array( 'value' => 23,   'suffix' => '+', 'label' => 'Centers' ),
+        array( 'value' => 1000, 'suffix' => '+', 'label' => 'Lives Impacted' ),
+    );
     $stats = get_field('ry_home_stats', 'option');
-    if ( $stats ) {
+    if ( $stats && is_array($stats) ) {
         $rs_home_stats = $stats;
     }
     
@@ -312,9 +348,10 @@ function rs_get_homepage_data() {
     if ( $f_name ) {
         $rs_home_founder = array(
             'name' => $f_name,
-            'role' => get_field('ry_home_founder_title', 'option'),
+            'title' => get_field('ry_home_founder_title', 'option'),
             'subtitle' => get_field('ry_home_founder_subtitle', 'option'),
             'image' => get_field('ry_home_founder_photo', 'option'),
+            'image_alt' => $f_name . ' - Founder',
             'paragraphs' => explode("\n\n", strip_tags(get_field('ry_home_founder_bio', 'option'))),
             'quote' => get_field('ry_home_founder_quote', 'option'),
             'quote_author' => get_field('ry_home_founder_quote_attr', 'option'),
@@ -334,8 +371,32 @@ function rs_get_homepage_data() {
             ];
         }
     }
+    
+    // Fallback: If no centers are manually featured, just grab the first 4
+    if ( empty($f_cards) && !empty($all_centers) ) {
+        $slice = array_slice($all_centers, 0, 4);
+        foreach ($slice as $c) {
+            $f_cards[] = [
+                'name' => $c['name'],
+                'city' => $c['area'],
+                'image' => $c['image'],
+                'link' => home_url('/centers/#' . $c['id'])
+            ];
+        }
+    }
+
     if ( !empty($f_cards) ) {
-        $rs_home_center_cards = array_slice($f_cards, 0, 4);
+        $rs_home_center_cards = $f_cards;
+    }
+    
+    // Update stats dynamically
+    if ( !empty($rs_home_stats) && is_array($rs_home_stats) ) {
+        $real_count = count($all_centers);
+        foreach ($rs_home_stats as &$stat) {
+            if ( $stat['label'] === 'Centers' && $real_count > 0 ) {
+                $stat['value'] = $real_count;
+            }
+        }
     }
     
     return array(

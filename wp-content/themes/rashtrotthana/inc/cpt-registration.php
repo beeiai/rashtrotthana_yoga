@@ -104,6 +104,23 @@ function rs_register_post_types() {
     ) );
 }
 
+
+    // ── rs_inquiry ────────────────────────────────────────────────────────────
+    register_post_type( 'rs_inquiry', array(
+        'labels'        => array(
+            'name'          => __( 'Inquiries', 'rashtrotthana' ),
+            'singular_name' => __( 'Inquiry', 'rashtrotthana' ),
+            'add_new_item'  => __( 'Add New Inquiry', 'rashtrotthana' ),
+            'edit_item'     => __( 'View Inquiry', 'rashtrotthana' ),
+            'all_items'     => __( 'All Inquiries', 'rashtrotthana' ),
+        ),
+        'public'        => false,
+        'show_ui'       => true,
+        'show_in_menu'  => false, // We will map it in admin portal
+        'supports'      => array( 'title', 'editor', 'custom-fields' ),
+        'menu_icon'     => 'dashicons-email',
+    ) );
+
 add_action( 'init', 'rs_register_post_types' );
 
 endif; // rs_register_post_types

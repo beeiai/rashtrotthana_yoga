@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 /**
  * Template Name: Gallery Page
  * Description: Redesigned Gallery page matching Home, Activities, Centers, and Events pages.
@@ -7,7 +7,7 @@
 
 get_header();
 
-// Gallery albums data â€” loaded from data/gallery-data.php.
+// Gallery albums data — loaded from data/gallery-data.php.
 // To swap in DB data, update rs_get_gallery_albums() in inc/data-helpers.php.
 $gallery_events = rs_get_gallery_albums();
 
@@ -1242,14 +1242,14 @@ foreach ( $gallery_events as $event ) {
                 </div>
                 <h1 class="rs-gallery-page-title">Visual Stories &amp; <em>Memories</em></h1>
                 <p class="rs-gallery-page-subtitle">
-                    Explore inspiring moments from our community gatherings, therapeutic intensives, childrenâ€™s summer camps, and cultural celebrations across our 23+ Bengaluru centers.
+                    Explore inspiring moments from our community gatherings, therapeutic intensives, children’s summer camps, and cultural celebrations across our 12 Bengaluru centers.
                 </p>
             </div>
 
             <!-- Clean Stat Pills (No Icons, Matching Events Page Design) -->
             <div class="rs-gallery-stats-bar">
                 <div class="rs-gallery-stat-pill">
-                    <strong>23+</strong>
+                    <strong>12</strong>
                     <span>Bengaluru Centers</span>
                 </div>
                 <div class="rs-gallery-stat-pill">
@@ -1312,7 +1312,7 @@ foreach ( $gallery_events as $event ) {
                         <span>Venue</span>
                     </span>
                     <span class="rs-hub-meta-pill" id="rs-hub-active-count">
-                        <span>0 Photos â€¢ 0 Videos</span>
+                        <span>0 Photos • 0 Videos</span>
                     </span>
                 </div>
                 <p class="rs-hub-desc" id="rs-hub-active-desc">Event description</p>
@@ -1362,7 +1362,7 @@ foreach ( $gallery_events as $event ) {
                             <span class="rs-album-category-badge"><?php echo esc_html( $event['category'] ); ?></span>
                             <span class="rs-album-count-badge">
                                 <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                                <span><?php echo esc_html( $photo_count ); ?> Photos â€¢ <?php echo esc_html( $video_count ); ?> Videos</span>
+                                <span><?php echo esc_html( $photo_count ); ?> Photos • <?php echo esc_html( $video_count ); ?> Videos</span>
                             </span>
                         </div>
 
@@ -1408,7 +1408,7 @@ foreach ( $gallery_events as $event ) {
                         <div class="rs-video-card-thumb rs-trigger-video" 
                              data-title="<?php echo esc_attr( $vid['title'] ); ?>" 
                              data-src="<?php echo esc_url( $vid['embed_url'] ); ?>"
-                             data-caption="<?php echo esc_attr( $vid['subtitle'] . ' â€” ' . $vid['event_title'] ); ?>"
+                             data-caption="<?php echo esc_attr( $vid['subtitle'] . ' — ' . $vid['event_title'] ); ?>"
                              tabindex="0"
                              role="button"
                              aria-label="Play video: <?php echo esc_attr( $vid['title'] ); ?>">
@@ -1427,7 +1427,7 @@ foreach ( $gallery_events as $event ) {
                             <button type="button" class="rs-video-watch-btn rs-trigger-video"
                                     data-title="<?php echo esc_attr( $vid['title'] ); ?>" 
                                     data-src="<?php echo esc_url( $vid['embed_url'] ); ?>"
-                                    data-caption="<?php echo esc_attr( $vid['subtitle'] . ' â€” ' . $vid['event_title'] ); ?>">
+                                    data-caption="<?php echo esc_attr( $vid['subtitle'] . ' — ' . $vid['event_title'] ); ?>">
                                 <span>Watch Video</span> &rarr;
                             </button>
                         </div>
@@ -1529,7 +1529,7 @@ document.addEventListener('DOMContentLoaded', function () {
         hubTitle.textContent = currentEvent.title;
         hubDate.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>' + currentEvent.date + '</span>';
         hubVenue.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> <span>' + currentEvent.venue + '</span>';
-        hubCount.innerHTML = '<span>' + currentEvent.photos.length + ' Photos â€¢ ' + currentEvent.videos.length + ' Videos</span>';
+        hubCount.innerHTML = '<span>' + currentEvent.photos.length + ' Photos • ' + currentEvent.videos.length + ' Videos</span>';
         hubDesc.textContent = currentEvent.desc;
 
         if (hubSelectDropdown) {

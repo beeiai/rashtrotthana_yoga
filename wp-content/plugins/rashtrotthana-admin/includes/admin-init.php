@@ -39,6 +39,15 @@ function radm_create_roles(): void {
             'upload_files'              => true,
         ] );
     }
+    
+        // Manage Centers, Activities, News, Events from within the Portal menu
+    add_submenu_page( 'radm-dashboard', 'Manage Centers', 'Centers', 'manage_options', 'edit.php?post_type=rs_center' );
+    add_submenu_page( 'radm-dashboard', 'Manage Activities', 'Activities', 'manage_options', 'edit.php?post_type=rs_activity' );
+    add_submenu_page( 'radm-dashboard', 'Manage Events', 'Events (Advanced)', 'manage_options', 'edit.php?post_type=event' );
+    add_submenu_page( 'radm-dashboard', 'Manage News', 'News', 'manage_options', 'edit.php' );
+    add_submenu_page( 'radm-dashboard', 'Manage Gallery', 'Gallery', 'manage_options', 'edit.php?post_type=rs_gallery_album' );
+    add_submenu_page( 'radm-dashboard', 'Manage Inquiries', 'Inquiries', 'manage_options', 'edit.php?post_type=rs_inquiry' );
+    add_submenu_page( 'radm-dashboard', 'System Settings', 'System Settings', 'manage_options', 'options-general.php' );
 }
 add_action( 'admin_init', 'radm_create_roles' );
 
@@ -67,8 +76,18 @@ function radm_register_menu(): void {
     foreach ( $pages as [ $slug, $title, $cap, $callback ] ) {
         add_submenu_page( 'radm-dashboard', $title, $title, $cap, $slug, $callback );
     }
+    
+        // Manage Centers, Activities, News, Events from within the Portal menu
+    add_submenu_page( 'radm-dashboard', 'Manage Centers', 'Centers', 'manage_options', 'edit.php?post_type=rs_center' );
+    add_submenu_page( 'radm-dashboard', 'Manage Activities', 'Activities', 'manage_options', 'edit.php?post_type=rs_activity' );
+    add_submenu_page( 'radm-dashboard', 'Manage Events', 'Events (Advanced)', 'manage_options', 'edit.php?post_type=event' );
+    add_submenu_page( 'radm-dashboard', 'Manage News', 'News', 'manage_options', 'edit.php' );
+    add_submenu_page( 'radm-dashboard', 'Manage Gallery', 'Gallery', 'manage_options', 'edit.php?post_type=rs_gallery_album' );
+    add_submenu_page( 'radm-dashboard', 'Manage Inquiries', 'Inquiries', 'manage_options', 'edit.php?post_type=rs_inquiry' );
+    add_submenu_page( 'radm-dashboard', 'System Settings', 'System Settings', 'manage_options', 'options-general.php' );
 }
 add_action( 'admin_menu', 'radm_register_menu' );
+
 
 // ── Asset Enqueueing ──────────────────────────────────────────────────────────
 function radm_enqueue_assets( string $hook ): void {

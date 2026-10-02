@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Homepage Data — Rashtrotthana Yoga
  *
@@ -24,7 +24,7 @@ $rs_home_stats = array(
     array( 'value' => 1972, 'suffix' => '',  'label' => 'Since' ),
     array( 'value' => 35,   'suffix' => '+', 'label' => 'Activities' ),
     array( 'value' => 18,   'suffix' => '',  'label' => 'Projects' ),
-    array( 'value' => 23,   'suffix' => '+', 'label' => 'Centers' ),
+    array( 'value' => 12,   'suffix' => '+', 'label' => 'Centers' ),
     array( 'value' => 1000, 'suffix' => '+', 'label' => 'Lives Impacted' ),
 );
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Template Name: Contact Us Page
  * Description: Redesigned Contact Us page matching Home, Activities, Centers, and Events pages.
@@ -10,6 +10,11 @@ get_header();
 // To swap in DB data, update rs_get_flagship_centers() and rs_get_faqs() in inc/data-helpers.php.
 $flagship_centers = rs_get_flagship_centers();
 $faqs_dataset     = rs_get_faqs();
+
+// Default variables for the contact bar
+$contact_phone   = !empty($flagship_centers[0]['phone']) ? $flagship_centers[0]['phone'] : '080 2664 4444';
+$contact_email   = !empty($flagship_centers[0]['email']) ? $flagship_centers[0]['email'] : 'info@rashtrotthanayoga.org';
+$contact_address = !empty($flagship_centers[0]['address']) ? $flagship_centers[0]['address'] : 'No. 23, 4th Cross, 4th Block, Jayanagar, Bengaluru – 560011';
 ?>
 
 <!-- Leaflet CSS & JS for Interactive Map -->
@@ -1044,6 +1049,10 @@ $faqs_dataset     = rs_get_faqs();
     transition: max-height 320ms cubic-bezier(.2,.8,.2,1), padding 320ms ease;
 }
 
+.rs-faq-card.is-active .rs-faq-body {
+    max-height: 1000px; /* high enough for typical content */
+}
+
 .rs-faq-body-inner {
     padding: 0 1.6rem 1.35rem;
     color: #67574c;
@@ -1242,40 +1251,40 @@ $faqs_dataset     = rs_get_faqs();
             <!-- Quick Contact Channels Bar (4 Glass Cards) -->
             <div class="rs-contact-channels-grid">
                 <!-- Phone Support -->
-                <a href="tel:+918026644444" class="rs-contact-channel-card" aria-label="Call central support">
+                <a href="tel:<?php echo esc_attr( preg_replace('/[^0-9+]/', '', $contact_phone) ); ?>" class="rs-contact-channel-card" aria-label="Call central support">
                     <div class="rs-channel-header">
                         <div class="rs-channel-icon-wrap" aria-hidden="true">
                             <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
                         <h3 class="rs-channel-title">Call Us</h3>
                     </div>
-                    <strong class="rs-channel-value">080 2664 4444</strong>
+                    <strong class="rs-channel-value"><?php echo esc_html( $contact_phone ); ?></strong>
                     <p class="rs-channel-timing">Mon – Sat: 5:00 AM – 9:00 PM<br>Sun: 6:00 AM – 1:00 PM</p>
                     <span class="rs-channel-cta-link">Call Now &rarr;</span>
                 </a>
 
                 <!-- WhatsApp Desk -->
-                <a href="https://wa.me/918095552361" target="_blank" rel="noopener" class="rs-contact-channel-card" aria-label="Chat on WhatsApp">
+                <a href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $contact_phone) ); ?>" target="_blank" rel="noopener" class="rs-contact-channel-card" aria-label="Chat on WhatsApp">
                     <div class="rs-channel-header">
                         <div class="rs-channel-icon-wrap" aria-hidden="true">
                             <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                         </div>
                         <h3 class="rs-channel-title">WhatsApp</h3>
                     </div>
-                    <strong class="rs-channel-value">+91 80955 52361</strong>
+                    <strong class="rs-channel-value"><?php echo esc_html( $contact_phone ); ?></strong>
                     <p class="rs-channel-timing">Instant replies and queries<br>during working hours</p>
                     <span class="rs-channel-cta-link">Start Chat &rarr;</span>
                 </a>
 
                 <!-- Email Support -->
-                <a href="mailto:info@rashtrotthanayoga.org" class="rs-contact-channel-card" aria-label="Send email">
+                <a href="mailto:<?php echo esc_attr( $contact_email ); ?>" class="rs-contact-channel-card" aria-label="Send email">
                     <div class="rs-channel-header">
                         <div class="rs-channel-icon-wrap" aria-hidden="true">
                             <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </div>
                         <h3 class="rs-channel-title">Email Us</h3>
                     </div>
-                    <strong class="rs-channel-value">info@rashtrotthanayoga.org</strong>
+                    <strong class="rs-channel-value"><?php echo esc_html( $contact_email ); ?></strong>
                     <p class="rs-channel-timing">We respond within<br>24 working hours</p>
                     <span class="rs-channel-cta-link">Write to Us &rarr;</span>
                 </a>
@@ -1288,8 +1297,8 @@ $faqs_dataset     = rs_get_faqs();
                         </div>
                         <h3 class="rs-channel-title">Visit Us</h3>
                     </div>
-                    <strong class="rs-channel-value">Jayanagar Head Office</strong>
-                    <p class="rs-channel-timing">#23, 4th Cross, 4th Block,<br>Bengaluru – 560011</p>
+                    <strong class="rs-channel-value" style="font-size: 1.1rem; line-height: 1.4;">Rashtrotthana Yoga</strong>
+                    <p class="rs-channel-timing"><?php echo nl2br( esc_html( $contact_address ) ); ?></p>
                     <span class="rs-channel-cta-link">Locate on Map &rarr;</span>
                 </a>
             </div>
@@ -1416,7 +1425,7 @@ $faqs_dataset     = rs_get_faqs();
                     <p class="rs-section-desc">Visit our spacious yoga shalas across Bengaluru for in-person consultations, trial sessions, and holistic community activities.</p>
                 </div>
                 <a href="<?php echo esc_url( home_url( '/centers/' ) ); ?>" class="rs-all-centers-btn">
-                    <span>Explore All 23+ Centers</span>
+                    <span>Explore All 12 Centers</span>
                     <span aria-hidden="true">&rarr;</span>
                 </a>
             </div>
@@ -1482,7 +1491,7 @@ $faqs_dataset     = rs_get_faqs();
                             <span><?php echo esc_html( $faq['q'] ); ?></span>
                             <span class="rs-faq-icon-pill" aria-hidden="true">+</span>
                         </button>
-                        <div class="rs-faq-body" id="faq-body-<?php echo esc_attr( $idx ); ?>" style="<?php echo ( $idx === 0 ) ? 'max-height: 400px;' : ''; ?>">
+                        <div class="rs-faq-body" id="faq-body-<?php echo esc_attr( $idx ); ?>">
                             <div class="rs-faq-body-inner">
                                 <p><?php echo esc_html( $faq['a'] ); ?></p>
                             </div>
@@ -1503,11 +1512,11 @@ $faqs_dataset     = rs_get_faqs();
                     </div>
                 </div>
                 <div class="rs-assistance-actions">
-                    <a href="tel:+918026644444" class="rs-assistance-call-btn">
+                    <a href="tel:<?php echo esc_attr( preg_replace('/[^0-9+]/', '', $contact_phone) ); ?>" class="rs-assistance-call-btn">
                         <svg style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2;" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         <span>080 2664 4444</span>
                     </a>
-                    <a href="https://wa.me/918095552361" target="_blank" rel="noopener" class="rs-assistance-whatsapp-btn">
+                    <a href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $contact_phone) ); ?>" target="_blank" rel="noopener" class="rs-assistance-whatsapp-btn">
                         <svg style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2;" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                         <span>WhatsApp Support</span>
                     </a>
@@ -1531,9 +1540,10 @@ document.addEventListener('DOMContentLoaded', function () {
             scrollWheelZoom: false
         });
 
-        // Crisp, clean CartoDB Voyager tiles (No API key needed)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        // Standard OpenStreetMap tiles (Free, no API key needed)
+        var tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+        L.tileLayer(tileUrl, {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             subdomains: 'abcd',
             maxZoom: 19
         }).addTo(map);
@@ -1653,9 +1663,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (otherCard !== card) {
                         otherCard.classList.remove('is-active');
                         var otherTrigger = otherCard.querySelector('.rs-faq-trigger');
-                        var otherBody = otherCard.querySelector('.rs-faq-body');
                         if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
-                        if (otherBody) otherBody.style.maxHeight = null;
                     }
                 });
 
@@ -1663,11 +1671,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (isOpen) {
                     card.classList.remove('is-active');
                     trigger.setAttribute('aria-expanded', 'false');
-                    body.style.maxHeight = null;
                 } else {
                     card.classList.add('is-active');
                     trigger.setAttribute('aria-expanded', 'true');
-                    body.style.maxHeight = body.scrollHeight + 40 + 'px';
                 }
             });
         }

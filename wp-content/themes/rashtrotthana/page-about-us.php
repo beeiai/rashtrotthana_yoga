@@ -809,7 +809,7 @@ get_header();
                     <span>Years of Seva</span>
                 </div>
                 <div class="rs-about-stat-pill">
-                    <strong>23+</strong>
+                    <strong>12</strong>
                     <span>Bengaluru Centers</span>
                 </div>
                 <div class="rs-about-stat-pill">
@@ -842,7 +842,7 @@ get_header();
                         Rashtrotthana Yoga is a dedicated initiative of <strong>Rashtrotthana Parishat</strong>, committed to promoting physical, mental, and spiritual well-being through the timeless discipline of authentic Yoga.
                     </p>
                     <p>
-                        What began as a small, humble community initiative to bring Yoga into everyday neighborhoods has blossomed into a vast statewide movement touching thousands of lives daily across 23+ centers in Bengaluru.
+                        What began as a small, humble community initiative to bring Yoga into everyday neighborhoods has blossomed into a vast statewide movement touching thousands of lives daily across 12 centers in Bengaluru.
                     </p>
 
                     <!-- Motto Card -->
@@ -904,70 +904,28 @@ get_header();
         </div>
     </section>
 
+    
     <!-- ============================================================
-         4. JOURNEY TIMELINE SECTION
+         4. ROTATING PHOTO SECTION
          ============================================================ -->
-    <section class="rs-about-section rs-timeline-section" id="timeline-section">
+    <section class="rs-about-section" id="timeline-section">
         <div class="rs-container">
             <div class="rs-about-section-header text-center">
-                <h2>A Journey of <em>Impact &amp; Growth</em></h2>
-                <p class="rs-about-section-desc mx-auto">
-                    Tracing the milestones of Rashtrotthana Yoga from a humble neighborhood shala to a pan-Karnataka movement.
-                </p>
+                <h2>Our Centers</h2>
             </div>
-
-            <div class="rs-timeline-wrapper">
-                <div class="rs-timeline-track-line" aria-hidden="true"></div>
-
-                <div class="rs-timeline-row">
-                    <!-- Point 1 -->
-                    <div class="rs-timeline-node">
-                        <div class="rs-timeline-icon-wrap" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </div>
-                        <span class="rs-timeline-year-pill">Early 1990s</span>
-                        <p class="rs-timeline-card-desc">The vision took root with a small, intimate Yoga class in Jayanagar.</p>
-                    </div>
-
-                    <!-- Point 2 -->
-                    <div class="rs-timeline-node">
-                        <div class="rs-timeline-icon-wrap" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        </div>
-                        <span class="rs-timeline-year-pill">1995 &ndash; 2000</span>
-                        <p class="rs-timeline-card-desc">Yoga programs expanded rapidly to diverse residential sectors of Bengaluru.</p>
-                    </div>
-
-                    <!-- Point 3 -->
-                    <div class="rs-timeline-node">
-                        <div class="rs-timeline-icon-wrap" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4M9 7h6M9 11h6M9 15h6"/></svg>
-                        </div>
-                        <span class="rs-timeline-year-pill">2000 &ndash; 2010</span>
-                        <p class="rs-timeline-card-desc">Establishment of multiple dedicated centers with morning and evening batches.</p>
-                    </div>
-
-                    <!-- Point 4 -->
-                    <div class="rs-timeline-node">
-                        <div class="rs-timeline-icon-wrap" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        </div>
-                        <span class="rs-timeline-year-pill">2010 &ndash; 2020</span>
-                        <p class="rs-timeline-card-desc">Reaching communities across Karnataka with 23+ fully equipped yoga centers.</p>
-                    </div>
-
-                    <!-- Point 5 -->
-                    <div class="rs-timeline-node">
-                        <div class="rs-timeline-icon-wrap" aria-hidden="true">
-                            <svg viewBox="0 0 24 24"><path d="M12 22C12 22 17 18 17 13C17 8 12 4 12 4C12 4 7 8 7 13C7 18 12 22 12 22Z"/><path d="M12 22C12 22 21 17 21 10C21 3 12 8 12 8"/><path d="M12 22C12 22 3 17 3 10C3 3 12 8 12 8"/></svg>
-                        </div>
-                        <span class="rs-timeline-year-pill">2020 &amp; Beyond</span>
-                        <p class="rs-timeline-card-desc">Advancing specialized yoga therapy, digital classes, and youth leadership.</p>
-                    </div>
-                </div>
+            <div class="rs-card-grid rs-gallery-grid" style="grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                <?php 
+                $all_centers = rs_get_centers();
+                foreach ($all_centers as $c) {
+                    if (preg_match('/^(Sadashiva|Jayanagar|Kundalahalli|Kundanalli|Chamaraj)/i', $c['name'])) {
+                        echo '<img src="' . esc_url($c['image']) . '" alt="' . esc_attr($c['name']) . '" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:12px;">';
+                    }
+                }
+                ?>
             </div>
         </div>
     </section>
+
 
     <!-- ============================================================
          5. OUR HISTORY SECTION
@@ -1001,7 +959,7 @@ get_header();
 
                         <div class="rs-history-step-card">
                             <h4>Today &amp; The Future</h4>
-                            <p>With 23+ centers, diverse curricula, clinical research partnerships, and an ever-growing family of sadhakas, we continue to inspire and elevate the health of society.</p>
+                            <p>With 12 centers, diverse curricula, clinical research partnerships, and an ever-growing family of sadhakas, we continue to inspire and elevate the health of society.</p>
                         </div>
                     </div>
                 </div>
