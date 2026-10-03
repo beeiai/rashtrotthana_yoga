@@ -47,8 +47,30 @@ class Activity_Meta {
             <input type="number" id="ry_center" name="ry_center" value="<?php echo esc_attr( $center ); ?>" class="regular-text">
         </p>
         <p>
-            <label for="ry_registration_form"><strong><?php _e( 'Registration Form ID', 'rashtrotthana-core' ); ?></strong></label><br>
-            <input type="number" id="ry_registration_form" name="ry_registration_form" value="<?php echo esc_attr( $registration_form ); ?>" class="regular-text">
+            <label for="ry_registration_form"><strong><?php _e( 'Select Form Group (Combined Center Forms)', 'rashtrotthana-core' ); ?></strong></label><br>
+            <?php
+            global $wpdb;
+            $fg_table = $wpdb->prefix . 'ry_form_groups';
+            $form_groups = [];
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '$fg_table'" ) === $fg_table ) {
+                $form_groups = $wpdb->get_results( "SELECT id, name, status FROM {$fg_table} ORDER BY name ASC", ARRAY_A );
+            }
+            ?>
+            <select id="ry_registration_form" name="ry_registration_form" class="regular-text" style="width: 100%; max-width: 320px;">
+                <option value="0"><?php _e( '-- No Form Group Attached --', 'rashtrotthana-core' ); ?></option>
+                <?php if ( ! empty( $form_groups ) ) : ?>
+                    <?php foreach ( $form_groups as $fg ) : ?>
+                        <option value="<?php echo esc_attr( $fg['id'] ); ?>" <?php selected( (int) $registration_form, (int) $fg['id'] ); ?>>
+                            <?php echo esc_html( $fg['name'] ); ?> (ID: <?php echo esc_html( $fg['id'] ); ?><?php echo $fg['status'] === 'inactive' ? ' - Inactive' : ''; ?>)
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+            <?php if ( $registration_form ) : ?>
+                <span style="display: block; margin-top: 6px; font-size: 12px; color: #166534;">
+                    🔗 <strong>Single Link:</strong> <code><?php echo esc_url( home_url( '/?ry_form_group=' . $registration_form ) ); ?></code>
+                </span>
+            <?php endif; ?>
         </p>
         <p>
             <label for="ry_requires_registration">

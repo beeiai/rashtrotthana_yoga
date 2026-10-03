@@ -13,7 +13,7 @@ function radm_ajax_auth(): void {
     if ( ! check_ajax_referer( 'radm_nonce', 'nonce', false ) ) {
         wp_send_json_error( [ 'message' => 'Security check failed.' ], 403 );
     }
-    if ( ! current_user_can( 'manage_options' ) ) {
+    if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_ry_registrations' ) && ! current_user_can( 'upload_files' ) ) {
         wp_send_json_error( [ 'message' => 'Insufficient permissions.' ], 403 );
     }
 }
@@ -531,132 +531,497 @@ function radm_ajax_export_csv(): void {
     exit;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 10. FORM GROUPS (CRUD)
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// FORM GROUPS AJAX HANDLERS
+// ═════════════════════════════════════════════════════════════════════════════
+
+require_once __DIR__ . '/class-form-groups-db.php';
+
+/**
+ * 1. Get Form Groups List
+ */
 add_action( 'wp_ajax_radm_get_form_groups', 'radm_ajax_get_form_groups' );
 function radm_ajax_get_form_groups(): void {
     radm_ajax_auth();
-    $groups = get_option( 'radm_form_groups', [] );
-    wp_send_json_success( [ 'groups' => array_values( (array) $groups ) ] );
+
+    $search   = sanitize_text_field( $_POST['search'] ?? '' );
+    $status   = sanitize_key( $_POST['status'] ?? '' );
+    $page     = max( 1, absint( $_POST['page'] ?? 1 ) );
+    $per_page = max( 1, absint( $_POST['per_page'] ?? 10 ) );
+
+    $result = RADM_Form_Groups_DB::get_all( [
+        'search'   => $search,
+        'status'   => $status,
+        'page'     => $page,
+        'per_page' => $per_page,
+    ] );
+
+    wp_send_json_success( $result );
 }
 
+/**
+ * 2. Get Single Form Group
+ */
+add_action( 'wp_ajax_radm_get_form_group', 'radm_ajax_get_form_group' );
+function radm_ajax_get_form_group(): void {
+    radm_ajax_auth();
+
+    $id = absint( $_POST['id'] ?? 0 );
+    if ( ! $id ) {
+        wp_send_json_error( [ 'message' => 'Invalid Form Group ID.' ], 400 );
+    }
+
+    $group = RADM_Form_Groups_DB::get( $id );
+    if ( ! $group ) {
+        wp_send_json_error( [ 'message' => 'Form Group not found.' ], 404 );
+    }
+
+    wp_send_json_success( $group );
+}
+
+/**
+ * 3. Save Form Group (Create / Update)
+ */
 add_action( 'wp_ajax_radm_save_form_group', 'radm_ajax_save_form_group' );
 function radm_ajax_save_form_group(): void {
     radm_ajax_auth();
 
-    $group_id    = sanitize_key( $_POST['group_id'] ?? '' );
-    $title       = sanitize_text_field( $_POST['title'] ?? '' );
+    $id          = absint( $_POST['id'] ?? 0 );
+    $name        = sanitize_text_field( $_POST['name'] ?? '' );
     $description = sanitize_textarea_field( $_POST['description'] ?? '' );
-    $raw_slug    = sanitize_title( $_POST['slug'] ?? '' );
-    $slug        = $raw_slug ?: sanitize_title( $title );
-    $action_mode = in_array( $_POST['action_mode'] ?? 'redirect', [ 'redirect', 'embed' ], true )
-                    ? sanitize_key( $_POST['action_mode'] )
-                    : 'redirect';
-    $ui_layout   = in_array( $_POST['ui_layout'] ?? 'cards', [ 'cards', 'dropdown' ], true )
-                    ? sanitize_key( $_POST['ui_layout'] )
-                    : 'cards';
-    $raw_centres = isset( $_POST['centres'] ) && is_array( $_POST['centres'] ) ? $_POST['centres'] : [];
+    $status      = sanitize_key( $_POST['status'] ?? 'active' );
+    $raw_centers = isset( $_POST['centers'] ) ? $_POST['centers'] : [];
 
-    if ( ! $title ) {
-        wp_send_json_error( [ 'message' => 'Form Group title is required.' ], 400 );
-    }
-
-    $centres = [];
-    foreach ( $raw_centres as $c ) {
-        $c_name = sanitize_text_field( $c['name'] ?? '' );
-        $c_loc  = sanitize_text_field( $c['location'] ?? '' );
-        $c_url  = esc_url_raw( $c['url'] ?? '' );
-        if ( ! $c_name ) continue;
-
-        $c_id = sanitize_key( $c['id'] ?? '' );
-        if ( ! $c_id ) {
-            $c_id = 'c_' . wp_generate_password( 6, false, false );
+    // If sent as JSON string
+    if ( is_string( $raw_centers ) ) {
+        $decoded = json_decode( stripslashes( $raw_centers ), true );
+        if ( is_array( $decoded ) ) {
+            $raw_centers = $decoded;
         }
-
-        $centres[] = [
-            'id'       => $c_id,
-            'name'     => $c_name,
-            'location' => $c_loc,
-            'url'      => $c_url,
-        ];
     }
 
-    $groups = get_option( 'radm_form_groups', [] );
-    if ( ! is_array( $groups ) ) $groups = [];
-
-    if ( ! $group_id ) {
-        $group_id = 'group_' . wp_generate_password( 8, false, false );
+    if ( empty( $name ) ) {
+        wp_send_json_error( [ 'message' => 'Form Group Name is required.' ], 400 );
     }
 
-    $existing_analytics = $groups[ $group_id ]['analytics'] ?? [];
+    try {
+        $group_id = RADM_Form_Groups_DB::save( [
+            'id'          => $id,
+            'name'        => $name,
+            'description' => $description,
+            'status'      => $status,
+            'centers'     => is_array( $raw_centers ) ? $raw_centers : [],
+        ] );
 
-    $groups[ $group_id ] = [
-        'id'          => $group_id,
-        'slug'        => $slug,
-        'title'       => $title,
-        'description' => $description,
-        'action_mode' => $action_mode,
-        'ui_layout'   => $ui_layout,
-        'centres'     => $centres,
-        'analytics'   => $existing_analytics,
-        'updated_at'  => current_time( 'mysql' ),
-    ];
+        $saved = RADM_Form_Groups_DB::get( $group_id );
 
-    update_option( 'radm_form_groups', $groups );
-
-    wp_send_json_success( [
-        'message'   => 'Form Group saved successfully.',
-        'group_id'  => $group_id,
-        'slug'      => $slug,
-        'shortcode' => '[ry_form_group slug="' . $slug . '"]',
-    ] );
+        wp_send_json_success( [
+            'message'  => $id > 0 ? 'Form Group updated successfully.' : 'Form Group created successfully.',
+            'group_id' => $group_id,
+            'group'    => $saved,
+        ] );
+    } catch ( \Exception $e ) {
+        wp_send_json_error( [ 'message' => $e->getMessage() ], 500 );
+    }
 }
 
+/**
+ * 4. Delete Form Group
+ */
 add_action( 'wp_ajax_radm_delete_form_group', 'radm_ajax_delete_form_group' );
 function radm_ajax_delete_form_group(): void {
     radm_ajax_auth();
 
-    $group_id = sanitize_key( $_POST['group_id'] ?? '' );
-    if ( ! $group_id ) {
-        wp_send_json_error( [ 'message' => 'Missing Group ID.' ], 400 );
+    $id = absint( $_POST['id'] ?? 0 );
+    if ( ! $id ) {
+        wp_send_json_error( [ 'message' => 'Invalid Form Group ID.' ], 400 );
     }
 
-    $groups = get_option( 'radm_form_groups', [] );
-    if ( is_array( $groups ) && isset( $groups[ $group_id ] ) ) {
-        unset( $groups[ $group_id ] );
-        update_option( 'radm_form_groups', $groups );
+    $deleted = RADM_Form_Groups_DB::delete( $id );
+    if ( ! $deleted ) {
+        wp_send_json_error( [ 'message' => 'Failed to delete Form Group.' ], 500 );
     }
 
-    wp_send_json_success( [ 'message' => 'Form Group deleted.' ] );
+    wp_send_json_success( [ 'message' => 'Form Group deleted successfully.' ] );
 }
 
-// ── Public Analytics Click Tracking Handler ──────────────────────────────────
-add_action( 'wp_ajax_radm_track_form_group_click',        'radm_ajax_track_form_group_click' );
-add_action( 'wp_ajax_nopriv_radm_track_form_group_click', 'radm_ajax_track_form_group_click' );
-function radm_ajax_track_form_group_click(): void {
-    $group_id  = sanitize_key( $_POST['group_id'] ?? '' );
-    $centre_id = sanitize_key( $_POST['centre_id'] ?? '' );
+/**
+ * 5. Toggle Status
+ */
+add_action( 'wp_ajax_radm_toggle_form_group_status', 'radm_ajax_toggle_form_group_status' );
+function radm_ajax_toggle_form_group_status(): void {
+    radm_ajax_auth();
 
-    if ( ! $group_id || ! $centre_id ) {
-        wp_send_json_error( [ 'message' => 'Missing parameters.' ], 400 );
+    $id = absint( $_POST['id'] ?? 0 );
+    if ( ! $id ) {
+        wp_send_json_error( [ 'message' => 'Invalid Form Group ID.' ], 400 );
     }
 
-    $groups = get_option( 'radm_form_groups', [] );
-    if ( is_array( $groups ) && isset( $groups[ $group_id ] ) ) {
-        if ( ! isset( $groups[ $group_id ]['analytics'] ) || ! is_array( $groups[ $group_id ]['analytics'] ) ) {
-            $groups[ $group_id ]['analytics'] = [];
+    try {
+        $new_status = RADM_Form_Groups_DB::toggle_status( $id );
+        wp_send_json_success( [
+            'id'         => $id,
+            'new_status' => $new_status,
+            'message'    => 'Status updated to ' . ucfirst( $new_status ),
+        ] );
+    } catch ( \Exception $e ) {
+        wp_send_json_error( [ 'message' => $e->getMessage() ], 500 );
+    }
+}
+
+/**
+ * 6. Public Center Link Endpoint for Website Modal
+ */
+add_action( 'wp_ajax_ry_get_public_form_group',        'ry_ajax_get_public_form_group' );
+add_action( 'wp_ajax_nopriv_ry_get_public_form_group', 'ry_ajax_get_public_form_group' );
+function ry_ajax_get_public_form_group(): void {
+    $id = absint( $_POST['id'] ?? $_GET['id'] ?? 0 );
+    if ( ! $id ) {
+        wp_send_json_error( [ 'message' => 'Invalid Form Group ID.' ], 400 );
+    }
+
+    $group = RADM_Form_Groups_DB::get( $id );
+    if ( ! $group || $group['status'] !== 'active' ) {
+        wp_send_json_error( [ 'message' => 'This registration form is currently unavailable or inactive.' ], 404 );
+    }
+
+    if ( empty( $group['centers'] ) ) {
+        wp_send_json_error( [ 'message' => 'No active center forms configured for this program.' ], 404 );
+    }
+
+    wp_send_json_success( [
+        'id'          => $group['id'],
+        'name'        => $group['name'],
+        'description' => $group['description'],
+        'centers'     => $group['centers'],
+    ] );
+}
+
+/**
+ * 1. GET GALLERY ITEMS LIST (with filters, search, pagination, tabs)
+ */
+add_action( 'wp_ajax_radm_get_gallery_items', 'radm_ajax_get_gallery_items' );
+function radm_ajax_get_gallery_items(): void {
+    radm_ajax_auth();
+
+    $type      = sanitize_key( $_POST['type'] ?? 'all' );
+    $category  = sanitize_text_field( $_POST['category'] ?? '' );
+    $event_id  = absint( $_POST['event_id'] ?? 0 );
+    $status    = sanitize_key( $_POST['status'] ?? '' );
+    $search    = sanitize_text_field( $_POST['search'] ?? '' );
+    $sort      = sanitize_key( $_POST['sort'] ?? 'latest' );
+    $page      = max( 1, absint( $_POST['page'] ?? 1 ) );
+    $per_page  = max( 1, absint( $_POST['per_page'] ?? 8 ) );
+
+    $meta_query = [];
+    if ( in_array( $type, [ 'image', 'video' ], true ) ) {
+        $meta_query[] = [
+            'key'     => '_ry_gallery_type',
+            'value'   => $type,
+            'compare' => '=',
+        ];
+    }
+    if ( ! empty( $category ) ) {
+        $meta_query[] = [
+            'key'     => '_ry_gallery_category',
+            'value'   => $category,
+            'compare' => '=',
+        ];
+    }
+    if ( $event_id > 0 ) {
+        $meta_query[] = [
+            'key'     => '_ry_gallery_event_id',
+            'value'   => $event_id,
+            'compare' => '=',
+        ];
+    }
+
+    $post_status = [ 'publish', 'draft' ];
+    if ( $status === 'publish' ) {
+        $post_status = [ 'publish' ];
+    } elseif ( $status === 'draft' ) {
+        $post_status = [ 'draft' ];
+    }
+
+    $query_args = [
+        'post_type'      => 'ry_gallery',
+        'post_status'    => $post_status,
+        'posts_per_page' => -1, // Fetch all to filter & count accurately
+        's'              => $search,
+    ];
+
+    if ( ! empty( $meta_query ) ) {
+        $query_args['meta_query'] = $meta_query;
+    }
+
+    if ( $sort === 'oldest' ) {
+        $query_args['orderby'] = 'meta_value';
+        $query_args['meta_key'] = '_ry_gallery_date';
+        $query_args['order']   = 'ASC';
+    } elseif ( $sort === 'title_asc' ) {
+        $query_args['orderby'] = 'title';
+        $query_args['order']   = 'ASC';
+    } elseif ( $sort === 'title_desc' ) {
+        $query_args['orderby'] = 'title';
+        $query_args['order']   = 'DESC';
+    } else {
+        $query_args['orderby'] = 'meta_value';
+        $query_args['meta_key'] = '_ry_gallery_date';
+        $query_args['order']   = 'DESC';
+    }
+
+    $all_posts = get_posts( $query_args );
+
+    // Count totals across all types for tab numbers
+    $total_all   = 0;
+    $total_image = 0;
+    $total_video = 0;
+
+    $base_posts = get_posts( [
+        'post_type'      => 'ry_gallery',
+        'post_status'    => [ 'publish', 'draft' ],
+        'posts_per_page' => -1,
+    ] );
+    foreach ( $base_posts as $bp ) {
+        $t = get_post_meta( $bp->ID, '_ry_gallery_type', true ) ?: 'image';
+        $total_all++;
+        if ( $t === 'video' ) {
+            $total_video++;
+        } else {
+            $total_image++;
+        }
+    }
+
+    $total_filtered = count( $all_posts );
+    $offset         = ( $page - 1 ) * $per_page;
+    $paged_posts    = array_slice( $all_posts, $offset, $per_page );
+
+    $items = [];
+    foreach ( $paged_posts as $post ) {
+        $g_type     = get_post_meta( $post->ID, '_ry_gallery_type', true ) ?: 'image';
+        $image_url  = get_post_meta( $post->ID, '_ry_gallery_image_url', true ) ?: '';
+        $video_url  = get_post_meta( $post->ID, '_ry_gallery_video_url', true ) ?: '';
+        $duration   = get_post_meta( $post->ID, '_ry_gallery_video_duration', true ) ?: '';
+        $g_cat      = get_post_meta( $post->ID, '_ry_gallery_category', true ) ?: 'General';
+        $g_event_id = (int) get_post_meta( $post->ID, '_ry_gallery_event_id', true );
+        $g_date_raw = get_post_meta( $post->ID, '_ry_gallery_date', true ) ?: get_the_date( 'Y-m-d', $post->ID );
+        $g_date_fmt = $g_date_raw ? date( 'd M Y', strtotime( $g_date_raw ) ) : date( 'd M Y', strtotime( $post->post_date ) );
+
+        $event_name = '';
+        if ( $g_event_id > 0 ) {
+            $ev_post = get_post( $g_event_id );
+            if ( $ev_post ) {
+                $event_name = $ev_post->post_title;
+            }
         }
 
-        $current = (int) ( $groups[ $group_id ]['analytics'][ $centre_id ] ?? 0 );
-        $groups[ $group_id ]['analytics'][ $centre_id ] = $current + 1;
+        // Subtitle tag
+        $sub_tag = '';
+        if ( ! empty( $event_name ) ) {
+            $sub_tag = 'Event: ' . $event_name;
+        } elseif ( ! empty( $g_cat ) ) {
+            $sub_tag = 'Category: ' . $g_cat;
+        }
 
-        update_option( 'radm_form_groups', $groups );
-        wp_send_json_success( [ 'clicks' => $current + 1 ] );
+        // Auto fallback image
+        if ( empty( $image_url ) ) {
+            if ( has_post_thumbnail( $post->ID ) ) {
+                $image_url = get_the_post_thumbnail_url( $post->ID, 'large' );
+            } else {
+                $image_url = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80';
+            }
+        }
+
+        $items[] = [
+            'id'             => $post->ID,
+            'title'          => $post->post_title,
+            'description'    => $post->post_content,
+            'type'           => $g_type,
+            'image_url'      => $image_url,
+            'video_url'      => $video_url,
+            'video_duration' => $duration,
+            'category'       => $g_cat,
+            'event_id'       => $g_event_id,
+            'event_name'     => $event_name,
+            'sub_tag'        => $sub_tag,
+            'date_raw'       => $g_date_raw,
+            'date_fmt'       => $g_date_fmt,
+            'status'         => $post->post_status, // 'publish' or 'draft'
+            'is_published'   => $post->post_status === 'publish',
+        ];
     }
 
-    wp_send_json_error( [ 'message' => 'Group not found.' ], 444 );
+    wp_send_json_success( [
+        'items'          => $items,
+        'total'          => $total_filtered,
+        'page'           => $page,
+        'per_page'       => $per_page,
+        'total_pages'    => ceil( $total_filtered / $per_page ),
+        'counts'         => [
+            'all'   => $total_all,
+            'image' => $total_image,
+            'video' => $total_video,
+        ],
+    ] );
 }
+
+/**
+ * 2. SAVE (CREATE / UPDATE) GALLERY ITEM
+ */
+add_action( 'wp_ajax_radm_save_gallery_item', 'radm_ajax_save_gallery_item' );
+function radm_ajax_save_gallery_item(): void {
+    radm_ajax_auth();
+
+    $media_id   = absint( $_POST['media_id'] ?? 0 );
+    $title      = sanitize_text_field( $_POST['title'] ?? '' );
+    $media_type = sanitize_key( $_POST['media_type'] ?? 'image' );
+    $image_url  = esc_url_raw( $_POST['image_url'] ?? '' );
+    $video_url  = esc_url_raw( $_POST['video_url'] ?? '' );
+    $video_dur  = sanitize_text_field( $_POST['video_duration'] ?? '' );
+    $video_post = esc_url_raw( $_POST['video_poster'] ?? '' );
+    $category   = sanitize_text_field( $_POST['category'] ?? 'General' );
+    $event_id   = absint( $_POST['event_id'] ?? 0 );
+    $media_date = sanitize_text_field( $_POST['media_date'] ?? current_time( 'Y-m-d' ) );
+    $status     = sanitize_key( $_POST['status'] ?? 'publish' );
+    $desc       = sanitize_textarea_field( $_POST['description'] ?? '' );
+
+    if ( ! in_array( $status, [ 'publish', 'draft' ], true ) ) {
+        $status = 'publish';
+    }
+
+    if ( empty( $title ) ) {
+        wp_send_json_error( [ 'message' => 'Media title is required.' ], 400 );
+    }
+
+    $uploaded_attachment_id = 0;
+    // Handle Direct File Upload if present
+    if ( ! empty( $_FILES['image_file'] ) && ! empty( $_FILES['image_file']['name'] ) ) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+
+        $attachment_id = media_handle_upload( 'image_file', 0 );
+        if ( is_wp_error( $attachment_id ) ) {
+            wp_send_json_error( [ 'message' => 'Upload failed: ' . $attachment_id->get_error_message() ], 400 );
+        }
+        $image_url              = wp_get_attachment_url( $attachment_id );
+        $uploaded_attachment_id = $attachment_id;
+    }
+
+    // Auto-detect YouTube thumbnail if video thumbnail is blank
+    if ( $media_type === 'video' ) {
+        if ( ! empty( $video_post ) ) {
+            $image_url = $video_post;
+        } elseif ( empty( $image_url ) && ! empty( $video_url ) ) {
+            if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $video_url, $m ) ) {
+                $image_url = 'https://img.youtube.com/vi/' . $m[1] . '/hqdefault.jpg';
+            }
+        }
+    }
+
+    // Default fallback image if still empty
+    if ( empty( $image_url ) ) {
+        $image_url = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80';
+    }
+
+    $post_data = [
+        'post_title'   => $title,
+        'post_content' => $desc,
+        'post_type'    => 'ry_gallery',
+        'post_status'  => $status,
+    ];
+
+    if ( $media_id > 0 ) {
+        $post_data['ID'] = $media_id;
+        $updated_id = wp_update_post( $post_data, true );
+        if ( is_wp_error( $updated_id ) ) {
+            wp_send_json_error( [ 'message' => $updated_id->get_error_message() ], 500 );
+        }
+        $post_id = $media_id;
+    } else {
+        $post_data['post_author'] = get_current_user_id();
+        $post_id = wp_insert_post( $post_data, true );
+        if ( is_wp_error( $post_id ) ) {
+            wp_send_json_error( [ 'message' => $post_id->get_error_message() ], 500 );
+        }
+    }
+
+    // Update Post Meta
+    update_post_meta( $post_id, '_ry_gallery_type', $media_type );
+    update_post_meta( $post_id, '_ry_gallery_image_url', $image_url );
+    update_post_meta( $post_id, '_ry_gallery_video_url', $video_url );
+    update_post_meta( $post_id, '_ry_gallery_video_duration', $video_dur );
+    update_post_meta( $post_id, '_ry_gallery_category', $category );
+    update_post_meta( $post_id, '_ry_gallery_event_id', $event_id );
+    update_post_meta( $post_id, '_ry_gallery_date', $media_date );
+
+    if ( $uploaded_attachment_id > 0 ) {
+        set_post_thumbnail( $post_id, $uploaded_attachment_id );
+        wp_update_post( [
+            'ID'          => $uploaded_attachment_id,
+            'post_parent' => $post_id,
+        ] );
+    }
+
+    if ( ! empty( $category ) ) {
+        wp_set_object_terms( $post_id, $category, 'gallery_category', false );
+    }
+
+    wp_send_json_success( [
+        'id'        => $post_id,
+        'image_url' => $image_url,
+        'title'     => $title,
+        'message'   => $media_id > 0 ? 'Gallery item updated successfully.' : 'Photo uploaded to gallery successfully.',
+    ] );
+}
+
+/**
+ * 3. DELETE GALLERY ITEM
+ */
+add_action( 'wp_ajax_radm_delete_gallery_item', 'radm_ajax_delete_gallery_item' );
+function radm_ajax_delete_gallery_item(): void {
+    radm_ajax_auth();
+
+    $media_id = absint( $_POST['media_id'] ?? 0 );
+    if ( ! $media_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid media ID.' ], 400 );
+    }
+
+    $deleted = wp_delete_post( $media_id, true );
+    if ( ! $deleted ) {
+        wp_send_json_error( [ 'message' => 'Failed to delete media.' ], 500 );
+    }
+
+    wp_send_json_success( [ 'message' => 'Media item deleted.' ] );
+}
+
+/**
+ * 4. TOGGLE GALLERY ITEM STATUS (Publish <-> Draft)
+ */
+add_action( 'wp_ajax_radm_toggle_gallery_status', 'radm_ajax_toggle_gallery_status' );
+function radm_ajax_toggle_gallery_status(): void {
+    radm_ajax_auth();
+
+    $media_id = absint( $_POST['media_id'] ?? 0 );
+    if ( ! $media_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid media ID.' ], 400 );
+    }
+
+    $current_status = get_post_status( $media_id );
+    $new_status     = ( $current_status === 'publish' ) ? 'draft' : 'publish';
+
+    wp_update_post( [
+        'ID'          => $media_id,
+        'post_status' => $new_status,
+    ] );
+
+    wp_send_json_success( [
+        'id'         => $media_id,
+        'new_status' => $new_status,
+        'message'    => 'Status updated to ' . ucfirst( $new_status ),
+    ] );
+}
+
 
 
 

@@ -42,11 +42,14 @@ class Registration_Hooks {
             'id' => get_the_ID(),
         ], $atts );
 
-        if ( ! self::requires_registration( $atts['id'] ) ) {
-            return '';
+        $reg_form = get_post_meta( $atts['id'], '_ry_registration_form', true );
+        if ( $reg_form && function_exists( 'ry_shortcode_form_group' ) ) {
+            return ry_shortcode_form_group( [
+                'id'   => $reg_form,
+                'text' => __( 'Register Now', 'rashtrotthana-core' ),
+            ] );
         }
 
-        // Output nothing by default. The Registration plugin will override this shortcode.
         return apply_filters( 'ry_core_registration_button_html', '<!-- Registration Plugin Inactive -->', $atts['id'] );
     }
 }

@@ -32,6 +32,6 @@ class Gallery_Category {
             'rest_base'         => 'gallery_category',
         ];
 
-        register_taxonomy( 'gallery_category', [ 'attachment' ], $args );
+        register_taxonomy( 'gallery_category', [ 'ry_gallery', 'attachment' ], $args );
     }
 }

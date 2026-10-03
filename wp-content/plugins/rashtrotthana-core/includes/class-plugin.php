@@ -34,6 +34,7 @@ class Plugin {
         ( new Post_Types\Resource() )->register();
         ( new Post_Types\Testimonial() )->register();
         ( new Post_Types\Faq() )->register();
+        ( new Post_Types\Gallery() )->register();
     }
 
     private function init_taxonomies() {
@@ -56,6 +57,8 @@ class Plugin {
         ( new Api\Rest_Centers() )->init();
         ( new Api\Rest_Events() )->init();
         ( new Api\Rest_Resources() )->init();
+        ( new Api\Rest_Gallery() )->init();
+        ( new Api\Rest_Form_Groups() )->init();
         ( new Api\Rest_Search() )->init();
     }
 
@@ -72,6 +75,7 @@ class Plugin {
         ( new Post_Types\Resource() )->register_post_type();
         ( new Post_Types\Testimonial() )->register_post_type();
         ( new Post_Types\Faq() )->register_post_type();
+        ( new Post_Types\Gallery() )->register_post_type();
         
         ( new Taxonomies\Activity_Category() )->register_taxonomy();
         ( new Taxonomies\Resource_Category() )->register_taxonomy();

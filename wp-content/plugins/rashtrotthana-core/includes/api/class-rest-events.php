@@ -164,6 +164,7 @@ class Rest_Events {
             $reg_form = get_post_meta( $post->ID, '_ry_registration_form', true );
             if ( $reg_form ) {
                 $data['registration_form_id'] = (int) $reg_form;
+                $data['registration_direct_url'] = home_url( '/?ry_form_group=' . (int) $reg_form );
             }
             $data['capacity'] = get_post_meta( $post->ID, '_ry_maximum_participants', true );
             $data['registration_start'] = get_post_meta( $post->ID, '_ry_registration_start', true );
