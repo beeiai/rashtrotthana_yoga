@@ -261,4 +261,38 @@ $all_centers = radm_get_all_centers();
     </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════════
+     DELETE STAFF USER CONFIRMATION MODAL
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-delete-user-overlay" aria-hidden="true">
+    <div class="radm-modal" style="max-width: 440px;">
+        <div class="radm-modal-header" style="border-bottom: 1px solid #fee2e2;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0; color: #b91c1c; font-size: 17px;">Delete Staff User</h3>
+                    <p style="margin: 2px 0 0; font-size: 12px; color: var(--radm-text-muted);">This action cannot be undone.</p>
+                </div>
+            </div>
+            <button type="button" class="radm-modal-close" id="radm-del-user-close" aria-label="Close">×</button>
+        </div>
+        <div class="radm-modal-body" style="padding: 20px 24px;">
+            <p style="margin: 0 0 12px; font-size: 14px; color: var(--radm-text); line-height: 1.5;">
+                Are you sure you want to delete staff user <strong id="radm-del-user-name" style="color: #1e293b;">this user</strong>?
+            </p>
+            <p style="margin: 0; font-size: 12.5px; color: var(--radm-text-muted);">
+                Their access permissions and WordPress login account will be permanently removed.
+            </p>
+        </div>
+        <div class="radm-modal-footer" style="background: #f8fafc; border-top: 1px solid var(--radm-border); display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px;">
+            <button type="button" class="radm-btn radm-btn-outline" id="radm-del-user-cancel-btn">Cancel</button>
+            <button type="button" class="radm-btn radm-btn-danger" id="radm-del-user-confirm-btn" style="background: #dc2626; color: #fff; border-color: #dc2626;">
+                Delete User
+            </button>
+        </div>
+    </div>
+</div>
+
 <?php radm_portal_footer(); ?>

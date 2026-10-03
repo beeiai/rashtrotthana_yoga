@@ -2555,13 +2555,21 @@
                     centerHtml = '<span style="font-size:12px;color:var(--radm-text-muted);">All Centers</span>';
                 }
 
+                // Actions 3-dots Menu
+                var deleteItemHtml = '';
+                if ( !u.is_self ) {
+                    deleteItemHtml = '<button type="button" class="radm-card-menu-item radm-card-menu-item--delete" data-action="delete-user" data-id="' + u.id + '">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>'
+                        + ' Delete User</button>';
+                }
+
                 html += '<tr data-user-id="' + u.id + '">'
                     + '<td style="text-align:center;color:var(--radm-text-muted);font-weight:500;">' + ( idx + 1 ) + '</td>'
                     + '<td>'
                     + '<div style="display:flex;align-items:center;gap:10px;">'
                     + '<div style="width:34px;height:34px;border-radius:50%;background:#e8f5e9;color:#2E7D32;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">' + initial + '</div>'
                     + '<div>'
-                    + '<strong style="display:block;color:var(--radm-text);font-size:13.5px;">' + esc( u.name ) + '</strong>'
+                    + '<strong style="display:block;color:var(--radm-text);font-size:13.5px;">' + esc( u.name ) + ( u.is_self ? ' <span style="font-size:11px;font-weight:600;color:var(--radm-green-primary);background:#e8f5e9;padding:1px 6px;border-radius:10px;">You</span>' : '' ) + '</strong>'
                     + '<span style="font-size:12px;color:var(--radm-text-muted);">' + esc( u.email ) + '</span>'
                     + '</div>'
                     + '</div>'
@@ -2570,10 +2578,15 @@
                     + '<td>' + modsHtml + '</td>'
                     + '<td>' + centerHtml + '</td>'
                     + '<td style="text-align:right;">'
-                    + '<button type="button" class="radm-btn radm-btn-secondary radm-btn--sm" data-action="edit-user-access" data-id="' + u.id + '" style="font-size:12px;padding:5px 12px;">'
-                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" style="margin-right:4px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
-                    + 'Edit Access'
-                    + '</button>'
+                    + '<div class="radm-card-actions-wrap" style="display:inline-block;">'
+                    + '<button type="button" class="radm-card-more-btn" title="User Actions">•••</button>'
+                    + '<div class="radm-card-dropdown">'
+                    + '<button type="button" class="radm-card-menu-item" data-action="edit-user-access" data-id="' + u.id + '">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+                    + ' Edit Access</button>'
+                    + deleteItemHtml
+                    + '</div>'
+                    + '</div>'
                     + '</td>'
                     + '</tr>';
             } );
@@ -2772,12 +2785,110 @@
         if ( uaModalClose ) uaModalClose.addEventListener( 'click', closeUserAccessModal );
         if ( uaModalCancel ) uaModalCancel.addEventListener( 'click', closeUserAccessModal );
 
-        // Table Edit Access Click Delegation
+        // ── Delete Staff User Confirmation Modal ────────────────────────
+        var delUserOverlay    = document.getElementById( 'radm-delete-user-overlay' );
+        var delUserCloseBtn   = document.getElementById( 'radm-del-user-close' );
+        var delUserCancelBtn  = document.getElementById( 'radm-del-user-cancel-btn' );
+        var delUserConfirmBtn = document.getElementById( 'radm-del-user-confirm-btn' );
+        var delUserNameEl     = document.getElementById( 'radm-del-user-name' );
+        var pendingDelUserId  = null;
+
+        function openDeleteUserModal( userId ) {
+            var user = allUsersList.find( function ( u ) { return u.id === parseInt( userId, 10 ); } );
+            if ( !user || !delUserOverlay ) return;
+
+            pendingDelUserId = user.id;
+            if ( delUserNameEl ) delUserNameEl.textContent = user.name + ' (' + user.email + ')';
+
+            delUserOverlay.setAttribute( 'aria-hidden', 'false' );
+            delUserOverlay.classList.add( 'radm-modal-open' );
+        }
+
+        function closeDeleteUserModal() {
+            if ( !delUserOverlay ) return;
+            delUserOverlay.classList.remove( 'radm-modal-open' );
+            delUserOverlay.setAttribute( 'aria-hidden', 'true' );
+            pendingDelUserId = null;
+        }
+
+        if ( delUserCloseBtn ) delUserCloseBtn.addEventListener( 'click', closeDeleteUserModal );
+        if ( delUserCancelBtn ) delUserCancelBtn.addEventListener( 'click', closeDeleteUserModal );
+        if ( delUserOverlay ) {
+            delUserOverlay.addEventListener( 'click', function ( e ) {
+                if ( e.target === delUserOverlay ) closeDeleteUserModal();
+            } );
+        }
+
+        if ( delUserConfirmBtn ) {
+            delUserConfirmBtn.addEventListener( 'click', function () {
+                if ( !pendingDelUserId ) return;
+                var uid = pendingDelUserId;
+
+                setLoading( delUserConfirmBtn, true );
+                ajaxPost( 'radm_delete_staff_user', { user_id: uid }, function ( res ) {
+                    setLoading( delUserConfirmBtn, false );
+                    closeDeleteUserModal();
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Staff user deleted successfully.', 'success' );
+                        var tr = document.querySelector( 'tr[data-user-id="' + uid + '"]' );
+                        if ( tr ) {
+                            tr.style.transition = 'opacity 0.25s, transform 0.25s';
+                            tr.style.opacity = '0';
+                            tr.style.transform = 'scale(0.96)';
+                            setTimeout( function () {
+                                loadStaffUsers();
+                            }, 280 );
+                        } else {
+                            loadStaffUsers();
+                        }
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to delete user.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // ── 3-Dots Kebab & Actions Click Delegation ─────────────────────
+        function closeAllRolesCardDropdowns() {
+            document.querySelectorAll( '.radm-roles-table .radm-card-dropdown.is-open' ).forEach( function ( d ) { d.classList.remove( 'is-open' ); } );
+            document.querySelectorAll( '.radm-roles-table .radm-card-more-btn.is-active' ).forEach( function ( b ) { b.classList.remove( 'is-active' ); } );
+        }
+
         document.addEventListener( 'click', function ( e ) {
-            var btn = e.target.closest( '[data-action="edit-user-access"]' );
-            if ( btn ) {
-                var uid = btn.dataset.id;
+            var moreBtn = e.target.closest( '.radm-roles-table .radm-card-more-btn' );
+            if ( moreBtn ) {
+                e.stopPropagation();
+                var menu = moreBtn.nextElementSibling;
+                var isOpen = menu && menu.classList.contains( 'is-open' );
+                closeAllRolesCardDropdowns();
+                if ( menu && !isOpen ) {
+                    menu.classList.add( 'is-open' );
+                    moreBtn.classList.add( 'is-active' );
+                }
+                return;
+            }
+
+            if ( !e.target.closest( '.radm-roles-table .radm-card-dropdown' ) ) {
+                closeAllRolesCardDropdowns();
+            }
+
+            // Edit User Access inside dropdown
+            var editBtn = e.target.closest( '[data-action="edit-user-access"]' );
+            if ( editBtn ) {
+                closeAllRolesCardDropdowns();
+                var uid = editBtn.dataset.id;
                 if ( uid ) openUserAccessModal( uid );
+                return;
+            }
+
+            // Delete User inside dropdown
+            var delBtn = e.target.closest( '[data-action="delete-user"]' );
+            if ( delBtn ) {
+                closeAllRolesCardDropdowns();
+                var dUid = delBtn.dataset.id;
+                if ( dUid ) openDeleteUserModal( dUid );
+                return;
             }
         } );
 
@@ -2897,6 +3008,7 @@
             if ( typeof closeViewModal === 'function' ) closeViewModal();
             if ( typeof closeDeleteModal === 'function' ) closeDeleteModal();
             if ( typeof closeUserAccessModal === 'function' ) closeUserAccessModal();
+            if ( typeof closeDeleteUserModal === 'function' ) closeDeleteUserModal();
             if ( typeof closeCreateUserModal === 'function' ) closeCreateUserModal();
         }
     } );

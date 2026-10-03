@@ -1074,6 +1074,7 @@ function radm_ajax_get_staff_users(): void {
             'module_items'    => $mod_items,
             'restrict_center' => ! empty( $perms['restrict_center'] ),
             'centers'         => $perms['centers'] ?? [],
+            'is_self'         => ( (int) $u->ID === (int) get_current_user_id() ),
             'registered_fmt'  => date( 'M d, Y', strtotime( $u->user_registered ) ),
         ];
     }
@@ -1246,6 +1247,45 @@ function radm_ajax_create_staff_user(): void {
         'password' => $password,
     ] );
 }
+
+/**
+ * Delete staff user
+ */
+add_action( 'wp_ajax_radm_delete_staff_user', 'radm_ajax_delete_staff_user' );
+function radm_ajax_delete_staff_user(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $user_id = absint( $_POST['user_id'] ?? 0 );
+    if ( ! $user_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid user ID.' ], 400 );
+    }
+
+    if ( $user_id === get_current_user_id() ) {
+        wp_send_json_error( [ 'message' => 'You cannot delete your own account.' ], 400 );
+    }
+
+    $user = get_userdata( $user_id );
+    if ( ! $user ) {
+        wp_send_json_error( [ 'message' => 'User not found.' ], 404 );
+    }
+
+    // Require user deletion functions if not already loaded
+    require_once ABSPATH . 'wp-admin/includes/user.php';
+
+    $deleted = wp_delete_user( $user_id, get_current_user_id() );
+    if ( ! $deleted ) {
+        wp_send_json_error( [ 'message' => 'Failed to delete user.' ], 500 );
+    }
+
+    wp_send_json_success( [
+        'message' => "User '{$user->display_name}' has been deleted successfully.",
+        'user_id' => $user_id,
+    ] );
+}
+
 
 
 
