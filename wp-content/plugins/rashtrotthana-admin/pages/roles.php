@@ -188,11 +188,17 @@ $all_centers = radm_get_all_centers();
 
             </div><!-- /.radm-modal-body -->
 
-            <div class="radm-modal-footer">
-                <button type="button" class="radm-btn radm-btn-outline" id="radm-ua-modal-cancel-btn">Cancel</button>
-                <button type="submit" class="radm-btn radm-btn-primary" id="radm-ua-modal-save-btn">
-                    <span id="radm-ua-save-text">Save Access Permissions</span>
+            <div class="radm-modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="radm-btn" id="radm-ua-modal-delete-btn" style="background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626; font-size: 13px; padding: 7px 12px; cursor: pointer; border-radius: 6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="margin-right: 4px; vertical-align: -1px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                    Delete User
                 </button>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="radm-btn radm-btn-outline" id="radm-ua-modal-cancel-btn">Cancel</button>
+                    <button type="submit" class="radm-btn radm-btn-primary" id="radm-ua-modal-save-btn">
+                        <span id="radm-ua-save-text">Save Access Permissions</span>
+                    </button>
+                </div>
             </div>
         </form>
 

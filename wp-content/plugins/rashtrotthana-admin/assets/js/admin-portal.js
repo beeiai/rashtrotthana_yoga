@@ -2456,6 +2456,7 @@
         var uaOverlay       = document.getElementById( 'radm-user-access-overlay' );
         var uaModalClose    = document.getElementById( 'radm-ua-modal-close' );
         var uaModalCancel   = document.getElementById( 'radm-ua-modal-cancel-btn' );
+        var uaModalDeleteBtn= document.getElementById( 'radm-ua-modal-delete-btn' );
         var uaForm          = document.getElementById( 'radm-user-access-form' );
         var uaUserIdInput   = document.getElementById( 'radm-ua-user-id' );
         var uaTitle         = document.getElementById( 'radm-ua-modal-title' );
@@ -2556,12 +2557,10 @@
                 }
 
                 // Actions 3-dots Menu
-                var deleteItemHtml = '';
-                if ( !u.is_self ) {
-                    deleteItemHtml = '<button type="button" class="radm-card-menu-item radm-card-menu-item--delete" data-action="delete-user" data-id="' + u.id + '">'
-                        + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>'
-                        + ' Delete User</button>';
-                }
+                var deleteItemHtml = '<button type="button" class="radm-card-menu-item radm-card-menu-item--delete" data-action="delete-user" data-id="' + u.id + '">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>'
+                    + ' Delete User'
+                    + '</button>';
 
                 html += '<tr data-user-id="' + u.id + '">'
                     + '<td style="text-align:center;color:var(--radm-text-muted);font-weight:500;">' + ( idx + 1 ) + '</td>'
@@ -2755,6 +2754,11 @@
             if ( uaSubtitle ) uaSubtitle.textContent = user.email;
             if ( uaRoleSelect ) uaRoleSelect.value = user.role;
 
+            if ( uaModalDeleteBtn ) {
+                uaModalDeleteBtn.dataset.id = user.id;
+                uaModalDeleteBtn.style.display = user.is_self ? 'none' : 'inline-flex';
+            }
+
             selectedModules = Array.isArray( user.modules ) ? user.modules.slice() : [];
             renderTagsBox();
 
@@ -2784,6 +2788,13 @@
 
         if ( uaModalClose ) uaModalClose.addEventListener( 'click', closeUserAccessModal );
         if ( uaModalCancel ) uaModalCancel.addEventListener( 'click', closeUserAccessModal );
+        if ( uaModalDeleteBtn ) {
+            uaModalDeleteBtn.addEventListener( 'click', function () {
+                var uid = this.dataset.id;
+                closeUserAccessModal();
+                if ( uid ) openDeleteUserModal( uid );
+            } );
+        }
 
         // ── Delete Staff User Confirmation Modal ────────────────────────
         var delUserOverlay    = document.getElementById( 'radm-delete-user-overlay' );
@@ -2796,6 +2807,11 @@
         function openDeleteUserModal( userId ) {
             var user = allUsersList.find( function ( u ) { return u.id === parseInt( userId, 10 ); } );
             if ( !user || !delUserOverlay ) return;
+
+            if ( user.is_self ) {
+                radmToast( 'You cannot delete your own logged-in Super Admin account.', 'warning' );
+                return;
+            }
 
             pendingDelUserId = user.id;
             if ( delUserNameEl ) delUserNameEl.textContent = user.name + ' (' + user.email + ')';
