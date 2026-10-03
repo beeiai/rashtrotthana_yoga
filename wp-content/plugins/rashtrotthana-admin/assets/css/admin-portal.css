@@ -735,10 +735,20 @@
     box-shadow: 0 20px 60px rgba(0,0,0,.22), 0 4px 16px rgba(0,0,0,.10);
     width: 100%;
     max-width: 460px;
+    max-height: 90vh;
     margin: 16px;
     transform: translateY(18px) scale(.97);
     transition: transform .25s cubic-bezier(.34,1.56,.64,1);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.radm-modal form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
 }
 .radm-modal--sm { max-width: 380px; }
 .radm-modal-overlay.radm-modal-open .radm-modal {
@@ -751,6 +761,7 @@
     justify-content: space-between;
     padding: 18px 20px 14px;
     border-bottom: 1px solid var(--radm-border);
+    flex-shrink: 0;
 }
 .radm-modal-header h3 {
     margin: 0;
@@ -774,6 +785,9 @@
 
 .radm-modal-body {
     padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
 }
 /* Override select inside radm-input-icon so it picks up correct padding */
 .radm-input-icon select.radm-input {
@@ -789,6 +803,8 @@
     gap: 10px;
     padding: 14px 20px 18px;
     border-top: 1px solid var(--radm-border);
+    background: var(--radm-white);
+    flex-shrink: 0;
 }
 
 /* ── Danger Button ─────────────────────────────────────────────────────── */
@@ -1224,12 +1240,24 @@
     animation: radmModalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.radm-modal form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
 .radm-modal--sm {
     max-width: 420px !important;
 }
 
 .radm-modal--lg {
     max-width: 780px !important;
+}
+
+.radm-modal--gallery {
+    max-width: 540px !important;
 }
 
 @keyframes radmModalPop {
@@ -1250,6 +1278,7 @@
     justify-content: space-between;
     align-items: center;
     background: #ffffff;
+    flex-shrink: 0;
 }
 
 .radm-modal-header h3 {
@@ -1286,7 +1315,7 @@
     padding: 22px;
     overflow-y: auto;
     flex: 1;
-    max-height: calc(90vh - 130px);
+    min-height: 0;
 }
 
 .radm-modal-footer {
@@ -1294,8 +1323,10 @@
     border-top: 1px solid var(--radm-border);
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 10px;
     background: #f8fafc;
+    flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
