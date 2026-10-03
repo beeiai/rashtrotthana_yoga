@@ -41,19 +41,21 @@
 
 /* ── CSS Variables ─────────────────────────────────────────────────────────── */
 :root {
-    --radm-green:         #2E7D32;
-    --radm-green-light:   #43A047;
-    --radm-green-bg:      #E8F5E9;
-    --radm-green-active:  #E8F5E9;
+    --radm-green:         #EA580C; /* Traditional Saffron / Ochre Primary */
+    --radm-green-light:   #F97316; /* Light Saffron */
+    --radm-green-dark:    #C2410C; /* Deep Saffron */
+    --radm-green-bg:      #FFF7ED; /* Warm Ochre Cream Background */
+    --radm-green-active:  #FFEDD5; /* Active item background */
+    --radm-green-primary: #EA580C;
     --radm-sidebar-w:     240px;
     --radm-header-h:      64px;
-    --radm-bg:            #F4F6F8;
+    --radm-bg:            #F8FAFC;
     --radm-white:         #FFFFFF;
-    --radm-text:          #1A1A2E;
-    --radm-text-muted:    #6B7280;
-    --radm-border:        #E5E7EB;
-    --radm-shadow:        0 1px 4px rgba(0,0,0,.08);
-    --radm-shadow-md:     0 4px 16px rgba(0,0,0,.10);
+    --radm-text:          #0F172A;
+    --radm-text-muted:    #64748B;
+    --radm-border:        #E2E8F0;
+    --radm-shadow:        0 1px 4px rgba(0,0,0,.06);
+    --radm-shadow-md:     0 4px 16px rgba(0,0,0,.08);
     --radm-radius:        12px;
     --radm-radius-sm:     8px;
     --radm-font:          'Inter', -apple-system, sans-serif;

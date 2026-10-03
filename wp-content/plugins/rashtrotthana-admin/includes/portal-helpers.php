@@ -250,22 +250,11 @@ function radm_portal_header( string $page_title, string $page_subtitle ): void {
 
         <?php
         $org_logo_url = get_option( 'radm_org_logo', '' );
+        $theme_logo   = get_template_directory_uri() . '/assets/images/rashtrotthana-group-logo.png';
+        $display_logo = ! empty( $org_logo_url ) ? $org_logo_url : $theme_logo;
         ?>
-        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-dashboard' ) ); ?>" class="radm-logo">
-            <?php if ( ! empty( $org_logo_url ) ) : ?>
-                <img src="<?php echo esc_url( $org_logo_url ); ?>" alt="Rashtrotthana Yoga" style="max-height: 42px; max-width: 180px; object-fit: contain;" />
-            <?php else : ?>
-                <div class="radm-logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C12 2 7 6 7 11C7 13.76 9.24 16 12 16C14.76 16 17 13.76 17 11C17 6 12 2 12 2Z" fill="white" opacity=".95"/>
-                        <path d="M12 16C12 16 8 17 6 20H18C16 17 12 16 12 16Z" fill="white" opacity=".85"/>
-                        <circle cx="12" cy="10" r="2.2" fill="white"/>
-                    </svg>
-                </div>
-                <div class="radm-logo-text">
-                    <strong>RASHTROTTHANA<br>YOGA</strong>
-                </div>
-            <?php endif; ?>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-dashboard' ) ); ?>" class="radm-logo" style="padding: 16px 18px; display: flex; align-items: center; justify-content: center; min-height: 64px; background: #ffffff;">
+            <img src="<?php echo esc_url( $display_logo ); ?>" alt="Rashtrotthana Yoga" style="max-height: 44px; max-width: 100%; object-fit: contain;" />
         </a>
 
         <nav class="radm-nav">
