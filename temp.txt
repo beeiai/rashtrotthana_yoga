@@ -1,0 +1,1 @@
+"     $activity_details = [];\n        $prog_rows = get_field('programs', $p->ID);\n        if ($prog_rows) {\n            foreach ($prog_rows as $row) {\n                $programs[] = $row['program_name'];\n                $activity_details[] = array(\n   "

@@ -11,10 +11,8 @@ require_once __DIR__ . '/portal-helpers.php';
 // AJAX handlers (events CRUD, participants CRUD, stats, CSV export, form groups)
 require_once __DIR__ . '/ajax-handlers.php';
 
-// Shortcodes (form-group)
+// Shortcodes (form-group & ongoing-events)
 require_once RADM_PLUGIN_DIR . 'shortcodes/form-group.php';
-
-// Shortcodes (ongoing-events)
 require_once RADM_PLUGIN_DIR . 'shortcodes/ongoing-events.php';
 
 // ── Roles Initialization ───────────────────────────────────────────────────────
@@ -27,7 +25,7 @@ function radm_create_roles(): void {
             'edit_pages'                => true,
             'edit_others_posts'         => true,
             'edit_others_pages'         => true,
-            'manage_options'   => true, // Custom cap for registrations
+            'manage_ry_registrations'   => true, // Custom cap for registrations
             'upload_files'              => true,
         ] );
     }
@@ -39,25 +37,25 @@ function radm_create_roles(): void {
             'upload_files'              => true,
         ] );
     }
-    
-        // Manage Centers, Activities, News, Events from within the Portal menu
-    add_submenu_page( 'radm-dashboard', 'Manage Centers', 'Centers', 'manage_options', 'edit.php?post_type=rs_center' );
-    add_submenu_page( 'radm-dashboard', 'Manage Activities', 'Activities', 'manage_options', 'edit.php?post_type=rs_activity' );
-    add_submenu_page( 'radm-dashboard', 'Manage Events', 'Events (Advanced)', 'manage_options', 'edit.php?post_type=event' );
-    add_submenu_page( 'radm-dashboard', 'Manage News', 'News', 'manage_options', 'edit.php' );
-    add_submenu_page( 'radm-dashboard', 'Manage Gallery', 'Gallery', 'manage_options', 'edit.php?post_type=rs_gallery_album' );
-    add_submenu_page( 'radm-dashboard', 'Manage Inquiries', 'Inquiries', 'manage_options', 'edit.php?post_type=rs_inquiry' );
-    add_submenu_page( 'radm-dashboard', 'System Settings', 'System Settings', 'manage_options', 'options-general.php' );
+
+    // Center Admin Role (Center-specific registrations & forms)
+    if ( ! get_role( 'radm_center_admin' ) ) {
+        add_role( 'radm_center_admin', 'Center Admin', [
+            'read'                      => true,
+            'manage_ry_registrations'   => true,
+            'upload_files'              => true,
+        ] );
+    }
 }
 add_action( 'admin_init', 'radm_create_roles' );
 
 // ── Menu Registration ────────────────────────────────────────────────────────
 function radm_register_menu(): void {
-    // Base capability for the portal is manage_ry_registrations (Admins & Super Admins)
+    // Base capability for the portal shell is read
     add_menu_page(
         'Rashtrotthana Portal',
         'Rashtrotthana',
-        'manage_options',
+        'read',
         'radm-dashboard',
         'radm_page_dashboard',
         'none',
@@ -65,43 +63,33 @@ function radm_register_menu(): void {
     );
 
     $pages = [
-        [ 'radm-dashboard',     'Dashboard',               'manage_options', 'radm_page_dashboard'     ],
-        [ 'radm-registrations', 'Registrations',           'manage_options', 'radm_page_registrations' ],
-        [ 'radm-form-groups',   'Form Groups',             'manage_options', 'radm_page_form_groups'   ],
-        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'manage_options', 'radm_page_whatsapp'      ],
-        [ 'radm-roles',         'Roles & Responsibilities','manage_options',          'radm_page_roles'         ],
-        [ 'radm-settings',      'Settings',                'manage_options',          'radm_page_settings'      ],
+        [ 'radm-dashboard',     'Dashboard',               'read',            'radm_page_dashboard'     ],
+        [ 'radm-registrations', 'Registrations',           'read',            'radm_page_registrations' ],
+        [ 'radm-gallery',       'Gallery',                 'read',            'radm_page_gallery'       ],
+        [ 'radm-form-groups',   'Form Groups',             'read',            'radm_page_form_groups'   ],
+        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'read',            'radm_page_whatsapp'      ],
+        [ 'radm-roles',         'Roles & Responsibilities','manage_options',  'radm_page_roles'         ],
+        [ 'radm-settings',      'Settings',                'manage_options',  'radm_page_settings'      ],
     ];
 
     foreach ( $pages as [ $slug, $title, $cap, $callback ] ) {
         add_submenu_page( 'radm-dashboard', $title, $title, $cap, $slug, $callback );
     }
-    
-        // Manage Centers, Activities, News, Events from within the Portal menu
-    add_submenu_page( 'radm-dashboard', 'Manage Centers', 'Centers', 'manage_options', 'edit.php?post_type=rs_center' );
-    add_submenu_page( 'radm-dashboard', 'Manage Activities', 'Activities', 'manage_options', 'edit.php?post_type=rs_activity' );
-    add_submenu_page( 'radm-dashboard', 'Manage Events', 'Events (Advanced)', 'manage_options', 'edit.php?post_type=event' );
-    add_submenu_page( 'radm-dashboard', 'Manage News', 'News', 'manage_options', 'edit.php' );
-    add_submenu_page( 'radm-dashboard', 'Manage Gallery', 'Gallery', 'manage_options', 'edit.php?post_type=rs_gallery_album' );
-    add_submenu_page( 'radm-dashboard', 'Manage Inquiries', 'Inquiries', 'manage_options', 'edit.php?post_type=rs_inquiry' );
-    add_submenu_page( 'radm-dashboard', 'System Settings', 'System Settings', 'manage_options', 'options-general.php' );
 }
 add_action( 'admin_menu', 'radm_register_menu' );
 
-
 // ── Asset Enqueueing ──────────────────────────────────────────────────────────
 function radm_enqueue_assets( string $hook ): void {
-    $our_hooks = [
-        'toplevel_page_radm-dashboard',
-        'rashtrotthana_page_radm-registrations',
-        'rashtrotthana_page_radm-form-groups',
-        'rashtrotthana_page_radm-whatsapp',
-        'rashtrotthana_page_radm-roles',
-        'rashtrotthana_page_radm-settings',
-    ];
+    $page = sanitize_key( $_GET['page'] ?? '' );
+    $is_our_page = ( strpos( $hook, 'radm-' ) !== false || strpos( $hook, 'rashtrotthana' ) !== false || strpos( $page, 'radm-' ) === 0 );
 
-    if ( ! in_array( $hook, $our_hooks, true ) ) {
+    if ( ! $is_our_page ) {
         return;
+    }
+
+    // Support WordPress Media Uploader Modal
+    if ( ! did_action( 'wp_enqueue_media' ) ) {
+        wp_enqueue_media();
     }
 
     wp_enqueue_style(
@@ -119,7 +107,7 @@ function radm_enqueue_assets( string $hook ): void {
     wp_enqueue_script(
         'radm-portal',
         RADM_PLUGIN_URL . 'assets/js/admin-portal.js',
-        [],
+        [ 'jquery' ],
         RADM_VERSION,
         true
     );
@@ -145,6 +133,7 @@ add_filter( 'admin_body_class', 'radm_body_class' );
 // ── Page Callbacks ────────────────────────────────────────────────────────────
 function radm_page_dashboard():     void { require RADM_PLUGIN_DIR . 'pages/dashboard.php';     }
 function radm_page_registrations(): void { require RADM_PLUGIN_DIR . 'pages/registrations.php'; }
+function radm_page_gallery():       void { require RADM_PLUGIN_DIR . 'pages/gallery.php';       }
 function radm_page_form_groups():   void { require RADM_PLUGIN_DIR . 'pages/form-groups.php';   }
 function radm_page_whatsapp():      void { require RADM_PLUGIN_DIR . 'pages/whatsapp.php';      }
 function radm_page_roles():         void { require RADM_PLUGIN_DIR . 'pages/roles.php';         }

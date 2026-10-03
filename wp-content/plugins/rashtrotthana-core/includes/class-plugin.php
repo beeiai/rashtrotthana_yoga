@@ -57,6 +57,8 @@ class Plugin {
         ( new Api\Rest_Centers() )->init();
         ( new Api\Rest_Events() )->init();
         ( new Api\Rest_Resources() )->init();
+        ( new Api\Rest_Gallery() )->init();
+        ( new Api\Rest_Form_Groups() )->init();
         ( new Api\Rest_Search() )->init();
     }
 
