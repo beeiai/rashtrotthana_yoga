@@ -79,36 +79,6 @@ $all_centers = radm_get_all_centers();
     </div>
 </div>
 
-<!-- ── Role Capabilities Reference Box ── -->
-<div class="radm-card" style="margin-top: 24px; background: #f8fafc; border: 1px solid var(--radm-border); border-radius: 12px; padding: 20px 24px;">
-    <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px; color: var(--radm-text); display: flex; align-items: center; gap: 8px;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="color: var(--radm-green-primary);">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-        </svg>
-        Role &amp; Module Access System Guide
-    </h3>
-    <p style="font-size: 13px; color: var(--radm-text-muted); margin: 0 0 12px; line-height: 1.5;">
-        You can customize what each staff user sees in their sidebar navigation. Staff will only have access to their assigned modules and centers.
-    </p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 14px;">
-        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">👑 Super Admin</strong>
-            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Unrestricted access to all 8 modules, system settings, and user roles.</p>
-        </div>
-        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">📅 Admin (Content &amp; Reg)</strong>
-            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Default access to Events, Registrations, Gallery, Form Groups &amp; WhatsApp.</p>
-        </div>
-        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">🖼️ Gallery Manager</strong>
-            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Media only access: upload, categorize &amp; manage gallery photos/videos.</p>
-        </div>
-        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">📍 Center Admin</strong>
-            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Scoped to specific assigned centers (Registrations &amp; Form Groups).</p>
-        </div>
-    </div>
-</div>
 
 <!-- ══════════════════════════════════════════════════════════════════
      EDIT USER MODULE ACCESS MODAL (TAG MULTI-SELECT + RESTRICT CENTER)
