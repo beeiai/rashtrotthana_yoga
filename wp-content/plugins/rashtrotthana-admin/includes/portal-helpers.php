@@ -64,39 +64,76 @@ function radm_get_all_modules(): array {
 }
 
 /**
- * Returns all centers for center restriction assignment
+ * Returns managed centers list (Settings -> Centers Management)
+ */
+function radm_get_centers_list(): array {
+    $saved = get_option( 'radm_centers_list', null );
+    if ( is_array( $saved ) && ! empty( $saved ) ) {
+        return $saved;
+    }
+
+    // Default Centers based on standard Rashtrotthana centers
+    $defaults = [
+        [
+            'id'       => 'center-1',
+            'name'     => 'Jayanagar Center',
+            'location' => 'Bangalore',
+            'status'   => 'active',
+        ],
+        [
+            'id'       => 'center-2',
+            'name'     => 'Basavanagudi Center',
+            'location' => 'Bangalore',
+            'status'   => 'active',
+        ],
+        [
+            'id'       => 'center-3',
+            'name'     => 'Malleshwaram Center',
+            'location' => 'Bangalore',
+            'status'   => 'active',
+        ],
+        [
+            'id'       => 'center-4',
+            'name'     => 'Indiranagar Center',
+            'location' => 'Bangalore',
+            'status'   => 'active',
+        ],
+        [
+            'id'       => 'center-5',
+            'name'     => 'Koramangala Center',
+            'location' => 'Bangalore',
+            'status'   => 'inactive',
+        ],
+    ];
+
+    update_option( 'radm_centers_list', $defaults );
+    return $defaults;
+}
+
+/**
+ * Returns all active centers for dropdowns & restrictions
  */
 function radm_get_all_centers(): array {
+    $list = radm_get_centers_list();
     $centers = [];
-    $posts = get_posts( [
-        'post_type'      => 'center',
-        'posts_per_page' => -1,
-        'post_status'    => 'publish',
-        'orderby'        => 'title',
-        'order'          => 'ASC',
-    ] );
-    if ( ! empty( $posts ) ) {
-        foreach ( $posts as $p ) {
+    foreach ( $list as $c ) {
+        if ( ( $c['status'] ?? 'active' ) === 'active' ) {
             $centers[] = [
-                'id'   => (string) $p->ID,
-                'name' => $p->post_title,
+                'id'       => (string) ( $c['id'] ?? $c['name'] ),
+                'name'     => $c['name'],
+                'location' => $c['location'] ?? 'Bangalore',
+                'status'   => $c['status'] ?? 'active',
             ];
-        }
-    } else {
-        // Check form group center names
-        global $wpdb;
-        $table = $wpdb->prefix . 'ry_form_group_centers';
-        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) === $table ) {
-            $rows = $wpdb->get_results( "SELECT DISTINCT center_name FROM {$table} WHERE center_name != '' ORDER BY center_name ASC", ARRAY_A );
-            foreach ( $rows as $idx => $r ) {
-                $centers[] = [ 'id' => $r['center_name'], 'name' => $r['center_name'] ];
-            }
         }
     }
     if ( empty( $centers ) ) {
-        $defaults = [ 'Jayanagar', 'BSK (Banashankari)', 'Indiranagar', 'Sadashivanagar', 'Malleshwaram', 'Rajajinagar' ];
-        foreach ( $defaults as $name ) {
-            $centers[] = [ 'id' => $name, 'name' => $name ];
+        foreach ( $list as $c ) {
+            $centers[] = [
+                'id'       => (string) ( $c['id'] ?? $c['name'] ),
+                'name'     => $c['name'],
+                'location' => $c['location'] ?? 'Bangalore',
+                'status'   => $c['status'] ?? 'active',
+            ];
         }
     }
     return $centers;

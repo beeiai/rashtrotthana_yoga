@@ -1286,6 +1286,155 @@ function radm_ajax_delete_staff_user(): void {
     ] );
 }
 
+/**
+ * Save Organization Settings (Name, Logo, Contact Email)
+ */
+add_action( 'wp_ajax_radm_save_org_settings', 'radm_ajax_save_org_settings' );
+function radm_ajax_save_org_settings(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Unauthorized.' ], 403 );
+    }
+
+    $org_name      = sanitize_text_field( $_POST['org_name'] ?? '' );
+    $org_logo      = esc_url_raw( $_POST['org_logo'] ?? '' );
+    $contact_email = sanitize_email( $_POST['contact_email'] ?? '' );
+
+    if ( empty( $org_name ) ) {
+        wp_send_json_error( [ 'message' => 'Organization name is required.' ], 400 );
+    }
+    if ( empty( $contact_email ) || ! is_email( $contact_email ) ) {
+        wp_send_json_error( [ 'message' => 'A valid contact email is required.' ], 400 );
+    }
+
+    update_option( 'blogname', $org_name );
+    update_option( 'radm_org_name', $org_name );
+    if ( ! empty( $org_logo ) ) {
+        update_option( 'radm_org_logo', $org_logo );
+    }
+    update_option( 'admin_email', $contact_email );
+    update_option( 'radm_contact_email', $contact_email );
+
+    wp_send_json_success( [
+        'message'       => 'Organization settings saved successfully!',
+        'org_name'      => $org_name,
+        'org_logo'      => $org_logo,
+        'contact_email' => $contact_email,
+    ] );
+}
+
+/**
+ * Get all Centers
+ */
+add_action( 'wp_ajax_radm_get_centers', 'radm_ajax_get_centers' );
+function radm_ajax_get_centers(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Unauthorized.' ], 403 );
+    }
+
+    $centers = radm_get_centers_list();
+    wp_send_json_success( [
+        'centers' => $centers,
+    ] );
+}
+
+/**
+ * Save or Create Center
+ */
+add_action( 'wp_ajax_radm_save_center', 'radm_ajax_save_center' );
+function radm_ajax_save_center(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Unauthorized.' ], 403 );
+    }
+
+    $center_id = sanitize_key( $_POST['center_id'] ?? '' );
+    $name      = sanitize_text_field( $_POST['name'] ?? '' );
+    $location  = sanitize_text_field( $_POST['location'] ?? 'Bangalore' );
+    $status    = sanitize_key( $_POST['status'] ?? 'active' );
+
+    if ( empty( $name ) ) {
+        wp_send_json_error( [ 'message' => 'Center name is required.' ], 400 );
+    }
+
+    $centers = radm_get_centers_list();
+    $is_edit = false;
+
+    if ( ! empty( $center_id ) ) {
+        foreach ( $centers as &$c ) {
+            if ( $c['id'] === $center_id ) {
+                $c['name']     = $name;
+                $c['location'] = $location;
+                $c['status']   = in_array( $status, [ 'active', 'inactive' ], true ) ? $status : 'active';
+                $is_edit = true;
+                break;
+            }
+        }
+        unset( $c );
+    }
+
+    if ( ! $is_edit ) {
+        $center_id = 'center-' . uniqid();
+        $centers[] = [
+            'id'       => $center_id,
+            'name'     => $name,
+            'location' => $location ?: 'Bangalore',
+            'status'   => in_array( $status, [ 'active', 'inactive' ], true ) ? $status : 'active',
+        ];
+    }
+
+    update_option( 'radm_centers_list', $centers );
+
+    wp_send_json_success( [
+        'message' => $is_edit ? 'Center updated successfully!' : 'New center added successfully!',
+        'center'  => [
+            'id'       => $center_id,
+            'name'     => $name,
+            'location' => $location,
+            'status'   => $status,
+        ],
+        'centers' => $centers,
+    ] );
+}
+
+/**
+ * Delete Center
+ */
+add_action( 'wp_ajax_radm_delete_center', 'radm_ajax_delete_center' );
+function radm_ajax_delete_center(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Unauthorized.' ], 403 );
+    }
+
+    $center_id = sanitize_key( $_POST['center_id'] ?? '' );
+    if ( empty( $center_id ) ) {
+        wp_send_json_error( [ 'message' => 'Invalid center ID.' ], 400 );
+    }
+
+    $centers = radm_get_centers_list();
+    $new_centers = [];
+    $deleted_name = '';
+
+    foreach ( $centers as $c ) {
+        if ( $c['id'] === $center_id ) {
+            $deleted_name = $c['name'];
+        } else {
+            $new_centers[] = $c;
+        }
+    }
+
+    update_option( 'radm_centers_list', $new_centers );
+
+    wp_send_json_success( [
+        'message'   => "Center '{$deleted_name}' deleted successfully.",
+        'center_id' => $center_id,
+        'centers'   => $new_centers,
+    ] );
+}
+
+
 
 
 

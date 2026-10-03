@@ -3012,6 +3012,320 @@
 
     } // end radm-roles
 
+    /* ═══════════════════════════════════════════════════════════════════
+       SETTINGS PAGE (ORGANIZATION SETTINGS & CENTERS MANAGEMENT)
+       ═══════════════════════════════════════════════════════════════════ */
+    if ( curPage === 'radm-settings' || document.getElementById( 'radm-centers-tbody' ) ) {
+
+        // Organization Settings Form
+        var orgForm        = document.getElementById( 'radm-org-settings-form' );
+        var orgNameInput   = document.getElementById( 'radm-org-name' );
+        var orgLogoInput   = document.getElementById( 'radm-org-logo-url' );
+        var orgLogoImg     = document.getElementById( 'radm-logo-img-preview' );
+        var changeLogoBtn  = document.getElementById( 'radm-change-logo-btn' );
+        var contactEmailIn = document.getElementById( 'radm-contact-email' );
+        var saveOrgBtn     = document.getElementById( 'radm-save-org-btn' );
+        var saveOrgText    = document.getElementById( 'radm-save-org-text' );
+
+        // WP Media Uploader for Logo
+        if ( changeLogoBtn ) {
+            changeLogoBtn.addEventListener( 'click', function ( e ) {
+                e.preventDefault();
+                if ( typeof wp !== 'undefined' && wp.media ) {
+                    var mediaFrame = wp.media( {
+                        title: 'Select or Upload Organization Logo',
+                        button: { text: 'Use this logo' },
+                        multiple: false,
+                        library: { type: 'image' }
+                    } );
+
+                    mediaFrame.on( 'select', function () {
+                        var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
+                        if ( attachment && attachment.url ) {
+                            if ( orgLogoInput ) orgLogoInput.value = attachment.url;
+                            if ( orgLogoImg ) orgLogoImg.src = attachment.url;
+                            radmToast( 'Logo selected. Click "Save Changes" to apply.', 'success' );
+                        }
+                    } );
+
+                    mediaFrame.open();
+                } else {
+                    var manualUrl = prompt( 'Enter Logo Image URL:', orgLogoInput ? orgLogoInput.value : '' );
+                    if ( manualUrl ) {
+                        if ( orgLogoInput ) orgLogoInput.value = manualUrl;
+                        if ( orgLogoImg ) orgLogoImg.src = manualUrl;
+                    }
+                }
+            } );
+        }
+
+        // Save Org Settings Submission
+        if ( orgForm ) {
+            orgForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+
+                var payload = {
+                    org_name:      orgNameInput ? orgNameInput.value.trim() : '',
+                    org_logo:      orgLogoInput ? orgLogoInput.value.trim() : '',
+                    contact_email: contactEmailIn ? contactEmailIn.value.trim() : '',
+                };
+
+                if ( saveOrgBtn ) {
+                    saveOrgBtn.disabled = true;
+                    if ( saveOrgText ) saveOrgText.textContent = 'Saving...';
+                }
+
+                ajaxPost( 'radm_save_org_settings', payload, function ( res ) {
+                    if ( saveOrgBtn ) {
+                        saveOrgBtn.disabled = false;
+                        if ( saveOrgText ) saveOrgText.textContent = 'Save Changes';
+                    }
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Organization settings saved successfully!', 'success' );
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to save settings.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // Centers Management Elements
+        var centersTbody   = document.getElementById( 'radm-centers-tbody' );
+        var addCenterBtn   = document.getElementById( 'radm-add-center-btn' );
+        
+        // Add/Edit Center Modal Elements
+        var cModalOverlay  = document.getElementById( 'radm-center-modal-overlay' );
+        var cModalTitle    = document.getElementById( 'radm-center-modal-title' );
+        var cModalClose    = document.getElementById( 'radm-center-modal-close' );
+        var cModalCancel   = document.getElementById( 'radm-center-modal-cancel' );
+        var cForm          = document.getElementById( 'radm-center-form' );
+        var cIdInput       = document.getElementById( 'radm-center-id' );
+        var cNameInput     = document.getElementById( 'radm-center-name' );
+        var cLocInput      = document.getElementById( 'radm-center-location' );
+        var cSubmitBtn     = document.getElementById( 'radm-center-modal-submit' );
+        var cSubmitText    = document.getElementById( 'radm-center-submit-text' );
+
+        // Delete Center Modal Elements
+        var cDelOverlay    = document.getElementById( 'radm-delete-center-overlay' );
+        var cDelCloseBtn   = document.getElementById( 'radm-del-center-close' );
+        var cDelCancelBtn  = document.getElementById( 'radm-del-center-cancel-btn' );
+        var cDelConfirmBtn = document.getElementById( 'radm-del-center-confirm-btn' );
+        var cDelNameEl     = document.getElementById( 'radm-del-center-name' );
+        var pendingCenterId= null;
+
+        var allCentersData = [];
+
+        function loadCenters() {
+            if ( !centersTbody ) return;
+            centersTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--radm-text-muted);"><div class="radm-spinner" style="margin:0 auto 10px;"></div>Loading centers...</td></tr>';
+
+            ajaxPost( 'radm_get_centers', {}, function ( res ) {
+                if ( !res.success ) {
+                    centersTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:#ef4444;">Failed to load centers.</td></tr>';
+                    return;
+                }
+
+                allCentersData = res.data.centers || [];
+                renderCentersTable();
+            } );
+        }
+
+        function renderCentersTable() {
+            if ( !centersTbody ) return;
+
+            if ( !allCentersData.length ) {
+                centersTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--radm-text-muted);">No centers configured yet. Click "+ Add New Center" above.</td></tr>';
+                return;
+            }
+
+            var html = '';
+            allCentersData.forEach( function ( c, idx ) {
+                var isActive = ( c.status === 'active' );
+                var badgeHtml = isActive 
+                    ? '<span class="radm-badge radm-badge--open">Active</span>'
+                    : '<span class="radm-badge radm-badge--draft" style="background:#fee2e2;color:#991b1b;border-color:#fecaca;">Inactive</span>';
+
+                html += '<tr data-center-id="' + esc( c.id ) + '">'
+                    + '<td style="text-align:center;color:var(--radm-text-muted);font-weight:600;">' + ( idx + 1 ) + '</td>'
+                    + '<td><strong style="color:var(--radm-text);font-size:13.5px;">' + esc( c.name ) + '</strong></td>'
+                    + '<td style="color:#475569;font-size:13px;">' + esc( c.location || 'Bangalore' ) + '</td>'
+                    + '<td>' + badgeHtml + '</td>'
+                    + '<td style="text-align:right;">'
+                    + '<button type="button" class="radm-action-square-btn" data-action="edit-center" data-id="' + esc( c.id ) + '" title="Edit Center">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+                    + '</button>'
+                    + '<button type="button" class="radm-action-square-btn radm-action-square-btn--delete" data-action="delete-center" data-id="' + esc( c.id ) + '" title="Delete Center">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>'
+                    + '</button>'
+                    + '</td>'
+                    + '</tr>';
+            } );
+
+            centersTbody.innerHTML = html;
+        }
+
+        // Open Add Center Modal
+        function openAddCenterModal() {
+            if ( !cModalOverlay ) return;
+            if ( cForm ) cForm.reset();
+            if ( cIdInput ) cIdInput.value = '';
+            if ( cLocInput ) cLocInput.value = 'Bangalore';
+            if ( cModalTitle ) cModalTitle.textContent = 'Add New Center';
+            if ( cSubmitText ) cSubmitText.textContent = 'Add Center';
+
+            var activeRadio = document.querySelector( 'input[name="radm_center_status"][value="active"]' );
+            if ( activeRadio ) activeRadio.checked = true;
+
+            cModalOverlay.setAttribute( 'aria-hidden', 'false' );
+            cModalOverlay.classList.add( 'radm-modal-open' );
+            if ( cNameInput ) cNameInput.focus();
+        }
+
+        // Open Edit Center Modal
+        function openEditCenterModal( centerId ) {
+            var center = allCentersData.find( function ( c ) { return c.id === centerId; } );
+            if ( !center || !cModalOverlay ) return;
+
+            if ( cIdInput ) cIdInput.value = center.id;
+            if ( cNameInput ) cNameInput.value = center.name;
+            if ( cLocInput ) cLocInput.value = center.location || 'Bangalore';
+            if ( cModalTitle ) cModalTitle.textContent = 'Edit Center: ' + center.name;
+            if ( cSubmitText ) cSubmitText.textContent = 'Save Center';
+
+            var statusVal = ( center.status === 'inactive' ) ? 'inactive' : 'active';
+            var statusRadio = document.querySelector( 'input[name="radm_center_status"][value="' + statusVal + '"]' );
+            if ( statusRadio ) statusRadio.checked = true;
+
+            cModalOverlay.setAttribute( 'aria-hidden', 'false' );
+            cModalOverlay.classList.add( 'radm-modal-open' );
+            if ( cNameInput ) cNameInput.focus();
+        }
+
+        function closeCenterModal() {
+            if ( !cModalOverlay ) return;
+            cModalOverlay.classList.remove( 'radm-modal-open' );
+            cModalOverlay.setAttribute( 'aria-hidden', 'true' );
+        }
+
+        if ( addCenterBtn ) addCenterBtn.addEventListener( 'click', openAddCenterModal );
+        if ( cModalClose )  cModalClose.addEventListener( 'click', closeCenterModal );
+        if ( cModalCancel ) cModalCancel.addEventListener( 'click', closeCenterModal );
+
+        // Center Form Submit
+        if ( cForm ) {
+            cForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+
+                var statusEl = document.querySelector( 'input[name="radm_center_status"]:checked' );
+                var payload = {
+                    center_id: cIdInput ? cIdInput.value : '',
+                    name:      cNameInput ? cNameInput.value.trim() : '',
+                    location:  cLocInput ? cLocInput.value.trim() : 'Bangalore',
+                    status:    statusEl ? statusEl.value : 'active',
+                };
+
+                if ( cSubmitBtn ) {
+                    cSubmitBtn.disabled = true;
+                    if ( cSubmitText ) cSubmitText.textContent = 'Saving...';
+                }
+
+                ajaxPost( 'radm_save_center', payload, function ( res ) {
+                    if ( cSubmitBtn ) {
+                        cSubmitBtn.disabled = false;
+                        if ( cSubmitText ) cSubmitText.textContent = 'Save Center';
+                    }
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Center saved successfully!', 'success' );
+                        closeCenterModal();
+                        if ( res.data.centers ) {
+                            allCentersData = res.data.centers;
+                            renderCentersTable();
+                        } else {
+                            loadCenters();
+                        }
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to save center.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // Delete Center Modal Logic
+        function openDeleteCenterModal( centerId ) {
+            var center = allCentersData.find( function ( c ) { return c.id === centerId; } );
+            if ( !center || !cDelOverlay ) return;
+
+            pendingCenterId = center.id;
+            if ( cDelNameEl ) cDelNameEl.textContent = center.name;
+
+            cDelOverlay.setAttribute( 'aria-hidden', 'false' );
+            cDelOverlay.classList.add( 'radm-modal-open' );
+        }
+
+        function closeDeleteCenterModal() {
+            if ( !cDelOverlay ) return;
+            cDelOverlay.classList.remove( 'radm-modal-open' );
+            cDelOverlay.setAttribute( 'aria-hidden', 'true' );
+            pendingCenterId = null;
+        }
+
+        if ( cDelCloseBtn )  cDelCloseBtn.addEventListener( 'click', closeDeleteCenterModal );
+        if ( cDelCancelBtn ) cDelCancelBtn.addEventListener( 'click', closeDeleteCenterModal );
+        if ( cDelOverlay ) {
+            cDelOverlay.addEventListener( 'click', function ( e ) {
+                if ( e.target === cDelOverlay ) closeDeleteCenterModal();
+            } );
+        }
+
+        if ( cDelConfirmBtn ) {
+            cDelConfirmBtn.addEventListener( 'click', function () {
+                if ( !pendingCenterId ) return;
+                var cid = pendingCenterId;
+
+                setLoading( cDelConfirmBtn, true );
+                ajaxPost( 'radm_delete_center', { center_id: cid }, function ( res ) {
+                    setLoading( cDelConfirmBtn, false );
+                    closeDeleteCenterModal();
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Center deleted successfully.', 'success' );
+                        if ( res.data.centers ) {
+                            allCentersData = res.data.centers;
+                            renderCentersTable();
+                        } else {
+                            loadCenters();
+                        }
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to delete center.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // Table Action Click Delegation
+        document.addEventListener( 'click', function ( e ) {
+            var editBtn = e.target.closest( '[data-action="edit-center"]' );
+            if ( editBtn ) {
+                var cid = editBtn.dataset.id;
+                if ( cid ) openEditCenterModal( cid );
+                return;
+            }
+
+            var delBtn = e.target.closest( '[data-action="delete-center"]' );
+            if ( delBtn ) {
+                var dCid = delBtn.dataset.id;
+                if ( dCid ) openDeleteCenterModal( dCid );
+                return;
+            }
+        } );
+
+        // Initial Load
+        loadCenters();
+
+    } // end radm-settings
+
     /* ── ESC closes any modal ─────────────────────────────────────────── */
     document.addEventListener( 'keydown', function ( e ) {
         if ( e.key === 'Escape' ) {
@@ -3026,6 +3340,8 @@
             if ( typeof closeUserAccessModal === 'function' ) closeUserAccessModal();
             if ( typeof closeDeleteUserModal === 'function' ) closeDeleteUserModal();
             if ( typeof closeCreateUserModal === 'function' ) closeCreateUserModal();
+            if ( typeof closeCenterModal === 'function' ) closeCenterModal();
+            if ( typeof closeDeleteCenterModal === 'function' ) closeDeleteCenterModal();
         }
     } );
 
