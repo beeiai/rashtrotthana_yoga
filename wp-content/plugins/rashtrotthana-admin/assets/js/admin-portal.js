@@ -2717,7 +2717,7 @@
                     selectedModules = Object.keys( allModulesMap );
                     if ( uaCenterToggle ) uaCenterToggle.checked = false;
                 } else if ( r === 'radm_admin' ) {
-                    selectedModules = [ 'dashboard', 'events', 'registrations', 'gallery', 'form-groups', 'whatsapp' ];
+                    selectedModules = [ 'dashboard', 'registrations', 'gallery', 'form-groups', 'whatsapp' ];
                     if ( uaCenterToggle ) uaCenterToggle.checked = false;
                 } else if ( r === 'radm_gallery' ) {
                     selectedModules = [ 'dashboard', 'gallery' ];
