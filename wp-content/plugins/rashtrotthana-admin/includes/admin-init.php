@@ -37,16 +37,25 @@ function radm_create_roles(): void {
             'upload_files'              => true,
         ] );
     }
+
+    // Center Admin Role (Center-specific registrations & forms)
+    if ( ! get_role( 'radm_center_admin' ) ) {
+        add_role( 'radm_center_admin', 'Center Admin', [
+            'read'                      => true,
+            'manage_ry_registrations'   => true,
+            'upload_files'              => true,
+        ] );
+    }
 }
 add_action( 'admin_init', 'radm_create_roles' );
 
 // ── Menu Registration ────────────────────────────────────────────────────────
 function radm_register_menu(): void {
-    // Base capability for the portal is manage_ry_registrations (Admins & Super Admins)
+    // Base capability for the portal shell is read
     add_menu_page(
         'Rashtrotthana Portal',
         'Rashtrotthana',
-        'manage_ry_registrations',
+        'read',
         'radm-dashboard',
         'radm_page_dashboard',
         'none',
@@ -54,13 +63,13 @@ function radm_register_menu(): void {
     );
 
     $pages = [
-        [ 'radm-dashboard',     'Dashboard',               'manage_ry_registrations', 'radm_page_dashboard'     ],
-        [ 'radm-registrations', 'Registrations',           'manage_ry_registrations', 'radm_page_registrations' ],
-        [ 'radm-gallery',       'Gallery',                 'upload_files',            'radm_page_gallery'       ],
-        [ 'radm-form-groups',   'Form Groups',             'manage_ry_registrations', 'radm_page_form_groups'   ],
-        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'manage_ry_registrations', 'radm_page_whatsapp'      ],
-        [ 'radm-roles',         'Roles & Responsibilities','manage_options',          'radm_page_roles'         ],
-        [ 'radm-settings',      'Settings',                'manage_options',          'radm_page_settings'      ],
+        [ 'radm-dashboard',     'Dashboard',               'read',            'radm_page_dashboard'     ],
+        [ 'radm-registrations', 'Registrations',           'read',            'radm_page_registrations' ],
+        [ 'radm-gallery',       'Gallery',                 'read',            'radm_page_gallery'       ],
+        [ 'radm-form-groups',   'Form Groups',             'read',            'radm_page_form_groups'   ],
+        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'read',            'radm_page_whatsapp'      ],
+        [ 'radm-roles',         'Roles & Responsibilities','manage_options',  'radm_page_roles'         ],
+        [ 'radm-settings',      'Settings',                'manage_options',  'radm_page_settings'      ],
     ];
 
     foreach ( $pages as [ $slug, $title, $cap, $callback ] ) {

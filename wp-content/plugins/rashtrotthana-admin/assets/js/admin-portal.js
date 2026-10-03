@@ -2443,6 +2443,448 @@
 
     } // end radm-gallery
 
+    /* ═══════════════════════════════════════════════════════════════════
+       ROLES & MODULE ACCESS MANAGER (TAG MULTI-SELECT & CENTER RESTRICTIONS)
+       ═══════════════════════════════════════════════════════════════════ */
+    if ( curPage === 'radm-roles' || document.getElementById( 'radm-users-tbody' ) ) {
+
+        var usersTbody      = document.getElementById( 'radm-users-tbody' );
+        var usersSearch     = document.getElementById( 'radm-users-search' );
+        var roleFilter      = document.getElementById( 'radm-users-role-filter' );
+        
+        // User Access Modal Elements
+        var uaOverlay       = document.getElementById( 'radm-user-access-overlay' );
+        var uaModalClose    = document.getElementById( 'radm-ua-modal-close' );
+        var uaModalCancel   = document.getElementById( 'radm-ua-modal-cancel-btn' );
+        var uaForm          = document.getElementById( 'radm-user-access-form' );
+        var uaUserIdInput   = document.getElementById( 'radm-ua-user-id' );
+        var uaTitle         = document.getElementById( 'radm-ua-modal-title' );
+        var uaSubtitle      = document.getElementById( 'radm-ua-modal-subtitle' );
+        var uaRoleSelect    = document.getElementById( 'radm-ua-role' );
+        var uaSaveBtn       = document.getElementById( 'radm-ua-modal-save-btn' );
+        var uaSaveText      = document.getElementById( 'radm-ua-save-text' );
+
+        // Tag Multi-Select Elements
+        var uaTagBox        = document.getElementById( 'radm-ua-mods-tags-container' );
+        var uaTagDropdown   = document.getElementById( 'radm-ua-mods-dropdown' );
+        var uaTagSearch     = document.getElementById( 'radm-ua-mods-search' );
+        var uaSelectAllBtn  = document.getElementById( 'radm-ua-select-all-mods' );
+        var uaClearAllBtn   = document.getElementById( 'radm-ua-clear-all-mods' );
+        var uaModCheckboxes = document.querySelectorAll( 'input[name="radm_ua_mod_check"]' );
+
+        // Center Restrictions Elements
+        var uaCenterToggle  = document.getElementById( 'radm-ua-restrict-center-toggle' );
+        var uaCentersWrap   = document.getElementById( 'radm-ua-centers-wrapper' );
+        var uaCenterChecks  = document.querySelectorAll( 'input[name="radm_ua_center_check"]' );
+
+        // Create User Modal Elements
+        var cuOverlay       = document.getElementById( 'radm-create-user-overlay' );
+        var cuOpenBtn       = document.getElementById( 'radm-open-create-user-btn' );
+        var cuCloseBtn      = document.getElementById( 'radm-create-user-close' );
+        var cuCancelBtn     = document.getElementById( 'radm-create-user-cancel' );
+        var cuForm          = document.getElementById( 'radm-create-user-form' );
+
+        // Local state
+        var allUsersList    = [];
+        var allModulesMap   = {};
+        var selectedModules = [];
+
+        function loadStaffUsers() {
+            if ( !usersTbody ) return;
+            usersTbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--radm-text-muted);"><div class="radm-spinner" style="margin:0 auto 10px;"></div>Loading staff users...</td></tr>';
+
+            ajaxPost( 'radm_get_staff_users', {}, function ( res ) {
+                if ( !res.success ) {
+                    usersTbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444;">Failed to load staff users.</td></tr>';
+                    return;
+                }
+
+                allUsersList  = res.data.users || [];
+                allModulesMap = res.data.all_modules || {};
+                renderUsersTable();
+            } );
+        }
+
+        function renderUsersTable() {
+            if ( !usersTbody ) return;
+
+            var q = ( usersSearch ? usersSearch.value.trim().toLowerCase() : '' );
+            var r = ( roleFilter ? roleFilter.value : '' );
+
+            var filtered = allUsersList.filter( function ( u ) {
+                var matchQ = ( !q || u.name.toLowerCase().indexOf( q ) !== -1 || u.email.toLowerCase().indexOf( q ) !== -1 );
+                var matchR = ( !r || u.role === r );
+                return matchQ && matchR;
+            } );
+
+            if ( !filtered.length ) {
+                usersTbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--radm-text-muted);">No staff users match your search criteria.</td></tr>';
+                return;
+            }
+
+            var html = '';
+            filtered.forEach( function ( u, idx ) {
+                var initial = ( u.name ? u.name.charAt( 0 ).toUpperCase() : 'U' );
+                
+                // Role Badge
+                var roleClass = 'radm-badge--open';
+                if ( u.role === 'administrator' ) roleClass = 'radm-badge--open';
+                else if ( u.role === 'radm_admin' ) roleClass = 'radm-badge--pending';
+                else if ( u.role === 'radm_gallery' ) roleClass = 'radm-badge--confirmed';
+                else if ( u.role === 'radm_center_admin' ) roleClass = 'radm-badge--attended';
+
+                // Modules Tags
+                var modsHtml = '';
+                if ( u.is_super_admin ) {
+                    modsHtml = '<span class="radm-tag-pill" style="background:#f0fdf4;color:#166534;border-color:#bbf7d0;">👑 Full Access (All 8 Modules)</span>';
+                } else if ( u.module_items && u.module_items.length ) {
+                    modsHtml = '<div class="radm-module-tags-list">';
+                    u.module_items.forEach( function ( mi ) {
+                        modsHtml += '<span class="radm-tag-pill radm-tag-pill--sm">' + esc( mi.label ) + '</span>';
+                    } );
+                    modsHtml += '</div>';
+                } else {
+                    modsHtml = '<span style="color:var(--radm-text-muted);font-size:12px;">No modules assigned</span>';
+                }
+
+                // Center Scope
+                var centerHtml = '';
+                if ( u.restrict_center && u.centers && u.centers.length ) {
+                    centerHtml = '<span style="font-size:12px;color:#1e293b;font-weight:600;">📍 ' + esc( u.centers.join( ', ' ) ) + '</span>';
+                } else {
+                    centerHtml = '<span style="font-size:12px;color:var(--radm-text-muted);">All Centers</span>';
+                }
+
+                html += '<tr data-user-id="' + u.id + '">'
+                    + '<td style="text-align:center;color:var(--radm-text-muted);font-weight:500;">' + ( idx + 1 ) + '</td>'
+                    + '<td>'
+                    + '<div style="display:flex;align-items:center;gap:10px;">'
+                    + '<div style="width:34px;height:34px;border-radius:50%;background:#e8f5e9;color:#2E7D32;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">' + initial + '</div>'
+                    + '<div>'
+                    + '<strong style="display:block;color:var(--radm-text);font-size:13.5px;">' + esc( u.name ) + '</strong>'
+                    + '<span style="font-size:12px;color:var(--radm-text-muted);">' + esc( u.email ) + '</span>'
+                    + '</div>'
+                    + '</div>'
+                    + '</td>'
+                    + '<td><span class="radm-badge ' + roleClass + '">' + esc( u.role_label ) + '</span></td>'
+                    + '<td>' + modsHtml + '</td>'
+                    + '<td>' + centerHtml + '</td>'
+                    + '<td style="text-align:right;">'
+                    + '<button type="button" class="radm-btn radm-btn-secondary radm-btn--sm" data-action="edit-user-access" data-id="' + u.id + '" style="font-size:12px;padding:5px 12px;">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" style="margin-right:4px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+                    + 'Edit Access'
+                    + '</button>'
+                    + '</td>'
+                    + '</tr>';
+            } );
+
+            usersTbody.innerHTML = html;
+        }
+
+        // Search & Filter listeners
+        if ( usersSearch ) usersSearch.addEventListener( 'input', renderUsersTable );
+        if ( roleFilter  ) roleFilter.addEventListener( 'change', renderUsersTable );
+
+        // ── Tag Multi-Select Box Rendering ──────────────────────────────
+        function renderTagsBox() {
+            if ( !uaTagBox ) return;
+            uaTagBox.innerHTML = '';
+
+            if ( !selectedModules.length ) {
+                uaTagBox.innerHTML = '<span class="radm-tag-placeholder">Click to select accessible modules...</span>';
+            } else {
+                selectedModules.forEach( function ( key ) {
+                    var label = allModulesMap[ key ] ? allModulesMap[ key ].label : key;
+                    var tag = document.createElement( 'span' );
+                    tag.className = 'radm-tag-pill';
+                    tag.dataset.key = key;
+                    tag.innerHTML = esc( label ) + '<button type="button" class="radm-tag-remove-btn" title="Remove">&times;</button>';
+                    uaTagBox.appendChild( tag );
+                } );
+            }
+
+            // Sync Checkboxes in dropdown
+            if ( uaModCheckboxes ) {
+                uaModCheckboxes.forEach( function ( cb ) {
+                    cb.checked = ( selectedModules.indexOf( cb.value ) !== -1 );
+                } );
+            }
+        }
+
+        function toggleTagDropdown( show ) {
+            if ( !uaTagDropdown ) return;
+            if ( typeof show === 'boolean' ) {
+                uaTagDropdown.style.display = show ? 'block' : 'none';
+            } else {
+                var isHidden = ( uaTagDropdown.style.display === 'none' || !uaTagDropdown.style.display );
+                uaTagDropdown.style.display = isHidden ? 'block' : 'none';
+            }
+            if ( uaTagBox ) {
+                if ( uaTagDropdown.style.display === 'block' ) {
+                    uaTagBox.classList.add( 'is-focused' );
+                    if ( uaTagSearch ) uaTagSearch.focus();
+                } else {
+                    uaTagBox.classList.remove( 'is-focused' );
+                }
+            }
+        }
+
+        if ( uaTagBox ) {
+            uaTagBox.addEventListener( 'click', function ( e ) {
+                // If clicked on remove cross
+                var removeBtn = e.target.closest( '.radm-tag-remove-btn' );
+                if ( removeBtn ) {
+                    e.stopPropagation();
+                    var pill = removeBtn.closest( '.radm-tag-pill' );
+                    if ( pill && pill.dataset.key ) {
+                        var k = pill.dataset.key;
+                        selectedModules = selectedModules.filter( function ( m ) { return m !== k; } );
+                        renderTagsBox();
+                    }
+                    return;
+                }
+                toggleTagDropdown();
+            } );
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener( 'click', function ( e ) {
+            if ( !e.target.closest( '#radm-ua-mods-multiselect' ) ) {
+                toggleTagDropdown( false );
+            }
+        } );
+
+        // Module Checkbox change
+        if ( uaModCheckboxes ) {
+            uaModCheckboxes.forEach( function ( cb ) {
+                cb.addEventListener( 'change', function () {
+                    var val = this.value;
+                    if ( this.checked ) {
+                        if ( selectedModules.indexOf( val ) === -1 ) selectedModules.push( val );
+                    } else {
+                        selectedModules = selectedModules.filter( function ( m ) { return m !== val; } );
+                    }
+                    renderTagsBox();
+                } );
+            } );
+        }
+
+        // Filter modules in dropdown
+        if ( uaTagSearch ) {
+            uaTagSearch.addEventListener( 'input', function () {
+                var sq = this.value.trim().toLowerCase();
+                var rows = document.querySelectorAll( '.radm-tag-opt-row' );
+                rows.forEach( function ( row ) {
+                    var title = row.querySelector( '.radm-tag-opt-title' );
+                    var text = title ? title.textContent.toLowerCase() : '';
+                    row.style.display = ( !sq || text.indexOf( sq ) !== -1 ) ? 'flex' : 'none';
+                } );
+            } );
+        }
+
+        // Select All & Clear All Modules
+        if ( uaSelectAllBtn ) {
+            uaSelectAllBtn.addEventListener( 'click', function () {
+                selectedModules = Object.keys( allModulesMap );
+                renderTagsBox();
+            } );
+        }
+
+        if ( uaClearAllBtn ) {
+            uaClearAllBtn.addEventListener( 'click', function () {
+                selectedModules = [];
+                renderTagsBox();
+            } );
+        }
+
+        // Role change auto-defaults
+        if ( uaRoleSelect ) {
+            uaRoleSelect.addEventListener( 'change', function () {
+                var r = this.value;
+                if ( r === 'administrator' ) {
+                    selectedModules = Object.keys( allModulesMap );
+                    if ( uaCenterToggle ) uaCenterToggle.checked = false;
+                } else if ( r === 'radm_admin' ) {
+                    selectedModules = [ 'dashboard', 'events', 'registrations', 'gallery', 'form-groups', 'whatsapp' ];
+                    if ( uaCenterToggle ) uaCenterToggle.checked = false;
+                } else if ( r === 'radm_gallery' ) {
+                    selectedModules = [ 'dashboard', 'gallery' ];
+                    if ( uaCenterToggle ) uaCenterToggle.checked = false;
+                } else if ( r === 'radm_center_admin' ) {
+                    selectedModules = [ 'dashboard', 'registrations', 'form-groups' ];
+                    if ( uaCenterToggle ) uaCenterToggle.checked = true;
+                } else {
+                    selectedModules = [ 'dashboard' ];
+                }
+                renderTagsBox();
+                if ( uaCentersWrap && uaCenterToggle ) {
+                    uaCentersWrap.style.display = uaCenterToggle.checked ? 'block' : 'none';
+                }
+            } );
+        }
+
+        // Center toggle listener
+        if ( uaCenterToggle ) {
+            uaCenterToggle.addEventListener( 'change', function () {
+                if ( uaCentersWrap ) {
+                    uaCentersWrap.style.display = this.checked ? 'block' : 'none';
+                }
+            } );
+        }
+
+        // ── Open User Access Modal ──────────────────────────────────────
+        function openUserAccessModal( userId ) {
+            var user = allUsersList.find( function ( u ) { return u.id === parseInt( userId, 10 ); } );
+            if ( !user || !uaOverlay ) return;
+
+            if ( uaUserIdInput ) uaUserIdInput.value = user.id;
+            if ( uaTitle ) uaTitle.textContent = 'Edit Module Access: ' + user.name;
+            if ( uaSubtitle ) uaSubtitle.textContent = user.email;
+            if ( uaRoleSelect ) uaRoleSelect.value = user.role;
+
+            selectedModules = Array.isArray( user.modules ) ? user.modules.slice() : [];
+            renderTagsBox();
+
+            // Center Restrictions
+            var isRestricted = !!user.restrict_center;
+            if ( uaCenterToggle ) uaCenterToggle.checked = isRestricted;
+            if ( uaCentersWrap ) uaCentersWrap.style.display = isRestricted ? 'block' : 'none';
+
+            var assignedCenters = user.centers || [];
+            if ( uaCenterChecks ) {
+                uaCenterChecks.forEach( function ( ccb ) {
+                    ccb.checked = ( assignedCenters.indexOf( ccb.value ) !== -1 );
+                } );
+            }
+
+            toggleTagDropdown( false );
+            uaOverlay.setAttribute( 'aria-hidden', 'false' );
+            uaOverlay.classList.add( 'radm-modal-open' );
+        }
+
+        function closeUserAccessModal() {
+            if ( !uaOverlay ) return;
+            uaOverlay.classList.remove( 'radm-modal-open' );
+            uaOverlay.setAttribute( 'aria-hidden', 'true' );
+            toggleTagDropdown( false );
+        }
+
+        if ( uaModalClose ) uaModalClose.addEventListener( 'click', closeUserAccessModal );
+        if ( uaModalCancel ) uaModalCancel.addEventListener( 'click', closeUserAccessModal );
+
+        // Table Edit Access Click Delegation
+        document.addEventListener( 'click', function ( e ) {
+            var btn = e.target.closest( '[data-action="edit-user-access"]' );
+            if ( btn ) {
+                var uid = btn.dataset.id;
+                if ( uid ) openUserAccessModal( uid );
+            }
+        } );
+
+        // ── Save User Access Form Submission ────────────────────────────
+        if ( uaForm ) {
+            uaForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+
+                var uid = uaUserIdInput ? parseInt( uaUserIdInput.value, 10 ) : 0;
+                if ( !uid ) return;
+
+                var centers = [];
+                if ( uaCenterChecks ) {
+                    uaCenterChecks.forEach( function ( ccb ) {
+                        if ( ccb.checked ) centers.push( ccb.value );
+                    } );
+                }
+
+                var payload = {
+                    user_id: uid,
+                    role: uaRoleSelect ? uaRoleSelect.value : '',
+                    modules: JSON.stringify( selectedModules ),
+                    restrict_center: ( uaCenterToggle && uaCenterToggle.checked ) ? 1 : 0,
+                    centers: JSON.stringify( centers )
+                };
+
+                if ( uaSaveBtn ) {
+                    uaSaveBtn.disabled = true;
+                    if ( uaSaveText ) uaSaveText.textContent = 'Saving...';
+                }
+
+                ajaxPost( 'radm_save_user_access', payload, function ( res ) {
+                    if ( uaSaveBtn ) {
+                        uaSaveBtn.disabled = false;
+                        if ( uaSaveText ) uaSaveText.textContent = 'Save Access Permissions';
+                    }
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Access permissions updated successfully!', 'success' );
+                        closeUserAccessModal();
+                        loadStaffUsers();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to update access.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // ── Create Staff User Modal Logic ───────────────────────────────
+        function openCreateUserModal() {
+            if ( !cuOverlay ) return;
+            if ( cuForm ) cuForm.reset();
+            cuOverlay.setAttribute( 'aria-hidden', 'false' );
+            cuOverlay.classList.add( 'radm-modal-open' );
+            var nameInput = document.getElementById( 'radm-cu-name' );
+            if ( nameInput ) nameInput.focus();
+        }
+
+        function closeCreateUserModal() {
+            if ( !cuOverlay ) return;
+            cuOverlay.classList.remove( 'radm-modal-open' );
+            cuOverlay.setAttribute( 'aria-hidden', 'true' );
+        }
+
+        if ( cuOpenBtn ) cuOpenBtn.addEventListener( 'click', openCreateUserModal );
+        if ( cuCloseBtn ) cuCloseBtn.addEventListener( 'click', closeCreateUserModal );
+        if ( cuCancelBtn ) cuCancelBtn.addEventListener( 'click', closeCreateUserModal );
+
+        if ( cuForm ) {
+            cuForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+
+                var nameEl  = document.getElementById( 'radm-cu-name' );
+                var emailEl = document.getElementById( 'radm-cu-email' );
+                var userEl  = document.getElementById( 'radm-cu-username' );
+                var passEl  = document.getElementById( 'radm-cu-password' );
+                var roleEl  = document.getElementById( 'radm-cu-role' );
+
+                var payload = {
+                    name:     nameEl ? nameEl.value.trim() : '',
+                    email:    emailEl ? emailEl.value.trim() : '',
+                    username: userEl ? userEl.value.trim() : '',
+                    password: passEl ? passEl.value : '',
+                    role:     roleEl ? roleEl.value : 'radm_admin',
+                };
+
+                var submitBtn = document.getElementById( 'radm-create-user-submit' );
+                if ( submitBtn ) submitBtn.disabled = true;
+
+                ajaxPost( 'radm_create_staff_user', payload, function ( res ) {
+                    if ( submitBtn ) submitBtn.disabled = false;
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Staff user created successfully!', 'success' );
+                        closeCreateUserModal();
+                        loadStaffUsers();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to create user.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // Initialize Load
+        loadStaffUsers();
+
+    } // end radm-roles
+
     /* ── ESC closes any modal ─────────────────────────────────────────── */
     document.addEventListener( 'keydown', function ( e ) {
         if ( e.key === 'Escape' ) {
@@ -2454,6 +2896,8 @@
             if ( typeof closeWizardModal === 'function' ) closeWizardModal();
             if ( typeof closeViewModal === 'function' ) closeViewModal();
             if ( typeof closeDeleteModal === 'function' ) closeDeleteModal();
+            if ( typeof closeUserAccessModal === 'function' ) closeUserAccessModal();
+            if ( typeof closeCreateUserModal === 'function' ) closeCreateUserModal();
         }
     } );
 

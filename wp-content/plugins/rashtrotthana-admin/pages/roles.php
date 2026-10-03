@@ -1,108 +1,294 @@
 <?php
+/**
+ * Rashtrotthana Admin Portal — Roles & Responsibilities Page
+ * Dynamic Module Access (Tag Multi-Select), Center Restrictions & Staff Management
+ */
+
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// Verify capabilities
+// Verify capabilities (Super Admin / manage_options)
 if ( ! current_user_can( 'manage_options' ) ) {
-    wp_die( 'You do not have sufficient permissions to access this page.' );
+    wp_die(
+        '<div style="font-family:sans-serif;text-align:center;padding:50px 20px;">'
+        . '<h2 style="color:#0f172a;">Access Restricted</h2>'
+        . '<p style="color:#64748b;">You do not have sufficient permissions to manage Roles & Responsibilities.</p>'
+        . '<a href="' . esc_url( admin_url( 'admin.php?page=radm-dashboard' ) ) . '" style="display:inline-block;margin-top:15px;color:#2E7D32;font-weight:600;text-decoration:none;">&larr; Return to Dashboard</a>'
+        . '</div>',
+        'Permission Denied',
+        [ 'response' => 403 ]
+    );
 }
 
-$message = '';
-// Handle role change submission
-if ( isset( $_POST['radm_change_role'] ) ) {
-    if ( ! check_admin_referer( 'radm_change_role_action', 'radm_change_role_nonce' ) ) {
-        wp_die( 'Security check failed.' );
-    }
-
-    $user_id = absint( $_POST['user_id'] ?? 0 );
-    $new_role = sanitize_text_field( $_POST['new_role'] ?? '' );
-    
-    // Prevent changing your own role accidentally if you are the only super admin
-    if ( $user_id === get_current_user_id() && $new_role !== 'administrator' ) {
-        $message = '<div class="radm-toast radm-toast--error radm-toast-show">You cannot demote yourself.</div>';
-    } else {
-        $user = get_userdata( $user_id );
-        if ( $user && in_array( $new_role, [ 'administrator', 'radm_admin', 'radm_gallery', 'subscriber' ], true ) ) {
-            $user->set_role( $new_role );
-            $message = '<div class="radm-toast radm-toast--success radm-toast-show">Role updated successfully.</div>';
-        } else {
-            $message = '<div class="radm-toast radm-toast--error radm-toast-show">Invalid user or role.</div>';
-        }
-    }
-}
-
-radm_portal_header( 'Roles & Responsibilities', 'Manage staff roles and their responsibilities' );
-echo $message;
-
-// Fetch all users
-$users = get_users();
-$role_names = [
-    'administrator' => 'Super Admin (Full Access)',
-    'radm_admin'    => 'Admin (Content & Registrations)',
-    'radm_gallery'  => 'Gallery Manager (Media Only)',
-    'subscriber'    => 'Subscriber (No Access)',
-];
+radm_portal_header( 'Roles & Responsibilities', 'Configure staff roles, custom module access & center restrictions' );
+$all_modules = radm_get_all_modules();
+$all_centers = radm_get_all_centers();
 ?>
 
-<div class="radm-card">
-    <div class="radm-card-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Staff Users</h2>
-        <a href="<?php echo esc_url( admin_url( 'user-new.php' ) ); ?>" class="radm-btn radm-btn-primary">
-            + Add New User
-        </a>
+<!-- ── Filter & Action Header ── -->
+<div class="radm-page-controls" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+    <div style="display: flex; gap: 12px; align-items: center; flex: 1; min-width: 280px;">
+        <div class="radm-search-wrap" style="position: relative; width: 100%; max-width: 320px;">
+            <input type="text" id="radm-users-search" class="radm-input" placeholder="Search staff name or email..." style="padding-left: 36px;" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--radm-text-muted);">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </div>
+        <select id="radm-users-role-filter" class="radm-select" style="max-width: 180px;">
+            <option value="">All Roles</option>
+            <option value="administrator">Super Admin</option>
+            <option value="radm_admin">Admin (Content & Reg)</option>
+            <option value="radm_gallery">Gallery Manager</option>
+            <option value="radm_center_admin">Center Admin</option>
+            <option value="subscriber">Subscriber</option>
+        </select>
     </div>
 
-    <table class="radm-table" style="width: 100%; text-align: left; border-collapse: collapse; margin-top: 15px;">
-        <thead>
-            <tr style="border-bottom: 2px solid #e2e8f0;">
-                <th style="padding: 12px 10px;">Name</th>
-                <th style="padding: 12px 10px;">Email</th>
-                <th style="padding: 12px 10px;">Current Role</th>
-                <th style="padding: 12px 10px;">Change Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ( $users as $user ) : 
-                $user_role = ! empty( $user->roles ) ? $user->roles[0] : 'subscriber';
-            ?>
-            <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 12px 10px;"><strong><?php echo esc_html( $user->display_name ); ?></strong></td>
-                <td style="padding: 12px 10px;"><?php echo esc_html( $user->user_email ); ?></td>
-                <td style="padding: 12px 10px;">
-                    <span class="radm-badge radm-badge--<?php echo $user_role === 'administrator' ? 'open' : 'closed'; ?>" style="font-size: 12px; padding: 4px 8px; border-radius: 12px; background: #f1f5f9;">
-                        <?php echo esc_html( $role_names[$user_role] ?? ucfirst($user_role) ); ?>
-                    </span>
-                </td>
-                <td style="padding: 12px 10px;">
-                    <form method="post" action="" style="display: flex; gap: 10px; align-items: center; margin: 0;">
-                        <?php wp_nonce_field( 'radm_change_role_action', 'radm_change_role_nonce' ); ?>
-                        <input type="hidden" name="user_id" value="<?php echo absint( $user->ID ); ?>" />
-                        
-                        <select name="new_role" class="radm-input" style="padding: 6px; font-size: 13px;">
-                            <?php foreach ( $role_names as $role_key => $role_label ) : ?>
-                                <option value="<?php echo esc_attr( $role_key ); ?>" <?php selected( $user_role, $role_key ); ?>>
-                                    <?php echo esc_html( $role_label ); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                        
-                        <button type="submit" name="radm_change_role" class="radm-btn radm-btn-secondary" style="padding: 6px 12px; font-size: 13px;">
-                            Update
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div style="display: flex; gap: 10px;">
+        <button type="button" class="radm-btn radm-btn-primary" id="radm-open-create-user-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            + Add Staff User
+        </button>
+    </div>
 </div>
 
-<div class="radm-card" style="margin-top: 20px; background: #f8fafc;">
-    <h3>Role Capabilities Reference</h3>
-    <ul style="line-height: 1.6; margin-left: 20px; color: #475569; font-size: 14px;">
-        <li><strong>Super Admin:</strong> Full access to all modules, system settings, user management, and configuration.</li>
-        <li><strong>Admin:</strong> Can create, edit, and delete events, manage registrations, and update page content. Cannot access system settings or change user roles.</li>
-        <li><strong>Gallery Manager:</strong> Can access the WordPress media library to upload, organize, and delete gallery images. No access to settings or registrations.</li>
-    </ul>
+<!-- ── Staff Users & Permissions Table ── -->
+<div class="radm-card" style="padding: 0; overflow: visible;">
+    <div class="radm-table-responsive" style="overflow: visible; min-height: 280px;">
+        <table class="radm-table radm-roles-table">
+            <thead>
+                <tr>
+                    <th style="width: 44px; text-align: center;">#</th>
+                    <th style="min-width: 200px;">Staff User</th>
+                    <th style="width: 140px;">Role</th>
+                    <th style="min-width: 280px;">Accessible Modules</th>
+                    <th style="min-width: 150px;">Center Scope</th>
+                    <th style="width: 130px; text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="radm-users-tbody">
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 50px 20px; color: var(--radm-text-muted);">
+                        <div class="radm-spinner" style="margin: 0 auto 12px;"></div>
+                        Loading staff users and permissions...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ── Role Capabilities Reference Box ── -->
+<div class="radm-card" style="margin-top: 24px; background: #f8fafc; border: 1px solid var(--radm-border); border-radius: 12px; padding: 20px 24px;">
+    <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 10px; color: var(--radm-text); display: flex; align-items: center; gap: 8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="color: var(--radm-green-primary);">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        Role &amp; Module Access System Guide
+    </h3>
+    <p style="font-size: 13px; color: var(--radm-text-muted); margin: 0 0 12px; line-height: 1.5;">
+        You can customize what each staff user sees in their sidebar navigation. Staff will only have access to their assigned modules and centers.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 14px;">
+        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">👑 Super Admin</strong>
+            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Unrestricted access to all 8 modules, system settings, and user roles.</p>
+        </div>
+        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">📅 Admin (Content &amp; Reg)</strong>
+            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Default access to Events, Registrations, Gallery, Form Groups &amp; WhatsApp.</p>
+        </div>
+        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">🖼️ Gallery Manager</strong>
+            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Media only access: upload, categorize &amp; manage gallery photos/videos.</p>
+        </div>
+        <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <strong style="color: #0f172a; font-size: 13.5px; display: block; margin-bottom: 4px;">📍 Center Admin</strong>
+            <p style="margin: 0; font-size: 12.5px; color: #64748b; line-height: 1.4;">Scoped to specific assigned centers (Registrations &amp; Form Groups).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     EDIT USER MODULE ACCESS MODAL (TAG MULTI-SELECT + RESTRICT CENTER)
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-user-access-overlay" aria-hidden="true">
+    <div class="radm-modal" style="max-width: 620px; width: 94%;">
+        
+        <div class="radm-modal-header">
+            <div>
+                <h3 id="radm-ua-modal-title" style="margin: 0 0 2px;">Edit Module Access</h3>
+                <p id="radm-ua-modal-subtitle" style="margin: 0; font-size: 13px; color: var(--radm-text-muted);">Manage accessible navbar modules and center restrictions</p>
+            </div>
+            <button type="button" class="radm-modal-close" id="radm-ua-modal-close" aria-label="Close modal">×</button>
+        </div>
+
+        <form id="radm-user-access-form">
+            <input type="hidden" id="radm-ua-user-id" name="user_id" value="" />
+
+            <div class="radm-modal-body" style="padding: 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+                
+                <!-- Role Selector -->
+                <div class="radm-form-group">
+                    <label for="radm-ua-role" class="radm-label" style="font-weight: 600;">
+                        Assign Role <span style="color:#ef4444;">*</span>
+                    </label>
+                    <select id="radm-ua-role" class="radm-select" style="width: 100%;">
+                        <option value="administrator">👑 Super Admin (Full Access to All Modules)</option>
+                        <option value="radm_admin">Admin (Content &amp; Registrations)</option>
+                        <option value="radm_gallery">Gallery Manager (Media Only)</option>
+                        <option value="radm_center_admin">Center Admin (Center-Specific)</option>
+                        <option value="subscriber">Subscriber (No Admin Access)</option>
+                    </select>
+                </div>
+
+                <!-- ── Accessible Modules Tag Multi-Select Dropdown ── -->
+                <div class="radm-form-group" id="radm-ua-modules-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="radm-label" style="font-weight: 600; margin: 0;">
+                            Accessible Modules <span style="color:#ef4444;">*</span>
+                        </label>
+                        <div style="font-size: 12px; display: flex; gap: 8px;">
+                            <button type="button" class="radm-btn-link" id="radm-ua-select-all-mods" style="color: var(--radm-green-primary); font-weight: 600;">Select All</button>
+                            <span style="color: #cbd5e1;">|</span>
+                            <button type="button" class="radm-btn-link" id="radm-ua-clear-all-mods" style="color: #64748b;">Clear</button>
+                        </div>
+                    </div>
+                    <p style="margin: 0 0 8px; font-size: 12.5px; color: var(--radm-text-muted);">
+                        The user will only see the selected items in their portal sidebar navbar.
+                    </p>
+
+                    <!-- Multi-Select Custom Tag Box Component -->
+                    <div class="radm-tag-multiselect" id="radm-ua-mods-multiselect">
+                        <!-- Selected Tags Display Area -->
+                        <div class="radm-tag-box" id="radm-ua-mods-tags-container">
+                            <!-- Populated with tags dynamically via JS: [ Events ✕ ] -->
+                            <span class="radm-tag-placeholder" id="radm-ua-mods-placeholder">Click to select accessible modules...</span>
+                        </div>
+
+                        <!-- Dropdown Checkbox Panel -->
+                        <div class="radm-tag-dropdown" id="radm-ua-mods-dropdown" style="display: none;">
+                            <div class="radm-tag-dropdown-header">
+                                <input type="text" id="radm-ua-mods-search" class="radm-input radm-input--sm" placeholder="Filter modules..." />
+                            </div>
+                            <div class="radm-tag-options-list" id="radm-ua-mods-options-list">
+                                <?php foreach ( $all_modules as $mod_k => $mod_v ) : ?>
+                                    <label class="radm-tag-opt-row" data-key="<?php echo esc_attr( $mod_k ); ?>">
+                                        <input type="checkbox" name="radm_ua_mod_check" value="<?php echo esc_attr( $mod_k ); ?>" />
+                                        <span class="radm-tag-opt-title"><?php echo esc_html( $mod_v['label'] ); ?></span>
+                                        <small class="radm-tag-opt-desc"><?php echo esc_html( $mod_v['desc'] ); ?></small>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Restrict by Center Toggle (Bonus Control) ── -->
+                <div class="radm-card" style="padding: 14px 16px; background: #f8fafc; border: 1px solid var(--radm-border); border-radius: 10px; margin: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 13.5px; color: var(--radm-text); display: block;">📍 Restrict by Center</strong>
+                            <span style="font-size: 12.5px; color: var(--radm-text-muted);">
+                                Restrict this user to view registrations and forms only for specific centers.
+                            </span>
+                        </div>
+                        <label class="radm-switch" style="margin: 0; flex-shrink: 0;">
+                            <input type="checkbox" id="radm-ua-restrict-center-toggle" />
+                            <span class="radm-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Center Multi-Select Picker (Shown when Toggle is ON) -->
+                    <div id="radm-ua-centers-wrapper" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+                        <label class="radm-label" style="font-weight: 600; font-size: 12.5px; margin-bottom: 6px;">
+                            Select Assigned Centers:
+                        </label>
+                        <div class="radm-centers-checklist" id="radm-ua-centers-checklist" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; max-height: 160px; overflow-y: auto;">
+                            <?php foreach ( $all_centers as $c ) : ?>
+                                <label class="radm-center-check-pill">
+                                    <input type="checkbox" name="radm_ua_center_check" value="<?php echo esc_attr( $c['name'] ); ?>" />
+                                    <span><?php echo esc_html( $c['name'] ); ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.radm-modal-body -->
+
+            <div class="radm-modal-footer">
+                <button type="button" class="radm-btn radm-btn-outline" id="radm-ua-modal-cancel-btn">Cancel</button>
+                <button type="submit" class="radm-btn radm-btn-primary" id="radm-ua-modal-save-btn">
+                    <span id="radm-ua-save-text">Save Access Permissions</span>
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     CREATE NEW STAFF USER MODAL
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-create-user-overlay" aria-hidden="true">
+    <div class="radm-modal" style="max-width: 600px; width: 94%;">
+        
+        <div class="radm-modal-header">
+            <div>
+                <h3 style="margin: 0 0 2px;">Add New Staff User</h3>
+                <p style="margin: 0; font-size: 13px; color: var(--radm-text-muted);">Create a staff account with customized module access</p>
+            </div>
+            <button type="button" class="radm-modal-close" id="radm-create-user-close" aria-label="Close modal">×</button>
+        </div>
+
+        <form id="radm-create-user-form">
+            <div class="radm-modal-body" style="padding: 20px 24px; display: flex; flex-direction: column; gap: 14px;">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label">Full Name <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="radm-cu-name" class="radm-input" placeholder="e.g. Ramesh Kumar" required />
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label">Email Address <span style="color:#ef4444;">*</span></label>
+                        <input type="email" id="radm-cu-email" class="radm-input" placeholder="ramesh@rashtrotthana.org" required />
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label">Username (optional)</label>
+                        <input type="text" id="radm-cu-username" class="radm-input" placeholder="auto-generated from email" />
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label">Password (optional)</label>
+                        <input type="password" id="radm-cu-password" class="radm-input" placeholder="auto-generated if blank" />
+                    </div>
+                </div>
+
+                <div class="radm-form-group">
+                    <label class="radm-label">Staff Role <span style="color:#ef4444;">*</span></label>
+                    <select id="radm-cu-role" class="radm-select" style="width: 100%;">
+                        <option value="radm_admin" selected>Admin (Content &amp; Registrations)</option>
+                        <option value="radm_gallery">Gallery Manager</option>
+                        <option value="radm_center_admin">Center Admin</option>
+                        <option value="administrator">Super Admin</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="radm-modal-footer">
+                <button type="button" class="radm-btn radm-btn-outline" id="radm-create-user-cancel">Cancel</button>
+                <button type="submit" class="radm-btn radm-btn-primary" id="radm-create-user-submit">
+                    <span>Create Staff User</span>
+                </button>
+            </div>
+        </form>
+
+    </div>
 </div>
 
 <?php radm_portal_footer(); ?>

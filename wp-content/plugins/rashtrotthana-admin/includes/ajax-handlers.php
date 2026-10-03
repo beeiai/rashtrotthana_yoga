@@ -1022,6 +1022,232 @@ function radm_ajax_toggle_gallery_status(): void {
     ] );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 10. ROLES & MODULE ACCESS MANAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Get all staff users with their roles, module access tags, and center scopes
+ */
+add_action( 'wp_ajax_radm_get_staff_users', 'radm_ajax_get_staff_users' );
+function radm_ajax_get_staff_users(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $all_modules = radm_get_all_modules();
+    $all_centers = radm_get_all_centers();
+    $users = get_users( [ 'orderby' => 'display_name', 'order' => 'ASC' ] );
+
+    $role_labels = [
+        'administrator'    => 'Super Admin',
+        'radm_admin'       => 'Admin (Content & Reg)',
+        'radm_gallery'     => 'Gallery Manager',
+        'radm_center_admin'=> 'Center Admin',
+        'subscriber'       => 'Subscriber',
+    ];
+
+    $items = [];
+    foreach ( $users as $u ) {
+        $perms = radm_get_user_module_permissions( $u->ID );
+        $role_key = ! empty( $u->roles ) ? $u->roles[0] : 'subscriber';
+
+        $mod_items = [];
+        foreach ( ( $perms['modules'] ?? [] ) as $m_key ) {
+            if ( isset( $all_modules[ $m_key ] ) ) {
+                $mod_items[] = [
+                    'key'   => $m_key,
+                    'label' => $all_modules[ $m_key ]['label'],
+                ];
+            }
+        }
+
+        $items[] = [
+            'id'              => (int) $u->ID,
+            'name'            => $u->display_name ?: $u->user_login,
+            'email'           => $u->user_email,
+            'role'            => $role_key,
+            'role_label'      => $role_labels[ $role_key ] ?? ucfirst( $role_key ),
+            'is_super_admin'  => ! empty( $perms['is_super_admin'] ),
+            'modules'         => $perms['modules'] ?? [],
+            'module_items'    => $mod_items,
+            'restrict_center' => ! empty( $perms['restrict_center'] ),
+            'centers'         => $perms['centers'] ?? [],
+            'registered_fmt'  => date( 'M d, Y', strtotime( $u->user_registered ) ),
+        ];
+    }
+
+    wp_send_json_success( [
+        'users'       => $items,
+        'all_modules' => $all_modules,
+        'all_centers' => $all_centers,
+        'roles'       => $role_labels,
+    ] );
+}
+
+/**
+ * Get single user module & role access
+ */
+add_action( 'wp_ajax_radm_get_user_access', 'radm_ajax_get_user_access' );
+function radm_ajax_get_user_access(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $user_id = absint( $_POST['user_id'] ?? 0 );
+    $user = get_userdata( $user_id );
+    if ( ! $user ) {
+        wp_send_json_error( [ 'message' => 'User not found.' ], 404 );
+    }
+
+    $perms = radm_get_user_module_permissions( $user_id );
+    $role_key = ! empty( $user->roles ) ? $user->roles[0] : 'subscriber';
+
+    wp_send_json_success( [
+        'id'              => $user->ID,
+        'name'            => $user->display_name ?: $user->user_login,
+        'email'           => $user->user_email,
+        'role'            => $role_key,
+        'is_super_admin'  => in_array( 'administrator', $user->roles, true ),
+        'modules'         => $perms['modules'] ?? [],
+        'restrict_center' => ! empty( $perms['restrict_center'] ),
+        'centers'         => $perms['centers'] ?? [],
+        'all_modules'     => radm_get_all_modules(),
+        'all_centers'     => radm_get_all_centers(),
+    ] );
+}
+
+/**
+ * Save user role, accessible modules (multi-select), and center restriction
+ */
+add_action( 'wp_ajax_radm_save_user_access', 'radm_ajax_save_user_access' );
+function radm_ajax_save_user_access(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $user_id = absint( $_POST['user_id'] ?? 0 );
+    $user = get_userdata( $user_id );
+    if ( ! $user ) {
+        wp_send_json_error( [ 'message' => 'User not found.' ], 404 );
+    }
+
+    // Role update
+    $new_role = sanitize_text_field( $_POST['role'] ?? '' );
+    if ( $new_role && $new_role !== ( ! empty( $user->roles ) ? $user->roles[0] : '' ) ) {
+        // Prevent demoting yourself if only admin
+        if ( $user_id === get_current_user_id() && $new_role !== 'administrator' ) {
+            wp_send_json_error( [ 'message' => 'You cannot demote yourself from Super Admin.' ], 400 );
+        }
+        $user->set_role( $new_role );
+    }
+
+    // Accessible Modules Multi-Select parsing
+    $raw_modules = $_POST['modules'] ?? [];
+    if ( is_string( $raw_modules ) ) {
+        $raw_modules = json_decode( stripslashes( $raw_modules ), true ) ?: [];
+    }
+    $valid_keys = array_keys( radm_get_all_modules() );
+    $modules = array_values( array_intersect( (array) $raw_modules, $valid_keys ) );
+
+    // Center Restriction parsing
+    $restrict_center = ! empty( $_POST['restrict_center'] );
+    $raw_centers = $_POST['centers'] ?? [];
+    if ( is_string( $raw_centers ) ) {
+        $raw_centers = json_decode( stripslashes( $raw_centers ), true ) ?: [];
+    }
+    $centers = array_map( 'sanitize_text_field', (array) $raw_centers );
+
+    // Save to user meta
+    update_user_meta( $user_id, '_radm_allowed_modules', $modules );
+    update_user_meta( $user_id, '_radm_restrict_center', $restrict_center ? 1 : 0 );
+    update_user_meta( $user_id, '_radm_assigned_centers', $centers );
+
+    wp_send_json_success( [
+        'message' => 'Module access and role permissions updated successfully for ' . ( $user->display_name ?: $user->user_login ) . '.',
+        'user_id' => $user_id,
+        'modules' => $modules,
+        'restrict_center' => $restrict_center,
+        'centers' => $centers,
+    ] );
+}
+
+/**
+ * Quick Create New Staff User with direct module & role assignment
+ */
+add_action( 'wp_ajax_radm_create_staff_user', 'radm_ajax_create_staff_user' );
+function radm_ajax_create_staff_user(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $name     = sanitize_text_field( $_POST['name'] ?? '' );
+    $email    = sanitize_email( $_POST['email'] ?? '' );
+    $username = sanitize_user( $_POST['username'] ?? '' );
+    $password = $_POST['password'] ?? '';
+    $role     = sanitize_text_field( $_POST['role'] ?? 'radm_admin' );
+
+    if ( ! $name || ! $email ) {
+        wp_send_json_error( [ 'message' => 'Name and Email are required.' ], 400 );
+    }
+    if ( email_exists( $email ) ) {
+        wp_send_json_error( [ 'message' => 'A user with this email address already exists.' ], 400 );
+    }
+
+    if ( ! $username ) {
+        $username = sanitize_user( current( explode( '@', $email ) ) );
+        if ( username_exists( $username ) ) {
+            $username .= '_' . wp_rand( 100, 999 );
+        }
+    }
+
+    if ( ! $password ) {
+        $password = wp_generate_password( 12, false );
+    }
+
+    $user_id = wp_create_user( $username, $password, $email );
+    if ( is_wp_error( $user_id ) ) {
+        wp_send_json_error( [ 'message' => $user_id->get_error_message() ], 400 );
+    }
+
+    wp_update_user( [
+        'ID'           => $user_id,
+        'display_name' => $name,
+        'role'         => $role,
+    ] );
+
+    // Modules Multi-Select
+    $raw_modules = $_POST['modules'] ?? [];
+    if ( is_string( $raw_modules ) ) {
+        $raw_modules = json_decode( stripslashes( $raw_modules ), true ) ?: [];
+    }
+    $valid_keys = array_keys( radm_get_all_modules() );
+    $modules = array_values( array_intersect( (array) $raw_modules, $valid_keys ) );
+
+    $restrict_center = ! empty( $_POST['restrict_center'] );
+    $raw_centers = $_POST['centers'] ?? [];
+    if ( is_string( $raw_centers ) ) {
+        $raw_centers = json_decode( stripslashes( $raw_centers ), true ) ?: [];
+    }
+    $centers = array_map( 'sanitize_text_field', (array) $raw_centers );
+
+    update_user_meta( $user_id, '_radm_allowed_modules', $modules );
+    update_user_meta( $user_id, '_radm_restrict_center', $restrict_center ? 1 : 0 );
+    update_user_meta( $user_id, '_radm_assigned_centers', $centers );
+
+    wp_send_json_success( [
+        'message'  => "Staff user '{$name}' created successfully!",
+        'user_id'  => $user_id,
+        'username' => $username,
+        'password' => $password,
+    ] );
+}
+
+
 
 
 
