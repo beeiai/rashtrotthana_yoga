@@ -667,7 +667,6 @@ function radm_ajax_track_form_group_click(): void {
 
 
 
-<?php
 // Contact form handler
 add_action('wp_ajax_radm_submit_contact', 'radm_ajax_submit_contact');
 add_action('wp_ajax_nopriv_radm_submit_contact', 'radm_ajax_submit_contact');
