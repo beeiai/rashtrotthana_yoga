@@ -1442,3 +1442,70 @@ function radm_ajax_delete_center(): void {
 
 
 
+
+/**
+ * Contact form handler
+ */
+add_action('wp_ajax_radm_submit_contact', 'radm_ajax_submit_contact');
+add_action('wp_ajax_nopriv_radm_submit_contact', 'radm_ajax_submit_contact');
+function radm_ajax_submit_contact(): void {
+    $name    = sanitize_text_field( $_POST['name'] ?? '' );
+    $email   = sanitize_email( $_POST['email'] ?? '' );
+    $phone   = sanitize_text_field( $_POST['phone'] ?? '' );
+    $subject = sanitize_text_field( $_POST['subject'] ?? '' );
+    $message = sanitize_textarea_field( $_POST['message'] ?? '' );
+
+    if ( ! $name || ! $email || ! $message ) {
+        wp_send_json_error( [ 'message' => 'Please fill all required fields.' ], 400 );
+    }
+
+    $admin_email = get_option('radm_contact_email');
+    if ( empty($admin_email) ) {
+        $admin_email = get_option('admin_email');
+    }
+
+    $email_subject = "New Contact Form Submission: " . ($subject ? $subject : 'General Inquiry');
+    $email_body    = "You have received a new message from the contact form.
+
+";
+    $email_body   .= "Name: $name
+";
+    $email_body   .= "Email: $email
+";
+    $email_body   .= "Phone: $phone
+";
+    $email_body   .= "Subject: $subject
+
+";
+    $email_body   .= "Message:
+$message
+";
+
+    $headers = [ 'Reply-To: ' . $name . ' <' . $email . '>' ];
+
+    // Insert into database as rs_inquiry post type
+    $post_id = wp_insert_post([
+        'post_title'   => sanitize_text_field($name . ' - ' . $subject),
+        'post_content' => "Name: " . sanitize_text_field($name) . "\n" .
+                          "Email: " . sanitize_email($email) . "\n" .
+                          "Phone: " . sanitize_text_field($phone) . "\n" .
+                          "Subject: " . sanitize_text_field($subject) . "\n\n" .
+                          "Message:\n" . sanitize_textarea_field($message),
+        'post_status'  => 'publish',
+        'post_type'    => 'rs_inquiry',
+        'meta_input'   => [
+            'inquiry_name'    => sanitize_text_field($name),
+            'inquiry_email'   => sanitize_email($email),
+            'inquiry_phone'   => sanitize_text_field($phone),
+            'inquiry_subject' => sanitize_text_field($subject),
+        ]
+    ]);
+
+    $sent = wp_mail( $admin_email, $email_subject, $email_body, $headers );
+
+    if ( $post_id || $sent ) {
+        wp_send_json_success( [ 'message' => 'Thank you for reaching out. We will get back to you soon.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to send message. Please try again later.' ], 500 );
+    }
+}

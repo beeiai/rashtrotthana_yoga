@@ -68,6 +68,7 @@ function radm_register_menu(): void {
         [ 'radm-gallery',       'Gallery',                 'read',            'radm_page_gallery'       ],
         [ 'radm-form-groups',   'Form Groups',             'read',            'radm_page_form_groups'   ],
         [ 'radm-whatsapp',      'WhatsApp (WATI)',         'read',            'radm_page_whatsapp'      ],
+        [ 'radm-pages',         'Content Pages',           'read',            'radm_page_pages'         ],
         [ 'radm-roles',         'Roles & Responsibilities','manage_options',  'radm_page_roles'         ],
         [ 'radm-settings',      'Settings',                'manage_options',  'radm_page_settings'      ],
     ];
@@ -133,6 +134,7 @@ add_filter( 'admin_body_class', 'radm_body_class' );
 // ── Page Callbacks ────────────────────────────────────────────────────────────
 function radm_page_dashboard():     void { require RADM_PLUGIN_DIR . 'pages/dashboard.php';     }
 function radm_page_registrations(): void { require RADM_PLUGIN_DIR . 'pages/registrations.php'; }
+function radm_page_pages():         void { require RADM_PLUGIN_DIR . 'pages/pages.php';         }
 function radm_page_gallery():       void { require RADM_PLUGIN_DIR . 'pages/gallery.php';       }
 function radm_page_form_groups():   void { require RADM_PLUGIN_DIR . 'pages/form-groups.php';   }
 function radm_page_whatsapp():      void { require RADM_PLUGIN_DIR . 'pages/whatsapp.php';      }
