@@ -27,7 +27,7 @@ function radm_create_roles(): void {
             'edit_pages'                => true,
             'edit_others_posts'         => true,
             'edit_others_pages'         => true,
-            'manage_ry_registrations'   => true, // Custom cap for registrations
+            'manage_options'   => true, // Custom cap for registrations
             'upload_files'              => true,
         ] );
     }
@@ -57,7 +57,7 @@ function radm_register_menu(): void {
     add_menu_page(
         'Rashtrotthana Portal',
         'Rashtrotthana',
-        'manage_ry_registrations',
+        'manage_options',
         'radm-dashboard',
         'radm_page_dashboard',
         'none',
@@ -65,10 +65,10 @@ function radm_register_menu(): void {
     );
 
     $pages = [
-        [ 'radm-dashboard',     'Dashboard',               'manage_ry_registrations', 'radm_page_dashboard'     ],
-        [ 'radm-registrations', 'Registrations',           'manage_ry_registrations', 'radm_page_registrations' ],
-        [ 'radm-form-groups',   'Form Groups',             'manage_ry_registrations', 'radm_page_form_groups'   ],
-        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'manage_ry_registrations', 'radm_page_whatsapp'      ],
+        [ 'radm-dashboard',     'Dashboard',               'manage_options', 'radm_page_dashboard'     ],
+        [ 'radm-registrations', 'Registrations',           'manage_options', 'radm_page_registrations' ],
+        [ 'radm-form-groups',   'Form Groups',             'manage_options', 'radm_page_form_groups'   ],
+        [ 'radm-whatsapp',      'WhatsApp (WATI)',         'manage_options', 'radm_page_whatsapp'      ],
         [ 'radm-roles',         'Roles & Responsibilities','manage_options',          'radm_page_roles'         ],
         [ 'radm-settings',      'Settings',                'manage_options',          'radm_page_settings'      ],
     ];
