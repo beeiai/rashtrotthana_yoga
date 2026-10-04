@@ -12,15 +12,12 @@ $rs_values           = $_home['values'];
 $rs_stats            = $_home['stats'];
 $rs_home_cards       = $_home['center_cards'];
 $rs_founder          = $_home['founder'];
+$rs_home_activities  = ! empty( $_home['activities'] ) ? $_home['activities'] : array();
 $activity_fallbacks  = $_home['activity_fallbacks'];
 $event_fallbacks     = $_home['event_fallbacks'];
 
-// Gallery albums — pulls from gallery-data.php via rs_get_gallery_albums()
-$rs_gallery_albums = rs_get_gallery_albums();
-
-// WordPress CPT queries (return empty until CPTs are populated)
-$activities = rashtrotthana_home_collection( array( 'activity', 'activities' ) );
-$events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
+// Live events fetched directly from DB via rs_get_events()
+$home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
 ?>
 
 <section class="rs-values rs-section">
@@ -37,9 +34,19 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
     <div class="rs-container">
         <div class="rs-section-row"><h2>Our Activities</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/activities/') ); ?>">View All Activities</a></div>
         <div class="rs-card-grid rs-activity-grid">
-            <?php if ( $activities ) : foreach ( $activities as $post ) : setup_postdata( $post ); ?>
-                <article class="rs-activity-card"><a href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } else { echo '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg' ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy">'; } ?><h3><?php the_title(); ?></h3><p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 14 ) ); ?></p></a></article>
-            <?php endforeach; wp_reset_postdata(); endif; ?>
+            <?php foreach ( $rs_home_activities as $act ) : ?>
+                <article class="rs-activity-card">
+                    <a href="<?php echo esc_url( $act['link'] ); ?>">
+                        <div class="rs-activity-card-media">
+                            <img src="<?php echo esc_url( $act['image'] ); ?>" alt="<?php echo esc_attr( $act['name'] ); ?>" loading="lazy">
+                        </div>
+                        <div class="rs-activity-card-body">
+                            <h3><?php echo esc_html( $act['name'] ); ?></h3>
+                            <p><?php echo esc_html( $act['desc'] ); ?></p>
+                        </div>
+                    </a>
+                </article>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -62,10 +69,10 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
                 <p class="rs-centers-subheading">Our <?php echo count(rs_get_centers()); ?> centers bring wellness, learning and community closer to you.</p>
             </div>
             <div class="rs-centers-action-col">
-                <form class="rs-center-search-box rs-center-search-box--wide" role="search">
+                <form class="rs-center-search-box" role="search">
                     <label class="screen-reader-text" for="rs-center-search-input">Search centers</label>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-                    <input id="rs-center-search-input" type="search" placeholder="Search by area, center name or location..." autocomplete="off">
+                    <input id="rs-center-search-input" type="search" placeholder="Search by area or center..." autocomplete="off">
                 </form>
             </div>
         </div>
@@ -74,15 +81,20 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
 
         <!-- 4-Card Horizontal Grid -->
         <div class="rs-center-cards">
-            <?php foreach ( $rs_home_cards as $center ) : ?>
-                <article class="rs-center-card">
+            <?php foreach ( $rs_home_cards as $center ) : 
+                $is_def = ! empty( $center['is_default'] );
+            ?>
+                <article class="rs-center-card"
+                         data-name="<?php echo esc_attr( strtolower( $center['name'] ) ); ?>"
+                         data-slug="<?php echo esc_attr( $center['slug'] ); ?>"
+                         data-default="<?php echo $is_def ? 'true' : 'false'; ?>"
+                         <?php echo $is_def ? '' : 'hidden'; ?>>
                     <div class="rs-center-card-img-wrap">
                         <img src="<?php echo esc_url( $center['image'] ); ?>" alt="<?php echo esc_attr( $center['name'] ); ?>" loading="lazy">
                     </div>
                     <div class="rs-center-card-body">
                         <h3><?php echo esc_html( $center['name'] ); ?></h3>
-                        <p class="rs-center-location"><?php echo esc_html( $center['city'] ); ?></p>
-                        <a class="rs-center-button" href="<?php echo esc_url( home_url('/centers/') ); ?>">
+                        <a class="rs-center-button" href="<?php echo esc_url( home_url( '/centers/#' . $center['slug'] ) ); ?>">
                             <span>View Details</span>
                             <span aria-hidden="true">&rarr;</span>
                         </a>
@@ -95,25 +107,57 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
     </div>
 </section>
 
-<section class="rs-content-section">
+<section class="rs-content-section rs-home-events-section">
     <div class="rs-container">
         <div class="rs-section-row"><h2>Upcoming Events</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/events/') ); ?>">View All Events</a></div>
-        <?php if ( $events ) : ?>
         <div class="rs-card-grid rs-event-grid">
-            <?php foreach ( $events as $post ) : setup_postdata( $post ); ?>
-                <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } else { echo '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/bg.jpg' ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy">'; } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
-            <?php endforeach; wp_reset_postdata(); ?>
+            <?php if ( ! empty( $home_events ) ) : foreach ( array_slice( $home_events, 0, 6 ) as $event ) : ?>
+                <article class="rs-event-item-card"
+                         id="home-event-<?php echo esc_attr( $event['id'] ); ?>"
+                         data-type="<?php echo esc_attr( $event['type'] ); ?>"
+                         data-category="<?php echo esc_attr( $event['category_slug'] ); ?>"
+                         data-title="<?php echo esc_attr( $event['title'] ); ?>"
+                         data-venue="<?php echo esc_attr( $event['venue'] ); ?>">
+                    
+                    <div class="rs-event-media">
+                        <img src="<?php echo esc_url( $event['image'] ); ?>" alt="<?php echo esc_attr( $event['title'] ); ?>" loading="lazy">
+                        <div class="rs-event-date-badge">
+                            <strong><?php echo esc_html( $event['day'] ); ?></strong>
+                            <span><?php echo esc_html( $event['month'] ); ?></span>
+                        </div>
+                        <span class="rs-event-category-pill"><?php echo esc_html( $event['category'] ); ?></span>
+                    </div>
+
+                    <div class="rs-event-body">
+                        <div class="rs-event-meta-list">
+                            <div class="rs-event-meta-item">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span><?php echo esc_html( $event['venue'] ); ?></span>
+                            </div>
+                            <div class="rs-event-meta-item">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <span><?php echo esc_html( $event['time'] ); ?></span>
+                            </div>
+                        </div>
+
+                        <h3 class="rs-event-title"><?php echo esc_html( $event['title'] ); ?></h3>
+                        <p class="rs-event-desc"><?php echo esc_html( $event['desc'] ); ?></p>
+
+                        <div class="rs-event-footer">
+                            <span class="rs-event-mode-badge" title="<?php echo esc_attr( $event['mode'] ); ?>"><?php echo esc_html( $event['mode'] ); ?></span>
+                            <a href="<?php echo esc_url( home_url( '/events/#' . $event['id'] ) ); ?>" class="rs-register-btn">
+                                <span>Register Now</span> <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            <?php endforeach; else : ?>
+                <div class="rs-events-empty-state" style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 2.75rem 1.5rem; background: #fff8f5; border-radius: 16px; border: 1px dashed rgba(143, 23, 29, 0.28);">
+                    <p style="margin: 0; font-size: 1.15rem; color: #5d1116; font-weight: 600;">There are no events available right now.</p>
+                    <p style="margin: 0.5rem 0 0; font-size: 0.92rem; color: #7a5c58;">Please check back soon for upcoming workshops, retreats, and celebrations.</p>
+                </div>
+            <?php endif; ?>
         </div>
-        <?php else : ?>
-        <div class="rs-no-events">
-            <div class="rs-no-events-inner">
-                <span class="rs-no-events-icon" aria-hidden="true">🗓️</span>
-                <p>There are no events available right now.</p>
-                <small>Check back soon — new events are added regularly.</small>
-                <a class="rs-btn rs-btn-secondary" href="<?php echo esc_url( home_url('/events/') ); ?>">View Events Page</a>
-            </div>
-        </div>
-        <?php endif; ?>
     </div>
 </section>
 
@@ -154,21 +198,19 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
             <a class="rs-outline-link" href="<?php echo esc_url( home_url('/gallery/') ); ?>">View Gallery</a>
         </div>
         <div class="rs-gallery-grid">
-            <?php foreach ( $rs_gallery_albums as $album ) :
-                $cover = ! empty( $album['cover_image'] ) ? $album['cover_image'] : '';
-                if ( ! $cover ) continue;
-                // Show up to 8 photos from each album's photo array as individual tiles
-                $tiles = ! empty( $album['photos'] ) ? array_slice( $album['photos'], 0, 2 ) : array();
-            ?>
-                <a href="<?php echo esc_url( home_url('/gallery/') ); ?>" aria-label="<?php echo esc_attr( $album['title'] ); ?>">
-                    <img src="<?php echo esc_url( $cover ); ?>" alt="<?php echo esc_attr( $album['title'] ); ?>" loading="lazy">
-                </a>
-                <?php foreach ( $tiles as $photo ) : if ( empty( $photo['url'] ) ) continue; ?>
-                <a href="<?php echo esc_url( home_url('/gallery/') ); ?>" aria-label="<?php echo esc_attr( $photo['title'] ?? '' ); ?>">
-                    <img src="<?php echo esc_url( $photo['url'] ); ?>" alt="<?php echo esc_attr( $photo['title'] ?? '' ); ?>" loading="lazy">
-                </a>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
+            <?php 
+            $gallery_media = function_exists( 'rs_get_home_gallery_images' ) ? rs_get_home_gallery_images( 12 ) : array();
+            if ( ! empty( $gallery_media ) ) :
+                foreach ( $gallery_media as $item ) : ?>
+                    <a class="rs-gallery-item" href="<?php echo esc_url( home_url('/gallery/') ); ?>" title="<?php echo esc_attr( $item['title'] ); ?>">
+                        <img src="<?php echo esc_url( $item['url'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" loading="lazy">
+                    </a>
+                <?php endforeach;
+            else : ?>
+                <div class="rs-gallery-empty-state" style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 2.5rem 1.5rem; background: #fff8f5; border-radius: 16px; border: 1px dashed rgba(143, 23, 29, 0.28);">
+                    <p style="margin: 0; font-size: 1.05rem; color: #5d1116; font-weight: 600;">Gallery photos will appear here once uploaded to the media library.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

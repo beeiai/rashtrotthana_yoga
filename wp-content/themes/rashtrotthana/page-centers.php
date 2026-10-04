@@ -1189,17 +1189,37 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial render
     updateCardVisibility();
 
-    // Hash checking logic
-    if (window.location.hash) {
-        var hashId = window.location.hash.substring(1);
-        if (hashId.startsWith('center-')) {
-            // Strip 'center-' to get the slug
-            var slug = hashId.substring(7);
-            setTimeout(function() {
-                openModal('center-modal-' + slug);
-            }, 300);
-        }
+    // Hash checking logic to automatically open center details modal
+    function handleCenterHash() {
+        if (!window.location.hash) return;
+        var rawHash = window.location.hash.substring(1).toLowerCase();
+        var slug = rawHash.replace(/^center-modal-/, '').replace(/^center-/, '').replace(/^card-/, '');
+        var aliasMap = {
+            'kg-nagar': 'kgnagar',
+            'rbi-layout': 'rbilayout',
+            'kempegowda-nagar': 'kgnagar'
+        };
+        if (aliasMap[slug]) slug = aliasMap[slug];
+
+        setTimeout(function() {
+            var modalId = 'center-modal-' + slug;
+            var targetModal = document.getElementById(modalId);
+            if (targetModal) {
+                openModal(modalId);
+                var targetCard = document.getElementById('card-' + slug);
+                if (targetCard) {
+                    var moreSection = document.getElementById('rs-centers-more-section');
+                    if (moreSection && moreSection.contains(targetCard)) {
+                        moreSection.style.display = 'block';
+                    }
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }, 350);
     }
+
+    handleCenterHash();
+    window.addEventListener('hashchange', handleCenterHash);
 
     // Check url params for locate logic from homepage
     var urlParams = new URLSearchParams(window.location.search);

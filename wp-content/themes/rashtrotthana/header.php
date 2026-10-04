@@ -27,11 +27,11 @@
 }
 @media (min-width:601px){
     .rs-hero-content{width:min(calc(100% - 96px),760px)!important;max-width:760px!important;margin-left:0!important;margin-right:auto!important}
-    .rs-hero-title{width:100%;max-width:760px!important;font-size:clamp(2.75rem,4.25vw,4.1rem)!important;line-height:1.08!important;letter-spacing:-.025em!important;text-wrap:balance}
+    .rs-hero-title{width:100%;max-width:720px!important;font-size:clamp(2.05rem,3.2vw,2.9rem)!important;line-height:1.18!important;letter-spacing:-.02em!important;text-wrap:balance}
 }
 @media (min-width:601px) and (max-width:900px){
     .rs-hero-content{width:calc(100% - 48px)!important}
-    .rs-hero-title{max-width:680px!important;font-size:clamp(2.5rem,5vw,3.35rem)!important}
+    .rs-hero-title{max-width:640px!important;font-size:clamp(1.85rem,3.8vw,2.35rem)!important}
 }
 </style>
 <header class="rs-site-header">

@@ -13,52 +13,138 @@
 
 // --- Center Cards (Homepage Centers Section) ---
 $rs_home_center_cards = array(
-    array( 'name' => 'Malleswaram Yoga Center',    'city' => 'Bengaluru', 'image' => get_template_directory_uri() . '/assets/images/client/dsc08572.jpg' ),
-    array( 'name' => 'Jayanagar Wellness Center',  'city' => 'Bengaluru', 'image' => get_template_directory_uri() . '/assets/images/client/dsc08548-2-.png' ),
-    array( 'name' => 'Kengeri Community Center',   'city' => 'Bengaluru', 'image' => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg' ),
-    array( 'name' => 'Rajarajeshwari Center',      'city' => 'Bengaluru', 'image' => get_template_directory_uri() . '/assets/images/client/20200529-182250.jpg' ),
+    array(
+        'name'       => 'KG Nagar',
+        'slug'       => 'kgnagar',
+        'image'      => content_url( '/uploads/2026/10/Kempegowda-Nagar.jpg' ),
+        'is_default' => true,
+    ),
+    array(
+        'name'       => 'Jayanagar',
+        'slug'       => 'jayanagar',
+        'image'      => content_url( '/uploads/2026/10/Jayanagara.jpg' ),
+        'is_default' => true,
+    ),
+    array(
+        'name'       => 'Sadashivnagar',
+        'slug'       => 'sadashivnagar',
+        'image'      => content_url( '/uploads/2026/10/Sadashivnagar.jpg' ),
+        'is_default' => true,
+    ),
+    array(
+        'name'       => 'Kundalahalli',
+        'slug'       => 'kundalahalli',
+        'image'      => content_url( '/uploads/2026/10/Kundalahalli.jpg' ),
+        'is_default' => true,
+    ),
+    array(
+        'name'       => 'Girinagar',
+        'slug'       => 'girinagar',
+        'image'      => content_url( '/uploads/2026/10/Girinagar.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'Gayathrinagar',
+        'slug'       => 'gayathrinagar',
+        'image'      => content_url( '/uploads/2026/10/Gayathrinagar.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'Aksharam',
+        'slug'       => 'aksharam',
+        'image'      => content_url( '/uploads/2026/10/Basavangudi.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'Kamakshipalya',
+        'slug'       => 'kamakshipalya',
+        'image'      => content_url( '/uploads/2026/10/KAMAKSHIPALYA.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'Nagarbhavi',
+        'slug'       => 'nagarbhavi',
+        'image'      => content_url( '/uploads/2026/10/nagarbhavi.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'RBI Layout',
+        'slug'       => 'rbilayout',
+        'image'      => content_url( '/uploads/2026/10/RBI-Layout.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'Vijaynagar',
+        'slug'       => 'vijaynagar',
+        'image'      => content_url( '/uploads/2026/10/Vijaynagar.jpg' ),
+        'is_default' => false,
+    ),
+    array(
+        'name'       => 'Sunkenahalli',
+        'slug'       => 'sunkenahalli',
+        'image'      => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg',
+        'is_default' => false,
+    ),
 );
 
 // --- Impact Statistics ---
 $rs_home_stats = array(
-    array( 'value' => 1972, 'suffix' => '',  'label' => 'Since' ),
-    array( 'value' => 35,   'suffix' => '+', 'label' => 'Activities' ),
-    array( 'value' => 18,   'suffix' => '',  'label' => 'Projects' ),
-    array( 'value' => 12,   'suffix' => '+', 'label' => 'Centers' ),
-    array( 'value' => 1000, 'suffix' => '+', 'label' => 'Lives Impacted' ),
+    array( 'value' => 1972, 'suffix' => '',       'label' => 'Since' ),
+    array( 'value' => 35,   'suffix' => '+',      'label' => 'Activities' ),
+    array( 'value' => 12,   'suffix' => '+',      'label' => 'Centers' ),
+    array( 'value' => 200,  'suffix' => '+',      'label' => 'Daily Classes' ),
+    array( 'value' => 1,    'suffix' => ' Lakh+', 'label' => 'Lives Impacted' ),
 );
 
-// --- Vision, Mission, Values ---
+// --- Vision, Mission, Values, Impact ---
 $rs_home_values = array(
-    array( 'title' => 'Our Vision',  'text' => 'To build a healthy, harmonious and sustainable society rooted in Indian values.' ),
-    array( 'title' => 'Our Mission', 'text' => 'To empower individuals through Yoga, Education, Culture and Service for personal growth and social transformation.' ),
-    array( 'title' => 'Our Values',  'text' => 'Integrity, compassion, discipline, selfless service and excellence in everything we do.' ),
-    array( 'title' => 'Our Impact',  'text' => 'Building stronger communities through meaningful service and lifelong learning.' ),
+    array( 'title' => 'Our Vision',  'text' => 'Swastha-Susthira Samajanirmanam — To build a healthy and sustainable society.' ),
+    array( 'title' => 'Our Mission', 'text' => 'Advancing world-class yoga training and clinical research to cultivate a community of physical vitality, mental clarity, and spiritual harmony.' ),
+    array( 'title' => 'Our Values',  'text' => 'Guided by Integrity and Affection (Aatmeeyata), we unite Commitment to excellence with Patriotism for our nation.' ),
+    array( 'title' => 'Our Impact',  'text' => 'We enrich lives and build stronger communities by connecting people through meaningful public service and creating continuous opportunities for lifelong learning.' ),
 );
 
 // --- Founder Data ---
 $rs_home_founder = array(
-    'name'        => 'Dr. D. Veerendra Heggade',
-    'title'       => 'Our Visionary Founder',
-    'subtitle'    => 'The guiding philosophy behind the Rashtrotthana Yoga movement.',
-    'image'       => get_template_directory_uri() . '/assets/images/client/08-02-22-rathasaptami-celebration-yoga-centres-bengaluru-5-.jpg',
-    'image_alt'   => 'Dr. D. Veerendra Heggade - Founder, Rashtrotthana Parishat',
+    'name'        => 'Sri Ajith Kumar',
+    'title'       => 'Sri Ajith Kumar',
+    'subtitle'    => '(1934 – 1990)',
+    'image'       => content_url( '/uploads/2026/10/Shri-Ajith-kumar-Founder.png' ),
+    'image_alt'   => 'Sri Ajith Kumar (1934 – 1990) - Founder, Rashtrotthana Yoga',
     'paragraphs'  => array(
-        '<strong>Dr. D. Veerendra Heggade</strong>, the revered Dharmadhikari of Dharmasthala and the founding inspiration behind Rashtrotthana Parishat, has been the beacon guiding this widespread Yoga movement.',
-        'His steadfast conviction that Yoga possesses the intrinsic power to transform individuals, heal bodily ailments, and foster socially conscious citizens has catalyzed the growth of our extensive network of community centers.',
-        'Under his inspiring guidance, Rashtrotthana Yoga remains steadfastly dedicated to service, integrity, and building a vigorous, harmonious nation.',
+        'Ajith Kumar is a talented graduate with gold medals in both Electrical and Mechanical engineering. He dedicated his entire life to the nation and became a promoter of the Rashtriya Swayamsevak Sangh. He demonstrated a keen interest in Yoga and was eager to foster awareness of it, aiming to entice more individuals to explore its teachings.',
+        'He believed that mental health would only be good if physical health was good. Ajith Kumar, who received his Yoga education from the renowned Yoga masters Pattabhi Jois and B.K.S. Iyengar of Mysuru, trained many enthusiastic youths as Yoga trainers. This created an encouraging atmosphere for Yoga education throughout the state. Ajit’s guidance and efforts have been invaluable in helping organizations like the Hindu Seva Pratishthana and Rashtrotthana Parishat take up Yoga education as a major activity.',
     ),
-    'quote'       => 'Yoga is not just an exercise; it is a way of life. It connects body, mind, and spirit to create a balanced, meaningful, and joyful existence.',
-    'quote_author'=> 'Dr. D. Veerendra Heggade',
+    'quote'       => 'Mental health would only be good if physical health was good.',
+    'quote_author'=> 'Sri Ajith Kumar',
 );
 
-// --- Activity Fallbacks (used on homepage until real CPT data is available) ---
-$rs_activity_fallbacks = array(
-    array( 'Yoga & Wellness',    'Yoga for all age groups, beginners, advanced and therapeutic programs.',     get_template_directory_uri() . '/assets/images/client/05-01-25-kutumba-milana-rysri-jayanagar-3-.jpg' ),
-    array( 'Education',          'Quality education and value-based learning for a better tomorrow.',          get_template_directory_uri() . '/assets/images/client/18-01-25-suggi-sambhrama-kolata-in-rysri-kg-nagar-1-.jpg' ),
-    array( 'Arts & Culture',     'Nurturing talent through music, dance and traditional arts.',                get_template_directory_uri() . '/assets/images/client/18-02-23-cultural-heritage-tour-for-rysri-yoga-practitioners-1-.jpg' ),
-    array( 'Community Service',  'Serving society through social and humanitarian initiatives.',               get_template_directory_uri() . '/assets/images/client/05-01-25-gou-puja-sambhrama-rysri-yoga-jayanagar-1-.jpg' ),
-    array( 'Sports & Fitness',   'Karate, fitness programs and physical development activities.',              get_template_directory_uri() . '/assets/images/client/21-06-22-idy-celebration-12-.jpg' ),
+// --- 4 Homepage Activities ---
+$rs_home_activities = array(
+    array(
+        'name'  => 'Yoga',
+        'desc'  => 'Authentic Patanjali Yoga, therapeutic wellness, and daily sadhana for physical vitality and mental peace.',
+        'image' => content_url( '/uploads/2026/10/Yoga.jpg' ),
+        'link'  => home_url( '/activities/#yoga-wellness' ),
+    ),
+    array(
+        'name'  => 'GYM',
+        'desc'  => 'Modern fitness equipment, strength conditioning, and personalized workout routines for all levels.',
+        'image' => content_url( '/uploads/2026/10/GYM.webp' ),
+        'link'  => home_url( '/activities/#fitness-sports' ),
+    ),
+    array(
+        'name'  => 'Music and dance',
+        'desc'  => 'Classical Carnatic vocal, instrumental music training, and expressive traditional dance forms.',
+        'image' => content_url( '/uploads/2026/10/Music.jpg' ),
+        'link'  => home_url( '/activities/#arts-music' ),
+    ),
+    array(
+        'name'  => 'Karate',
+        'desc'  => 'Martial arts discipline, self-defense technique, mental focus, and agility training for all ages.',
+        'image' => content_url( '/uploads/2026/10/karate.jpg' ),
+        'link'  => home_url( '/activities/#martial-arts' ),
+    ),
 );
 
 // --- Event Fallbacks (used on homepage until real CPT events are available) ---

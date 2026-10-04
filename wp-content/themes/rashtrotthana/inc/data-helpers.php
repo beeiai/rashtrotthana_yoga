@@ -287,110 +287,66 @@ function rs_get_gallery_albums() {
     return $cached;
 }
 
+/**
+ * Retrieve homepage gallery images strictly from WordPress Media Library
+ */
+function rs_get_home_gallery_images( $limit = 12 ) {
+    $args = array(
+        'post_type'      => 'attachment',
+        'post_mime_type' => 'image',
+        'post_status'    => 'inherit',
+        'posts_per_page' => 50,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    );
+    $attachments = get_posts( $args );
+    $gallery = array();
+
+    foreach ( $attachments as $att ) {
+        $file = get_attached_file( $att->ID );
+        // Verify attachment file actually exists on disk
+        if ( ! $file || ! file_exists( $file ) ) {
+            continue;
+        }
+
+        // Filter out hero slides, logos, or founder portrait
+        $slug = $att->post_name;
+        if ( stripos( $slug, 'hero' ) !== false || stripos( $slug, 'founder' ) !== false || stripos( $slug, 'logo' ) !== false ) {
+            continue;
+        }
+
+        $img_url = wp_get_attachment_image_url( $att->ID, 'large' ) ?: wp_get_attachment_url( $att->ID );
+        if ( ! $img_url ) {
+            continue;
+        }
+
+        $gallery[] = array(
+            'id'    => $att->ID,
+            'title' => $att->post_title,
+            'url'   => $img_url,
+            'link'  => home_url( '/gallery/' ),
+        );
+
+        if ( count( $gallery ) >= $limit ) {
+            break;
+        }
+    }
+
+    return $gallery;
+}
+
 // ── Homepage ─────────────────────────────────────────────────────────────────
 
 function rs_get_homepage_data() {
-    $rs_home_center_cards = [];
-    $rs_home_stats = [];
-    $rs_home_values = [];
-    $rs_home_founder = [];
-    $rs_activity_fallbacks = [];
-    $rs_event_fallbacks = [];
-    // Merge ACF options with original arrays
-    
-    
-    // Values
-    $rs_home_values = array(
-        array( 'title' => 'Our Vision',  'text' => 'To build a healthy, harmonious and sustainable society rooted in Indian values.' ),
-        array( 'title' => 'Our Mission', 'text' => 'To empower individuals through Yoga, Education, Culture and Service for personal growth and social transformation.' ),
-        array( 'title' => 'Our Values',  'text' => 'Integrity, compassion, discipline, selfless service and excellence in everything we do.' ),
-        array( 'title' => 'Our Impact',  'text' => 'Building stronger communities through meaningful service and lifelong learning.' ),
-    );
+    require get_template_directory() . '/data/homepage-data.php';
 
-    $v_title = get_field('ry_about_vision_title', 'option');
-    $v_text = get_field('ry_about_vision_text', 'option');
-    $m_title = get_field('ry_about_mission_title', 'option');
-    $m_text = get_field('ry_about_mission_text', 'option');
-    if ( $v_title && $m_title ) {
-        $rs_home_values[0] = ['title' => $v_title, 'text' => strip_tags($v_text)];
-        $rs_home_values[1] = ['title' => $m_title, 'text' => strip_tags($m_text)];
-    }
-    
-    // Stats
-    $rs_home_stats = array(
-        array( 'value' => 1972, 'suffix' => '',  'label' => 'Since' ),
-        array( 'value' => 35,   'suffix' => '+', 'label' => 'Activities' ),
-        array( 'value' => 18,   'suffix' => '',  'label' => 'Projects' ),
-        array( 'value' => 23,   'suffix' => '+', 'label' => 'Centers' ),
-        array( 'value' => 1000, 'suffix' => '+', 'label' => 'Lives Impacted' ),
-    );
-    $stats = get_field('ry_home_stats', 'option');
-    if ( $stats && is_array($stats) ) {
-        $rs_home_stats = $stats;
-    }
-    
-    // Founder
-    $f_name = get_field('ry_home_founder_name', 'option');
-    if ( $f_name ) {
-        $rs_home_founder = array(
-            'name' => $f_name,
-            'title' => get_field('ry_home_founder_title', 'option'),
-            'subtitle' => get_field('ry_home_founder_subtitle', 'option'),
-            'image' => get_field('ry_home_founder_photo', 'option'),
-            'image_alt' => $f_name . ' - Founder',
-            'paragraphs' => explode("\n\n", strip_tags(get_field('ry_home_founder_bio', 'option'))),
-            'quote' => get_field('ry_home_founder_quote', 'option'),
-            'quote_author' => get_field('ry_home_founder_quote_attr', 'option'),
-        );
-    }
-    
-    // Featured Cards
-    $f_cards = [];
-    $all_centers = rs_get_centers();
-    foreach ($all_centers as $c) {
-        if ( !empty($c['is_featured']) ) {
-            $f_cards[] = [
-                'name' => $c['name'],
-                'city' => $c['area'],
-                'image' => $c['image'],
-                'link' => home_url('/centers/#' . $c['id'])
-            ];
-        }
-    }
-    
-    // Fallback: If no centers are manually featured, just grab the first 4
-    if ( empty($f_cards) && !empty($all_centers) ) {
-        $slice = array_slice($all_centers, 0, 4);
-        foreach ($slice as $c) {
-            $f_cards[] = [
-                'name' => $c['name'],
-                'city' => $c['area'],
-                'image' => $c['image'],
-                'link' => home_url('/centers/#' . $c['id'])
-            ];
-        }
-    }
-
-    if ( !empty($f_cards) ) {
-        $rs_home_center_cards = $f_cards;
-    }
-    
-    // Update stats dynamically
-    if ( !empty($rs_home_stats) && is_array($rs_home_stats) ) {
-        $real_count = count($all_centers);
-        foreach ($rs_home_stats as &$stat) {
-            if ( $stat['label'] === 'Centers' && $real_count > 0 ) {
-                $stat['value'] = $real_count;
-            }
-        }
-    }
-    
     return array(
+        'activities'         => isset( $rs_home_activities ) ? $rs_home_activities : array(),
         'center_cards'       => $rs_home_center_cards,
         'stats'              => $rs_home_stats,
         'values'             => $rs_home_values,
         'founder'            => $rs_home_founder,
-        'activity_fallbacks' => $rs_activity_fallbacks,
+        'activity_fallbacks' => isset( $rs_activity_fallbacks ) ? $rs_activity_fallbacks : array(),
         'event_fallbacks'    => $rs_event_fallbacks,
     );
 }
