@@ -15,6 +15,9 @@ $rs_founder          = $_home['founder'];
 $activity_fallbacks  = $_home['activity_fallbacks'];
 $event_fallbacks     = $_home['event_fallbacks'];
 
+// Gallery albums — pulls from gallery-data.php via rs_get_gallery_albums()
+$rs_gallery_albums = rs_get_gallery_albums();
+
 // WordPress CPT queries (return empty until CPTs are populated)
 $activities = rashtrotthana_home_collection( array( 'activity', 'activities' ) );
 $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
@@ -59,15 +62,11 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
                 <p class="rs-centers-subheading">Our <?php echo count(rs_get_centers()); ?> centers bring wellness, learning and community closer to you.</p>
             </div>
             <div class="rs-centers-action-col">
-                <form class="rs-center-search-box" role="search">
+                <form class="rs-center-search-box rs-center-search-box--wide" role="search">
                     <label class="screen-reader-text" for="rs-center-search-input">Search centers</label>
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-                    <input id="rs-center-search-input" type="search" placeholder="Search by area or center..." autocomplete="off">
+                    <input id="rs-center-search-input" type="search" placeholder="Search by area, center name or location..." autocomplete="off">
                 </form>
-                <a class="rs-center-locate-btn" href="<?php echo esc_url( home_url('/centers/') ); ?>">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7Zm0 10.1A3.1 3.1 0 1 1 12 5.9a3.1 3.1 0 0 1 0 6.2Z"/></svg>
-                    <span>Locate Centers Near You</span>
-                </a>
             </div>
         </div>
 
@@ -99,11 +98,22 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
 <section class="rs-content-section">
     <div class="rs-container">
         <div class="rs-section-row"><h2>Upcoming Events</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/events/') ); ?>">View All Events</a></div>
+        <?php if ( $events ) : ?>
         <div class="rs-card-grid rs-event-grid">
-            <?php if ( $events ) : foreach ( $events as $post ) : setup_postdata( $post ); ?>
-                <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } else { echo '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/client/dsc08572.jpg' ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy">'; } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
-            <?php endforeach; wp_reset_postdata(); endif; ?>
+            <?php foreach ( $events as $post ) : setup_postdata( $post ); ?>
+                <article class="rs-event-card"><a href="<?php the_permalink(); ?>"><div class="rs-event-image"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); } else { echo '<img src="' . esc_url( get_template_directory_uri() . '/assets/images/bg.jpg' ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy">'; } ?><span><b><?php echo esc_html( get_the_date( 'd' ) ); ?></b><?php echo esc_html( get_the_date( 'M' ) ); ?></span></div><h3><?php the_title(); ?></h3><p>View event details</p><span class="rs-register-button">Register Now</span></a></article>
+            <?php endforeach; wp_reset_postdata(); ?>
         </div>
+        <?php else : ?>
+        <div class="rs-no-events">
+            <div class="rs-no-events-inner">
+                <span class="rs-no-events-icon" aria-hidden="true">🗓️</span>
+                <p>There are no events available right now.</p>
+                <small>Check back soon — new events are added regularly.</small>
+                <a class="rs-btn rs-btn-secondary" href="<?php echo esc_url( home_url('/events/') ); ?>">View Events Page</a>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -138,7 +148,29 @@ $events     = rashtrotthana_home_collection( array( 'event', 'events' ), 4 );
 </section>
 
 <section class="rs-content-section rs-gallery">
-    <div class="rs-container"><div class="rs-section-row"><h2>Moments of Inspiration</h2><a class="rs-outline-link" href="<?php echo esc_url( home_url('/gallery/') ); ?>">View Gallery</a></div><div class="rs-gallery-grid"><?php foreach ( $activity_fallbacks as $item ) : ?><img src="<?php echo esc_url( $item[2] ); ?>" alt="" loading="lazy"><?php endforeach; ?></div></div>
+    <div class="rs-container">
+        <div class="rs-section-row">
+            <h2>Moments of Inspiration</h2>
+            <a class="rs-outline-link" href="<?php echo esc_url( home_url('/gallery/') ); ?>">View Gallery</a>
+        </div>
+        <div class="rs-gallery-grid">
+            <?php foreach ( $rs_gallery_albums as $album ) :
+                $cover = ! empty( $album['cover_image'] ) ? $album['cover_image'] : '';
+                if ( ! $cover ) continue;
+                // Show up to 8 photos from each album's photo array as individual tiles
+                $tiles = ! empty( $album['photos'] ) ? array_slice( $album['photos'], 0, 2 ) : array();
+            ?>
+                <a href="<?php echo esc_url( home_url('/gallery/') ); ?>" aria-label="<?php echo esc_attr( $album['title'] ); ?>">
+                    <img src="<?php echo esc_url( $cover ); ?>" alt="<?php echo esc_attr( $album['title'] ); ?>" loading="lazy">
+                </a>
+                <?php foreach ( $tiles as $photo ) : if ( empty( $photo['url'] ) ) continue; ?>
+                <a href="<?php echo esc_url( home_url('/gallery/') ); ?>" aria-label="<?php echo esc_attr( $photo['title'] ?? '' ); ?>">
+                    <img src="<?php echo esc_url( $photo['url'] ); ?>" alt="<?php echo esc_attr( $photo['title'] ?? '' ); ?>" loading="lazy">
+                </a>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
 </section>
 
 

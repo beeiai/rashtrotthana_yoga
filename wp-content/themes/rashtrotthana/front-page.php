@@ -1,4 +1,4 @@
-﻿<?php get_header(); ?>
+<?php get_header(); ?>
 
 <style>
     .rs-homepage { font-size: 16px; }
@@ -125,6 +125,12 @@
         display: flex;
         align-items: center;
         width: 270px;
+    }
+
+    /* Wide variant — used on homepage where the locate button is removed */
+    .rs-center-search-box.rs-center-search-box--wide {
+        width: 100%;
+        max-width: 520px;
     }
 
     .rs-center-search-box svg {
@@ -333,10 +339,46 @@
         .rs-center-search-box {
             width: 100%;
         }
-        .rs-center-locate-btn {
-            width: 100%;
-            justify-content: center;
+        .rs-center-search-box.rs-center-search-box--wide {
+            max-width: 100%;
         }
+    }
+
+    /* ── Events: Empty State ─────────────────────────────────────────── */
+    .rs-no-events {
+        padding: 3rem 1rem;
+        text-align: center;
+    }
+
+    .rs-no-events-inner {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: .85rem;
+        padding: 2.5rem 3rem;
+        border-radius: 1.25rem;
+        border: 1px solid rgba(143, 23, 29, .15);
+        background: linear-gradient(145deg, rgba(255, 255, 255, .72), rgba(255, 248, 236, .48));
+        box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 rgba(255, 255, 255, .9);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+
+    .rs-no-events-icon {
+        font-size: 2.5rem;
+        line-height: 1;
+    }
+
+    .rs-no-events-inner p {
+        margin: 0;
+        color: #542019;
+        font-size: 1.08rem;
+        font-weight: 700;
+    }
+
+    .rs-no-events-inner small {
+        color: #8b7465;
+        font-size: .88rem;
     }
 
     @media (max-width: 580px) {
