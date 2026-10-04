@@ -276,29 +276,15 @@ function rs_get_news() {
 // ── Gallery ──────────────────────────────────────────────────────────────────
 
 function rs_get_gallery_albums() {
-    $posts = get_posts( array('post_type' => 'rs_gallery_album', 'posts_per_page' => -1, 'post_status' => 'publish') );
-    $albums = array();
-    foreach ( $posts as $p ) {
-        $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_template_directory_uri() . '/assets/images/client/07-04-24-summer-camp-in-rysri-yoga-centres-1-.jpg';
-        
-        $photos = get_field('photos', $p->ID) ?: [];
-        $videos = get_field('videos', $p->ID) ?: [];
-
-        $albums[] = array(
-            'id' => $p->post_name,
-            'title' => $p->post_title,
-            'category' => 'Events',
-            'category_slug' => 'events',
-            'date' => get_the_date('F j, Y', $p),
-            'venue' => 'Rashtrotthana Center',
-            'desc' => $p->post_content,
-            'cover_image' => $img,
-            'photos' => $photos,
-            'videos' => $videos
-        );
+    static $cached = null;
+    if ( $cached !== null ) {
+        return $cached;
     }
-    
-    return $albums;
+    // Load from static data file. To switch to DB-driven albums,
+    // replace this block with a get_posts() / WP_Query call.
+    require get_template_directory() . '/data/gallery-data.php';
+    $cached = isset( $gallery_events ) ? $gallery_events : array();
+    return $cached;
 }
 
 // ── Homepage ─────────────────────────────────────────────────────────────────
