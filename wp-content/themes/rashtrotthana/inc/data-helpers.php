@@ -186,11 +186,11 @@ function rs_get_activity_categories() {
 // ── Events ───────────────────────────────────────────────────────────────────
 
 function rs_get_events( $type = '' ) {
-    $posts = get_posts( array('post_type' => 'event', 'posts_per_page' => -1, 'post_status' => 'publish') );
+    $posts = get_posts( array('post_type' => 'event', 'posts_per_page' => -1, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'ASC') );
     $events = array();
     foreach ( $posts as $p ) {
         $date_iso = get_field('event_date', $p->ID) ?: get_post_meta($p->ID, '_ry_event_date', true);
-        if (!$date_iso) $date_iso = current_time('Y-m-d');
+        if (!$date_iso) $date_iso = get_the_date('Y-m-d', $p);
         
         // ACF date could be Ymd (e.g., 20261015) or Y-m-d
         if (preg_match('/^(\d{4})(\d{2})(\d{2})$/', $date_iso, $m)) {
@@ -202,22 +202,29 @@ function rs_get_events( $type = '' ) {
         if (!$time) {
             $start = get_post_meta($p->ID, '_ry_start_time', true);
             $end = get_post_meta($p->ID, '_ry_end_time', true);
-            $time = ($start && $end) ? "$start - $end" : "6:00 AM - 8:00 AM";
+            $time = ($start && $end) ? "$start - $end" : "6:00 AM - 9:00 AM";
         }
         
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/18-01-25-suggi-sambhrama-kolata-in-rysri-kg-nagar-1-.jpg';
         
         $venue_obj = get_field('event_venue', $p->ID);
-        $venue = $venue_obj ? $venue_obj->post_title : (get_field('event_venue_custom', $p->ID) ?: 'Rashtrotthana Center');
+        $venue = $venue_obj ? $venue_obj->post_title : (get_field('event_venue_custom', $p->ID) ?: (get_post_meta($p->ID, '_ry_event_venue', true) ?: 'Rashtrotthana Center'));
 
         // Compare using midnight to ensure today's events are not marked past
         $today_midnight = strtotime(current_time('Y-m-d 00:00:00'));
         $is_past = $ts < $today_midnight;
-        $e_type = $is_past ? 'past' : 'upcoming';
+        $override_type = get_post_meta($p->ID, '_ry_event_type', true);
+        $e_type = $override_type ?: ($is_past ? 'past' : 'upcoming');
 
         if ( $type && $type !== $e_type ) {
             continue;
+        }
+
+        $category = get_post_meta($p->ID, '_ry_event_category', true) ?: (get_field('event_category', $p->ID) ?: 'Special Event');
+        $reg_status = get_field('registration_status', $p->ID) ?: get_post_meta($p->ID, '_ry_registration_status', true);
+        if (!$reg_status) {
+            $reg_status = ($is_past || $e_type === 'past') ? 'closed' : 'open';
         }
 
         $events[] = array(
@@ -230,16 +237,17 @@ function rs_get_events( $type = '' ) {
             'title' => $p->post_title,
             'venue' => $venue,
             'time' => $time,
-            'category' => 'Wellness',
-            'category_slug' => 'wellness',
-            'mode' => get_field('event_mode', $p->ID) ?: get_post_meta($p->ID, '_ry_event_mode', true),
+            'category' => $category,
+            'category_slug' => sanitize_title($category),
+            'mode' => get_field('event_mode', $p->ID) ?: (get_post_meta($p->ID, '_ry_event_mode', true) ?: 'In-Person'),
             'type' => $e_type,
             'image' => $img,
-            'desc' => wp_trim_words($p->post_content, 20),
-            'fee' => get_field('event_fee', $p->ID) ?: get_post_meta($p->ID, '_ry_event_fee', true),
+            'desc' => $p->post_excerpt ?: wp_trim_words(strip_tags($p->post_content), 24, '...'),
+            'full_text' => wpautop($p->post_content),
+            'fee' => get_field('event_fee', $p->ID) ?: (get_post_meta($p->ID, '_ry_event_fee', true) ?: 'Free'),
+            'registration_status' => $reg_status,
         );
     }
-    
     
     return $events;
 }
@@ -251,7 +259,7 @@ function rs_get_news() {
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/20200529-182250.jpg';
         
-        $rt = get_post_meta($p->ID, '_ry_read_time', true) ?: '3 min read';
+        $rt = get_post_meta($p->ID, '_ry_read_time', true) ?: '2 min read';
         
         $cats = wp_get_post_categories($p->ID, ['fields' => 'all']);
         $cat_name = !empty($cats) ? $cats[0]->name : 'News';
@@ -265,7 +273,7 @@ function rs_get_news() {
             'category_slug' => $cat_slug,
             'read_time' => $rt,
             'image' => $img,
-            'excerpt' => $p->post_excerpt ?: wp_trim_words($p->post_content, 15),
+            'excerpt' => $p->post_excerpt ?: wp_trim_words(strip_tags($p->post_content), 22, '...'),
             'full_text' => wpautop($p->post_content)
         );
     }
