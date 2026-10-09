@@ -14,37 +14,8 @@
   if (!document.querySelector('.rs-homepage')) return;
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ─────────────────────────────────────────────────────────────
-     1. CUSTOM CURSOR (fine pointer only)
-  ───────────────────────────────────────────────────────────── */
-  if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
-    var dot  = document.createElement('div');
-    var ring = document.createElement('div');
-    dot.className  = 'rse-cursor-dot';
-    ring.className = 'rse-cursor-ring';
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
+  /* 1. CUSTOM CURSOR REMOVED */
 
-    var mx = 0, my = 0, rx = 0, ry = 0;
-
-    document.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
-    });
-
-    (function animRing() {
-      rx += (mx - rx) * 0.14;
-      ry += (my - ry) * 0.14;
-      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
-      requestAnimationFrame(animRing);
-    })();
-
-    var interactables = 'a, button, .rs-btn, .rs-activity-card, .rs-event-card, .rs-center-card, .rs-team-card, .rs-value-card, .rs-gallery-grid img, .rs-outline-link';
-    document.querySelectorAll(interactables).forEach(function (el) {
-      el.addEventListener('mouseenter', function () { dot.classList.add('is-hovering'); ring.classList.add('is-hovering'); });
-      el.addEventListener('mouseleave', function () { dot.classList.remove('is-hovering'); ring.classList.remove('is-hovering'); });
-    });
-  }
 
   /* ─────────────────────────────────────────────────────────────
      2. SCROLL-REVEAL  (IntersectionObserver)

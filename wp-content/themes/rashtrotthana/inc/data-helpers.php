@@ -69,15 +69,64 @@ function rs_get_centers( $zone_slug = '' ) {
             }
         }
 
-        $lat = get_field('lat', $p->ID) ?: 12.9716;
-        $lng = get_field('lng', $p->ID) ?: 77.5946;
+        $lat = get_post_meta($p->ID, 'lat', true) ?: (get_field('lat', $p->ID) ?: 0);
+        $lng = get_post_meta($p->ID, 'lng', true) ?: (get_field('lng', $p->ID) ?: 0);
+
+        if ( empty($lat) || empty($lng) || ($lat == 12.9716 && $lng == 77.5946) ) {
+            $fallback_coords = array(
+                'sadashivnagar' => array( 13.0068, 77.5813 ),
+                'gayathrinagar' => array( 12.9982, 77.5615 ),
+                'rbi-layout'    => array( 12.8894, 77.5746 ),
+                'kamakshipalya' => array( 12.9835, 77.5255 ),
+                'kg-nagar'      => array( 12.9488, 77.5637 ),
+                'nagarbhavi'    => array( 12.9602, 77.5103 ),
+                'vijaynagar'    => array( 12.9698, 77.5358 ),
+                'sunkenahalli'  => array( 12.9421, 77.5678 ),
+                'girinagar'     => array( 12.9372, 77.5385 ),
+                'aksharam'      => array( 12.9355, 77.5398 ),
+                'kundalahalli'  => array( 12.9698, 77.7199 ),
+                'jayanagar'     => array( 12.9250, 77.5938 ),
+            );
+            $slug_check = $p->post_name;
+            foreach ($fallback_coords as $k => $c_pair) {
+                if ($slug_check === $k || strpos($slug_check, $k) !== false || strpos(strtolower($p->post_title), $k) !== false) {
+                    $lat = $c_pair[0];
+                    $lng = $c_pair[1];
+                    break;
+                }
+            }
+        }
+        $lat = floatval($lat ?: 12.9716);
+        $lng = floatval($lng ?: 77.5946);
         $hours = get_field('hours', $p->ID) ?: 'Please refer to batch timings';
         $phone = get_field('phone', $p->ID) ?: '';
         $email = get_field('email', $p->ID) ?: 'info@rashtrotthana.org';
         $area = get_field('area', $p->ID) ?: '';
 
+        $upload_dir = wp_upload_dir();
+        $fallback_images = array(
+            'sadashivnagar' => $upload_dir['baseurl'] . '/2026/10/Sadashivnagar.jpg',
+            'gayathrinagar' => $upload_dir['baseurl'] . '/2026/10/Gayathrinagar.jpg',
+            'rbi-layout'    => $upload_dir['baseurl'] . '/2026/10/RBI-Layout.jpg',
+            'rbilayout'     => $upload_dir['baseurl'] . '/2026/10/RBI-Layout.jpg',
+            'kamakshipalya' => $upload_dir['baseurl'] . '/2026/10/KAMAKSHIPALYA.jpg',
+            'kg-nagar'      => $upload_dir['baseurl'] . '/2026/10/Kempegowda-Nagar.jpg',
+            'kgnagar'       => $upload_dir['baseurl'] . '/2026/10/Kempegowda-Nagar.jpg',
+            'nagarbhavi'    => $upload_dir['baseurl'] . '/2026/10/nagarbhavi.jpg',
+            'vijaynagar'    => $upload_dir['baseurl'] . '/2026/10/Vijaynagar.jpg',
+            'sunkenahalli'  => $upload_dir['baseurl'] . '/2026/10/Basavangudi.jpg',
+            'girinagar'     => $upload_dir['baseurl'] . '/2026/10/Girinagar.jpg',
+            'aksharam'      => $upload_dir['baseurl'] . '/2026/10/Yoga-Prashikshana.jpg',
+            'kundalahalli'  => $upload_dir['baseurl'] . '/2026/10/Kundalahalli.jpg',
+            'jayanagar'     => $upload_dir['baseurl'] . '/2026/10/Jayanagara.jpg',
+        );
+        $c_slug = $p->post_name;
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
+        if (!$img && isset($fallback_images[$c_slug])) {
+            $img = $fallback_images[$c_slug];
+        }
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg';
+
 
         $centers[] = array(
             'id' => $p->post_name,
@@ -141,10 +190,25 @@ function rs_get_activity_categories() {
     
     foreach ( $terms as $term ) {
         $term_id = 'activity_category_' . $term->term_id;
+        $icon_fallbacks = array(
+            'yoga-wellness'     => '🧘',
+            'arts-music'        => '🎵',
+            'dance'             => '💃',
+            'martial-arts'      => '🥋',
+            'children-programs' => '👶',
+            'fitness-sports'    => '🏃',
+            'health-therapy'    => '🌿',
+            'knowledge-culture' => '🕉️',
+        );
+        $term_icon = get_field('icon', $term_id);
+        if ( empty($term_icon) || $term_icon === '?' ) {
+            $term_icon = isset($icon_fallbacks[$term->slug]) ? $icon_fallbacks[$term->slug] : '🧘';
+        }
         $cat_data = array(
             'slug'    => $term->slug,
-            'icon'    => get_field('icon', $term_id),
+            'icon'    => $term_icon,
             'title'   => $term->name,
+
             'tagline' => get_field('tagline', $term_id),
             'text'    => get_field('text', $term_id),
             'image'   => get_field('image', $term_id) ?: get_term_meta($term->term_id, 'image_url', true),

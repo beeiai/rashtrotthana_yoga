@@ -2146,32 +2146,6 @@ $news_dataset   = rs_get_news();
         </div>
     </section>
 
-    <!-- ============================================================
-         Stay Informed Newsletter Banner (Home & Centers Style)
-         ============================================================ -->
-    <section class="rs-events-subscribe-section" aria-label="Newsletter Subscription">
-        <div class="rs-container">
-            <div class="rs-events-newsletter-card">
-                <div class="rs-events-newsletter-content">
-                    <div class="rs-events-newsletter-icon" aria-hidden="true">?</div>
-                    <div class="rs-events-newsletter-text">
-                        <h3>Stay Informed. Stay Inspired.</h3>
-                        <p>Subscribe to our monthly newsletter and never miss an update on upcoming yoga celebrations, health workshops, and inspiring community programs.</p>
-                    </div>
-                </div>
-
-                <form class="rs-events-newsletter-form" id="rs-newsletter-form">
-                    <label for="rs-newsletter-email" class="screen-reader-text" style="position:absolute;width:1px;height:1px;overflow:hidden;">Email Address</label>
-                    <input type="email" id="rs-newsletter-email" placeholder="Enter your email address..." required autocomplete="email">
-                    <button type="submit">
-                        <span>Subscribe</span> <span aria-hidden="true">?</span>
-                    </button>
-                    <div class="rs-newsletter-msg" id="rs-newsletter-status" aria-live="polite"></div>
-                </form>
-            </div>
-        </div>
-    </section>
-
 </main>
 
 <!-- ============================================================
@@ -2924,22 +2898,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-
-    // ============================================================
-    // Newsletter Form Handler
-    // ============================================================
-    var newsletterForm = document.getElementById('rs-newsletter-form');
-    var newsletterStatus = document.getElementById('rs-newsletter-status');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var emailVal = document.getElementById('rs-newsletter-email').value;
-            newsletterStatus.className = 'rs-newsletter-msg is-success';
-            newsletterStatus.textContent = '? Subscribed! Welcome to Rashtrotthana community updates.';
-            newsletterForm.reset();
-            setTimeout(function () { newsletterStatus.style.display = 'none'; }, 4000);
-        });
-    }
 });
 </script>
 

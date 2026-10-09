@@ -5826,6 +5826,41 @@ body.rs-center-modal-open {
     100% { transform: translateX(-50%) scale(2.8); opacity: 0; }
 }
 
+/* Custom Leaflet Tooltip for Centers Flag Hover */
+.rs-flag-leaflet-tooltip {
+    background: #ffffff !important;
+    border: 1.5px solid #F36A21 !important;
+    border-radius: 8px !important;
+    padding: 5px 10px !important;
+    box-shadow: 0 6px 20px rgba(84, 32, 25, 0.2) !important;
+    font-family: 'Poppins', sans-serif !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
+}
+.rs-flag-leaflet-tooltip::before {
+    border-top-color: #F36A21 !important;
+}
+.rs-map-flag-tooltip-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1px;
+}
+.rs-flag-tooltip-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #8F171D;
+    line-height: 1.25;
+}
+.rs-flag-tooltip-area {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #F36A21;
+    line-height: 1.2;
+}
+
 /* Custom Leaflet Popup Styling */
 .rs-custom-leaflet-popup .leaflet-popup-content-wrapper {
     border-radius: 18px !important;
@@ -5943,6 +5978,7 @@ body.rs-center-modal-open {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(143, 23, 29, 0.35) transparent;
+    transform: none !important;
 }
 
 .rs-center-modal-card {
@@ -5952,12 +5988,13 @@ body.rs-center-modal-open {
     border: 1.5px solid rgba(143, 23, 29, 0.18);
     box-shadow: 0 32px 80px rgba(54, 20, 15, 0.42), 0 4px 20px rgba(54, 20, 15, 0.08);
     padding: clamp(28px, 3.2vw, 44px) clamp(24px, 3.8vw, 48px);
-    animation: rs-modal-pop 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: rs-modal-fade 160ms ease-out;
+    transform: none !important;
 }
 
-@keyframes rs-modal-pop {
-    0% { transform: scale(0.94); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+@keyframes rs-modal-fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .rs-center-modal-close {
@@ -6194,6 +6231,37 @@ body.rs-center-modal-open {
     flex-shrink: 0;
 }
 
+.rs-center-act-desc {
+    margin: 0;
+    color: #6D5B50;
+    font: 400 0.82rem/1.55 'Poppins', sans-serif;
+}
+
+/* Batch Details Container Inside Activity Card */
+.rs-center-act-batch-details {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(143, 23, 29, 0.14);
+}
+
+.rs-center-act-batch-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #8F171D;
+    font: 700 0.74rem 'Poppins', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rs-center-act-batch-header svg {
+    color: #F36A21;
+    flex-shrink: 0;
+}
+
 .rs-center-act-details {
     display: flex;
     flex-direction: column;
@@ -6201,7 +6269,7 @@ body.rs-center-modal-open {
     padding: 10px 12px;
     background: #FFFDF9;
     border-radius: 10px;
-    border: 1px dashed rgba(143, 23, 29, 0.14);
+    border: 1px solid rgba(143, 23, 29, 0.1);
 }
 
 .rs-center-act-detail-row {
@@ -6222,12 +6290,6 @@ body.rs-center-modal-open {
 .rs-act-detail-text strong {
     color: #542019;
     font-weight: 600;
-}
-
-.rs-center-act-desc {
-    margin: 0;
-    color: #6D5B50;
-    font: 400 0.82rem/1.55 'Poppins', sans-serif;
 }
 
 /* Center Events Section */

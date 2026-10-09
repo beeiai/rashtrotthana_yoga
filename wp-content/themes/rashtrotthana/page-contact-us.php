@@ -7,14 +7,35 @@
 get_header();
 
 // Contact page data — loaded from data/contact-data.php.
-// To swap in DB data, update rs_get_flagship_centers() and rs_get_faqs() in inc/data-helpers.php.
-$flagship_centers = rs_get_flagship_centers();
+// KG Nagar Center Details for Contact Us
+$all_centers_list = rs_get_centers();
+$kg_nagar_center = null;
+foreach ( $all_centers_list as $c ) {
+    if ( $c['id'] === 'kg-nagar' || strpos( strtolower($c['name']), 'kg' ) !== false ) {
+        $kg_nagar_center = $c;
+        break;
+    }
+}
+if ( ! $kg_nagar_center ) {
+    $kg_nagar_center = array(
+        'id'      => 'kg-nagar',
+        'name'    => 'KG Nagar',
+        'area'    => 'KG Nagar',
+        'address' => 'Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004',
+        'phone'   => '9482834425',
+        'email'   => 'info@rashtrotthana.org',
+        'lat'     => 12.9488,
+        'lng'     => 77.5637,
+        'image'   => get_template_directory_uri() . '/assets/images/client/18-01-25-suggi-sambhrama-kolata-in-rysri-kg-nagar-1-.jpg',
+    );
+}
+
 $faqs_dataset     = rs_get_faqs();
 
 // Default variables for the contact bar
-$contact_phone   = !empty($flagship_centers[0]['phone']) ? $flagship_centers[0]['phone'] : '080 2664 4444';
-$contact_email   = !empty($flagship_centers[0]['email']) ? $flagship_centers[0]['email'] : 'info@rashtrotthanayoga.org';
-$contact_address = !empty($flagship_centers[0]['address']) ? $flagship_centers[0]['address'] : 'No. 23, 4th Cross, 4th Block, Jayanagar, Bengaluru – 560011';
+$contact_phone   = !empty($kg_nagar_center['phone']) ? $kg_nagar_center['phone'] : '9482834425';
+$contact_email   = !empty($kg_nagar_center['email']) ? $kg_nagar_center['email'] : 'info@rashtrotthana.org';
+$contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['address'] : 'Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004';
 ?>
 
 <!-- Leaflet CSS & JS for Interactive Map -->
@@ -1238,10 +1259,6 @@ $contact_address = !empty($flagship_centers[0]['address']) ? $flagship_centers[0
     <header class="rs-contact-header-section">
         <div class="rs-container">
             <div class="rs-contact-title-block">
-                <div class="rs-contact-eyebrow">
-                    <span class="rs-contact-eyebrow-dot" aria-hidden="true"></span>
-                    <span>Community &amp; Assistance</span>
-                </div>
                 <h1 class="rs-contact-page-title">We’re Here to <em>Connect</em> with You</h1>
                 <p class="rs-contact-page-subtitle">
                     Have a question, need assistance with yoga batch enrolments, or looking to visit our centers? Reach out through any of our direct channels below.
@@ -1382,14 +1399,14 @@ $contact_address = !empty($flagship_centers[0]['address']) ? $flagship_centers[0
                     </div>
                 </div>
 
-                <!-- Column 2: Interactive Leaflet Map -->
+                <!-- Column 2: Interactive Leaflet Map showing KG Nagar Center Only -->
                 <div class="rs-contact-map-card">
                     <div class="rs-contact-map-header">
                         <h3>
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <span>Interactive Bengaluru Centers Map</span>
+                            <span>KG Nagar Center Location</span>
                         </h3>
-                        <span class="rs-map-filter-hint">6 Key Shalas Marked</span>
+                        <span class="rs-map-filter-hint">Keshavashilpa</span>
                     </div>
 
                     <!-- Leaflet Canvas -->
@@ -1397,76 +1414,21 @@ $contact_address = !empty($flagship_centers[0]['address']) ? $flagship_centers[0
                         <div id="rs-contact-leaflet-map"></div>
                     </div>
 
-                    <!-- Head Office Quick Info Footer Bar -->
+                    <!-- KG Nagar Quick Info Footer Bar -->
                     <div class="rs-map-hq-overlay">
                         <div class="rs-map-hq-info">
                             <strong>
                                 <svg style="width: 15px; height: 15px; stroke: var(--color-maroon); stroke-width: 2.5; fill: none;" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                <span>Head Office &amp; Central Shala</span>
+                                <span>KG Nagar Center</span>
                             </strong>
-                            <span>No. 23, 4th Cross, 4th Block, Jayanagar, Bengaluru – 560011</span>
+                            <span>Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004</span>
                         </div>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=Rashtrotthana+Yoga+Jayanagar+Bengaluru" target="_blank" rel="noopener" class="rs-map-hq-directions-btn">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=Keshavashilpa+Kempegowda+Nagar+Bengaluru" target="_blank" rel="noopener" class="rs-map-hq-directions-btn">
                             <span>Get Directions</span>
                             <span aria-hidden="true">&rarr;</span>
                         </a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Connect with Flagship Centers Section -->
-    <section class="rs-contact-section">
-        <div class="rs-container">
-            <div class="rs-section-header-wrap">
-                <div>
-                    <h2>Connect with Our <em>Centers</em></h2>
-                    <p class="rs-section-desc">Visit our spacious yoga shalas across Bengaluru for in-person consultations, trial sessions, and holistic community activities.</p>
-                </div>
-                <a href="<?php echo esc_url( home_url( '/centers/' ) ); ?>" class="rs-all-centers-btn">
-                    <span>Explore All 12 Centers</span>
-                    <span aria-hidden="true">&rarr;</span>
-                </a>
-            </div>
-
-            <div class="rs-contact-centers-grid">
-                <?php foreach ( array_slice( $flagship_centers, 0, 4 ) as $center ) : ?>
-                    <article class="rs-contact-center-card">
-                        <div class="rs-contact-center-media">
-                            <img src="<?php echo esc_url( $center['image'] ); ?>" alt="<?php echo esc_attr( $center['name'] ); ?>" loading="lazy">
-                            <?php if ( ! empty( $center['is_hq'] ) ) : ?>
-                                <span class="rs-contact-center-badge">Head Office</span>
-                            <?php else : ?>
-                                <span class="rs-contact-center-badge">Bengaluru Shala</span>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="rs-contact-center-body">
-                            <h3 class="rs-contact-center-title"><?php echo esc_html( $center['name'] ); ?></h3>
-                            
-                            <div class="rs-contact-center-meta">
-                                <div class="rs-contact-center-meta-item">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                    <span><?php echo esc_html( $center['address'] ); ?></span>
-                                </div>
-                                <div class="rs-contact-center-meta-item">
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                    <span><?php echo esc_html( $center['phone'] ); ?></span>
-                                </div>
-                            </div>
-
-                            <div class="rs-contact-center-footer">
-                                <a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $center['phone'] ) ); ?>">
-                                    <span>Call Center</span> &rarr;
-                                </a>
-                                <a href="<?php echo esc_url( home_url( '/centers/#' . $center['id'] ) ); ?>" style="color: var(--color-maroon);">
-                                    <span>View Details</span> &rarr;
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -1499,29 +1461,6 @@ $contact_address = !empty($flagship_centers[0]['address']) ? $flagship_centers[0
                     </div>
                 <?php endforeach; ?>
             </div>
-
-            <!-- Immediate Assistance Callout Banner -->
-            <div class="rs-contact-assistance-banner">
-                <div class="rs-assistance-content">
-                    <div class="rs-assistance-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                    </div>
-                    <div class="rs-assistance-text">
-                        <strong>Need Immediate Assistance?</strong>
-                        <p>Our counselors are available Monday through Saturday to answer questions about batch availability and admissions.</p>
-                    </div>
-                </div>
-                <div class="rs-assistance-actions">
-                    <a href="tel:<?php echo esc_attr( preg_replace('/[^0-9+]/', '', $contact_phone) ); ?>" class="rs-assistance-call-btn">
-                        <svg style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2;" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        <span>080 2664 4444</span>
-                    </a>
-                    <a href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $contact_phone) ); ?>" target="_blank" rel="noopener" class="rs-assistance-whatsapp-btn">
-                        <svg style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2;" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                        <span>WhatsApp Support</span>
-                    </a>
-                </div>
-            </div>
         </div>
     </section>
 </main>
@@ -1533,10 +1472,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================================
     var mapContainer = document.getElementById('rs-contact-leaflet-map');
     if (mapContainer && typeof L !== 'undefined') {
-        // Initialize Map centered on Jayanagar Head Office
+        var kgNagarCenter = <?php echo json_encode( $kg_nagar_center ); ?>;
         var map = L.map('rs-contact-leaflet-map', {
-            center: [12.9450, 77.5850],
-            zoom: 12,
+            center: [kgNagarCenter.lat, kgNagarCenter.lng],
+            zoom: 16,
             scrollWheelZoom: false
         });
 
@@ -1548,62 +1487,59 @@ document.addEventListener('DOMContentLoaded', function () {
             maxZoom: 19
         }).addTo(map);
 
-        // Centers dataset for map markers
-        var mapCenters = <?php echo json_encode( $flagship_centers ); ?>;
-
         var mapIconUrl = '<?php echo esc_url( get_template_directory_uri() . "/assets/images/map_icon.png" ); ?>';
 
-        function createCustomPin(isHQ) {
-            return L.divIcon({
-                className: 'rs-leaflet-custom-marker',
-                html: '<div class="rs-map-flag-pin' + (isHQ ? ' is-highlighted' : '') + '">' +
-                      '<div class="rs-flag-base-shadow"></div>' +
-                      '<img src="' + mapIconUrl + '" class="rs-map-flag-img" alt="Center Marker">' +
-                      (isHQ ? '<div class="rs-flag-pulse"></div>' : '') +
-                      '</div>',
-                iconSize: [38, 52],
-                iconAnchor: [4, 51],
-                popupAnchor: [15, -48]
-            });
-        }
-
-        var markersGroup = L.featureGroup().addTo(map);
-
-        mapCenters.forEach(function (center) {
-            var marker = L.marker([center.lat, center.lng], {
-                icon: createCustomPin(center.is_hq),
-                title: center.name
-            });
-
-            var directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(center.name + ' ' + center.address);
-
-            var popupHtml = '<div class="rs-map-popup-inner">' +
-                '<h4>' + center.name + '</h4>' +
-                '<span class="rs-map-popup-badge">' + (center.is_hq ? 'Head Office & Central Shala' : center.area) + '</span>' +
-                '<p>' + center.address + '</p>' +
-                '<div class="rs-map-popup-actions">' +
-                    '<a href="tel:' + center.phone.replace(/[^0-9+]/g, '') + '" class="rs-map-popup-phone">☎ ' + center.phone + '</a>' +
-                    '<a href="' + directionsUrl + '" target="_blank" rel="noopener" class="rs-map-popup-dir">Directions &rarr;</a>' +
-                '</div>' +
-            '</div>';
-
-            marker.bindPopup(popupHtml, {
-                maxWidth: 290,
-                className: 'rs-custom-leaflet-popup'
-            });
-
-            markersGroup.addLayer(marker);
-
-            // Automatically open Head Office popup on desktop
-            if (center.is_hq && window.innerWidth > 992) {
-                setTimeout(function () {
-                    marker.openPopup();
-                }, 600);
-            }
+        var kgMarkerIcon = L.divIcon({
+            className: 'rs-leaflet-custom-marker',
+            html: '<div class="rs-map-flag-pin is-highlighted">' +
+                  '<div class="rs-flag-base-shadow"></div>' +
+                  '<img src="' + mapIconUrl + '" class="rs-map-flag-img" alt="KG Nagar Center Marker">' +
+                  '<div class="rs-flag-pulse"></div>' +
+                  '</div>',
+            iconSize: [38, 52],
+            iconAnchor: [4, 51],
+            popupAnchor: [15, -48]
         });
 
-        // Fit bounds comfortably to all flagship centers
-        map.fitBounds(markersGroup.getBounds().pad(0.12));
+        var marker = L.marker([kgNagarCenter.lat, kgNagarCenter.lng], {
+            icon: kgMarkerIcon,
+            title: kgNagarCenter.name
+        }).addTo(map);
+
+        marker.bindTooltip(
+            '<div class="rs-map-flag-tooltip-box">' +
+                '<span class="rs-flag-tooltip-name">' + kgNagarCenter.name + '</span>' +
+                '<span class="rs-flag-tooltip-area">Keshavashilpa</span>' +
+            '</div>',
+            {
+                permanent: false,
+                direction: 'top',
+                offset: [14, -50],
+                className: 'rs-flag-leaflet-tooltip'
+            }
+        );
+
+        var directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent('Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004');
+
+        var popupHtml = '<div class="rs-map-popup-inner">' +
+            '<img src="' + kgNagarCenter.image + '" alt="' + kgNagarCenter.name + '" class="rs-map-popup-media" style="height:100px;width:100%;object-fit:cover;border-radius:10px;margin-bottom:6px;" loading="lazy">' +
+            '<h4 style="margin:0 0 4px;font-size:1rem;color:var(--color-maroon);font-weight:700;">' + kgNagarCenter.name + '</h4>' +
+            '<span class="rs-map-popup-badge" style="display:inline-block;padding:2px 8px;background:rgba(243,106,33,0.12);color:var(--color-saffron);border-radius:20px;font-size:0.7rem;font-weight:600;margin-bottom:6px;">Keshavashilpa</span>' +
+            '<p style="margin:0 0 8px;font-size:0.8rem;color:#555;line-height:1.4;">' + kgNagarCenter.address + '</p>' +
+            '<div class="rs-map-popup-actions" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">' +
+                '<a href="tel:9482834425" class="rs-map-popup-phone" style="font-size:0.78rem;font-weight:600;color:var(--color-maroon);">☎ 9482834425</a>' +
+                '<a href="' + directionsUrl + '" target="_blank" rel="noopener" class="rs-map-popup-dir" style="font-size:0.78rem;font-weight:700;color:var(--color-saffron);">Directions &rarr;</a>' +
+            '</div>' +
+        '</div>';
+
+        marker.bindPopup(popupHtml, {
+            maxWidth: 290,
+            className: 'rs-custom-leaflet-popup'
+        });
+
+        setTimeout(function () {
+            marker.openPopup();
+        }, 500);
     }
 
     // ============================================================

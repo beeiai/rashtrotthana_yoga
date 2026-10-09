@@ -1,4 +1,4 @@
-﻿/**
+/**
  * inner-pages.js
  * Additive interaction layer for all non-homepage inner pages.
  * Mirrors the homepage-effects.js feature set on inner pages.
@@ -11,44 +11,8 @@
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ─────────────────────────────────────────────────────────────
-     1. CUSTOM CURSOR — saffron dot + lagging ring
-  ───────────────────────────────────────────────────────────── */
-  if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
-    var dot  = document.createElement('div');
-    var ring = document.createElement('div');
-    dot.className  = 'rsi-cursor-dot';
-    ring.className = 'rsi-cursor-ring';
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
+  /* 1. CUSTOM CURSOR REMOVED */
 
-    var mx = 0, my = 0, rx = 0, ry = 0;
-
-    document.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
-    });
-
-    (function animRing() {
-      rx += (mx - rx) * 0.14;
-      ry += (my - ry) * 0.14;
-      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
-      requestAnimationFrame(animRing);
-    })();
-
-    /* Hover state on interactive elements */
-    var interactables = 'a, button, input, select, textarea, article[class*="card"], article[class*="category"], .rs-activity-category, .rs-directory-card, .rs-media-item';
-    document.querySelectorAll(interactables).forEach(function (el) {
-      el.addEventListener('mouseenter', function () {
-        dot.classList.add('is-hovering');
-        ring.classList.add('is-hovering');
-      });
-      el.addEventListener('mouseleave', function () {
-        dot.classList.remove('is-hovering');
-        ring.classList.remove('is-hovering');
-      });
-    });
-  }
 
   /* ─────────────────────────────────────────────────────────────
      2. NAVBAR SCROLL SHADOW

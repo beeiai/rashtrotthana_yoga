@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Template Name: Gallery Page
  * Description: Redesigned Gallery page matching Home, Activities, Centers, and Events pages.
@@ -42,19 +42,13 @@ foreach ( $gallery_events as $event ) {
 .rs-gallery-page {
     position: relative;
     isolation: isolate;
-    overflow-x: hidden;
-    background-color: var(--color-cream) !important;
-    background-image:
-        radial-gradient(circle at 10% 8%, rgba(249, 183, 42, .24), transparent 28rem),
-        radial-gradient(circle at 90% 12%, rgba(243, 106, 33, .16), transparent 32rem),
-        linear-gradient(180deg, rgba(255, 248, 236, .94) 0%, rgba(255, 248, 236, .84) 40%, rgba(255, 248, 236, .96) 100%),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/bg.jpg' ); ?>") !important;
-    background-position: center top, center top, center top, center top !important;
-    background-size: auto, auto, auto, 1920px auto !important;
-    background-repeat: no-repeat, no-repeat, no-repeat, repeat-y !important;
-    background-attachment: scroll, scroll, scroll, fixed !important;
     color: var(--color-text);
     font-family: 'Poppins', sans-serif !important;
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)),
+        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") center top / cover fixed no-repeat !important;
+    animation: rs-nature-drift 24s ease-in-out infinite alternate;
+    min-height: 100vh;
     padding-bottom: 3.5rem;
 }
 
@@ -66,11 +60,16 @@ foreach ( $gallery_events as $event ) {
 /* Ambient Floating Glow Orbs */
 .rs-gallery-page::before,
 .rs-gallery-page::after {
-    content: "";
     position: absolute;
-    pointer-events: none;
-    z-index: 0;
+    z-index: -1;
+    display: block;
+    width: 28rem;
+    height: 28rem;
     border-radius: 50%;
+    content: "";
+    filter: blur(14px);
+    opacity: .75;
+    pointer-events: none;
 }
 
 .rs-gallery-page::before {
@@ -78,23 +77,34 @@ foreach ( $gallery_events as $event ) {
     left: 0;
     width: 100%;
     height: 100%;
+    border-radius: 0;
     background:
-        radial-gradient(circle at 6% 15%, rgba(249, 183, 42, .18), transparent 28rem),
-        radial-gradient(circle at 94% 22%, rgba(243, 106, 33, .14), transparent 32rem);
+        radial-gradient(circle at 8% 10%, rgba(249, 183, 42, .18), transparent 26rem),
+        radial-gradient(circle at 92% 16%, rgba(243, 106, 33, .14), transparent 30rem);
+    filter: none;
+    opacity: 1;
 }
 
 .rs-gallery-page::after {
-    top: 50rem;
-    right: -12rem;
-    width: 36rem;
-    height: 36rem;
-    background: radial-gradient(circle, rgba(249, 183, 42, .22), transparent 70%);
+    top: 55rem;
+    right: -15rem;
+    background: radial-gradient(circle, rgba(249, 183, 42, .24), transparent 68%);
     animation: rsg-atmosphere-pulse 5s ease-in-out infinite alternate;
 }
 
+@keyframes rs-nature-drift {
+    0%   { background-position: center top, 48% top; }
+    100% { background-position: center top, 52% top; }
+}
+
 @keyframes rsg-atmosphere-pulse {
-    0%   { opacity: .25; transform: scale(.95); }
-    100% { opacity: .55; transform: scale(1.08); }
+    0%   { opacity: .28; transform: scale(.96); }
+    100% { opacity: .6;  transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rs-gallery-page { animation: none; }
+    .rs-gallery-page::after { animation: none; }
 }
 
 /* Side Margins: Matching Home, Centers, and Events pages exactly */
@@ -1236,46 +1246,11 @@ foreach ( $gallery_events as $event ) {
     <header class="rs-gallery-header-section">
         <div class="rs-container">
             <div class="rs-gallery-title-block">
-                <div class="rs-gallery-eyebrow">
-                    <span class="rs-gallery-eyebrow-dot" aria-hidden="true"></span>
-                    <span>Moments &amp; Archives</span>
-                </div>
                 <h1 class="rs-gallery-page-title">Visual Stories &amp; <em>Memories</em></h1>
                 <p class="rs-gallery-page-subtitle">
                     Explore inspiring moments from our community gatherings, therapeutic intensives, children’s summer camps, and cultural celebrations across our 23+ Bengaluru centers.
                 </p>
             </div>
-
-            <!-- Clean Stat Pills (No Icons, Matching Events Page Design) -->
-            <div class="rs-gallery-stats-bar">
-                <div class="rs-gallery-stat-pill">
-                    <strong>23+</strong>
-                    <span>Bengaluru Centers</span>
-                </div>
-                <div class="rs-gallery-stat-pill">
-                    <strong>35+</strong>
-                    <span>Yoga Programs</span>
-                </div>
-                <div class="rs-gallery-stat-pill">
-                    <strong>1,200+</strong>
-                    <span>Visual Archives</span>
-                </div>
-                <div class="rs-gallery-stat-pill">
-                    <strong>10,000+</strong>
-                    <span>Active Participants</span>
-                </div>
-            </div>
-
-            <!-- Category Filter Tabs Bar -->
-            <nav class="rs-gallery-filter-bar" aria-label="Filter gallery by event category">
-                <button type="button" class="rs-gallery-tab-btn is-active" data-filter="all">All Events</button>
-                <button type="button" class="rs-gallery-tab-btn" data-filter="yoga-day">Yoga Day</button>
-                <button type="button" class="rs-gallery-tab-btn" data-filter="children">Children Camp</button>
-                <button type="button" class="rs-gallery-tab-btn" data-filter="therapy">Therapy &amp; Health</button>
-                <button type="button" class="rs-gallery-tab-btn" data-filter="youth">Youth Fest</button>
-                <button type="button" class="rs-gallery-tab-btn" data-filter="community">Community Seva</button>
-                <button type="button" class="rs-gallery-tab-btn" data-filter="culture">Retreat &amp; Culture</button>
-            </nav>
         </div>
     </header>
 
@@ -1433,23 +1408,6 @@ foreach ( $gallery_events as $event ) {
                         </div>
                     </article>
                 <?php endforeach; ?>
-            </div>
-
-            <!-- Stay Connected Newsletter Banner -->
-            <div class="rs-gallery-subscribe-banner">
-                <div class="rs-sub-content">
-                    <div class="rs-sub-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    </div>
-                    <div class="rs-sub-text">
-                        <strong>Stay Connected. Stay Inspired.</strong>
-                        <p>Subscribe to our periodic newsletter to receive notifications on upcoming festival camps, photo albums, and masterclasses.</p>
-                    </div>
-                </div>
-                <form class="rs-sub-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Rashtrotthana Yoga visual updates!'); this.reset();">
-                    <input type="email" placeholder="Enter your email address" required autocomplete="email">
-                    <button type="submit">Subscribe &rarr;</button>
-                </form>
             </div>
         </div>
     </section>
@@ -1659,35 +1617,6 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.classList.add('is-active');
             currentFilterType = btn.dataset.hubType;
             renderHubMedia();
-        });
-    });
-
-    // Category Tabs Filter for the main Event Albums
-    document.querySelectorAll('.rs-gallery-tab-btn').forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            document.querySelectorAll('.rs-gallery-tab-btn').forEach(function (t) { t.classList.remove('is-active'); });
-            tab.classList.add('is-active');
-
-            var filter = tab.dataset.filter;
-            var albumCards = document.querySelectorAll('.rs-event-album-card');
-
-            albumCards.forEach(function (c) {
-                if (filter === 'all' || c.dataset.category === filter) {
-                    c.style.display = 'flex';
-                } else {
-                    c.style.display = 'none';
-                }
-            });
-
-            // Automatically open matching event if filtered to a single category
-            if (filter !== 'all') {
-                var firstMatch = galleryEvents.find(function (ev) {
-                    return ev.category_slug === filter;
-                });
-                if (firstMatch) {
-                    openEventHub(firstMatch.id);
-                }
-            }
         });
     });
 

@@ -8,9 +8,8 @@
     .rs-homepage .rs-activity-card, .rs-homepage .rs-event-card, .rs-homepage .rs-team-card, .rs-homepage .rs-center-card { transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease; }
     .rs-homepage .rs-activity-card:hover, .rs-homepage .rs-event-card:hover, .rs-homepage .rs-center-card:hover { transform: translateY(-6px); box-shadow: 0 18px 34px rgba(82, 38, 18, .14); }
     .rs-homepage .rs-btn, .rs-homepage .rs-center-button, .rs-homepage .rs-register-button { transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease; }
-    .rs-homepage .rs-btn:hover, .rs-homepage .rs-center-button:hover, .rs-homepage .rs-register-button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(143, 23, 29, .18); }
-    .rs-cursor-glow { position: fixed; z-index: 9999; top: -18px; left: -18px; width: 36px; height: 36px; border: 1px solid rgba(243, 106, 33, .32); border-radius: 50%; background: rgba(255, 212, 142, .16); pointer-events: none; mix-blend-mode: multiply; transition: transform 80ms linear, width 180ms ease, height 180ms ease, background-color 180ms ease; }
-    .rs-homepage .rs-hero-visual { will-change: transform; }
+    .rs-cursor-glow { display: none !important; }
+
     .rs-homepage .rs-hero-title { font-size: clamp(2.05rem, 3.2vw, 2.9rem); line-height: 1.18; letter-spacing: -.02em; }
     .rs-homepage .rs-hero-description { max-width: 34rem; font-size: clamp(1rem, 1.25vw, 1.12rem); line-height: 1.7; }
     .rs-homepage .rs-heading { max-width: 48rem; margin-inline: auto; text-align: center; }
@@ -2134,15 +2133,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (window.matchMedia('(pointer: fine)').matches) {
-            var cursorGlow = document.createElement('span');
-            cursorGlow.className = 'rs-cursor-glow';
-            cursorGlow.setAttribute('aria-hidden', 'true');
-            document.body.appendChild(cursorGlow);
             window.addEventListener('pointermove', function (event) {
-                cursorGlow.style.transform = 'translate3d(' + event.clientX + 'px, ' + event.clientY + 'px, 0)';
                 homepage.style.setProperty('--background-x', ((event.clientX / window.innerWidth - .5) * -18).toFixed(2) + 'px');
                 homepage.style.setProperty('--background-y', ((event.clientY / window.innerHeight - .5) * -12).toFixed(2) + 'px');
             }, { passive: true });
+
 
             var tiltCards = homepage.querySelectorAll('.rs-value-card, .rs-activity-card, .rs-event-card, .rs-center-card, .rs-team-card, .rs-center-intro, .rs-center-locate, .rs-stat-grid');
             Array.prototype.forEach.call(tiltCards, function (card) {
