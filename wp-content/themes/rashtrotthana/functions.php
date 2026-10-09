@@ -14,6 +14,7 @@
 require_once get_template_directory() . '/inc/enqueue.php';
 require_once get_template_directory() . '/inc/cpt-registration.php';
 require_once get_template_directory() . '/inc/data-helpers.php';
+require_once get_template_directory() . '/inc/gallery-meta-box.php';
 
 // ── Theme Setup ───────────────────────────────────────────────────────────────
 if ( ! function_exists( 'rashtrotthana_theme_setup' ) ) :

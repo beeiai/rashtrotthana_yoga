@@ -1366,6 +1366,7 @@ foreach ( $gallery_events as $event ) {
     </section>
 
     <!-- Curated Featured Videos Showcase Section -->
+    <?php if ( ! empty( $all_videos ) ) : ?>
     <section class="rs-gallery-section" id="featured-videos">
         <div class="rs-container">
             <div class="rs-gallery-section-header">
@@ -1411,6 +1412,7 @@ foreach ( $gallery_events as $event ) {
             </div>
         </div>
     </section>
+    <?php endif; ?>
 </main>
 
 <!-- Full-Screen Interactive Lightbox Modal -->
