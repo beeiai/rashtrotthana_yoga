@@ -6,7 +6,7 @@
 $activity_categories = array(
     array(
         'slug'     => 'yoga-wellness',
-        'icon'     => '?',
+        'icon'     => '🧘',
         'title'    => 'Yoga & Wellness',
         'tagline'  => 'Strength, Balance & Inner Peace',
         'text'     => 'Yoga practices that build physical strength, flexibility, mental clarity, and inner calm across all age groups.',
@@ -56,7 +56,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'arts-music',
-        'icon'     => '?',
+        'icon'     => '🎵',
         'title'    => 'Arts & Music',
         'tagline'  => 'Creativity, Harmony & Soul',
         'text'     => 'Nurturing creativity and harmony through classical and contemporary vocal and instrumental music learning.',
@@ -106,7 +106,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'dance',
-        'icon'     => '?',
+        'icon'     => '💃',
         'title'    => 'Dance',
         'tagline'  => 'Grace, Rhythm & Heritage',
         'text'     => 'Traditional dance forms and creative movement preserving India\'s rich cultural heritage and rhythm.',
@@ -156,7 +156,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'martial-arts',
-        'icon'     => '?',
+        'icon'     => '🥋',
         'title'    => 'Martial Arts',
         'tagline'  => 'Discipline, Agility & Self-Defence',
         'text'     => 'Self-defence and discipline-building through structured physical training, mental focus, and ancient techniques.',
@@ -206,7 +206,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'children-programs',
-        'icon'     => '?',
+        'icon'     => '👶',
         'title'    => 'Children Programs',
         'tagline'  => 'Values, Character & Joyful Learning',
         'text'     => 'Value-based education and holistic development programs designed to spark curiosity and strong character in children.',
@@ -256,7 +256,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'fitness-sports',
-        'icon'     => '?',
+        'icon'     => '🏃',
         'title'    => 'Fitness & Sports',
         'tagline'  => 'Stamina, Strength & Sportsmanship',
         'text'     => 'Build physical strength, stamina, and confidence with modern sports facilities and expert fitness coaching.',
@@ -306,7 +306,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'health-therapy',
-        'icon'     => '?',
+        'icon'     => '🌿',
         'title'    => 'Health & Therapy',
         'tagline'  => 'Natural Healing & Holistic Care',
         'text'     => 'Therapeutic programs and natural healing therapies restoring physical harmony, mental peace, and vital health.',
@@ -356,7 +356,7 @@ $activity_categories = array(
     ),
     array(
         'slug'     => 'knowledge-culture',
-        'icon'     => '?',
+        'icon'     => '🕉️',
         'title'    => 'Knowledge & Culture',
         'tagline'  => 'Wisdom, Heritage & Lifelong Learning',
         'text'     => 'Inspiring programs celebrating timeless wisdom, regional languages, Indian philosophy, and cultural values.',

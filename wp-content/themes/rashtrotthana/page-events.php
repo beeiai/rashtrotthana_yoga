@@ -605,6 +605,7 @@ get_header();
     -webkit-backdrop-filter: blur(16px);
     overflow: hidden;
     transition: transform 260ms cubic-bezier(.2,.8,.2,1), box-shadow 260ms ease, border-color 260ms ease;
+    cursor: pointer;
 }
 
 .rs-event-item-card::after {
@@ -779,16 +780,97 @@ get_header();
     overflow: hidden;
 }
 
-/* Card Footer: Strictly Identical Buttons & No Register Button for Completed Events */
+/* Card Footer: View Details (Left, Plain) and Register Now (Right, Red) / Closed */
 .rs-event-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: .6rem;
+    gap: .5rem;
     margin-top: auto;
     padding-top: .9rem;
     border-top: 1px solid rgba(143, 23, 29, .1);
-    min-height: 54px;
+    min-height: 52px;
+}
+
+/* View Details Button (Left, Plain / Non-Red) */
+.rs-card-view-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .35rem !important;
+    height: 2.45rem !important;
+    padding: 0 1.05rem !important;
+    border: 1.5px solid rgba(143, 23, 29, .26) !important;
+    border-radius: 999px !important;
+    background: #FFFDF9 !important;
+    color: var(--color-maroon, #8F171D) !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: .81rem !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+    transition: all 180ms ease !important;
+}
+
+.rs-card-view-btn:hover {
+    background: #FFF5EA !important;
+    border-color: var(--color-maroon, #8F171D) !important;
+    color: var(--color-maroon, #8F171D) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Register Now Button (Right, Vibrant Red) */
+.rs-card-register-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .35rem !important;
+    height: 2.45rem !important;
+    padding: 0 1.15rem !important;
+    border: 1px solid #B31B1B !important;
+    border-radius: 999px !important;
+    background: #B31B1B !important;
+    box-shadow: 0 6px 16px rgba(179, 27, 27, .28), inset 0 1px 0 rgba(255, 255, 255, .35) !important;
+    color: #ffffff !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: .81rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+    transition: all 180ms ease !important;
+}
+
+.rs-card-register-btn:hover {
+    background: #8F171D !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 22px rgba(179, 27, 27, .38) !important;
+    color: #ffffff !important;
+}
+
+/* Closed State (Right, Subtle Muted Pill) */
+.rs-card-closed-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 2.45rem !important;
+    padding: 0 1.1rem !important;
+    border: 1px solid rgba(117, 106, 97, .24) !important;
+    border-radius: 999px !important;
+    background: rgba(117, 106, 97, .09) !important;
+    color: #756a61 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: .81rem !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    cursor: not-allowed !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
 }
 
 .rs-event-mode-badge {
@@ -808,7 +890,7 @@ get_header();
     flex-shrink: 1;
 }
 
-/* Register Now Button (Same Size, Single Line, No Wrapping) */
+/* Register / Read More Button for News Articles */
 .rs-register-btn {
     display: inline-flex !important;
     align-items: center !important;
@@ -818,31 +900,29 @@ get_header();
     min-width: 140px !important;
     height: 2.55rem !important;
     padding: 0 1rem !important;
-    border: 1px solid #B31B1B !important;
+    border: 1.5px solid rgba(143, 23, 29, .26) !important;
     border-radius: 999px !important;
-    background: #B31B1B !important;
-    box-shadow: 0 8px 20px rgba(179, 27, 27, .28), inset 0 1px 0 rgba(255, 255, 255, .42) !important;
-    color: #fff !important;
+    background: #FFFDF9 !important;
+    color: var(--color-maroon, #8F171D) !important;
     font-family: 'Poppins', sans-serif !important;
     font-size: .84rem !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     line-height: 1 !important;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, .16) !important;
     cursor: pointer !important;
     white-space: nowrap !important;
     flex-shrink: 0 !important;
     box-sizing: border-box !important;
-    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+    transition: all 180ms ease !important;
 }
 
 .rs-register-btn:hover {
-    transform: translateY(-2px) !important;
-    background: #8F171D !important;
-    box-shadow: 0 12px 26px rgba(179, 27, 27, .38), 0 0 18px rgba(243, 106, 33, .25), inset 0 1px 0 #fff !important;
-    color: #fff !important;
+    background: #FFF5EA !important;
+    border-color: var(--color-maroon, #8F171D) !important;
+    color: var(--color-maroon, #8F171D) !important;
+    transform: translateY(-1px) !important;
 }
 
-/* Badge for Completed Events (No Register Button) */
+/* Badge for Completed Events / Articles */
 .rs-event-concluded-badge {
     display: inline-flex;
     align-items: center;
@@ -870,7 +950,7 @@ get_header();
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 480px;
+    min-height: 485px;
     box-sizing: border-box;
     border: 1px solid rgba(143, 23, 29, .13) !important;
     border-radius: 1.25rem;
@@ -880,12 +960,24 @@ get_header();
     -webkit-backdrop-filter: blur(16px);
     overflow: hidden;
     transition: transform 260ms cubic-bezier(.2,.8,.2,1), box-shadow 260ms ease, border-color 260ms ease;
+    cursor: pointer;
+}
+
+.rs-news-item-card::after {
+    position: absolute;
+    top: 0;
+    right: 1.2rem;
+    width: 4rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    box-shadow: 0 0 12px rgba(249, 183, 42, .8);
+    content: "";
 }
 
 .rs-news-item-card:hover {
     transform: translateY(-7px);
-    border-color: rgba(249, 183, 42, .68) !important;
-    box-shadow: 0 24px 44px rgba(89, 37, 24, .16), inset 0 1px 0 #fff;
+    border-color: rgba(243, 106, 33, .48) !important;
+    box-shadow: 0 24px 44px rgba(89, 37, 24, .16), 0 0 20px rgba(249, 183, 42, .14), inset 0 1px 0 #fff;
 }
 
 .rs-news-item-card[hidden] {
@@ -907,25 +999,29 @@ get_header();
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+    transition: transform 450ms cubic-bezier(.2,.8,.2,1), filter 450ms ease;
+    filter: saturate(1.06) contrast(1.02);
 }
 
 .rs-news-item-card:hover .rs-news-media img {
     transform: scale(1.08);
+    filter: saturate(1.15) contrast(1.06);
 }
 
 .rs-news-category-badge {
     position: absolute;
     top: .9rem;
-    left: .9rem;
+    right: .9rem;
     z-index: 2;
-    padding: .35rem .8rem;
+    padding: .35rem .75rem;
     border-radius: 999px;
-    background: var(--color-maroon);
-    box-shadow: 0 4px 12px rgba(143, 23, 29, .3);
+    border: 1px solid rgba(255, 255, 255, .8);
+    background: rgba(84, 32, 25, .78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     color: #fff;
     font-size: .72rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: .02em;
 }
 
@@ -938,29 +1034,41 @@ get_header();
 
 .rs-news-meta {
     display: flex;
-    align-items: center;
-    gap: .75rem;
-    height: 22px;
-    min-height: 22px;
-    margin-bottom: .65rem;
-    color: #795c4b;
-    font-size: .8rem;
-    font-weight: 500;
+    flex-direction: column;
+    gap: .35rem;
+    height: 48px;
+    min-height: 48px;
+    margin-bottom: .75rem;
+    justify-content: center;
 }
 
-.rs-news-meta-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--color-saffron);
+.rs-news-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    color: #756a61;
+    font-size: .84rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rs-news-meta-item svg {
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    stroke: var(--color-maroon);
+    stroke-width: 2;
+    fill: none;
 }
 
 .rs-news-title {
-    margin: 0 0 .75rem;
+    margin: 0 0 .65rem;
     color: #542019;
-    font-size: 1.16rem;
+    font-size: 1.18rem;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.32;
     height: 3.15rem;
     min-height: 3.15rem;
     display: -webkit-box;
@@ -975,7 +1083,7 @@ get_header();
 }
 
 .rs-news-excerpt {
-    margin: 0 0 1.25rem;
+    margin: 0 0 1rem;
     color: #67574c;
     font-size: .88rem;
     line-height: 1.55;
@@ -988,31 +1096,14 @@ get_header();
 }
 
 .rs-news-footer {
-    margin-top: auto;
-    min-height: 38px;
     display: flex;
     align-items: center;
-}
-
-.rs-news-read-link {
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    color: var(--color-maroon);
-    font-size: .86rem;
-    font-weight: 700;
-    text-decoration: none;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-    font-family: inherit;
-    transition: gap 180ms ease, color 180ms ease;
-}
-
-.rs-news-read-link:hover {
-    gap: .75rem;
-    color: var(--color-saffron);
+    justify-content: space-between;
+    gap: .6rem;
+    margin-top: auto;
+    padding-top: .9rem;
+    border-top: 1px solid rgba(143, 23, 29, .1);
+    min-height: 54px;
 }
 
 /* No Results Message */
@@ -1393,31 +1484,325 @@ get_header();
 }
 
 /* ============================================================
-   Article Read Preview Modal
+   Big Activities-Style Event & News Detail Modals
    ============================================================ */
-.rs-article-modal-card {
-    max-width: 660px;
+.rs-event-big-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(14px, 2.5vw, 32px);
+    opacity: 0;
+    transition: opacity 240ms ease;
 }
 
-.rs-article-modal-media {
+.rs-event-big-modal.is-active {
+    display: flex;
+    opacity: 1;
+}
+
+.rs-event-big-modal .rs-event-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 10, 5, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.rs-event-big-modal-container {
+    position: relative;
+    z-index: 2;
     width: 100%;
-    height: 240px;
-    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.rs-event-big-card {
+    position: relative;
+    width: 100% !important;
+    max-width: 980px !important;
+    max-height: calc(100vh - 44px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #FFFDF9;
+    border: 1.5px solid rgba(143, 23, 29, 0.18);
+    border-radius: 26px;
+    box-shadow: 0 32px 90px rgba(45, 12, 8, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+    padding: clamp(28px, 3vw, 40px) clamp(24px, 3.5vw, 44px);
+    transform: scale(0.94) translateY(18px);
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(143, 23, 29, 0.25) transparent;
+}
+
+.rs-event-big-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.rs-event-big-card::-webkit-scrollbar-thumb {
+    background: rgba(143, 23, 29, 0.25);
+    border-radius: 10px;
+}
+
+.rs-event-big-modal.is-active .rs-event-big-card {
+    transform: scale(1) translateY(0);
+}
+
+.rs-event-big-close {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(143, 23, 29, 0.18);
+    background: #FFF5EA;
+    color: #542019;
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 180ms ease;
+    z-index: 10;
+    line-height: 1;
+}
+
+.rs-event-big-close:hover {
+    background: #8F171D;
+    color: #FFFFFF;
+    border-color: #8F171D;
+    transform: rotate(90deg) scale(1.08);
+}
+
+.rs-event-modal-banner-wrap {
+    width: 100%;
+    max-height: 380px;
+    border-radius: 18px;
     overflow: hidden;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    background: #f7ebe1;
+    box-shadow: 0 10px 30px rgba(89, 37, 24, 0.12);
 }
 
-.rs-article-modal-media img {
+.rs-event-modal-banner-wrap img {
     width: 100%;
-    height: 100%;
+    max-height: 380px;
     object-fit: cover;
+    display: block;
 }
 
-.rs-article-modal-body p {
-    color: #67574c;
+.rs-event-meta-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: .85rem;
+}
+
+.rs-event-meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem .95rem;
+    border-radius: 999px;
+    background: #FFF4E4;
+    border: 1px solid rgba(243, 106, 33, .25);
+    color: #542019;
+    font-size: .84rem;
+    font-weight: 600;
+}
+
+.rs-event-meta-pill svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--color-maroon);
+    stroke-width: 2.2;
+    fill: none;
+    flex-shrink: 0;
+}
+
+.rs-act-modal-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.rs-act-modal-tagline {
+    display: inline-block;
+    color: var(--color-saffron);
+    font: 700 0.78rem 'Poppins', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.rs-act-modal-title {
+    margin: 0 0 8px;
+    color: #542019;
+    font: 700 clamp(1.5rem, 2.4vw, 2.1rem)/1.22 'Poppins', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.rs-act-modal-divider {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(143, 23, 29, 0.18), rgba(243, 106, 33, 0.25), transparent);
+    margin: 1.25rem 0 1.5rem;
+}
+
+.rs-event-modal-fulltext {
+    color: #3b2b24;
+    font-size: 1.02rem;
+    line-height: 1.8;
+}
+
+.rs-event-modal-fulltext p {
+    margin: 0 0 1.25rem;
+}
+
+.rs-dignitaries-list {
+    margin: .85rem 0 1.5rem;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+}
+
+.rs-dignitaries-list li {
+    position: relative;
+    padding: .75rem 1.15rem .75rem 2.2rem;
+    background: rgba(255, 247, 237, .75);
+    border: 1px solid rgba(143, 23, 29, .12);
+    border-radius: .85rem;
+    line-height: 1.6;
     font-size: .95rem;
-    line-height: 1.7;
-    margin-bottom: 1rem;
+    color: #43332c;
+}
+
+.rs-dignitaries-list li::before {
+    content: "•";
+    position: absolute;
+    left: .85rem;
+    top: .65rem;
+    color: var(--color-maroon);
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.rs-dignitaries-list li strong {
+    color: var(--color-maroon);
+    font-weight: 700;
+}
+
+.rs-act-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.rs-act-modal-footer-note {
+    margin: 0;
+    color: #796d65;
+    font: 500 0.84rem/1.55 'Poppins', sans-serif;
+    max-width: 580px;
+}
+
+.rs-act-modal-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.rs-act-modal-centers-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: #FFF6EC;
+    color: #542019;
+    border: 1px solid rgba(143, 23, 29, 0.2);
+    font: 600 0.82rem 'Poppins', sans-serif;
+    text-decoration: none;
+    transition: all 180ms ease;
+    white-space: nowrap;
+}
+
+.rs-act-modal-centers-link:hover {
+    background: #FFEEDB;
+    border-color: #8F171D;
+    color: #8F171D;
+}
+
+/* Modal Register Now Button (Vibrant Red, Matches Theme Primary Button) */
+.rs-modal-register-btn {
+    background: #B31B1B !important;
+    color: #FFFFFF !important;
+    border: 1px solid #8F171D !important;
+    border-radius: 999px !important;
+    padding: 10px 24px !important;
+    font: 700 0.86rem 'Poppins', sans-serif !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    box-shadow: 0 6px 18px rgba(179, 27, 27, 0.3) !important;
+    cursor: pointer !important;
+    transition: all 180ms ease !important;
+    white-space: nowrap !important;
+}
+
+.rs-modal-register-btn:hover {
+    background: #8F171D !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 24px rgba(179, 27, 27, 0.4) !important;
+    color: #FFFFFF !important;
+}
+
+/* Modal Closed Badge */
+.rs-modal-closed-btn {
+    background: rgba(117, 106, 97, 0.1) !important;
+    color: #756a61 !important;
+    border: 1px solid rgba(117, 106, 97, 0.25) !important;
+    border-radius: 999px !important;
+    padding: 10px 22px !important;
+    font: 600 0.84rem 'Poppins', sans-serif !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    cursor: not-allowed !important;
+    white-space: nowrap !important;
+}
+
+/* Modal Close Button (Plain / Warm Outline) */
+.rs-act-modal-close-pill-btn,
+.rs-act-modal-cta-btn {
+    background: #FFF6EC !important;
+    color: #542019 !important;
+    border: 1px solid rgba(143, 23, 29, 0.24) !important;
+    border-radius: 999px !important;
+    padding: 10px 22px !important;
+    font: 600 0.84rem 'Poppins', sans-serif !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+    transition: all 180ms ease !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+}
+
+.rs-act-modal-close-pill-btn:hover,
+.rs-act-modal-cta-btn:hover {
+    background: #FFEEDB !important;
+    border-color: #8F171D !important;
+    color: #8F171D !important;
+    transform: translateY(-1px) !important;
 }
 
 /* ============================================================
@@ -1472,7 +1857,7 @@ get_header();
 
 <?php
 /**
- * Events and news data � loaded from data/events-data.php.
+ * Events and news data — loaded from data/events-data.php.
  * To swap in DB data, update rs_get_events() and rs_get_news() in inc/data-helpers.php.
  */
 $events_dataset = rs_get_events();
@@ -1484,39 +1869,15 @@ $news_dataset   = rs_get_news();
 
 
     <!-- ============================================================
-         Refined Header Block (Zero Hero Banner � Activities/Centers Style)
+         Refined Header Block (Zero Hero Banner — Activities/Centers Style)
          ============================================================ -->
     <section class="rs-events-header-section" aria-labelledby="events-page-heading">
         <div class="rs-container">
             <div class="rs-events-title-block">
-                <div class="rs-events-eyebrow">
-                    <span class="rs-events-eyebrow-dot" aria-hidden="true"></span>
-                    <span>COMMUNITY &amp; CELEBRATIONS</span>
-                </div>
                 <h1 id="events-page-heading" class="rs-events-page-title">Events &amp; <em>News</em></h1>
                 <p class="rs-events-page-subtitle">
-                    Experience transformative yoga celebrations, skill-building workshops, and inspiring community stories across our 12 Bengaluru centers. Find your next milestone below.
+                    Experience transformative yoga celebrations, skill-building workshops, and inspiring community stories across our 10+ Bengaluru centers. Find your next milestone below.
                 </p>
-
-                <!-- Quick Highlights Stat Bar (Small icons removed per user request) -->
-                <div class="rs-events-stats-bar" aria-label="Events overview">
-                    <div class="rs-events-stat-pill">
-                        <strong><?php echo count($events_dataset); ?>+</strong>
-                        <span>Scheduled Events</span>
-                    </div>
-                    <div class="rs-events-stat-pill">
-                        <strong>12</strong>
-                        <span>Bengaluru Centers</span>
-                    </div>
-                    <div class="rs-events-stat-pill">
-                        <strong>10,000+</strong>
-                        <span>Active Participants</span>
-                    </div>
-                    <div class="rs-events-stat-pill">
-                        <strong><?php echo count($news_dataset); ?></strong>
-                        <span>Fresh Insights</span>
-                    </div>
-                </div>
             </div>
 
             <!-- ============================================================
@@ -1527,8 +1888,7 @@ $news_dataset   = rs_get_news();
                     <!-- Segmented Navigation Tabs -->
                     <nav class="rs-events-nav-tabs" aria-label="Filter by type">
                         <button type="button" class="rs-events-tab-btn is-active" data-filter-type="all">All Items</button>
-                        <button type="button" class="rs-events-tab-btn" data-filter-type="upcoming">Upcoming Events</button>
-                        <button type="button" class="rs-events-tab-btn" data-filter-type="past">Past Events</button>
+                        <button type="button" class="rs-events-tab-btn" data-filter-type="events">Events &amp; Programs</button>
                         <button type="button" class="rs-events-tab-btn" data-filter-type="news">News &amp; Articles</button>
                     </nav>
 
@@ -1539,7 +1899,7 @@ $news_dataset   = rs_get_news();
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                         <input type="search" id="rs-events-search-input" placeholder="Search events, workshops, centers, or news..." aria-label="Search events and news" autocomplete="off">
-                        <button type="button" id="rs-events-clear-search" class="rs-events-search-clear" aria-label="Clear search">?</button>
+                        <button type="button" id="rs-events-clear-search" class="rs-events-search-clear" aria-label="Clear search">×</button>
                     </div>
                 </div>
 
@@ -1566,11 +1926,11 @@ $news_dataset   = rs_get_news();
                     </select>
 
                     <button type="button" id="rs-filter-reset-btn" class="rs-events-reset-btn" aria-label="Reset all filters">
-                        <span aria-hidden="true">?</span> Reset Filters
+                        <span aria-hidden="true">↺</span> Reset Filters
                     </button>
 
                     <div class="rs-events-status-indicator" id="rs-filter-count-text" aria-live="polite">
-                        Showing <?php echo count($events_dataset); ?> Events &amp; <?php echo count($news_dataset); ?> Articles
+                        Showing <?php echo count($events_dataset); ?> Events &amp; <?php echo count($news_dataset); ?> Article<?php echo count($news_dataset) === 1 ? '' : 's'; ?>
                     </div>
                 </div>
             </div>
@@ -1578,20 +1938,20 @@ $news_dataset   = rs_get_news();
     </section>
 
     <!-- ============================================================
-         Upcoming Events Section (Equal Cards + Side Arrow Carousel)
+         Events & Programs Section (Equal Cards + Side Arrow Carousel)
          ============================================================ -->
     <section class="rs-events-section" id="events-section" aria-labelledby="events-section-title">
         <div class="rs-container">
             <div class="rs-events-section-header">
                 <div>
-                    <h2 id="events-section-title">Upcoming Events &amp; Programs</h2>
+                    <h2 id="events-section-title">Events &amp; Programs</h2>
                     <p class="rs-events-section-desc">
-                        Participate in inspiring gatherings, therapeutic intensives, and weekend retreats guided by certified Rashtrotthana Gurus.
+                        Participate in inspiring gatherings, therapeutic intensives, and celebrations guided by certified Rashtrotthana Gurus.
                     </p>
                 </div>
                 <div class="rs-events-header-controls">
                     <button type="button" class="rs-view-toggle-btn" id="rs-events-view-toggle" aria-expanded="false" data-target="events-carousel-stage">
-                        <span class="toggle-text">View All Events in Grid</span> <span aria-hidden="true">?</span>
+                        <span class="toggle-text">View All Events in Grid</span> <span aria-hidden="true">⊞</span>
                     </button>
                 </div>
             </div>
@@ -1608,6 +1968,7 @@ $news_dataset   = rs_get_news();
                     <?php foreach ( $events_dataset as $index => $event ) : ?>
                         <article class="rs-event-item-card"
                                  id="<?php echo esc_attr( $event['id'] ); ?>"
+                                 data-event-id="<?php echo esc_attr( $event['id'] ); ?>"
                                  data-type="<?php echo esc_attr( $event['type'] ); ?>"
                                  data-category="<?php echo esc_attr( $event['category_slug'] ); ?>"
                                  data-timeframe="<?php echo esc_attr( $event['timeframe'] ); ?>"
@@ -1616,15 +1977,16 @@ $news_dataset   = rs_get_news();
                                  data-date="<?php echo esc_attr( $event['day'] . ' ' . $event['month'] . ' ' . $event['year'] ); ?>"
                                  data-time="<?php echo esc_attr( $event['time'] ); ?>"
                                  data-fee="<?php echo esc_attr( $event['fee'] ); ?>"
-                                 data-search="<?php echo esc_attr( strtolower( $event['title'] . ' ' . $event['venue'] . ' ' . $event['category'] . ' ' . $event['desc'] ) ); ?>">
+                                 data-search="<?php echo esc_attr( strtolower( $event['title'] . ' ' . $event['venue'] . ' ' . $event['category'] . ' ' . $event['desc'] ) ); ?>"
+                                 tabindex="0" role="button" aria-haspopup="dialog" aria-label="View details for <?php echo esc_attr( $event['title'] ); ?>">
                             
                             <div class="rs-event-media">
                                 <img src="<?php echo esc_url( $event['image'] ); ?>" alt="<?php echo esc_attr( $event['title'] ); ?>" loading="lazy">
+                                <span class="rs-event-category-pill"><?php echo esc_html( $event['category'] ); ?></span>
                                 <div class="rs-event-date-badge">
                                     <strong><?php echo esc_html( $event['day'] ); ?></strong>
                                     <span><?php echo esc_html( $event['month'] ); ?></span>
                                 </div>
-                                <span class="rs-event-category-pill"><?php echo esc_html( $event['category'] ); ?></span>
                             </div>
 
                             <div class="rs-event-body">
@@ -1643,14 +2005,15 @@ $news_dataset   = rs_get_news();
                                 <p class="rs-event-desc"><?php echo esc_html( $event['desc'] ); ?></p>
 
                                 <div class="rs-event-footer">
-                                    <span class="rs-event-mode-badge" title="<?php echo esc_attr( $event['mode'] ); ?>"><?php echo esc_html( $event['mode'] ); ?></span>
-                                    
-                                    <?php if ( $event['type'] !== 'past' ) : ?>
-                                        <button type="button" class="rs-register-btn rs-open-register-modal" data-event-id="<?php echo esc_attr( $event['id'] ); ?>">
-                                            <span>Register Now</span> <span aria-hidden="true">?</span>
-                                        </button>
+                                    <button type="button" class="rs-card-view-btn rs-open-event-modal" data-event-id="<?php echo esc_attr( $event['id'] ); ?>" aria-label="View details for <?php echo esc_attr( $event['title'] ); ?>">
+                                        <span>View Details</span> <span aria-hidden="true">&rarr;</span>
+                                    </button>
+                                    <?php if ( !empty($event['registration_status']) && $event['registration_status'] === 'closed' ) : ?>
+                                        <span class="rs-card-closed-pill" aria-label="Registration is closed">Closed</span>
                                     <?php else : ?>
-                                        <span class="rs-event-concluded-badge">Completed</span>
+                                        <button type="button" class="rs-card-register-btn rs-open-register-modal" data-event-id="<?php echo esc_attr( $event['id'] ); ?>" data-event-title="<?php echo esc_attr( $event['title'] ); ?>" aria-label="Register now for <?php echo esc_attr( $event['title'] ); ?>">
+                                            <span>Register Now</span> <span aria-hidden="true">&rarr;</span>
+                                        </button>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -1666,7 +2029,7 @@ $news_dataset   = rs_get_news();
 
             <!-- Empty State for Events -->
             <div class="rs-events-empty-state" id="events-empty-state">
-                <span class="empty-icon">??</span>
+                <span class="empty-icon">🌱</span>
                 <h3>No Events Found</h3>
                 <p>No upcoming events match your selected filters. Try choosing "All Categories" or resetting your search.</p>
                 <button type="button" class="rs-events-reset-btn rs-trigger-reset">Clear Filters</button>
@@ -1698,7 +2061,7 @@ $news_dataset   = rs_get_news();
                 </div>
                 <div class="rs-events-header-controls">
                     <button type="button" class="rs-view-toggle-btn" id="rs-news-view-toggle" aria-expanded="false" data-target="news-carousel-stage">
-                        <span class="toggle-text">View All News in Grid</span> <span aria-hidden="true">?</span>
+                        <span class="toggle-text">View All News in Grid</span> <span aria-hidden="true">⊞</span>
                     </button>
                 </div>
             </div>
@@ -1715,29 +2078,41 @@ $news_dataset   = rs_get_news();
                     <?php foreach ( $news_dataset as $index => $article ) : ?>
                         <article class="rs-news-item-card"
                                  id="<?php echo esc_attr( $article['id'] ); ?>"
+                                 data-news-id="<?php echo esc_attr( $article['id'] ); ?>"
                                  data-category="<?php echo esc_attr( $article['category_slug'] ); ?>"
                                  data-title="<?php echo esc_attr( $article['title'] ); ?>"
                                  data-date="<?php echo esc_attr( $article['date'] ); ?>"
-                                 data-search="<?php echo esc_attr( strtolower( $article['title'] . ' ' . $article['category'] . ' ' . $article['excerpt'] ) ); ?>">
+                                 data-search="<?php echo esc_attr( strtolower( $article['title'] . ' ' . $article['category'] . ' ' . $article['excerpt'] ) ); ?>"
+                                 tabindex="0" role="button" aria-haspopup="dialog" aria-label="Read article: <?php echo esc_attr( $article['title'] ); ?>">
                             
                             <div class="rs-news-media">
                                 <img src="<?php echo esc_url( $article['image'] ); ?>" alt="<?php echo esc_attr( $article['title'] ); ?>" loading="lazy">
                                 <span class="rs-news-category-badge"><?php echo esc_html( $article['category'] ); ?></span>
+                                <div class="rs-event-date-badge">
+                                    <strong><?php echo esc_html( date('d', strtotime($article['date'])) ); ?></strong>
+                                    <span><?php echo esc_html( date('M', strtotime($article['date'])) ); ?></span>
+                                </div>
                             </div>
 
                             <div class="rs-news-body">
                                 <div class="rs-news-meta">
-                                    <span><?php echo esc_html( $article['date'] ); ?></span>
-                                    <span class="rs-news-meta-dot" aria-hidden="true"></span>
-                                    <span><?php echo esc_html( $article['read_time'] ); ?></span>
+                                    <div class="rs-news-meta-item">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                        <span><?php echo esc_html( $article['date'] ); ?></span>
+                                    </div>
+                                    <div class="rs-news-meta-item">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                        <span><?php echo esc_html( $article['read_time'] ); ?></span>
+                                    </div>
                                 </div>
 
                                 <h3 class="rs-news-title"><?php echo esc_html( $article['title'] ); ?></h3>
                                 <p class="rs-news-excerpt"><?php echo esc_html( $article['excerpt'] ); ?></p>
 
                                 <div class="rs-news-footer">
-                                    <button type="button" class="rs-news-read-link rs-open-article-modal" data-news-id="<?php echo esc_attr( $article['id'] ); ?>">
-                                        <span>Read Full Article</span> <span aria-hidden="true">?</span>
+                                    <span class="rs-event-mode-badge" title="<?php echo esc_attr( $article['read_time'] ); ?>"><?php echo esc_html( $article['read_time'] ); ?></span>
+                                    <button type="button" class="rs-register-btn rs-open-article-modal" data-news-id="<?php echo esc_attr( $article['id'] ); ?>">
+                                        <span>Read More</span> <span aria-hidden="true">&rarr;</span>
                                     </button>
                                 </div>
                             </div>
@@ -1771,146 +2146,188 @@ $news_dataset   = rs_get_news();
         </div>
     </section>
 
-    <!-- ============================================================
-         Stay Informed Newsletter Banner (Home & Centers Style)
-         ============================================================ -->
-    <section class="rs-events-subscribe-section" aria-label="Newsletter Subscription">
-        <div class="rs-container">
-            <div class="rs-events-newsletter-card">
-                <div class="rs-events-newsletter-content">
-                    <div class="rs-events-newsletter-icon" aria-hidden="true">?</div>
-                    <div class="rs-events-newsletter-text">
-                        <h3>Stay Informed. Stay Inspired.</h3>
-                        <p>Subscribe to our monthly newsletter and never miss an update on upcoming yoga celebrations, health workshops, and inspiring community programs.</p>
-                    </div>
-                </div>
-
-                <form class="rs-events-newsletter-form" id="rs-newsletter-form">
-                    <label for="rs-newsletter-email" class="screen-reader-text" style="position:absolute;width:1px;height:1px;overflow:hidden;">Email Address</label>
-                    <input type="email" id="rs-newsletter-email" placeholder="Enter your email address..." required autocomplete="email">
-                    <button type="submit">
-                        <span>Subscribe</span> <span aria-hidden="true">?</span>
-                    </button>
-                    <div class="rs-newsletter-msg" id="rs-newsletter-status" aria-live="polite"></div>
-                </form>
-            </div>
-        </div>
-    </section>
-
 </main>
 
 <!-- ============================================================
-     Interactive "Register Now" Modal
+     Interactive "Event Details" Modal (Big Card, Activities Style)
      ============================================================ -->
-<div id="rs-registration-modal" class="rs-event-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-modal-event-title">
+<div id="rs-event-detail-modal" class="rs-event-big-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-big-event-title">
     <div class="rs-event-modal-backdrop" data-close-modal="true"></div>
-    <div class="rs-event-modal-card">
-        <button type="button" class="rs-modal-close-btn" aria-label="Close registration dialog" data-close-modal="true">?</button>
-        
-        <div class="rs-modal-header">
-            <span class="rs-modal-badge" id="rs-modal-category-text">Special Event</span>
-            <h2 class="rs-modal-title" id="rs-modal-event-title">Event Title</h2>
-            <div class="rs-modal-event-details">
-                <span>
-                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    <span id="rs-modal-date-text">Date</span>
-                </span>
-                <span>
-                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span id="rs-modal-time-text">Time</span>
-                </span>
-                <span>
-                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span id="rs-modal-venue-text">Venue</span>
-                </span>
+    <div class="rs-event-big-modal-container">
+        <div class="rs-event-big-card">
+            <button type="button" class="rs-event-big-close" aria-label="Close event details" data-close-modal="true">&times;</button>
+            
+            <div class="rs-event-modal-banner-wrap" id="rs-big-event-banner-wrap">
+                <img id="rs-big-event-img" src="" alt="">
+            </div>
+
+            <div class="rs-act-modal-header">
+                <div class="rs-act-modal-meta">
+                    <span class="rs-act-modal-tagline" id="rs-big-event-category">SPECIAL EVENT</span>
+                    <div id="rs-modal-header-reg-wrap"></div>
+                </div>
+                <h2 class="rs-act-modal-title" id="rs-big-event-title">Event Title</h2>
+                
+                <div class="rs-event-meta-pill-group">
+                    <span class="rs-event-meta-pill">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <strong id="rs-big-event-date">Date</strong>
+                    </span>
+                    <span class="rs-event-meta-pill">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span id="rs-big-event-time">Time</span>
+                    </span>
+                    <span class="rs-event-meta-pill">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span id="rs-big-event-venue">Venue</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="rs-act-modal-divider" aria-hidden="true"></div>
+
+            <div class="rs-act-modal-body">
+                <div class="rs-event-modal-fulltext" id="rs-big-event-content">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+
+            <div class="rs-act-modal-footer">
+                <p class="rs-act-modal-footer-note">Rashtrotthana Yoga — Nurturing health, culture, and community across 10+ Bengaluru centers.</p>
+                <div class="rs-act-modal-footer-actions">
+                    <a href="<?php echo esc_url( home_url('/centers/') ); ?>" class="rs-act-modal-centers-link">
+                        <span>Find Nearest Center &rarr;</span>
+                    </a>
+                    <div id="rs-modal-reg-action-wrap"></div>
+                    <button type="button" class="rs-act-modal-close-pill-btn" data-close-modal="true">
+                        <span>Close</span>
+                    </button>
+                </div>
             </div>
         </div>
-
-        <form class="rs-modal-form" id="rs-event-registration-form">
-            <input type="hidden" id="rs-modal-hidden-event-id" name="event_id">
-
-            <div class="rs-modal-field">
-                <label for="reg-full-name">Your Full Name *</label>
-                <input type="text" id="reg-full-name" required placeholder="e.g. Anand Sharma">
-            </div>
-
-            <div class="rs-modal-row">
-                <div class="rs-modal-field">
-                    <label for="reg-age">Age *</label>
-                    <input type="number" id="reg-age" name="age" required min="5" max="120" placeholder="e.g. 28">
-                </div>
-                <div class="rs-modal-field">
-                    <label for="reg-gender">Gender *</label>
-                    <select id="reg-gender" name="gender" required>
-                        <option value="" disabled selected>Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="rs-modal-field">
-                <label for="reg-phone-number">Mobile / WhatsApp Number *</label>
-                <input type="tel" id="reg-phone-number" required placeholder="e.g. 98765 43210">
-            </div>
-
-            <div class="rs-modal-field">
-                <label for="reg-email-address">Email Address *</label>
-                <input type="email" id="reg-email-address" required placeholder="e.g. anand@example.com">
-            </div>
-
-            <div class="rs-modal-field">
-                <label for="reg-center-preference">Preferred Rashtrotthana Center</label>
-                <select id="reg-center-preference">
-                    <option value="jayanagar">Jayanagar Center</option>
-                    <option value="basavanagudi">Basavanagudi Center</option>
-                    <option value="malleswaram">Malleswaram Center</option>
-                    <option value="yelahanka">Yelahanka Center</option>
-                    <option value="whitefield">Whitefield Center</option>
-                    <option value="jpnagar">JP Nagar Center</option>
-                    <option value="online">Online / Hybrid Batch</option>
-                </select>
-            </div>
-
-            <button type="submit" class="rs-modal-submit-btn" id="rs-submit-reg-btn">
-                Confirm Registration ?
-            </button>
-            <div class="rs-modal-success-alert" id="rs-modal-reg-success" aria-live="polite">
-                ? Thank you! Your registration has been received. Our center team will contact you with program batch guidelines shortly.
-            </div>
-        </form>
     </div>
 </div>
 
 <!-- ============================================================
-     Interactive "Read Article" Preview Modal
+     Interactive "Read Article" Preview Modal (Big Card, Activities Style)
      ============================================================ -->
-<div id="rs-article-modal" class="rs-event-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-article-modal-title">
+<div id="rs-article-modal" class="rs-event-big-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-article-modal-title">
     <div class="rs-event-modal-backdrop" data-close-modal="true"></div>
-    <div class="rs-event-modal-card rs-article-modal-card">
-        <button type="button" class="rs-modal-close-btn" aria-label="Close article dialog" data-close-modal="true">?</button>
-        
-        <div class="rs-article-modal-media">
-            <img id="rs-article-modal-img" src="" alt="">
-        </div>
+    <div class="rs-event-big-modal-container">
+        <div class="rs-event-big-card">
+            <button type="button" class="rs-event-big-close" aria-label="Close article dialog" data-close-modal="true">&times;</button>
+            
+            <div class="rs-event-modal-banner-wrap" id="rs-article-modal-banner-wrap">
+                <img id="rs-article-modal-img" src="" alt="">
+            </div>
 
+            <div class="rs-act-modal-header">
+                <div class="rs-act-modal-meta">
+                    <span class="rs-act-modal-tagline" id="rs-article-modal-category">NEWS &amp; UPDATES</span>
+                </div>
+                <h2 class="rs-act-modal-title" id="rs-article-modal-title">Article Title</h2>
+                <div class="rs-event-meta-pill-group">
+                    <span class="rs-event-meta-pill">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span id="rs-article-modal-date">Date</span>
+                    </span>
+                    <span class="rs-event-meta-pill">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span id="rs-article-modal-readtime">2 min read</span>
+                    </span>
+                    <span class="rs-event-meta-pill">
+                        <span>Rashtrotthana Editorial</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="rs-act-modal-divider" aria-hidden="true"></div>
+
+            <div class="rs-act-modal-body">
+                <div class="rs-event-modal-fulltext" id="rs-article-modal-content">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+
+            <div class="rs-act-modal-footer">
+                <p class="rs-act-modal-footer-note">For media coverage, press releases, or inquiries, reach out to info@rashtrotthana.org.</p>
+                <div class="rs-act-modal-footer-actions">
+                    <button type="button" class="rs-act-modal-close-pill-btn" data-close-modal="true">
+                        <span>Close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     Interactive "Register Now" Event Registration Modal Dialog
+     ============================================================ -->
+<div id="rs-registration-modal" class="rs-event-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="rs-reg-modal-title">
+    <div class="rs-event-modal-backdrop" data-close-reg-modal="true"></div>
+    <div class="rs-event-modal-card">
+        <button type="button" class="rs-modal-close-btn" aria-label="Close registration form" data-close-reg-modal="true">&times;</button>
+        
         <div class="rs-modal-header">
-            <span class="rs-modal-badge" id="rs-article-modal-category">News</span>
-            <h2 class="rs-modal-title" id="rs-article-modal-title">Article Title</h2>
+            <span class="rs-modal-badge" id="rs-reg-modal-badge">EVENT REGISTRATION</span>
+            <h2 class="rs-modal-title" id="rs-reg-modal-title">Register for Event</h2>
             <div class="rs-modal-event-details">
-                <span>
+                <span id="rs-reg-modal-date">
                     <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    <span id="rs-article-modal-date">May 20, 2026</span>
+                    <strong id="rs-reg-modal-date-text">Date</strong>
                 </span>
-                <span>�</span>
-                <span>Rashtrotthana Editorial</span>
+                <span id="rs-reg-modal-time">
+                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="rs-reg-modal-time-text">Time</span>
+                </span>
+                <span id="rs-reg-modal-venue">
+                    <svg class="rs-modal-detail-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span id="rs-reg-modal-venue-text">Venue</span>
+                </span>
             </div>
         </div>
 
-        <div class="rs-article-modal-body" id="rs-article-modal-content">
-            <!-- Injected via JavaScript -->
-        </div>
+        <form class="rs-modal-form" id="rs-event-reg-form">
+            <input type="hidden" id="rs-reg-event-id" name="event_id" value="">
+            
+            <div class="rs-modal-field">
+                <label for="rs-reg-name">Full Name *</label>
+                <input type="text" id="rs-reg-name" name="name" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="rs-modal-row">
+                <div class="rs-modal-field">
+                    <label for="rs-reg-phone">Phone Number *</label>
+                    <input type="tel" id="rs-reg-phone" name="phone" placeholder="e.g. +91 98765 43210" required>
+                </div>
+                <div class="rs-modal-field">
+                    <label for="rs-reg-email">Email Address *</label>
+                    <input type="email" id="rs-reg-email" name="email" placeholder="you@example.com" required>
+                </div>
+            </div>
+
+            <div class="rs-modal-field">
+                <label for="rs-reg-center">Preferred Center / Branch</label>
+                <select id="rs-reg-center" name="center">
+                    <option value="Basavanagudi">Basavanagudi</option>
+                    <option value="Jayanagar">Jayanagar</option>
+                    <option value="Sadashivanagar">Sadashivanagar</option>
+                    <option value="KG Nagar">KG Nagar / Sunkenahalli</option>
+                    <option value="Vijayanagar">Vijayanagar</option>
+                    <option value="Other">Other / Not sure</option>
+                </select>
+            </div>
+
+            <button type="submit" class="rs-modal-submit-btn" id="rs-reg-submit-btn">
+                <span>Confirm Registration &rarr;</span>
+            </button>
+
+            <div class="rs-modal-success-alert" id="rs-reg-success-msg">
+                🎉 <strong>Registration Submitted Successfully!</strong><br>
+                Thank you! Our coordinators will contact you with reporting timings and tournament details.
+            </div>
+        </form>
     </div>
 </div>
 
@@ -1983,15 +2400,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Filter Events Cards
         eventCards.forEach(function (card) {
-            var cType = card.getAttribute('data-type') || '';
             var cCategory = card.getAttribute('data-category') || '';
             var cTimeframe = card.getAttribute('data-timeframe') || '';
             var cSearch = card.getAttribute('data-search') || '';
 
             var matchesType = true;
-            if (activeFilterType === 'upcoming') matchesType = (cType === 'upcoming');
-            else if (activeFilterType === 'past') matchesType = (cType === 'past');
-            else if (activeFilterType === 'news') matchesType = false; // Hide events when news tab active
+            if (activeFilterType === 'news') matchesType = false;
 
             var matchesCategory = (selectedCat === 'all' || cCategory === selectedCat);
             var matchesMonth = (selectedMonth === 'all' || cTimeframe === selectedMonth);
@@ -2008,9 +2422,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var cSearch = card.getAttribute('data-search') || '';
 
             var matchesType = true;
-            if (activeFilterType === 'upcoming' || activeFilterType === 'past') {
-                matchesType = false; // Hide news when specific event tab active
-            }
+            if (activeFilterType === 'events') matchesType = false;
 
             var matchesCategory = (selectedCat === 'all' || cCategory === selectedCat);
             var matchesSearch = (!query || cSearch.indexOf(query) !== -1);
@@ -2024,7 +2436,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (activeFilterType === 'news') {
             eventsSection.style.display = 'none';
             newsSection.style.display = 'block';
-        } else if (activeFilterType === 'upcoming' || activeFilterType === 'past') {
+        } else if (activeFilterType === 'events') {
             eventsSection.style.display = 'block';
             newsSection.style.display = 'none';
         } else {
@@ -2211,93 +2623,225 @@ document.addEventListener('DOMContentLoaded', function () {
     setupCarousel('news');
 
     // ============================================================
-    // Registration Modal Controller (For active events only)
+    // Event Details Big Modal Controller (Activities Style)
+    // ============================================================
+    var eventModal = document.getElementById('rs-event-detail-modal');
+    var eventImg = document.getElementById('rs-big-event-img');
+    var eventBannerWrap = document.getElementById('rs-big-event-banner-wrap');
+    var eventTitle = document.getElementById('rs-big-event-title');
+    var eventCategory = document.getElementById('rs-big-event-category');
+    var eventDate = document.getElementById('rs-big-event-date');
+    var eventTime = document.getElementById('rs-big-event-time');
+    var eventVenue = document.getElementById('rs-big-event-venue');
+    var eventContent = document.getElementById('rs-big-event-content');
+
+    function openEventDetailModal(eventId) {
+        var ev = eventsMap[eventId];
+        if (!ev || !eventModal) return;
+
+        if (ev.image && eventImg) {
+            eventImg.src = ev.image;
+            eventImg.alt = ev.title;
+            if (eventBannerWrap) eventBannerWrap.style.display = 'block';
+        } else if (eventBannerWrap) {
+            eventBannerWrap.style.display = 'none';
+        }
+
+        if (eventCategory) eventCategory.textContent = (ev.category || 'SPECIAL EVENT').toUpperCase();
+        if (eventTitle) eventTitle.textContent = ev.title;
+        if (eventDate) eventDate.textContent = ev.day + ' ' + ev.month + ' ' + ev.year;
+        if (eventTime) eventTime.textContent = ev.time;
+        if (eventVenue) eventVenue.textContent = ev.venue;
+        if (eventContent) {
+            eventContent.innerHTML = ev.full_text || ('<p>' + (ev.desc || '') + '</p>');
+        }
+
+        var regWrap = document.getElementById('rs-modal-reg-action-wrap');
+        var headerRegWrap = document.getElementById('rs-modal-header-reg-wrap');
+        var isClosed = (ev.registration_status === 'closed');
+
+        if (isClosed) {
+            if (regWrap) regWrap.innerHTML = '<span class="rs-modal-closed-btn" aria-label="Registration is closed">Closed</span>';
+            if (headerRegWrap) headerRegWrap.innerHTML = '<span class="rs-card-closed-pill" aria-label="Registration is closed">Closed</span>';
+        } else {
+            var safeTitle = (ev.title || '').replace(/"/g, '&quot;');
+            var regBtnHtml = '<button type="button" class="rs-modal-register-btn rs-open-register-modal" data-event-id="' + ev.id + '" data-event-title="' + safeTitle + '"><span>Register Now</span> <span aria-hidden="true">&rarr;</span></button>';
+            var headerRegHtml = '<button type="button" class="rs-card-register-btn rs-open-register-modal" data-event-id="' + ev.id + '" data-event-title="' + safeTitle + '"><span>Register Now</span> <span aria-hidden="true">&rarr;</span></button>';
+            if (regWrap) regWrap.innerHTML = regBtnHtml;
+            if (headerRegWrap) headerRegWrap.innerHTML = headerRegHtml;
+        }
+
+        // Attach click listener for newly injected register buttons inside the modal
+        if (regWrap) {
+            var rBtn = regWrap.querySelector('.rs-open-register-modal');
+            if (rBtn) {
+                rBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openRegisterModal(ev.id);
+                });
+            }
+        }
+        if (headerRegWrap) {
+            var hrBtn = headerRegWrap.querySelector('.rs-open-register-modal');
+            if (hrBtn) {
+                hrBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openRegisterModal(ev.id);
+                });
+            }
+        }
+
+        eventModal.classList.add('is-active');
+        eventModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEventDetailModal() {
+        if (!eventModal) return;
+        eventModal.classList.remove('is-active');
+        eventModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    // ============================================================
+    // Registration Modal Controller
     // ============================================================
     var regModal = document.getElementById('rs-registration-modal');
-    var regForm = document.getElementById('rs-event-registration-form');
-    var regSuccessAlert = document.getElementById('rs-modal-reg-success');
-    var hiddenEventIdInput = document.getElementById('rs-modal-hidden-event-id');
-    var modalEventTitle = document.getElementById('rs-modal-event-title');
-    var modalDateText = document.getElementById('rs-modal-date-text');
-    var modalTimeText = document.getElementById('rs-modal-time-text');
-    var modalVenueText = document.getElementById('rs-modal-venue-text');
-    var modalCategoryText = document.getElementById('rs-modal-category-text');
+    var regForm = document.getElementById('rs-event-reg-form');
+    var regSuccess = document.getElementById('rs-reg-success-msg');
+    var regSubmitBtn = document.getElementById('rs-reg-submit-btn');
 
-    function openRegModal(eventId) {
+    function openRegisterModal(eventId) {
         var ev = eventsMap[eventId];
-        if (!ev || ev.type === 'past') return;
+        if (!ev || !regModal) return;
 
-        hiddenEventIdInput.value = ev.id;
-        modalEventTitle.textContent = ev.title;
-        modalDateText.textContent = ev.day + ' ' + ev.month + ' ' + ev.year;
-        modalTimeText.textContent = ev.time;
-        modalVenueText.textContent = ev.venue;
-        modalCategoryText.textContent = ev.category + ' (' + ev.fee + ')';
+        var titleEl = document.getElementById('rs-reg-modal-title');
+        var dateEl = document.getElementById('rs-reg-modal-date-text');
+        var timeEl = document.getElementById('rs-reg-modal-time-text');
+        var venueEl = document.getElementById('rs-reg-modal-venue-text');
+        var hiddenIdEl = document.getElementById('rs-reg-event-id');
 
-        regForm.reset();
-        regSuccessAlert.style.display = 'none';
+        if (titleEl) titleEl.textContent = 'Register: ' + ev.title;
+        if (dateEl) dateEl.textContent = ev.day + ' ' + ev.month + ' ' + ev.year;
+        if (timeEl) timeEl.textContent = ev.time;
+        if (venueEl) venueEl.textContent = ev.venue;
+        if (hiddenIdEl) hiddenIdEl.value = ev.id;
+
+        if (regForm) regForm.reset();
+        if (regSuccess) regSuccess.style.display = 'none';
+        if (regSubmitBtn) {
+            regSubmitBtn.disabled = false;
+            regSubmitBtn.innerHTML = '<span>Confirm Registration &rarr;</span>';
+        }
 
         regModal.classList.add('is-active');
         regModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-
-        var firstInput = regForm.querySelector('input[type="text"]');
-        if (firstInput) firstInput.focus();
     }
 
-    function closeRegModal() {
+    function closeRegisterModal() {
+        if (!regModal) return;
         regModal.classList.remove('is-active');
         regModal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        // Only restore body overflow if event detail modal is not active
+        if (!eventModal || !eventModal.classList.contains('is-active')) {
+            document.body.style.overflow = '';
+        }
     }
 
-    document.querySelectorAll('.rs-open-register-modal').forEach(function (btn) {
+    // Attach card footer Register Now click listeners
+    document.querySelectorAll('.rs-card-register-btn').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             var eventId = btn.getAttribute('data-event-id');
-            openRegModal(eventId);
+            openRegisterModal(eventId);
         });
     });
 
+    // Close registration modal listeners
+    document.querySelectorAll('[data-close-reg-modal="true"]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            closeRegisterModal();
+        });
+    });
+
+    // Registration form submission handler
     if (regForm) {
         regForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            var submitBtn = document.getElementById('rs-submit-reg-btn');
-            submitBtn.textContent = 'Registering...';
-            submitBtn.disabled = true;
-
+            if (regSubmitBtn) {
+                regSubmitBtn.disabled = true;
+                regSubmitBtn.innerHTML = '<span>Processing...</span>';
+            }
             setTimeout(function () {
-                submitBtn.textContent = 'Registration Confirmed ?';
-                regSuccessAlert.style.display = 'block';
+                if (regSuccess) regSuccess.style.display = 'block';
+                if (regSubmitBtn) regSubmitBtn.innerHTML = '<span>✓ Registered</span>';
                 setTimeout(function () {
-                    closeRegModal();
-                    submitBtn.textContent = 'Confirm Registration ?';
-                    submitBtn.disabled = false;
-                }, 2200);
-            }, 700);
+                    closeRegisterModal();
+                }, 2500);
+            }, 500);
         });
     }
 
+    // Bind event detail click (both the button and entire card)
+    document.querySelectorAll('.rs-open-event-modal').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var eventId = btn.getAttribute('data-event-id');
+            openEventDetailModal(eventId);
+        });
+    });
+
+    document.querySelectorAll('.rs-event-item-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            var eventId = card.getAttribute('data-event-id') || card.id;
+            openEventDetailModal(eventId);
+        });
+        card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                var eventId = card.getAttribute('data-event-id') || card.id;
+                openEventDetailModal(eventId);
+            }
+        });
+    });
+
     // ============================================================
-    // Article Preview Modal Controller
+    // Article Preview Big Modal Controller (Activities Style)
     // ============================================================
     var articleModal = document.getElementById('rs-article-modal');
     var articleImg = document.getElementById('rs-article-modal-img');
+    var articleBannerWrap = document.getElementById('rs-article-modal-banner-wrap');
     var articleTitle = document.getElementById('rs-article-modal-title');
     var articleCategory = document.getElementById('rs-article-modal-category');
     var articleDate = document.getElementById('rs-article-modal-date');
+    var articleReadTime = document.getElementById('rs-article-modal-readtime');
     var articleContent = document.getElementById('rs-article-modal-content');
 
     function openArticleModal(newsId) {
         var nw = newsMap[newsId];
-        if (!nw) return;
+        if (!nw || !articleModal) return;
 
-        articleImg.src = nw.image;
-        articleImg.alt = nw.title;
-        articleTitle.textContent = nw.title;
-        articleCategory.textContent = nw.category;
-        articleDate.textContent = nw.date + ' (' + nw.read_time + ')';
-        articleContent.innerHTML = '<p>' + nw.full_text + '</p><p>For inquiries, press coverage, or collaborations, contact the Rashtrotthana Media Cell at info@rashtrotthana.org.</p>';
+        if (nw.image && articleImg) {
+            articleImg.src = nw.image;
+            articleImg.alt = nw.title;
+            if (articleBannerWrap) articleBannerWrap.style.display = 'block';
+        } else if (articleBannerWrap) {
+            articleBannerWrap.style.display = 'none';
+        }
+
+        if (articleCategory) articleCategory.textContent = (nw.category || 'NEWS').toUpperCase();
+        if (articleTitle) articleTitle.textContent = nw.title;
+        if (articleDate) articleDate.textContent = nw.date;
+        if (articleReadTime) articleReadTime.textContent = nw.read_time;
+        if (articleContent) {
+            articleContent.innerHTML = nw.full_text || ('<p>' + (nw.excerpt || '') + '</p>');
+        }
 
         articleModal.classList.add('is-active');
         articleModal.setAttribute('aria-hidden', 'false');
@@ -2305,6 +2849,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function closeArticleModal() {
+        if (!articleModal) return;
         articleModal.classList.remove('is-active');
         articleModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
@@ -2313,15 +2858,31 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.rs-open-article-modal').forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             var newsId = btn.getAttribute('data-news-id');
             openArticleModal(newsId);
+        });
+    });
+
+    document.querySelectorAll('.rs-news-item-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            var newsId = card.getAttribute('data-news-id') || card.id;
+            openArticleModal(newsId);
+        });
+        card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                var newsId = card.getAttribute('data-news-id') || card.id;
+                openArticleModal(newsId);
+            }
         });
     });
 
     // Close Modals on Backdrop or Close Button Click
     document.querySelectorAll('[data-close-modal="true"]').forEach(function (el) {
         el.addEventListener('click', function () {
-            closeRegModal();
+            closeEventDetailModal();
             closeArticleModal();
         });
     });
@@ -2329,26 +2890,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Close on Escape key
     window.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            closeRegModal();
-            closeArticleModal();
+            if (regModal && regModal.classList.contains('is-active')) {
+                closeRegisterModal();
+            } else {
+                closeEventDetailModal();
+                closeArticleModal();
+            }
         }
     });
-
-    // ============================================================
-    // Newsletter Form Handler
-    // ============================================================
-    var newsletterForm = document.getElementById('rs-newsletter-form');
-    var newsletterStatus = document.getElementById('rs-newsletter-status');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var emailVal = document.getElementById('rs-newsletter-email').value;
-            newsletterStatus.className = 'rs-newsletter-msg is-success';
-            newsletterStatus.textContent = '? Subscribed! Welcome to Rashtrotthana community updates.';
-            newsletterForm.reset();
-            setTimeout(function () { newsletterStatus.style.display = 'none'; }, 4000);
-        });
-    }
 });
 </script>
 

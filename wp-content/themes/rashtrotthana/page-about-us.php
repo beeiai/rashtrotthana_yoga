@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Template Name: About Us
  * Description: Redesigned About Us page matching Home, Activities, Centers, Events, and Gallery pages.
@@ -164,40 +164,52 @@ get_header();
     line-height: 1.65;
 }
 
-/* Clean Number Cards / Stat Pills (No Icons, Matching Events Page Design) */
+/* Clean Number Cards / Stat Pills (Single Line on Desktop) */
 .rs-about-stats-bar {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.15rem;
+    align-items: center;
+    gap: clamp(.4rem, .75vw, .75rem);
     margin-bottom: 2.25rem;
+    max-width: 1200px;
+    margin-inline: auto;
+}
+
+@media (min-width: 900px) {
+    .rs-about-stats-bar {
+        flex-wrap: nowrap;
+    }
 }
 
 .rs-about-stat-pill {
     display: inline-flex;
     align-items: center;
-    gap: .65rem;
-    padding: .65rem 1.45rem;
+    gap: .4rem;
+    padding: .42rem .85rem;
     border: 1px solid rgba(255, 255, 255, .85);
     border-radius: 999px;
-    background: rgba(255, 255, 255, .75);
-    box-shadow: 0 6px 20px rgba(89, 37, 24, .06);
+    background: rgba(255, 255, 255, .78);
+    box-shadow: 0 4px 16px rgba(89, 37, 24, .06);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     color: #542019;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .rs-about-stat-pill strong {
     color: var(--color-maroon);
-    font-size: 1.4rem;
+    font-size: 1.12rem;
     font-weight: 800;
     line-height: 1;
 }
 
 .rs-about-stat-pill span {
     color: #67574c;
-    font-size: .88rem;
+    font-size: .8rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 /* ============================================================
@@ -584,7 +596,7 @@ get_header();
 }
 
 /* ============================================================
-   5. OUR MEMBERS SECTION
+   4. OUR MEMBERS SECTION
    ============================================================ */
 .rs-team-grid {
     display: grid;
@@ -595,7 +607,7 @@ get_header();
 .rs-team-card {
     position: relative;
     overflow: hidden;
-    padding: .85rem .85rem 1.35rem;
+    padding: .85rem .85rem 1.25rem;
     border: 1px solid rgba(143, 23, 29, .15) !important;
     border-radius: 1.15rem;
     background: linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(255, 248, 236, .75));
@@ -603,6 +615,7 @@ get_header();
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    text-align: center;
 }
 
 .rs-team-card::after {
@@ -624,11 +637,11 @@ get_header();
 
 .rs-team-card img {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-    object-position: center;
+    object-position: top center;
     border-radius: .75rem;
-    background: var(--color-sand);
+    background: #fdfaf5;
     transition: transform 400ms ease, filter 400ms ease;
 }
 
@@ -639,107 +652,40 @@ get_header();
 .rs-team-card h3 {
     margin: .95rem .35rem .25rem;
     color: #542019;
-    font-size: 1.12rem;
+    font-size: 1.15rem;
     font-weight: 700;
     line-height: 1.25;
 }
 
 .rs-team-card .rs-team-role {
-    margin: 0 .35rem .65rem;
+    margin: 0 .35rem 0;
     color: var(--color-saffron);
-    font-size: .84rem;
+    font-size: .88rem;
     font-weight: 600;
     line-height: 1.35;
 }
 
-.rs-team-card > p:last-child {
-    margin: 0 .35rem;
-    color: #67574c;
-    font-size: .86rem;
-    line-height: 1.55;
-}
-
-/* ============================================================
-   6. CORE YOGIC VALUES SECTION
-   ============================================================ */
-.rs-values-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-
-.rs-about-value-card {
-    position: relative;
-    padding: 2rem 1.75rem;
-    border-radius: 1.25rem;
-    background: rgba(255, 253, 249, .8);
-    border: 1px solid rgba(143, 23, 29, .13);
-    box-shadow: 0 12px 30px rgba(89, 37, 24, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    display: flex;
-    flex-direction: column;
-    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-}
-
-.rs-about-value-card::after {
-    position: absolute;
-    top: 0;
-    right: 1.5rem;
-    width: 3.5rem;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 10px rgba(249, 183, 42, .8);
-    content: "";
-}
-
-.rs-about-value-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(243, 106, 33, .45);
-    box-shadow: 0 20px 40px rgba(89, 37, 24, .14);
-}
-
-.rs-value-card-icon {
+/* Overview Image Specific Styling for Circular Emblem */
+.rs-overview-image {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    background: rgba(143, 23, 29, .08);
-    color: var(--color-maroon);
-    margin-bottom: 1.25rem;
-    border: 1px solid rgba(143, 23, 29, .15);
-    transition: all 180ms ease;
 }
 
-.rs-about-value-card:hover .rs-value-card-icon {
-    background: var(--color-maroon);
-    color: #fff;
-    box-shadow: 0 6px 18px rgba(143, 23, 29, .3);
+.rs-overview-image::after {
+    display: none !important;
 }
 
-.rs-value-card-icon svg {
-    width: 24px;
-    height: 24px;
-    stroke: currentColor;
-    stroke-width: 2.2;
-    fill: none;
-}
-
-.rs-about-value-card h3 {
-    margin: 0 0 .65rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #542019;
-}
-
-.rs-about-value-card p {
-    margin: 0;
-    color: #67574c;
-    font-size: .92rem;
-    line-height: 1.65;
+.rs-overview-image img {
+    max-height: 420px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 36px rgba(89, 37, 24, .16));
+    border-radius: 50%;
 }
 
 /* ============================================================
@@ -755,29 +701,9 @@ get_header();
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1.5rem 1rem;
     }
-    .rs-values-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .rs-timeline-row {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 2rem;
-    }
-    .rs-timeline-track-line {
-        display: none;
-    }
-    .rs-timeline-node {
-        flex: 0 0 calc(50% - 1.5rem);
-    }
 }
 
 @media (max-width: 768px) {
-    .rs-values-grid {
-        grid-template-columns: 1fr;
-    }
-    .rs-timeline-node {
-        flex: 0 0 100%;
-    }
     .rs-team-grid {
         grid-template-columns: 1fr;
     }
@@ -787,62 +713,59 @@ get_header();
 <main class="rs-about-page" id="main-content">
 
     <!-- ============================================================
-         1. PAGE HEADER SECTION (Hero Removed, Clean Title Block & Stats)
+         1. PAGE HEADER SECTION (Clean Title Block & Stats)
          ============================================================ -->
     <header class="rs-about-header-section">
         <div class="rs-container">
             <div class="rs-about-title-block">
-                <div class="rs-about-eyebrow">
-                    <span class="rs-about-eyebrow-dot" aria-hidden="true"></span>
-                    <span>Who We Are &amp; Our Mission</span>
-                </div>
                 <h1 class="rs-about-page-title">Rooted in Values. Driven by <em>Purpose.</em></h1>
                 <p class="rs-about-page-subtitle">
-                    Discover the 30+ year journey of Rashtrotthana Yoga &mdash; an enduring commitment to holistic well-being, authentic Vedic discipline, and community transformation across Karnataka.
+                    Discover the 50+ year journey of Rashtrotthana Yoga - an enduring commitment to holistic well-being, authentic Vedic discipline, and community transformation across Karnataka.
                 </p>
             </div>
 
-            <!-- Clean Stat Pills (No Icons, Matching Events & Gallery Page Design) -->
+            <!-- Clean Stat Pills -->
             <div class="rs-about-stats-bar">
                 <div class="rs-about-stat-pill">
-                    <strong>30+</strong>
-                    <span>Years of Seva</span>
+                    <strong>12+</strong>
+                    <span>Centers</span>
                 </div>
                 <div class="rs-about-stat-pill">
-                    <strong>12</strong>
-                    <span>Bengaluru Centers</span>
+                    <strong>150+</strong>
+                    <span>Daily Classes</span>
                 </div>
                 <div class="rs-about-stat-pill">
-                    <strong>35+</strong>
-                    <span>Holistic Programs</span>
+                    <strong>3000+</strong>
+                    <span>Daily Practitioners</span>
                 </div>
                 <div class="rs-about-stat-pill">
-                    <strong>10,000+</strong>
-                    <span>Daily Sadhakas</span>
+                    <strong>1 Lakh+</strong>
+                    <span>Yoga Trained</span>
+                </div>
+                <div class="rs-about-stat-pill">
+                    <strong>250+</strong>
+                    <span>Teachers</span>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- ============================================================
-         2. OUR BACKGROUND SECTION
+         2. OVERVIEW SECTION
          ============================================================ -->
     <section class="rs-about-section" id="background-section">
         <div class="rs-container">
             <div class="rs-background-grid">
                 <div class="rs-background-content">
                     <div class="rs-about-section-header">
-                        <h2>Our <em>Background</em></h2>
-                        <p class="rs-about-section-desc">
-                            Promoting physical, mental, and spiritual harmony across Karnataka for over three decades.
-                        </p>
+                        <h2>Overview</h2>
                     </div>
 
                     <p>
-                        Rashtrotthana Yoga is a dedicated initiative of <strong>Rashtrotthana Parishat</strong>, committed to promoting physical, mental, and spiritual well-being through the timeless discipline of authentic Yoga.
+                        Rashtrotthana currently runs Yoga centres in 24 locations in Bengaluru. Yoga is taught to interested people in over 180 groups every day. Yoga education is offered in three stages: introduction, practice, and advancement. More than 4,000 people are receiving Yoga therapy and training every day.
                     </p>
                     <p>
-                        What began as a small, humble community initiative to bring Yoga into everyday neighborhoods has blossomed into a vast statewide movement touching thousands of lives daily across 12 centers in Bengaluru.
+                        In addition to Yoga training, a monthly ideological lecture on national, cultural, and social issues is also organized.
                     </p>
 
                     <!-- Motto Card -->
@@ -857,78 +780,15 @@ get_header();
                     </div>
                 </div>
 
-                <div class="rs-framed-image">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/rysri-sadashivanagar.jpg' ); ?>" alt="Rashtrotthana Yoga Yogashala Campus" loading="lazy">
+                <div class="rs-framed-image rs-overview-image">
+                    <img src="<?php echo esc_url( content_url( '/uploads/2026/10/History.png' ) ); ?>" alt="Rashtrotthana Yoga History" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ============================================================
-         3. CORE YOGIC VALUES SECTION
-         ============================================================ -->
-    <section class="rs-about-section" id="values-section">
-        <div class="rs-container">
-            <div class="rs-about-section-header text-center">
-                <h2>Our Guiding <em>Pillars</em></h2>
-                <p class="rs-about-section-desc mx-auto">
-                    The core principles that guide our teachings, community service, and instructors every day.
-                </p>
-            </div>
-
-            <div class="rs-values-grid">
-                <div class="rs-about-value-card">
-                    <div class="rs-value-card-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24"><path d="M12 22C12 22 17 18 17 13C17 8 12 4 12 4C12 4 7 8 7 13C7 18 12 22 12 22Z"/></svg>
-                    </div>
-                    <h3>Authentic Tradition</h3>
-                    <p>Rooted firmly in Patanjali classical yoga, traditional asana alignment, and classical Pranayama without commercial shortcuts.</p>
-                </div>
-
-                <div class="rs-about-value-card">
-                    <div class="rs-value-card-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
-                    </div>
-                    <h3>Community Inclusivity</h3>
-                    <p>Yoga accessible to all segments of society, offering subsidized classes, school youth initiatives, and community outreach drives.</p>
-                </div>
-
-                <div class="rs-about-value-card">
-                    <div class="rs-value-card-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                    </div>
-                    <h3>Holistic Transformation</h3>
-                    <p>Addressing the complete individual — physical stamina, emotional equilibrium, neurological calm, and spiritual evolution.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    
-    <!-- ============================================================
-         4. ROTATING PHOTO SECTION
-         ============================================================ -->
-    <section class="rs-about-section" id="timeline-section">
-        <div class="rs-container">
-            <div class="rs-about-section-header text-center">
-                <h2>Our Centers</h2>
-            </div>
-            <div class="rs-card-grid rs-gallery-grid" style="grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                <?php 
-                $all_centers = rs_get_centers();
-                foreach ($all_centers as $c) {
-                    if (preg_match('/^(Sadashiva|Jayanagar|Kundalahalli|Kundanalli|Chamaraj)/i', $c['name'])) {
-                        echo '<img src="' . esc_url($c['image']) . '" alt="' . esc_attr($c['name']) . '" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:12px;">';
-                    }
-                }
-                ?>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ============================================================
-         5. OUR HISTORY SECTION
+         3. OUR HISTORICAL EVOLUTION SECTION
          ============================================================ -->
     <section class="rs-about-section" id="history-section">
         <div class="rs-container">
@@ -943,60 +803,76 @@ get_header();
 
                     <div class="rs-history-timeline-list">
                         <div class="rs-history-step-card">
-                            <h4>The Beginning</h4>
-                            <p>Rashtrotthana Parishat envisioned a society deeply rooted in physical health, moral culture, and spiritual values. Yoga was chosen as the primary vehicle to achieve this profound vision.</p>
+                            <h4>Beginning of Yoga Initiative</h4>
+                            <p>In 1972, the Rashtrotthana Physical Education Centre was started in Jayanagar, Bengaluru. The initiative was supported by Rashtrotthana Parishat, with contributions from several donors and Vishwa Hindu Parishat activists.</p>
                         </div>
 
                         <div class="rs-history-step-card">
-                            <h4>Spreading the Light</h4>
-                            <p>Yoga centers were systematically established across neighborhoods, schools, and civic halls to make authentic Yogic training accessible to all demographics without commercial barriers.</p>
+                            <h4>Ajith Kumar’s Role</h4>
+                            <p>Ajith Kumar, a Pracharak of the Rashtriya Swayamsevak Sangh, played a key role in promoting Yoga. He trained under renowned Yoga teachers Pattabhi Jois in Mysuru and later B.K.S. Iyengar.</p>
                         </div>
 
                         <div class="rs-history-step-card">
-                            <h4>Building a Movement</h4>
-                            <p>Through certified teachers, dedicated volunteers, and medically backed yoga therapy programs, daily Yoga became an integral habit for thousands of urban practitioners.</p>
+                            <h4>Yoga Training &amp; Expansion</h4>
+                            <p>Under Ajith Kumar’s leadership, Rashtrotthana workers and Yoga enthusiasts began practicing Yoga. Regular Yoga classes were gradually introduced, and practitioners were trained to become Yoga instructors.</p>
                         </div>
 
                         <div class="rs-history-step-card">
-                            <h4>Today &amp; The Future</h4>
-                            <p>With 12 centers, diverse curricula, clinical research partnerships, and an ever-growing family of sadhakas, we continue to inspire and elevate the health of society.</p>
+                            <h4>Contribution to Yoga Education</h4>
+                            <p>Many trained practitioners became dedicated Yoga teachers at the Rashtrotthana Physical Education Centre. The centre played an important role in spreading Yoga awareness and education across Karnataka and beyond.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="rs-framed-image">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/client/rysri-kundalahalli-1-.jpg' ); ?>" alt="Rashtrotthana Yoga Shala History" loading="lazy">
+                    <img src="<?php echo esc_url( content_url( '/uploads/2026/10/evolution.jpeg' ) ); ?>" alt="Rashtrotthana Yoga Evolution" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ============================================================
-         6. OUR MEMBERS SECTION
+         4. OUR MEMBERS SECTION
          ============================================================ -->
     <section class="rs-about-section" id="members-section">
         <div class="rs-container">
             <div class="rs-about-section-header text-center">
                 <h2>Our <em>Members</em></h2>
                 <p class="rs-about-section-desc mx-auto">
-                    Meet the people who bring our vision to life through yoga, education, culture and service.
+                    Meet the leadership guiding our vision of health, culture, and service.
                 </p>
             </div>
 
             <div class="rs-team-grid">
                 <?php
-                $team_image = get_template_directory_uri() . '/assets/images/hero-v3.png';
-                foreach ( array(
-                    array( 'Ananya H.', 'Yoga & Wellness', 'Creating welcoming spaces where every person can find balance and strength.' ),
-                    array( 'Prasanna B.', 'Education & Values', 'Nurturing confident learners through discipline, curiosity and timeless values.' ),
-                    array( 'Ramesh K.', 'Community Service', 'Connecting people and purpose through meaningful service across our communities.' ),
-                    array( 'Meera S.', 'Culture & Outreach', 'Sharing the richness of Indian culture while building a kinder, stronger society.' ),
-                ) as $member ) : ?>
+                $rs_members = array(
+                    array(
+                        'name'  => 'Shri Ajith Kumar',
+                        'role'  => 'Founder',
+                        'image' => content_url( '/uploads/2026/10/Shri-Ajith-kumar-Founder.png' ),
+                    ),
+                    array(
+                        'name'  => 'Shri M P Kumar',
+                        'role'  => 'President',
+                        'image' => content_url( '/uploads/2026/10/Sri-M-P-Kumar-President.png' ),
+                    ),
+                    array(
+                        'name'  => 'Shri Dinesh Hegde',
+                        'role'  => 'General Secretary',
+                        'image' => content_url( '/uploads/2026/10/Sri-Dinesh-Hegde-General-Secretary.png' ),
+                    ),
+                    array(
+                        'name'  => 'Shri K S Narayan',
+                        'role'  => 'Treasurer',
+                        'image' => content_url( '/uploads/2026/10/Sri-K-S-Narayan-Treasurer.jpg' ),
+                    ),
+                );
+
+                foreach ( $rs_members as $member ) : ?>
                     <article class="rs-team-card">
-                        <img src="<?php echo esc_url( $team_image ); ?>" alt="<?php echo esc_attr( $member[0] ); ?>" loading="lazy">
-                        <h3><?php echo esc_html( $member[0] ); ?></h3>
-                        <p class="rs-team-role"><?php echo esc_html( $member[1] ); ?></p>
-                        <p><?php echo esc_html( $member[2] ); ?></p>
+                        <img src="<?php echo esc_url( $member['image'] ); ?>" alt="<?php echo esc_attr( $member['name'] ); ?>" loading="lazy">
+                        <h3><?php echo esc_html( $member['name'] ); ?></h3>
+                        <p class="rs-team-role"><?php echo esc_html( $member['role'] ); ?></p>
                     </article>
                 <?php endforeach; ?>
             </div>

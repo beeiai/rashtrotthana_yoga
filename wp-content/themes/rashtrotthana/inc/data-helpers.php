@@ -69,15 +69,64 @@ function rs_get_centers( $zone_slug = '' ) {
             }
         }
 
-        $lat = get_field('lat', $p->ID) ?: 12.9716;
-        $lng = get_field('lng', $p->ID) ?: 77.5946;
+        $lat = get_post_meta($p->ID, 'lat', true) ?: (get_field('lat', $p->ID) ?: 0);
+        $lng = get_post_meta($p->ID, 'lng', true) ?: (get_field('lng', $p->ID) ?: 0);
+
+        if ( empty($lat) || empty($lng) || ($lat == 12.9716 && $lng == 77.5946) ) {
+            $fallback_coords = array(
+                'sadashivnagar' => array( 13.0068, 77.5813 ),
+                'gayathrinagar' => array( 12.9982, 77.5615 ),
+                'rbi-layout'    => array( 12.8894, 77.5746 ),
+                'kamakshipalya' => array( 12.9835, 77.5255 ),
+                'kg-nagar'      => array( 12.9488, 77.5637 ),
+                'nagarbhavi'    => array( 12.9602, 77.5103 ),
+                'vijaynagar'    => array( 12.9698, 77.5358 ),
+                'sunkenahalli'  => array( 12.9421, 77.5678 ),
+                'girinagar'     => array( 12.9372, 77.5385 ),
+                'aksharam'      => array( 12.9355, 77.5398 ),
+                'kundalahalli'  => array( 12.9698, 77.7199 ),
+                'jayanagar'     => array( 12.9250, 77.5938 ),
+            );
+            $slug_check = $p->post_name;
+            foreach ($fallback_coords as $k => $c_pair) {
+                if ($slug_check === $k || strpos($slug_check, $k) !== false || strpos(strtolower($p->post_title), $k) !== false) {
+                    $lat = $c_pair[0];
+                    $lng = $c_pair[1];
+                    break;
+                }
+            }
+        }
+        $lat = floatval($lat ?: 12.9716);
+        $lng = floatval($lng ?: 77.5946);
         $hours = get_field('hours', $p->ID) ?: 'Please refer to batch timings';
         $phone = get_field('phone', $p->ID) ?: '';
         $email = get_field('email', $p->ID) ?: 'info@rashtrotthana.org';
         $area = get_field('area', $p->ID) ?: '';
 
+        $upload_dir = wp_upload_dir();
+        $fallback_images = array(
+            'sadashivnagar' => $upload_dir['baseurl'] . '/2026/10/Sadashivnagar.jpg',
+            'gayathrinagar' => $upload_dir['baseurl'] . '/2026/10/Gayathrinagar.jpg',
+            'rbi-layout'    => $upload_dir['baseurl'] . '/2026/10/RBI-Layout.jpg',
+            'rbilayout'     => $upload_dir['baseurl'] . '/2026/10/RBI-Layout.jpg',
+            'kamakshipalya' => $upload_dir['baseurl'] . '/2026/10/KAMAKSHIPALYA.jpg',
+            'kg-nagar'      => $upload_dir['baseurl'] . '/2026/10/Kempegowda-Nagar.jpg',
+            'kgnagar'       => $upload_dir['baseurl'] . '/2026/10/Kempegowda-Nagar.jpg',
+            'nagarbhavi'    => $upload_dir['baseurl'] . '/2026/10/nagarbhavi.jpg',
+            'vijaynagar'    => $upload_dir['baseurl'] . '/2026/10/Vijaynagar.jpg',
+            'sunkenahalli'  => $upload_dir['baseurl'] . '/2026/10/Basavangudi.jpg',
+            'girinagar'     => $upload_dir['baseurl'] . '/2026/10/Girinagar.jpg',
+            'aksharam'      => $upload_dir['baseurl'] . '/2026/10/Yoga-Prashikshana.jpg',
+            'kundalahalli'  => $upload_dir['baseurl'] . '/2026/10/Kundalahalli.jpg',
+            'jayanagar'     => $upload_dir['baseurl'] . '/2026/10/Jayanagara.jpg',
+        );
+        $c_slug = $p->post_name;
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
+        if (!$img && isset($fallback_images[$c_slug])) {
+            $img = $fallback_images[$c_slug];
+        }
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg';
+
 
         $centers[] = array(
             'id' => $p->post_name,
@@ -129,33 +178,72 @@ function rs_get_faqs() {
 
 
 function rs_get_activity_categories() {
-    $categories = array();
-    
-    // Get all activity category terms
+    static $cached = null;
+    if ( $cached !== null ) {
+        return $cached;
+    }
+
     $terms = get_terms( array(
-        'taxonomy' => 'activity_category',
+        'taxonomy'   => 'activity_category',
         'hide_empty' => false,
     ) );
-    
-    
-    
+
+    if ( empty( $terms ) || is_wp_error( $terms ) ) {
+        require get_template_directory() . '/data/activities-data.php';
+        $cached = isset( $activity_categories ) ? $activity_categories : array();
+        return $cached;
+    }
+
+    // Desired category display order matching Home page
+    $order_map = array(
+        'yoga'        => 1,
+        'gym'         => 2,
+        'karate'      => 3,
+        'music-dance' => 4,
+    );
+
+    $fallback_images = array(
+        'yoga'        => content_url( '/uploads/2026/10/Yoga.jpg' ),
+        'gym'         => content_url( '/uploads/2026/10/GYM.webp' ),
+        'karate'      => content_url( '/uploads/2026/10/karate.jpg' ),
+        'music-dance' => content_url( '/uploads/2026/10/Music.jpg' ),
+    );
+
+    $fallback_taglines = array(
+        'yoga'        => 'Strength, Balance & Inner Peace',
+        'gym'         => 'Strength, Stamina & Peak Fitness',
+        'karate'      => 'Discipline, Agility & Self-Defence',
+        'music-dance' => 'Creativity, Harmony & Soul',
+    );
+
+    $categories = array();
+
     foreach ( $terms as $term ) {
         $term_id = 'activity_category_' . $term->term_id;
+        $slug    = $term->slug;
+
+        $tagline = get_field( 'tagline', $term_id ) ?: ( get_term_meta( $term->term_id, 'tagline', true ) ?: ( isset( $fallback_taglines[ $slug ] ) ? $fallback_taglines[ $slug ] : '' ) );
+        $text    = get_field( 'text', $term_id ) ?: ( get_term_meta( $term->term_id, 'text', true ) ?: $term->description );
+        $image   = get_field( 'image', $term_id ) ?: ( get_term_meta( $term->term_id, 'image', true ) ?: ( get_term_meta( $term->term_id, 'image_url', true ) ?: ( isset( $fallback_images[ $slug ] ) ? $fallback_images[ $slug ] : '' ) ) );
+
         $cat_data = array(
-            'slug'    => $term->slug,
-            'icon'    => get_field('icon', $term_id),
+            'slug'    => $slug,
             'title'   => $term->name,
-            'tagline' => get_field('tagline', $term_id),
-            'text'    => get_field('text', $term_id),
-            'image'   => get_field('image', $term_id) ?: get_term_meta($term->term_id, 'image_url', true),
-            'items'   => array()
+            'tagline' => $tagline,
+            'text'    => $text,
+            'image'   => $image,
+            'order'   => isset( $order_map[ $slug ] ) ? $order_map[ $slug ] : 99,
+            'items'   => array(),
         );
-        
-        // Get activities for this term
+
+        // Query sub-activities for this category
         $activities = get_posts( array(
-            'post_type' => 'activity',
+            'post_type'      => 'activity',
             'posts_per_page' => -1,
-            'tax_query' => array(
+            'post_status'    => 'publish',
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'tax_query'      => array(
                 array(
                     'taxonomy' => 'activity_category',
                     'field'    => 'term_id',
@@ -163,34 +251,110 @@ function rs_get_activity_categories() {
                 ),
             ),
         ) );
-        
+
+        $seen_titles = array();
         foreach ( $activities as $act ) {
+            $clean_title = trim( $act->post_title );
+            if ( isset( $seen_titles[ $clean_title ] ) ) {
+                continue;
+            }
+            $seen_titles[ $clean_title ] = true;
+
+            $badge       = get_field( 'badge', $act->ID ) ?: ( get_post_meta( $act->ID, 'badge', true ) ?: 'Certified Program' );
+            $centers_val = get_field( 'centers_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'centers_text', true ) ?: ( get_field( 'centers', $act->ID ) ?: get_post_meta( $act->ID, 'centers', true ) ) );
+            if ( empty( $centers_val ) || $centers_val === '0' || $centers_val === 0 ) {
+                $centers_val = 'Available across Bengaluru Centers';
+            }
+            $batches     = get_field( 'batches_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'batches_text', true ) ?: ( get_field( 'batches', $act->ID ) ?: ( get_post_meta( $act->ID, 'batches', true ) ?: 'Morning & Evening Batches Available' ) ) );
+            $duration    = get_field( 'duration_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'duration_text', true ) ?: ( get_field( 'duration', $act->ID ) ?: ( get_post_meta( $act->ID, 'duration', true ) ?: '60 Mins / Class' ) ) );
+            $frequency   = get_field( 'frequency_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'frequency_text', true ) ?: ( get_field( 'frequency', $act->ID ) ?: ( get_post_meta( $act->ID, 'frequency', true ) ?: 'Regular Weekly Schedule' ) ) );
+            $eligibility = get_field( 'eligibility_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'eligibility_text', true ) ?: ( get_field( 'eligibility', $act->ID ) ?: ( get_post_meta( $act->ID, 'eligibility', true ) ?: 'All Age Groups' ) ) );
+
             $cat_data['items'][] = array(
-                'name'        => $act->post_title,
-                'badge'       => get_field('badge', $act->ID),
+                'id'          => $act->ID,
+                'name'        => $clean_title,
+                'badge'       => $badge,
                 'desc'        => $act->post_content,
-                'centers'     => get_field('centers', $act->ID) ?: 'All major centers',
-                'batches'     => get_field('batches', $act->ID),
-                'duration'    => get_field('duration', $act->ID),
-                'frequency'   => get_field('frequency', $act->ID),
-                'eligibility' => get_field('eligibility', $act->ID)
+                'centers'     => $centers_val,
+                'batches'     => $batches,
+                'duration'    => $duration,
+                'frequency'   => $frequency,
+                'eligibility' => $eligibility,
             );
         }
-        
+
         $categories[] = $cat_data;
     }
-    
-    return $categories;
+
+    // Sort according to canonical order
+    usort( $categories, function( $a, $b ) {
+        return $a['order'] - $b['order'];
+    } );
+
+    $cached = $categories;
+    return $cached;
+}
+
+// ── Student Registration AJAX Handler ─────────────────────────────────────────
+add_action( 'wp_ajax_rs_submit_activity_registration', 'rs_handle_activity_registration' );
+add_action( 'wp_ajax_nopriv_rs_submit_activity_registration', 'rs_handle_activity_registration' );
+
+function rs_handle_activity_registration() {
+    check_ajax_referer( 'rs_activity_reg_nonce', 'nonce' );
+
+    $name     = sanitize_text_field( $_POST['student_name'] ?? '' );
+    $phone    = sanitize_text_field( $_POST['student_phone'] ?? '' );
+    $email    = sanitize_email( $_POST['student_email'] ?? '' );
+    $activity = sanitize_text_field( $_POST['activity_name'] ?? '' );
+    $center   = sanitize_text_field( $_POST['center_choice'] ?? '' );
+    $timing   = sanitize_text_field( $_POST['preferred_timing'] ?? '' );
+    $notes    = sanitize_textarea_field( $_POST['student_notes'] ?? '' );
+
+    if ( empty( $name ) || empty( $phone ) || empty( $center ) ) {
+        wp_send_json_error( array( 'message' => 'Please provide your Name, Phone Number, and select a Center.' ) );
+    }
+
+    $title = sprintf( 'Registration: %s (%s) - %s', $activity, $center, $name );
+    $content = sprintf(
+        "Student Registration Details:\n\nName: %s\nPhone: %s\nEmail: %s\nActivity: %s\nCenter: %s\nPreferred Timing: %s\nNotes: %s\nSubmitted: %s",
+        $name, $phone, $email, $activity, $center, $timing, $notes, current_time( 'mysql' )
+    );
+
+    $inquiry_id = wp_insert_post( array(
+        'post_title'   => $title,
+        'post_content' => $content,
+        'post_status'  => 'publish',
+        'post_type'    => 'rs_inquiry',
+    ) );
+
+    if ( $inquiry_id && ! is_wp_error( $inquiry_id ) ) {
+        update_post_meta( $inquiry_id, '_rs_student_name', $name );
+        update_post_meta( $inquiry_id, '_rs_student_phone', $phone );
+        update_post_meta( $inquiry_id, '_rs_student_email', $email );
+        update_post_meta( $inquiry_id, '_rs_activity', $activity );
+        update_post_meta( $inquiry_id, '_rs_center', $center );
+        update_post_meta( $inquiry_id, '_rs_timing', $timing );
+
+        wp_send_json_success( array(
+            'message' => sprintf(
+                'Namaste %s! Your registration for "%s" at our %s Center has been successfully submitted. Our coordinator will contact you shortly.',
+                $name, $activity, $center
+            ),
+            'inquiry_id' => $inquiry_id,
+        ) );
+    } else {
+        wp_send_json_error( array( 'message' => 'Unable to save registration right now. Please try again or call your nearest center directly.' ) );
+    }
 }
 
 // ── Events ───────────────────────────────────────────────────────────────────
 
 function rs_get_events( $type = '' ) {
-    $posts = get_posts( array('post_type' => 'event', 'posts_per_page' => -1, 'post_status' => 'publish') );
+    $posts = get_posts( array('post_type' => 'event', 'posts_per_page' => -1, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'ASC') );
     $events = array();
     foreach ( $posts as $p ) {
         $date_iso = get_field('event_date', $p->ID) ?: get_post_meta($p->ID, '_ry_event_date', true);
-        if (!$date_iso) $date_iso = current_time('Y-m-d');
+        if (!$date_iso) $date_iso = get_the_date('Y-m-d', $p);
         
         // ACF date could be Ymd (e.g., 20261015) or Y-m-d
         if (preg_match('/^(\d{4})(\d{2})(\d{2})$/', $date_iso, $m)) {
@@ -202,22 +366,29 @@ function rs_get_events( $type = '' ) {
         if (!$time) {
             $start = get_post_meta($p->ID, '_ry_start_time', true);
             $end = get_post_meta($p->ID, '_ry_end_time', true);
-            $time = ($start && $end) ? "$start - $end" : "6:00 AM - 8:00 AM";
+            $time = ($start && $end) ? "$start - $end" : "6:00 AM - 9:00 AM";
         }
         
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/18-01-25-suggi-sambhrama-kolata-in-rysri-kg-nagar-1-.jpg';
         
         $venue_obj = get_field('event_venue', $p->ID);
-        $venue = $venue_obj ? $venue_obj->post_title : (get_field('event_venue_custom', $p->ID) ?: 'Rashtrotthana Center');
+        $venue = $venue_obj ? $venue_obj->post_title : (get_field('event_venue_custom', $p->ID) ?: (get_post_meta($p->ID, '_ry_event_venue', true) ?: 'Rashtrotthana Center'));
 
         // Compare using midnight to ensure today's events are not marked past
         $today_midnight = strtotime(current_time('Y-m-d 00:00:00'));
         $is_past = $ts < $today_midnight;
-        $e_type = $is_past ? 'past' : 'upcoming';
+        $override_type = get_post_meta($p->ID, '_ry_event_type', true);
+        $e_type = $override_type ?: ($is_past ? 'past' : 'upcoming');
 
         if ( $type && $type !== $e_type ) {
             continue;
+        }
+
+        $category = get_post_meta($p->ID, '_ry_event_category', true) ?: (get_field('event_category', $p->ID) ?: 'Special Event');
+        $reg_status = get_field('registration_status', $p->ID) ?: get_post_meta($p->ID, '_ry_registration_status', true);
+        if (!$reg_status) {
+            $reg_status = ($is_past || $e_type === 'past') ? 'closed' : 'open';
         }
 
         $events[] = array(
@@ -230,16 +401,17 @@ function rs_get_events( $type = '' ) {
             'title' => $p->post_title,
             'venue' => $venue,
             'time' => $time,
-            'category' => 'Wellness',
-            'category_slug' => 'wellness',
-            'mode' => get_field('event_mode', $p->ID) ?: get_post_meta($p->ID, '_ry_event_mode', true),
+            'category' => $category,
+            'category_slug' => sanitize_title($category),
+            'mode' => get_field('event_mode', $p->ID) ?: (get_post_meta($p->ID, '_ry_event_mode', true) ?: 'In-Person'),
             'type' => $e_type,
             'image' => $img,
-            'desc' => wp_trim_words($p->post_content, 20),
-            'fee' => get_field('event_fee', $p->ID) ?: get_post_meta($p->ID, '_ry_event_fee', true),
+            'desc' => $p->post_excerpt ?: wp_trim_words(strip_tags($p->post_content), 24, '...'),
+            'full_text' => wpautop($p->post_content),
+            'fee' => get_field('event_fee', $p->ID) ?: (get_post_meta($p->ID, '_ry_event_fee', true) ?: 'Free'),
+            'registration_status' => $reg_status,
         );
     }
-    
     
     return $events;
 }
@@ -251,7 +423,7 @@ function rs_get_news() {
         $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_post_meta($p->ID, '_ry_image_url', true);
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/20200529-182250.jpg';
         
-        $rt = get_post_meta($p->ID, '_ry_read_time', true) ?: '3 min read';
+        $rt = get_post_meta($p->ID, '_ry_read_time', true) ?: '2 min read';
         
         $cats = wp_get_post_categories($p->ID, ['fields' => 'all']);
         $cat_name = !empty($cats) ? $cats[0]->name : 'News';
@@ -265,7 +437,7 @@ function rs_get_news() {
             'category_slug' => $cat_slug,
             'read_time' => $rt,
             'image' => $img,
-            'excerpt' => $p->post_excerpt ?: wp_trim_words($p->post_content, 15),
+            'excerpt' => $p->post_excerpt ?: wp_trim_words(strip_tags($p->post_content), 22, '...'),
             'full_text' => wpautop($p->post_content)
         );
     }
@@ -275,136 +447,192 @@ function rs_get_news() {
 
 // ── Gallery ──────────────────────────────────────────────────────────────────
 
-function rs_get_gallery_albums() {
-    $posts = get_posts( array('post_type' => 'rs_gallery_album', 'posts_per_page' => -1, 'post_status' => 'publish') );
-    $albums = array();
-    foreach ( $posts as $p ) {
-        $img = get_the_post_thumbnail_url($p->ID, 'large') ?: get_template_directory_uri() . '/assets/images/client/07-04-24-summer-camp-in-rysri-yoga-centres-1-.jpg';
-        
-        $photos = get_field('photos', $p->ID) ?: [];
-        $videos = get_field('videos', $p->ID) ?: [];
-
-        $albums[] = array(
-            'id' => $p->post_name,
-            'title' => $p->post_title,
-            'category' => 'Events',
-            'category_slug' => 'events',
-            'date' => get_the_date('F j, Y', $p),
-            'venue' => 'Rashtrotthana Center',
-            'desc' => $p->post_content,
-            'cover_image' => $img,
-            'photos' => $photos,
-            'videos' => $videos
-        );
+function rs_format_youtube_embed( $url ) {
+    if ( preg_match( '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i', $url, $match ) ) {
+        return 'https://www.youtube.com/embed/' . $match[1];
     }
-    
-    return $albums;
+    return $url;
+}
+
+function rs_get_gallery_albums() {
+    static $cached = null;
+    if ( $cached !== null ) {
+        return $cached;
+    }
+
+    $db_albums = get_posts( array(
+        'post_type'      => 'rs_gallery_album',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'menu_order date',
+        'order'          => 'DESC',
+    ) );
+
+    if ( ! empty( $db_albums ) ) {
+        $albums = array();
+        foreach ( $db_albums as $p ) {
+            $date     = get_post_meta( $p->ID, '_rs_album_date', true ) ?: get_the_date( 'F j, Y', $p );
+            $venue    = get_post_meta( $p->ID, '_rs_album_venue', true ) ?: 'Bengaluru';
+            $category = get_post_meta( $p->ID, '_rs_album_category', true ) ?: 'Special Event';
+            $cat_slug = sanitize_title( $category );
+            $desc     = $p->post_excerpt ?: wp_strip_all_tags( $p->post_content );
+
+            // Cover Image
+            $cover_url = get_the_post_thumbnail_url( $p->ID, 'large' );
+
+            // Photos
+            $photos_raw = get_post_meta( $p->ID, '_rs_album_photos', true );
+            $photo_ids  = array();
+            if ( is_string( $photos_raw ) && ! empty( $photos_raw ) ) {
+                if ( $photos_raw[0] === '[' ) {
+                    $photo_ids = json_decode( $photos_raw, true ) ?: array();
+                } else {
+                    $photo_ids = array_filter( array_map( 'intval', explode( ',', $photos_raw ) ) );
+                }
+            } elseif ( is_array( $photos_raw ) ) {
+                $photo_ids = $photos_raw;
+            }
+
+            // Fallback: check attachments where post_parent = $p->ID
+            if ( empty( $photo_ids ) ) {
+                $attached = get_posts( array(
+                    'post_type'      => 'attachment',
+                    'post_mime_type' => 'image',
+                    'post_parent'    => $p->ID,
+                    'posts_per_page' => 100,
+                    'fields'         => 'ids',
+                ) );
+                if ( ! empty( $attached ) ) {
+                    $photo_ids = $attached;
+                }
+            }
+
+            $photos = array();
+            foreach ( $photo_ids as $pid ) {
+                $img_url = wp_get_attachment_image_url( $pid, 'large' ) ?: wp_get_attachment_url( $pid );
+                if ( ! $img_url ) {
+                    continue;
+                }
+                $photos[] = array(
+                    'id'      => $pid,
+                    'title'   => get_the_title( $pid ),
+                    'url'     => $img_url,
+                    'caption' => wp_get_attachment_caption( $pid ) ?: get_the_title( $pid ),
+                );
+            }
+
+            if ( ! $cover_url && ! empty( $photos ) ) {
+                $cover_url = $photos[0]['url'];
+            }
+
+            // Videos
+            $videos_raw = get_post_meta( $p->ID, '_rs_album_videos', true );
+            $videos     = array();
+            if ( is_string( $videos_raw ) && ! empty( $videos_raw ) ) {
+                $videos = json_decode( $videos_raw, true ) ?: array();
+            } elseif ( is_array( $videos_raw ) ) {
+                $videos = $videos_raw;
+            }
+
+            foreach ( $videos as &$vid ) {
+                $v_url = isset( $vid['url'] ) ? $vid['url'] : ( isset( $vid['embed_url'] ) ? $vid['embed_url'] : '' );
+                $vid['embed_url'] = rs_format_youtube_embed( $v_url );
+                if ( empty( $vid['duration'] ) && ! empty( $vid['subtitle'] ) ) {
+                    $vid['duration'] = $vid['subtitle'];
+                }
+                if ( empty( $vid['subtitle'] ) ) {
+                    $vid['subtitle'] = 'Event Highlights';
+                }
+                if ( empty( $vid['thumb'] ) ) {
+                    $vid['thumb'] = $cover_url ?: ( ! empty( $photos ) ? $photos[0]['url'] : '' );
+                }
+            }
+            unset( $vid );
+
+            $albums[] = array(
+                'id'            => $p->post_name,
+                'title'         => $p->post_title,
+                'category'      => $category,
+                'category_slug' => $cat_slug,
+                'date'          => $date,
+                'venue'         => $venue,
+                'desc'          => $desc,
+                'cover_image'   => $cover_url ?: get_template_directory_uri() . '/assets/images/mandala-bg.jpg',
+                'photos'        => $photos,
+                'videos'        => $videos,
+            );
+        }
+
+        $cached = $albums;
+        return $cached;
+    }
+
+    // Load from static data file as fallback if no DB albums exist
+    require get_template_directory() . '/data/gallery-data.php';
+    $cached = isset( $gallery_events ) ? $gallery_events : array();
+    return $cached;
+}
+
+/**
+ * Retrieve homepage gallery images strictly from WordPress Media Library
+ */
+function rs_get_home_gallery_images( $limit = 12 ) {
+    $args = array(
+        'post_type'      => 'attachment',
+        'post_mime_type' => 'image',
+        'post_status'    => 'inherit',
+        'posts_per_page' => 50,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    );
+    $attachments = get_posts( $args );
+    $gallery = array();
+
+    foreach ( $attachments as $att ) {
+        $file = get_attached_file( $att->ID );
+        // Verify attachment file actually exists on disk
+        if ( ! $file || ! file_exists( $file ) ) {
+            continue;
+        }
+
+        // Filter out hero slides, logos, or founder portrait
+        $slug = $att->post_name;
+        if ( stripos( $slug, 'hero' ) !== false || stripos( $slug, 'founder' ) !== false || stripos( $slug, 'logo' ) !== false ) {
+            continue;
+        }
+
+        $img_url = wp_get_attachment_image_url( $att->ID, 'large' ) ?: wp_get_attachment_url( $att->ID );
+        if ( ! $img_url ) {
+            continue;
+        }
+
+        $gallery[] = array(
+            'id'    => $att->ID,
+            'title' => $att->post_title,
+            'url'   => $img_url,
+            'link'  => home_url( '/gallery/' ),
+        );
+
+        if ( count( $gallery ) >= $limit ) {
+            break;
+        }
+    }
+
+    return $gallery;
 }
 
 // ── Homepage ─────────────────────────────────────────────────────────────────
 
 function rs_get_homepage_data() {
-    $rs_home_center_cards = [];
-    $rs_home_stats = [];
-    $rs_home_values = [];
-    $rs_home_founder = [];
-    $rs_activity_fallbacks = [];
-    $rs_event_fallbacks = [];
-    // Merge ACF options with original arrays
-    
-    
-    // Values
-    $rs_home_values = array(
-        array( 'title' => 'Our Vision',  'text' => 'To build a healthy, harmonious and sustainable society rooted in Indian values.' ),
-        array( 'title' => 'Our Mission', 'text' => 'To empower individuals through Yoga, Education, Culture and Service for personal growth and social transformation.' ),
-        array( 'title' => 'Our Values',  'text' => 'Integrity, compassion, discipline, selfless service and excellence in everything we do.' ),
-        array( 'title' => 'Our Impact',  'text' => 'Building stronger communities through meaningful service and lifelong learning.' ),
-    );
+    require get_template_directory() . '/data/homepage-data.php';
 
-    $v_title = get_field('ry_about_vision_title', 'option');
-    $v_text = get_field('ry_about_vision_text', 'option');
-    $m_title = get_field('ry_about_mission_title', 'option');
-    $m_text = get_field('ry_about_mission_text', 'option');
-    if ( $v_title && $m_title ) {
-        $rs_home_values[0] = ['title' => $v_title, 'text' => strip_tags($v_text)];
-        $rs_home_values[1] = ['title' => $m_title, 'text' => strip_tags($m_text)];
-    }
-    
-    // Stats
-    $rs_home_stats = array(
-        array( 'value' => 1972, 'suffix' => '',  'label' => 'Since' ),
-        array( 'value' => 35,   'suffix' => '+', 'label' => 'Activities' ),
-        array( 'value' => 18,   'suffix' => '',  'label' => 'Projects' ),
-        array( 'value' => 23,   'suffix' => '+', 'label' => 'Centers' ),
-        array( 'value' => 1000, 'suffix' => '+', 'label' => 'Lives Impacted' ),
-    );
-    $stats = get_field('ry_home_stats', 'option');
-    if ( $stats && is_array($stats) ) {
-        $rs_home_stats = $stats;
-    }
-    
-    // Founder
-    $f_name = get_field('ry_home_founder_name', 'option');
-    if ( $f_name ) {
-        $rs_home_founder = array(
-            'name' => $f_name,
-            'title' => get_field('ry_home_founder_title', 'option'),
-            'subtitle' => get_field('ry_home_founder_subtitle', 'option'),
-            'image' => get_field('ry_home_founder_photo', 'option'),
-            'image_alt' => $f_name . ' - Founder',
-            'paragraphs' => explode("\n\n", strip_tags(get_field('ry_home_founder_bio', 'option'))),
-            'quote' => get_field('ry_home_founder_quote', 'option'),
-            'quote_author' => get_field('ry_home_founder_quote_attr', 'option'),
-        );
-    }
-    
-    // Featured Cards
-    $f_cards = [];
-    $all_centers = rs_get_centers();
-    foreach ($all_centers as $c) {
-        if ( !empty($c['is_featured']) ) {
-            $f_cards[] = [
-                'name' => $c['name'],
-                'city' => $c['area'],
-                'image' => $c['image'],
-                'link' => home_url('/centers/#' . $c['id'])
-            ];
-        }
-    }
-    
-    // Fallback: If no centers are manually featured, just grab the first 4
-    if ( empty($f_cards) && !empty($all_centers) ) {
-        $slice = array_slice($all_centers, 0, 4);
-        foreach ($slice as $c) {
-            $f_cards[] = [
-                'name' => $c['name'],
-                'city' => $c['area'],
-                'image' => $c['image'],
-                'link' => home_url('/centers/#' . $c['id'])
-            ];
-        }
-    }
-
-    if ( !empty($f_cards) ) {
-        $rs_home_center_cards = $f_cards;
-    }
-    
-    // Update stats dynamically
-    if ( !empty($rs_home_stats) && is_array($rs_home_stats) ) {
-        $real_count = count($all_centers);
-        foreach ($rs_home_stats as &$stat) {
-            if ( $stat['label'] === 'Centers' && $real_count > 0 ) {
-                $stat['value'] = $real_count;
-            }
-        }
-    }
-    
     return array(
+        'activities'         => isset( $rs_home_activities ) ? $rs_home_activities : array(),
         'center_cards'       => $rs_home_center_cards,
         'stats'              => $rs_home_stats,
         'values'             => $rs_home_values,
         'founder'            => $rs_home_founder,
-        'activity_fallbacks' => $rs_activity_fallbacks,
+        'activity_fallbacks' => isset( $rs_activity_fallbacks ) ? $rs_activity_fallbacks : array(),
         'event_fallbacks'    => $rs_event_fallbacks,
     );
 }

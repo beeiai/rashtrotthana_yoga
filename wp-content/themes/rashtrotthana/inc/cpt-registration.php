@@ -114,7 +114,7 @@ function rs_register_post_types() {
         ),
         'public'        => false,
         'show_ui'       => true,
-        'show_in_menu'  => false, // We will map it in admin portal
+        'show_in_menu'  => true,
         'supports'      => array( 'title', 'editor', 'custom-fields' ),
         'menu_icon'     => 'dashicons-email',
     ) );

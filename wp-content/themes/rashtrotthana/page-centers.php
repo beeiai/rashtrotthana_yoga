@@ -285,10 +285,92 @@ if ( ! function_exists( 'rs_get_center_events' ) ) {
     }
 }
 
+/**
+ * Helper: Filter and sanitize activity subcards to ensure only genuine activities are displayed
+ * Eliminates timing strings (e.g., 5 to 6 pm), batch tiers (e.g., General, Senior, Beginner),
+ * and booking/plan names.
+ */
+if ( ! function_exists( 'rs_filter_center_activities' ) ) {
+    function rs_filter_center_activities( $activities, $center_name = '' ) {
+        if ( ! is_array( $activities ) ) return array();
+        
+        $clean = array();
+        $disallowed_exact = array(
+            'beginner', 'intermediate', 'senior', 'general', 'junior',
+            'toddlers', 'kids', 'adults', 'weekdays', 'weekend', 'regular batch',
+            'book store', 'hourly table booking', 'hourly table booking / playo app booking',
+            'pay / session (public swim hour)', 'swim membership (lap swim hour)',
+        );
+        
+        foreach ( $activities as $act ) {
+            if ( empty( $act['name'] ) ) continue;
+            $raw_name = trim( $act['name'] );
+            $lower = strtolower( $raw_name );
+            
+            // Check if exact match to disallowed tier words
+            if ( in_array( $lower, $disallowed_exact ) ) {
+                continue;
+            }
+            
+            // Filter if name starts with or is predominantly a time range (e.g. "5:00 PM to 6:00 PM", "5.30AM to 1.30PM")
+            if ( preg_match( '/^(\d{1,2}([:\.]\d{2})?\s*(am|pm)?\s*(to|-)\s*\d{1,2}([:\.]\d{2})?\s*(am|pm)?)/i', $raw_name ) ) {
+                continue;
+            }
+            // Filter standalone time slots like "4:30 , 5:30 , 6:30 PM", "10:30 AM to 11:30 AM"
+            if ( preg_match( '/^[\d\s:,\.ampAMP-]+$/', $raw_name ) ) {
+                continue;
+            }
+            // Filter session counts like "2 Days / Weekly (8 Session)", "3 Days / Weekly (12 Session)"
+            if ( preg_match( '/^\d+\s*days?\s*\/\s*weekly/i', $raw_name ) ) {
+                continue;
+            }
+            // Filter if contains only playo / table booking
+            if ( stripos( $lower, 'playo app' ) !== false || stripos( $lower, 'table booking' ) !== false ) {
+                continue;
+            }
+            // Filter coaching age labels like "Kids Coaching (6-15) yrs", "Coaching - Toddlers (<3.5 Yrs)"
+            if ( preg_match( '/^coaching\s*-\s*(toddlers|kids|adults)/i', $raw_name ) ) {
+                continue;
+            }
+            if ( preg_match( '/^(kids|adults)\s+coaching/i', $raw_name ) ) {
+                continue;
+            }
+            // Filter standalone "pay / session"
+            if ( stripos( $lower, 'pay / session' ) !== false ) {
+                continue;
+            }
+            
+            $clean[] = $act;
+        }
+        
+        // If no yoga class present, ensure a foundational Yoga Classes card is present
+        $has_yoga = false;
+        foreach ( $clean as $act ) {
+            if ( stripos( $act['name'], 'yoga' ) !== false ) {
+                $has_yoga = true;
+                break;
+            }
+        }
+        if ( ! $has_yoga ) {
+            array_unshift( $clean, array(
+                'name'    => 'Yoga Classes',
+                'badge'   => 'Foundational to Advanced',
+                'days'    => 'Monday to Saturday',
+                'timings' => 'Morning: 6:00 AM – 7:30 AM | Evening: 5:30 PM – 7:00 PM',
+                'dates'   => 'Ongoing admissions',
+                'desc'    => 'Certified Rashtrotthana Yoga instruction catering to all age groups and experience levels.',
+            ) );
+        }
+        
+        return $clean;
+    }
+}
+
 // Enrich each center with operation hours, detailed activities, and events
 foreach ( $centers as &$c ) {
     $c['operation_hours']  = rs_get_center_op_hours( $c );
-    $c['activity_details'] = !empty($c['activity_details']) ? $c['activity_details'] : rs_get_center_detailed_activities( $c );
+    $raw_acts = !empty($c['activity_details']) ? $c['activity_details'] : rs_get_center_detailed_activities( $c );
+    $c['activity_details'] = rs_filter_center_activities( $raw_acts, !empty($c['name']) ? $c['name'] : '' );
     $c['events']           = rs_get_center_events( $c );
 }
 unset( $c );
@@ -474,7 +556,7 @@ unset( $c );
                         <div class="rs-map-header-bar">
                             <div class="rs-map-header-title">
                                 <span class="rs-map-pulse-indicator"></span>
-                                <span id="rs-map-title-text">All 12 Centers on Map</span>
+                                <span id="rs-map-title-text">All <?php echo count($centers); ?> Centers on Map</span>
                             </div>
                             <button type="button" id="rs-map-reset-view" class="rs-map-reset-view-btn" title="Show All Centers">
                                 <span>⟲ All Centers</span>
@@ -596,44 +678,12 @@ unset( $c );
         </div>
     </section>
 
-    <!-- Redesigned Assistance / Help Banner -->
-    <section class="rs-center-help-section">
-        <div class="rs-container">
-            <div class="rs-center-help-card">
-                <div class="rs-help-card-glow" aria-hidden="true"></div>
-                <div class="rs-help-card-left">
-                    <div class="rs-help-icon-badge" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                        </svg>
-                    </div>
-                    <div class="rs-help-text">
-                        <span class="rs-help-eyebrow">NEED PERSONAL GUIDANCE?</span>
-                        <h3>Can't find the right center or schedule?</h3>
-                        <p>Our wellness team will connect you with the ideal batch, certified instructor, or therapy consultation nearest to your home or office.</p>
-                    </div>
-                </div>
-                <div class="rs-help-card-actions">
-                    <a href="tel:+918026644444" class="rs-help-btn-primary">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                        </svg>
-                        <span>Call 080 2664 4444</span>
-                    </a>
-                    <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-help-btn-secondary">
-                        <span>Send an Enquiry →</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
 </main>
 
 <!-- Redesigned Pop-up Modals for Each Center -->
 <?php foreach ( $centers as $index => $center ) : 
-    $center_activities = ! empty( $center['activity_details'] ) ? $center['activity_details'] : rs_get_center_detailed_activities( $center );
-    $center_events     = ! empty( $center['events'] ) ? $center['events'] : rs_get_center_events( $center );
+    $raw_acts = ! empty( $center['activity_details'] ) ? $center['activity_details'] : rs_get_center_detailed_activities( $center );
+    $center_activities = rs_filter_center_activities( $raw_acts, !empty($center['name']) ? $center['name'] : '' );
     $center_op_hours   = ! empty( $center['operation_hours'] ) ? $center['operation_hours'] : rs_get_center_op_hours( $center );
 ?>
     <div class="rs-center-modal" id="center-modal-<?php echo esc_attr( $center['id'] ); ?>" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="center-modal-title-<?php echo esc_attr( $center['id'] ); ?>">
@@ -695,12 +745,12 @@ unset( $c );
                     </div>
                 </div>
 
-                <!-- Detailed Activities Section (Replaces Available Programs) -->
+                <!-- Detailed Activities Section with Batch Details Nested Inside Each Card -->
                 <div class="rs-center-modal-section">
                     <div class="rs-center-modal-section-header">
                         <div>
-                            <h3 class="rs-center-modal-section-title">Activities &amp; Batch Schedules</h3>
-                            <p class="rs-center-modal-section-subtitle">Structured courses, therapeutic sessions, and daily batches conducted at this center.</p>
+                            <h3 class="rs-center-modal-section-title">Activities</h3>
+                            <p class="rs-center-modal-section-subtitle">Certified yoga programs and classes conducted at this center along with complete batch details.</p>
                         </div>
                     </div>
                     <div class="rs-center-activities-grid">
@@ -712,53 +762,42 @@ unset( $c );
                                         <span class="rs-center-act-badge"><?php echo esc_html( $act['badge'] ); ?></span>
                                     <?php endif; ?>
                                 </div>
-                                <div class="rs-center-act-details">
-                                    <div class="rs-center-act-detail-row">
-                                        <span class="rs-act-detail-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                        </span>
-                                        <span class="rs-act-detail-text"><strong>Timings:</strong> <?php echo esc_html( $act['timings'] ); ?></span>
-                                    </div>
-                                    <div class="rs-center-act-detail-row">
-                                        <span class="rs-act-detail-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                                        </span>
-                                        <span class="rs-act-detail-text"><strong>Batches:</strong> <?php echo esc_html( $act['days'] ); ?></span>
-                                    </div>
-                                    <?php if ( ! empty( $act['dates'] ) ) : ?>
-                                        <div class="rs-center-act-detail-row">
-                                            <span class="rs-act-detail-icon" aria-hidden="true">
-                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-                                            </span>
-                                            <span class="rs-act-detail-text"><strong>Admissions:</strong> <?php echo esc_html( $act['dates'] ); ?></span>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                <p class="rs-center-act-desc"><?php echo esc_html( $act['desc'] ); ?></p>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+                                <?php if ( ! empty( $act['desc'] ) ) : ?>
+                                    <p class="rs-center-act-desc"><?php echo esc_html( $act['desc'] ); ?></p>
+                                <?php endif; ?>
 
-                <!-- Center Events Section -->
-                <div class="rs-center-modal-section">
-                    <div class="rs-center-modal-section-header">
-                        <div>
-                            <h3 class="rs-center-modal-section-title">Center Events &amp; Workshops</h3>
-                            <p class="rs-center-modal-section-subtitle">Upcoming special gatherings and intensive workshops scheduled at <?php echo esc_html( $center['name'] ); ?>.</p>
-                        </div>
-                    </div>
-                    <div class="rs-center-modal-events-grid">
-                        <?php foreach ( $center_events as $evt ) : ?>
-                            <div class="rs-center-modal-event-card">
-                                <div class="rs-center-modal-event-info">
-                                    <h4 class="rs-center-modal-event-name"><?php echo esc_html( $evt['title'] ); ?></h4>
-                                    <p class="rs-center-modal-event-desc"><?php echo esc_html( $evt['desc'] ); ?></p>
-                                </div>
-                                <div class="rs-center-modal-event-action">
-                                    <a href="<?php echo esc_url( $evt['link'] ); ?>" class="rs-center-modal-event-register-btn">
-                                        <span>Register Now →</span>
-                                    </a>
+                                <!-- Batch Details inside the Activity Card -->
+                                <div class="rs-center-act-batch-details">
+                                    <div class="rs-center-act-batch-header">
+                                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                        <span class="rs-center-act-batch-title">Batch Details</span>
+                                    </div>
+                                    <div class="rs-center-act-details">
+                                        <?php if ( ! empty( $act['timings'] ) ) : ?>
+                                            <div class="rs-center-act-detail-row">
+                                                <span class="rs-act-detail-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                                </span>
+                                                <span class="rs-act-detail-text"><strong>Timings:</strong> <?php echo esc_html( $act['timings'] ); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if ( ! empty( $act['days'] ) ) : ?>
+                                            <div class="rs-center-act-detail-row">
+                                                <span class="rs-act-detail-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                                </span>
+                                                <span class="rs-act-detail-text"><strong>Batches &amp; Days:</strong> <?php echo esc_html( $act['days'] ); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if ( ! empty( $act['dates'] ) ) : ?>
+                                            <div class="rs-center-act-detail-row">
+                                                <span class="rs-act-detail-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                                                </span>
+                                                <span class="rs-act-detail-text"><strong>Admissions:</strong> <?php echo esc_html( $act['dates'] ); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -869,8 +908,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var allMarkersLayer = L.featureGroup().addTo(map);
+    var initialBounds = null;
+    var autoReturnTimer = null;
+    var isSoloMode = false;
 
-    // Create Leaflet markers for all 12 Centers
+    // Create Leaflet markers for all Centers with Bhagwa flag icon & hover tooltip
     centersData.forEach(function (center) {
         if (!center.lat || !center.lng) return;
 
@@ -879,6 +921,20 @@ document.addEventListener('DOMContentLoaded', function () {
             title: center.name,
             riseOnHover: true
         });
+
+        // Hover tooltip showing which center it is
+        marker.bindTooltip(
+            '<div class="rs-map-flag-tooltip-box">' +
+                '<span class="rs-flag-tooltip-name">' + center.name + '</span>' +
+                (center.area ? '<span class="rs-flag-tooltip-area">' + center.area + '</span>' : '') +
+            '</div>',
+            {
+                permanent: false,
+                direction: 'top',
+                offset: [14, -50],
+                className: 'rs-flag-leaflet-tooltip'
+            }
+        );
 
         var popupContent = 
             '<div class="rs-map-popup-inner">' +
@@ -898,7 +954,7 @@ document.addEventListener('DOMContentLoaded', function () {
         marker.bindPopup(popupContent, { maxWidth: 280, className: 'rs-custom-leaflet-popup' });
 
         marker.on('click', function () {
-            highlightCenter(center.id, false);
+            highlightCenter(center.id, true);
         });
 
         markersMap[center.id] = marker;
@@ -906,58 +962,117 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (centersData.length > 0) {
-        map.fitBounds(allMarkersLayer.getBounds(), { padding: [36, 36] });
+        initialBounds = allMarkersLayer.getBounds();
+        map.fitBounds(initialBounds, { padding: [36, 36] });
     }
 
-    // Highlighting Logic
+    // Highlighting Logic: Show ONLY clicked center on map, then automatically return to original position
     function highlightCenter(centerId, doFly) {
-        if (activeMarkerId && markersMap[activeMarkerId]) {
-            markersMap[activeMarkerId].setIcon(createMarkerIcon(false));
-            markersMap[activeMarkerId].setZIndexOffset(0);
+        if (autoReturnTimer) {
+            clearTimeout(autoReturnTimer);
+            autoReturnTimer = null;
         }
-        cards.forEach(function (c) { c.classList.remove('is-active'); });
 
-        activeMarkerId = centerId;
         var marker = markersMap[centerId];
         var card = document.getElementById('card-' + centerId);
+        if (!marker) return;
 
+        isSoloMode = true;
+        activeMarkerId = centerId;
+
+        cards.forEach(function (c) { c.classList.remove('is-active'); });
         if (card) {
             card.classList.add('is-active');
         }
 
-        if (marker) {
-            marker.setIcon(createMarkerIcon(true));
-            marker.setZIndexOffset(1000);
-            if (doFly) {
-                map.flyTo(marker.getLatLng(), 15, { duration: 0.8 });
-                setTimeout(function () {
-                    marker.openPopup();
-                }, 400);
-            } else {
-                marker.openPopup();
+        // Show ONLY this center on the map; hide all others
+        centersData.forEach(function (c) {
+            var m = markersMap[c.id];
+            if (m) {
+                if (c.id === centerId) {
+                    if (!allMarkersLayer.hasLayer(m)) {
+                        allMarkersLayer.addLayer(m);
+                    }
+                    m.setIcon(createMarkerIcon(true));
+                    m.setZIndexOffset(1000);
+                } else {
+                    if (allMarkersLayer.hasLayer(m)) {
+                        allMarkersLayer.removeLayer(m);
+                    }
+                }
             }
+        });
 
-            var centerObj = centersData.find(function(c) { return c.id === centerId; });
-            if (mapTitleText && centerObj) {
-                mapTitleText.textContent = centerObj.name;
-            }
+        if (doFly) {
+            map.flyTo(marker.getLatLng(), 15, { duration: 0.8 });
+            setTimeout(function () {
+                marker.openPopup();
+            }, 350);
+        } else {
+            marker.openPopup();
         }
+
+        var centerObj = centersData.find(function(c) { return c.id === centerId; });
+        if (mapTitleText && centerObj) {
+            mapTitleText.textContent = centerObj.name;
+        }
+
+        // Return to original position after 4.5 seconds
+        autoReturnTimer = setTimeout(function () {
+            resetAllMarkersHighlight();
+        }, 4500);
     }
 
     function resetAllMarkersHighlight() {
-        if (activeMarkerId && markersMap[activeMarkerId]) {
-            markersMap[activeMarkerId].setIcon(createMarkerIcon(false));
-            markersMap[activeMarkerId].setZIndexOffset(0);
+        if (autoReturnTimer) {
+            clearTimeout(autoReturnTimer);
+            autoReturnTimer = null;
         }
+        isSoloMode = false;
         activeMarkerId = null;
+
+        // Restore all markers matching current filters
+        centersData.forEach(function (c) {
+            var m = markersMap[c.id];
+            if (m) {
+                m.setIcon(createMarkerIcon(false));
+                m.setZIndexOffset(0);
+                var card = document.getElementById('card-' + c.id);
+                if (matchingCards.length === 0 || matchingCards.indexOf(card) !== -1) {
+                    if (!allMarkersLayer.hasLayer(m)) {
+                        allMarkersLayer.addLayer(m);
+                    }
+                }
+            }
+        });
+
         cards.forEach(function (c) { c.classList.remove('is-active'); });
+        map.closePopup();
+
         if (mapTitleText) {
-            mapTitleText.textContent = 'All 12 Centers on Map';
+            var visibleCount = matchingCards.length || centersData.length;
+            mapTitleText.textContent = 'All ' + visibleCount + ' Centers on Map';
         }
-        if (allMarkersLayer.getLayers().length > 0) {
-            map.fitBounds(allMarkersLayer.getBounds(), { padding: [36, 36] });
+
+        // Fly back to original bounds
+        if (initialBounds && initialBounds.isValid()) {
+            map.flyToBounds(initialBounds, { padding: [36, 36], duration: 0.9 });
         }
     }
+
+    // Reset view when popup is closed
+    map.on('popupclose', function () {
+        if (isSoloMode) {
+            resetAllMarkersHighlight();
+        }
+    });
+
+    // Reset view when clicked outside markers on map
+    map.on('click', function (e) {
+        if (isSoloMode && (!e.originalEvent || !e.originalEvent.target.closest('.rs-leaflet-custom-marker'))) {
+            resetAllMarkersHighlight();
+        }
+    });
 
     // ============================================================
     // 2. FILTERING, SEARCH & PROGRESSIVE "SEE MORE" DISPLAY
@@ -1151,6 +1266,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function openModal(modalId) {
         var modal = document.getElementById(modalId);
         if (!modal) return;
+        if (autoReturnTimer) {
+            clearTimeout(autoReturnTimer);
+            autoReturnTimer = null;
+        }
         modal.classList.add('is-open');
         modal.setAttribute('aria-hidden', 'false');
         body.classList.add('rs-center-modal-open');
@@ -1189,17 +1308,37 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial render
     updateCardVisibility();
 
-    // Hash checking logic
-    if (window.location.hash) {
-        var hashId = window.location.hash.substring(1);
-        if (hashId.startsWith('center-')) {
-            // Strip 'center-' to get the slug
-            var slug = hashId.substring(7);
-            setTimeout(function() {
-                openModal('center-modal-' + slug);
-            }, 300);
-        }
+    // Hash checking logic to automatically open center details modal
+    function handleCenterHash() {
+        if (!window.location.hash) return;
+        var rawHash = window.location.hash.substring(1).toLowerCase();
+        var slug = rawHash.replace(/^center-modal-/, '').replace(/^center-/, '').replace(/^card-/, '');
+        var aliasMap = {
+            'kg-nagar': 'kgnagar',
+            'rbi-layout': 'rbilayout',
+            'kempegowda-nagar': 'kgnagar'
+        };
+        if (aliasMap[slug]) slug = aliasMap[slug];
+
+        setTimeout(function() {
+            var modalId = 'center-modal-' + slug;
+            var targetModal = document.getElementById(modalId);
+            if (targetModal) {
+                openModal(modalId);
+                var targetCard = document.getElementById('card-' + slug);
+                if (targetCard) {
+                    var moreSection = document.getElementById('rs-centers-more-section');
+                    if (moreSection && moreSection.contains(targetCard)) {
+                        moreSection.style.display = 'block';
+                    }
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }, 350);
     }
+
+    handleCenterHash();
+    window.addEventListener('hashchange', handleCenterHash);
 
     // Check url params for locate logic from homepage
     var urlParams = new URLSearchParams(window.location.search);
