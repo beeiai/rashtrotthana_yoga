@@ -425,7 +425,7 @@
     }
     .rs-homepage .rs-activity-card-body h3,
     .rs-homepage .rs-activity-card h3 {
-        font-size: 1.35rem !important;
+        font-size: 1.05rem !important;
         font-weight: 700 !important;
         color: #542019 !important;
         margin: 0 0 0.75rem !important;

@@ -91,7 +91,7 @@ $rs_home_center_cards = array(
 $rs_home_stats = array(
     array( 'value' => 1972, 'suffix' => '',       'label' => 'Since' ),
     array( 'value' => 35,   'suffix' => '+',      'label' => 'Activities' ),
-    array( 'value' => 12,   'suffix' => '+',      'label' => 'Centers' ),
+    array( 'value' => 25,   'suffix' => '+',      'label' => 'Centers' ),
     array( 'value' => 200,  'suffix' => '+',      'label' => 'Daily Classes' ),
     array( 'value' => 1,    'suffix' => ' Lakh+', 'label' => 'Lives Impacted' ),
 );

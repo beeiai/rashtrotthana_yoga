@@ -306,8 +306,8 @@ foreach ( $activity_categories as $cat ) {
 
 .rs-pillar-card .rs-pillar-title {
     margin: 0 0 .5rem;
-    font-size: 1.18rem !important;
-    font-weight: 600;
+    font-size: 0.88rem !important;
+    font-weight: 700;
     color: #542019;
     line-height: 1.25;
 }
@@ -1197,7 +1197,7 @@ foreach ( $activity_categories as $cat ) {
                     <!-- Filter 1: Center / Location Filter -->
                     <div class="rs-filter-select-wrap">
                         <select id="rs-filter-center" class="rs-filter-select" aria-label="Filter by Center">
-                            <option value="">All 12 Centers</option>
+                            <option value="">All 25+ Centers</option>
                             <?php foreach ( $all_centers as $center ) : ?>
                                 <option value="<?php echo esc_attr( strtolower( $center['name'] ) ); ?>">
                                     <?php echo esc_html( $center['name'] ); ?>

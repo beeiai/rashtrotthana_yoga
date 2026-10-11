@@ -1423,7 +1423,7 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
                             </strong>
                             <span>Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004</span>
                         </div>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=Keshavashilpa+Kempegowda+Nagar+Bengaluru" target="_blank" rel="noopener" class="rs-map-hq-directions-btn">
+                        <a href="<?php echo !empty($kg_nagar_center['map_url']) ? esc_url($kg_nagar_center['map_url']) : 'https://share.google/09YU1kWIcbb0tTmlc'; ?>" target="_blank" rel="noopener" class="rs-map-hq-directions-btn">
                             <span>Get Directions</span>
                             <span aria-hidden="true">&rarr;</span>
                         </a>
@@ -1519,7 +1519,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         );
 
-        var directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent('Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004');
+        var directionsUrl = '<?php echo !empty($kg_nagar_center["map_url"]) ? esc_url($kg_nagar_center["map_url"]) : "https://share.google/09YU1kWIcbb0tTmlc"; ?>';
 
         var popupHtml = '<div class="rs-map-popup-inner">' +
             '<img src="' + kgNagarCenter.image + '" alt="' + kgNagarCenter.name + '" class="rs-map-popup-media" style="height:100px;width:100%;object-fit:cover;border-radius:10px;margin-bottom:6px;" loading="lazy">' +

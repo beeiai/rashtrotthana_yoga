@@ -838,7 +838,7 @@ Karnataka 560041.',
   0 => 'yoga',
   1 => 'wellness',
 ),
-        'address' => '',
+        'address' => '15, 2nd Main Rd, Vinayaka Layout, 1st Stage, Basaveshwar Nagar, Bengaluru, Karnataka 560079',
         'email' => 'info@rashtrotthana.org',
         'image' => 'http://localhost:8881/wp-content/uploads/2026/10/KAMAKSHIPALYA.jpg',
         'features' => array (

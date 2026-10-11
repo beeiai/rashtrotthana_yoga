@@ -127,6 +127,105 @@ function rs_get_centers( $zone_slug = '' ) {
         }
         if (!$img) $img = get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg';
 
+        $fallback_maps = array(
+            'sadashivnagar' => 'https://maps.app.goo.gl/E3Dipy67Wwf5xkam8',
+            'gayathrinagar' => 'https://maps.app.goo.gl/SCep2hzRv1xH2RmL9',
+            'rbi-layout'    => 'https://maps.app.goo.gl/VNRgWBJkF2T9L2mo7',
+            'rbilayout'     => 'https://maps.app.goo.gl/VNRgWBJkF2T9L2mo7',
+            'kamakshipalya' => 'https://maps.app.goo.gl/QjpNjSdqVkfGjW3D6',
+            'kg-nagar'      => 'https://maps.app.goo.gl/7x6twgWcDWvWVKRx9',
+            'kgnagar'       => 'https://maps.app.goo.gl/7x6twgWcDWvWVKRx9',
+            'nagarbhavi'    => 'https://maps.app.goo.gl/95rZNUx1rdTghNhq6',
+            'vijaynagar'    => 'https://maps.app.goo.gl/jFy3yMB2wZTEjYWPA',
+            'sunkenahalli'  => 'https://maps.app.goo.gl/mJV4THKcNoTKD4yk8',
+            'kundalahalli'  => 'https://maps.app.goo.gl/8LNFGappKdPDxSHJ7',
+            'jayanagar'     => 'https://maps.app.goo.gl/xkzHbuQHGYkNyoHG7',
+        );
+
+        $fallback_socials = array(
+            'sadashivnagar' => array(
+                'instagram' => 'https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=oihehvp',
+                'facebook'  => 'https://www.facebook.com/rashtrotthanapathanjaliyogamandir.yoga',
+                'linktree'  => 'https://linktr.ee/rysrisadashivnagar',
+            ),
+            'gayathrinagar' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanagayatrinagar?stkn=MWtjeGVkN2lmcG9hdA==',
+                'facebook'  => 'https://www.facebook.com/profile.php?id=100087916731697&mibextid=ZbWKwL',
+                'linktree'  => '',
+            ),
+            'rbi-layout' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanarbilayout/?hl=en',
+                'facebook'  => 'https://www.facebook.com/photo/?fbid=122093703260352686&set=a.122093703290352686',
+                'linktree'  => '',
+            ),
+            'rbilayout' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanarbilayout/?hl=en',
+                'facebook'  => 'https://www.facebook.com/photo/?fbid=122093703260352686&set=a.122093703290352686',
+                'linktree'  => '',
+            ),
+            'kamakshipalya' => array(
+                'instagram' => 'https://www.instagram.com/rashtrottanabasaveshwaranagar?stkn=MXV1MnR3Z2sxNWVxOA==',
+                'facebook'  => 'https://www.facebook.com/share/1ERBp1zPAh/',
+                'linktree'  => '',
+            ),
+            'kg-nagar' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanakempegowdanagara?stkn=emk4NGNlcWl2ZWdu',
+                'facebook'  => 'https://www.facebook.com/share/19M3dXaSLQ/',
+                'linktree'  => '',
+            ),
+            'kgnagar' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanakempegowdanagara?stkn=emk4NGNlcWl2ZWdu',
+                'facebook'  => 'https://www.facebook.com/share/19M3dXaSLQ/',
+                'linktree'  => '',
+            ),
+            'nagarbhavi' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthananagarbhavi?stkn=MXRzcDl2OWp2aHFoaA==',
+                'facebook'  => 'https://www.facebook.com/share/18Fz6TzN9z/',
+                'linktree'  => '',
+            ),
+            'vijaynagar' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanavijayanagar?stkn=MmRuZ3h5bXB5dmVj',
+                'facebook'  => 'https://www.facebook.com/share/1Jd2zSBJ2q/',
+                'linktree'  => 'https://linktr.ee/RysriVijaynagar',
+            ),
+            'sunkenahalli' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanasunkenahalli?stkn=MWZyNXk4anRzbWtkcg==',
+                'facebook'  => 'https://www.facebook.com/share/1Hip7xW11i/',
+                'linktree'  => 'https://linktr.ee/sunkenahalli.rysri1',
+            ),
+            'kundalahalli' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanakundalahalli/',
+                'facebook'  => 'https://www.facebook.com/rashtrotthanakundalahalli',
+                'linktree'  => 'https://linktr.ee/admin/links',
+            ),
+            'jayanagar' => array(
+                'instagram' => 'https://www.instagram.com/rashtrotthanajayanagar?stkn=cThsbDd3bDdidzl5',
+                'facebook'  => 'https://www.facebook.com/share/1BsXeenHuR/',
+                'linktree'  => '',
+            ),
+        );
+
+        $map_url = get_post_meta($p->ID, 'map_url', true) ?: (get_field('map_url', $p->ID) ?: '');
+        if (empty($map_url) && isset($fallback_maps[$c_slug])) {
+            $map_url = $fallback_maps[$c_slug];
+        }
+
+        $ig_url = get_post_meta($p->ID, 'instagram_url', true) ?: (get_field('instagram_url', $p->ID) ?: '');
+        if (empty($ig_url) && isset($fallback_socials[$c_slug]['instagram'])) {
+            $ig_url = $fallback_socials[$c_slug]['instagram'];
+        }
+
+        $fb_url = get_post_meta($p->ID, 'facebook_url', true) ?: (get_field('facebook_url', $p->ID) ?: '');
+        if (empty($fb_url) && isset($fallback_socials[$c_slug]['facebook'])) {
+            $fb_url = $fallback_socials[$c_slug]['facebook'];
+        }
+
+        $lt_url = get_post_meta($p->ID, 'linktree_url', true) ?: (get_field('linktree_url', $p->ID) ?: '');
+        if (empty($lt_url) && isset($fallback_socials[$c_slug]['linktree'])) {
+            $lt_url = $fallback_socials[$c_slug]['linktree'];
+        }
+
+        $address = get_post_meta($p->ID, 'address', true) ?: (get_field('address', $p->ID) ?: $p->post_content);
 
         $centers[] = array(
             'id' => $p->post_name,
@@ -142,12 +241,16 @@ function rs_get_centers( $zone_slug = '' ) {
             'timing_label' => 'Morning & Evening',
             'programs' => !empty($programs) ? $programs : ['Yoga for Beginners', 'Pranayama'],
             'activities' => ['yoga', 'wellness'],
-            'address' => get_field('address', $p->ID) ?: $p->post_content,
+            'address' => $address,
             'email' => $email,
             'image' => $img,
             'features' => !empty($features) ? $features : ['Certified Instructors', 'Spacious Shala'],
             'activity_details' => $activity_details,
             'is_hq' => get_field('is_hq', $p->ID) ?: false,
+            'map_url' => $map_url,
+            'instagram_url' => $ig_url,
+            'facebook_url' => $fb_url,
+            'linktree_url' => $lt_url,
         );
     }
     return $centers;
@@ -161,16 +264,20 @@ function rs_get_flagship_centers() {
 }
 
 function rs_get_faqs() {
-    $posts = get_posts( array( 'post_type' => 'faq', 'posts_per_page' => -1, 'post_status' => 'publish' ) );
+    $posts = get_posts( array(
+        'post_type'      => 'faq',
+        'posts_per_page' => 4,
+        'post_status'    => 'publish',
+        'orderby'        => 'ID',
+        'order'          => 'ASC',
+    ) );
     $faqs = array();
     foreach ( $posts as $p ) {
         $faqs[] = array(
             'q' => $p->post_title,
-            'a' => wpautop($p->post_content)
+            'a' => trim( strip_tags( $p->post_content ) )
         );
     }
-    // Fallback if none exist
-    
     return $faqs;
 }
 

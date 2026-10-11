@@ -727,7 +727,7 @@ get_header();
             <!-- Clean Stat Pills -->
             <div class="rs-about-stats-bar">
                 <div class="rs-about-stat-pill">
-                    <strong>12+</strong>
+                    <strong>25+</strong>
                     <span>Centers</span>
                 </div>
                 <div class="rs-about-stat-pill">

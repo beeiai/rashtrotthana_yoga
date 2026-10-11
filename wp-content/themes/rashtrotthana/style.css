@@ -6151,6 +6151,95 @@ body.rs-center-modal-open {
     color: #C84F18;
 }
 
+/* Branch Social Links inside Modal */
+.rs-center-modal-socials {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 12px 16px;
+    background: #FFFDF9;
+    border: 1px solid rgba(143, 23, 29, 0.12);
+    border-radius: 12px;
+}
+
+.rs-center-socials-label {
+    font: 600 0.8rem 'Poppins', sans-serif;
+    color: #6E5B50;
+    margin-right: 4px;
+}
+
+.rs-center-socials-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.rs-center-social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font: 600 0.8rem 'Poppins', sans-serif;
+    text-decoration: none !important;
+    transition: all 200ms ease;
+    border: 1px solid transparent;
+}
+
+.rs-center-social-btn svg {
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+}
+
+.rs-center-social-btn:hover svg {
+    transform: scale(1.1);
+}
+
+.rs-center-social-btn.rs-social-ig {
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.08), rgba(253, 29, 29, 0.08));
+    color: #C13584 !important;
+    border-color: rgba(193, 53, 132, 0.25);
+}
+
+.rs-center-social-btn.rs-social-ig:hover {
+    background: linear-gradient(135deg, #E1306C, #F77737);
+    color: #fff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(225, 48, 108, 0.3);
+    transform: translateY(-2px);
+}
+
+.rs-center-social-btn.rs-social-fb {
+    background: rgba(24, 119, 242, 0.08);
+    color: #1877F2 !important;
+    border-color: rgba(24, 119, 242, 0.25);
+}
+
+.rs-center-social-btn.rs-social-fb:hover {
+    background: #1877F2;
+    color: #fff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+    transform: translateY(-2px);
+}
+
+.rs-center-social-btn.rs-social-lt {
+    background: rgba(40, 167, 69, 0.08);
+    color: #28a745 !important;
+    border-color: rgba(40, 167, 69, 0.25);
+}
+
+.rs-center-social-btn.rs-social-lt:hover {
+    background: #28a745;
+    color: #fff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    transform: translateY(-2px);
+}
+
 /* Modal Sections */
 .rs-center-modal-section {
     margin-bottom: 28px;
