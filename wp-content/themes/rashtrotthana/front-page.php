@@ -2062,30 +2062,7 @@
         100% { transform: translate3d(calc(var(--background-x, 0px) - 20px), calc(var(--background-y, 0px) - 24px), 60px) rotateY(18deg) scale(1.12); }
     }
 
-    @media (prefers-reduced-motion: reduce), (pointer: coarse) {
-        body.home .rs-atmosphere-ring,
-        body.home .rs-atmosphere-petal,
-        body.home .rs-atmosphere-leaf,
-        body.home .rs-atmosphere-flower,
-        body.home .rs-atmosphere-lotus,
-        body.home .rs-atmosphere-yoga {
-            animation: none;
-        }
-    }
 
-    @media (prefers-reduced-motion: reduce), (pointer: coarse) {
-        body.home .rs-value-card,
-        body.home .rs-activity-card,
-        body.home .rs-event-card,
-        body.home .rs-center-card,
-        body.home .rs-team-card,
-        body.home .rs-center-intro,
-        body.home .rs-center-locate,
-        body.home .rs-stat-grid {
-            transform: none !important;
-            transition: box-shadow 180ms ease, border-color 180ms ease;
-        }
-    }
 
     body.home .rs-homepage .rs-btn.rs-crosshair-active::before,
     body.home .rs-homepage .rs-center-button.rs-crosshair-active::before,
@@ -2106,18 +2083,17 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var homepage = document.querySelector('.rs-homepage');
 
-    if (homepage && !prefersReducedMotion) {
-        var revealItems = homepage.querySelectorAll('.rs-values, .rs-stats, .rs-centers, .rs-content-section, .rs-founder-section, .rs-testimonials, .rs-team-card, .rs-activity-card, .rs-event-card');
+    if (homepage) {
+        var revealItems = homepage.querySelectorAll('.rs-values, .rs-stats, .rs-centers, .rs-content-section, .rs-founder-section, .rs-testimonials, .rs-team-card');
         var revealObserver = new IntersectionObserver(function (entries, observer) {
             entries.forEach(function (entry) {
                 if (!entry.isIntersecting) return;
                 entry.target.classList.add('is-visible');
                 observer.unobserve(entry.target);
             });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px' });
 
         Array.prototype.forEach.call(revealItems, function (item, index) {
             item.classList.add('rs-reveal');
@@ -2178,6 +2154,8 @@ document.addEventListener('DOMContentLoaded', function () {
             var statsObserver = new IntersectionObserver(function (entries, observer) {
                 if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
                 Array.prototype.forEach.call(statValues, function (value, index) {
+                    if (value.dataset.counting) return;
+                    value.dataset.counting = 'true';
                     var target = Number(value.getAttribute('data-count')) || 0;
                     var suffix = value.getAttribute('data-suffix') || '';
                     var start = performance.now() + index * 90;
@@ -2193,16 +2171,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.requestAnimationFrame(count);
                 });
                 observer.disconnect();
-            }, { threshold: 0.35 });
+            }, { threshold: 0.15 });
             statsObserver.observe(stats);
         }
-    }
-
-    if (prefersReducedMotion) {
-        document.querySelectorAll('.rs-stat-value').forEach(function (value) {
-            var target = Number(value.getAttribute('data-count')) || 0;
-            value.textContent = target.toLocaleString() + (value.getAttribute('data-suffix') || '');
-        });
     }
 
     var centerFinder = document.querySelector('.rs-center-finder');
@@ -2263,26 +2234,48 @@ document.addEventListener('DOMContentLoaded', function () {
         centerSearch.addEventListener('keyup', filterCenters);
     }
 
-    if (prefersReducedMotion) return;
-
     document.querySelectorAll('.rs-activity-grid, .rs-gallery-grid').forEach(function (track) {
         var paused = false;
         var animationFrame;
         var lastTimestamp = 0;
-        var speed = 0.035;
-        var position = track.scrollLeft;
+        var speed = 0.055; /* px/ms — smooth, elegant auto-scroll */
+        var position = 0;
 
+        /* Disable snap & smooth BEFORE any animation so browser snap never fights scrollLeft */
+        track.style.scrollBehavior = 'auto';
+        track.style.scrollSnapType = 'none';
+        track.scrollLeft = 0;
+
+        /* Clone cards to create seamless infinite loop (clone enough times so track never runs short) */
+        var originals = Array.prototype.slice.call(track.children);
+        if (originals.length > 0) {
+            var passes = originals.length < 6 ? 2 : 1;
+            for (var p = 0; p < passes; p++) {
+                originals.forEach(function (card) {
+                    var clone = card.cloneNode(true);
+                    clone.classList.remove('rs-reveal', 'rs-sr', 'rs-sr-left', 'rs-sr-right');
+                    clone.classList.add('is-visible', 'rs-sr-visible');
+                    clone.style.removeProperty('--reveal-delay');
+                    clone.style.opacity = '1';
+                    clone.style.transform = 'none';
+                    track.appendChild(clone);
+                });
+            }
+        }
+
+        /* Ensure all cards in the track are fully visible */
         Array.prototype.slice.call(track.children).forEach(function (card) {
-            var clone = card.cloneNode(true);
-            clone.classList.remove('rs-reveal');
-            clone.classList.add('is-visible');
-            clone.style.removeProperty('--reveal-delay');
-            track.appendChild(clone);
+            card.classList.remove('rs-reveal', 'rs-sr');
+            card.classList.add('is-visible', 'rs-sr-visible');
+            card.style.opacity = '1';
         });
 
         function cardStep() {
             var card = track.firstElementChild;
-            return card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).gap || 0) : 0;
+            if (!card) return 0;
+            var w = card.offsetWidth; /* offsetWidth is reliable even in flex containers */
+            var gap = parseFloat(getComputedStyle(track).gap || getComputedStyle(track).columnGap || '0');
+            return w + gap;
         }
 
         function animate(timestamp) {
@@ -2295,7 +2288,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 track.scrollLeft = position;
                 var step = cardStep();
                 var firstCard = track.firstElementChild;
-                if (firstCard && step && position >= step) {
+                if (firstCard && step > 0 && position >= step) {
                     track.appendChild(firstCard);
                     position -= step;
                     track.scrollLeft = position;
@@ -2306,13 +2299,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function pause() { paused = true; }
-        function resume() { paused = false; }
+        function resume() {
+            position = track.scrollLeft;
+            lastTimestamp = 0;
+            paused = false;
+        }
 
         track.addEventListener('mouseenter', pause);
         track.addEventListener('mouseleave', resume);
+        track.addEventListener('touchstart', pause, { passive: true });
+        track.addEventListener('touchend', resume, { passive: true });
+        track.addEventListener('scroll', function () {
+            if (paused) {
+                position = track.scrollLeft;
+            }
+        }, { passive: true });
 
-        track.style.scrollBehavior = 'auto';
-        track.style.scrollSnapType = 'none';
         animationFrame = window.requestAnimationFrame(animate);
         window.addEventListener('beforeunload', function () { window.cancelAnimationFrame(animationFrame); }, { once: true });
     });

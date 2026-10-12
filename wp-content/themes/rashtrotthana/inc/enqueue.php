@@ -49,13 +49,13 @@ function rashtrotthana_enqueue_assets() {
             'rashtrotthana-homepage-effects',
             get_template_directory_uri() . '/assets/css/homepage-effects.css',
             array( 'rashtrotthana-style' ),
-            '2.0.0'
+            '2.0.2'
         );
         wp_enqueue_script(
             'rashtrotthana-homepage-effects',
             get_template_directory_uri() . '/assets/js/homepage-effects.js',
             array(),
-            '2.0.0',
+            '2.0.2',
             true
         );
     }

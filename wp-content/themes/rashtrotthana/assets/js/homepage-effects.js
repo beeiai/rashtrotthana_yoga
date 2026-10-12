@@ -12,7 +12,7 @@
 
   /* Skip if page is not the homepage */
   if (!document.querySelector('.rs-homepage')) return;
-  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reducedMotion = false;
 
   /* 1. CUSTOM CURSOR REMOVED */
 
@@ -174,18 +174,21 @@
         if (!entry.isIntersecting) return;
         obs.unobserve(entry.target);
         var el     = entry.target;
+        if (el.dataset.counting) return;
+        el.dataset.counting = 'true';
         var target = parseInt(el.dataset.count, 10);
         var suffix = el.dataset.suffix || '';
-        var dur    = reducedMotion ? 0 : 1800;
+        var dur    = 1800;
         var start  = performance.now();
         (function step(now) {
-          var p    = Math.min((now - start) / dur, 1);
-          var ease = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-          el.textContent = Math.round(ease * target) + suffix;
+          var elapsed = now - start;
+          var p    = Math.min(elapsed / dur, 1);
+          var ease = 1 - Math.pow(2, -10 * p);
+          el.textContent = Math.round(ease * target).toLocaleString() + suffix;
           if (p < 1) requestAnimationFrame(step);
         })(performance.now());
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
     statEls.forEach(function (el) { statObserver.observe(el); });
   }
 
