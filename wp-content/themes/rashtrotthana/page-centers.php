@@ -975,6 +975,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         );
 
+        var directionsUrl = center.map_url || ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Rashtrotthana Yoga ' + center.name + ' ' + (center.address || '')));
+
         var popupContent = 
             '<div class="rs-map-popup-inner">' +
                 '<img src="' + center.image + '" alt="' + center.name + '" class="rs-map-popup-media" loading="lazy">' +
@@ -987,7 +989,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     center.area +
                 '</p>' +
                 '<p class="rs-map-popup-timing">☀ ' + (center.timing_label || center.hours) + '</p>' +
-                '<button type="button" class="rs-map-popup-btn rs-open-center-modal-btn" data-modal="center-modal-' + center.id + '">View Details →</button>' +
+                '<div style="display:flex;gap:6px;margin-top:10px;">' +
+                    '<button type="button" class="rs-map-popup-btn rs-open-center-modal-btn" data-modal="center-modal-' + center.id + '" style="flex:1;margin-top:0;">View Details →</button>' +
+                    '<a href="' + directionsUrl + '" target="_blank" rel="noopener" class="rs-map-popup-btn" style="flex:1;margin-top:0;background:var(--color-maroon);color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Directions ↗</a>' +
+                '</div>' +
             '</div>';
 
         marker.bindPopup(popupContent, { maxWidth: 280, className: 'rs-custom-leaflet-popup' });
