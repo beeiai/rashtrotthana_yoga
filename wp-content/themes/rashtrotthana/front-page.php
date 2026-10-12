@@ -1342,9 +1342,26 @@
     }
 
     body.home .rs-hero-image-wrapper::after {
+        content: "" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 3 !important;
+        pointer-events: none !important;
         background:
-            linear-gradient(90deg, rgba(255, 248, 236, .99) 0%, rgba(255, 248, 236, .92) 27%, rgba(255, 248, 236, .64) 46%, rgba(255, 248, 236, .16) 68%, rgba(255, 248, 236, 0) 100%),
-            linear-gradient(180deg, rgba(143, 23, 29, .08), transparent 32%, rgba(143, 23, 29, .12));
+            linear-gradient(90deg, 
+                rgba(255, 248, 236, 0.99) 0%, 
+                rgba(255, 248, 236, 0.96) 28%, 
+                rgba(255, 248, 236, 0.88) 42%, 
+                rgba(255, 248, 236, 0.55) 58%, 
+                rgba(255, 248, 236, 0.18) 75%, 
+                rgba(255, 248, 236, 0) 90%
+            ),
+            linear-gradient(180deg, 
+                rgba(255, 248, 236, 0.45) 0%, 
+                transparent 22%, 
+                transparent 80%, 
+                rgba(255, 248, 236, 0.4) 100%
+            ) !important;
     }
 
     body.home .rs-hero-image-wrapper img {
@@ -1355,8 +1372,8 @@
     }
 
     body.home .rs-hero-content {
-        position: relative;
-        z-index: 2;
+        position: relative !important;
+        z-index: 5 !important;
         width: min(100% - 160px, 1280px);
         max-width: 620px;
         min-height: 650px;
@@ -1369,12 +1386,15 @@
 
     body.home .rs-hero-title {
         max-width: 620px;
-        text-shadow: 0 3px 18px rgba(255, 248, 236, .75);
+        color: #550000 !important;
+        text-shadow: none !important;
     }
 
     body.home .rs-hero-description {
         max-width: 560px;
-        text-shadow: 0 2px 12px rgba(255, 248, 236, .9);
+        color: #332a24 !important;
+        font-weight: 450 !important;
+        text-shadow: none !important;
     }
 
     @media (max-width: 900px) {
@@ -1399,8 +1419,16 @@
 
         body.home .rs-hero-image-wrapper::after {
             background:
-                linear-gradient(90deg, rgba(255, 248, 236, .99) 0%, rgba(255, 248, 236, .9) 42%, rgba(255, 248, 236, .26) 76%, rgba(255, 248, 236, 0) 100%),
-                linear-gradient(180deg, rgba(143, 23, 29, .08), transparent 36%, rgba(143, 23, 29, .14));
+                linear-gradient(180deg, 
+                    rgba(255, 248, 236, 0.98) 0%, 
+                    rgba(255, 248, 236, 0.94) 52%, 
+                    rgba(255, 248, 236, 0.75) 75%, 
+                    rgba(255, 248, 236, 0.2) 100%
+                ),
+                linear-gradient(90deg, 
+                    rgba(255, 248, 236, 0.96) 0%, 
+                    rgba(255, 248, 236, 0.82) 100%
+                ) !important;
         }
     }
 
@@ -1439,8 +1467,12 @@
 
         body.home .rs-hero-image-wrapper::after {
             background:
-                linear-gradient(90deg, rgba(255, 248, 236, .99) 0%, rgba(255, 248, 236, .9) 53%, rgba(255, 248, 236, .18) 100%),
-                linear-gradient(180deg, rgba(143, 23, 29, .08), transparent 38%, rgba(143, 23, 29, .14));
+                linear-gradient(180deg, 
+                    rgba(255, 248, 236, 0.99) 0%, 
+                    rgba(255, 248, 236, 0.95) 58%, 
+                    rgba(255, 248, 236, 0.8) 80%, 
+                    rgba(255, 248, 236, 0.25) 100%
+                ) !important;
         }
 
         body.home .rs-center-card h3 {
@@ -2164,7 +2196,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     function count(timestamp) {
                         var progress = Math.min(Math.max((timestamp - start) / duration, 0), 1);
                         var eased = 1 - Math.pow(1 - progress, 3);
-                        value.textContent = Math.floor(target * eased).toLocaleString() + suffix;
+                        var currentVal = Math.floor(target * eased);
+                        var noComma = target === 1972 || value.getAttribute('data-no-comma') === 'true' || (target >= 1900 && target <= 2099);
+                        value.textContent = (noComma ? String(currentVal) : currentVal.toLocaleString()) + suffix;
                         if (progress < 1) window.requestAnimationFrame(count);
                     }
 

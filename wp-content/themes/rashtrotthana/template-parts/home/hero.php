@@ -132,6 +132,106 @@ $hero_images = array(
     transform: translateY(-8px) scale(0.99);
     pointer-events: none;
 }
+
+/* Smooth fading crossfade for hero background slides */
+.rs-hero-slideshow {
+    isolation: isolate;
+    position: relative;
+}
+.rs-hero-slides {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #1a0808;
+    border-radius: inherit;
+}
+.rs-hero-slides .rs-hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    z-index: 0;
+    transform: scale(1.04);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 6s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: opacity, transform;
+    pointer-events: none;
+}
+.rs-hero-slides .rs-hero-slide.is-previous {
+    opacity: 1 !important;
+    z-index: 1 !important;
+    transform: scale(1) !important;
+    transition: none !important;
+    pointer-events: none;
+}
+.rs-hero-slides .rs-hero-slide.is-active {
+    opacity: 1 !important;
+    z-index: 2 !important;
+    transform: scale(1) !important;
+    pointer-events: auto;
+}
+
+/* Warm cream overlay blending hero background slides with content */
+.rs-hero-image-wrapper {
+    position: relative;
+}
+.rs-hero-image-wrapper::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+    background:
+        linear-gradient(90deg, 
+            rgba(255, 248, 236, 0.99) 0%, 
+            rgba(255, 248, 236, 0.96) 28%, 
+            rgba(255, 248, 236, 0.88) 42%, 
+            rgba(255, 248, 236, 0.55) 58%, 
+            rgba(255, 248, 236, 0.18) 75%, 
+            rgba(255, 248, 236, 0) 90%
+        ),
+        linear-gradient(180deg, 
+            rgba(255, 248, 236, 0.45) 0%, 
+            transparent 22%, 
+            transparent 80%, 
+            rgba(255, 248, 236, 0.4) 100%
+        ) !important;
+}
+@media (max-width: 900px) {
+    .rs-hero-image-wrapper::after {
+        background:
+            linear-gradient(180deg, 
+                rgba(255, 248, 236, 0.98) 0%, 
+                rgba(255, 248, 236, 0.94) 52%, 
+                rgba(255, 248, 236, 0.75) 75%, 
+                rgba(255, 248, 236, 0.2) 100%
+            ),
+            linear-gradient(90deg, 
+                rgba(255, 248, 236, 0.96) 0%, 
+                rgba(255, 248, 236, 0.82) 100%
+            ) !important;
+    }
+}
+@media (max-width: 600px) {
+    .rs-hero-image-wrapper::after {
+        background:
+            linear-gradient(180deg, 
+                rgba(255, 248, 236, 0.99) 0%, 
+                rgba(255, 248, 236, 0.95) 58%, 
+                rgba(255, 248, 236, 0.8) 80%, 
+                rgba(255, 248, 236, 0.25) 100%
+            ) !important;
+    }
+}
+.rs-hero-content {
+    position: relative;
+    z-index: 5 !important;
+}
+.rs-hero-slide-dots {
+    z-index: 6 !important;
+}
 </style>
 
 <script>

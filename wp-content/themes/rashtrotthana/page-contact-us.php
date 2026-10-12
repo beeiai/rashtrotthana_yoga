@@ -33,9 +33,10 @@ if ( ! $kg_nagar_center ) {
 $faqs_dataset     = rs_get_faqs();
 
 // Default variables for the contact bar
-$contact_phone   = !empty($kg_nagar_center['phone']) ? $kg_nagar_center['phone'] : '9482834425';
-$contact_email   = !empty($kg_nagar_center['email']) ? $kg_nagar_center['email'] : 'info@rashtrotthana.org';
-$contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['address'] : 'Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004';
+$contact_phone    = !empty($kg_nagar_center['phone']) ? $kg_nagar_center['phone'] : '9482834425';
+$contact_email    = !empty($kg_nagar_center['email']) ? $kg_nagar_center['email'] : 'info@rashtrotthana.org';
+$contact_address  = !empty($kg_nagar_center['address']) ? $kg_nagar_center['address'] : 'Keshavashilpa, Kempegowda Nagar, Bengaluru – 560004';
+$contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_number', 'option') ?: '+91 96060 44453') : '+91 96060 44453';
 ?>
 
 <!-- Leaflet CSS & JS for Interactive Map -->
@@ -1281,14 +1282,14 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
                 </a>
 
                 <!-- WhatsApp Desk -->
-                <a href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $contact_phone) ); ?>" target="_blank" rel="noopener" class="rs-contact-channel-card" aria-label="Chat on WhatsApp">
+                <a href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $contact_whatsapp) ); ?>" target="_blank" rel="noopener" class="rs-contact-channel-card" aria-label="Chat on WhatsApp">
                     <div class="rs-channel-header">
                         <div class="rs-channel-icon-wrap" aria-hidden="true">
                             <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                         </div>
                         <h3 class="rs-channel-title">WhatsApp</h3>
                     </div>
-                    <strong class="rs-channel-value"><?php echo esc_html( $contact_phone ); ?></strong>
+                    <strong class="rs-channel-value"><?php echo esc_html( $contact_whatsapp ); ?></strong>
                     <p class="rs-channel-timing">Instant replies and queries<br>during working hours</p>
                     <span class="rs-channel-cta-link">Start Chat &rarr;</span>
                 </a>

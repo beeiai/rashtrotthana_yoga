@@ -54,7 +54,7 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
     <div class="rs-container rs-stat-grid">
         <div class="rs-stat-heading"><h2>Our Impact in Numbers</h2><p>Creating a legacy of wellness, wisdom and service since 1972</p></div>
         <?php foreach ( $rs_stats as $stat ) : ?>
-            <div><strong class="rs-stat-value" data-count="<?php echo esc_attr( $stat['value'] ); ?>" data-suffix="<?php echo esc_attr( $stat['suffix'] ); ?>">0<?php echo esc_html( $stat['suffix'] ); ?></strong><span><?php echo esc_html( $stat['label'] ); ?></span></div>
+            <div><strong class="rs-stat-value" data-count="<?php echo esc_attr( $stat['value'] ); ?>" <?php echo $stat['value'] == 1972 ? 'data-no-comma="true"' : ''; ?> data-suffix="<?php echo esc_attr( $stat['suffix'] ); ?>">0<?php echo esc_html( $stat['suffix'] ); ?></strong><span><?php echo esc_html( $stat['label'] ); ?></span></div>
         <?php endforeach; ?>
     </div>
 </section>

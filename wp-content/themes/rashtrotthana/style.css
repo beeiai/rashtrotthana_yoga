@@ -484,7 +484,7 @@ select {
 
 .rs-hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 5;
 
     max-width: 570px;
 }
@@ -551,16 +551,25 @@ select {
 
 .rs-hero-image-wrapper::after {
     content: "";
-
     position: absolute;
     inset: 0;
-
-    background:
-        linear-gradient(90deg,
-            rgba(255, 248, 236, 0.3) 0%,
-            rgba(255, 248, 236, 0) 35%);
-
+    z-index: 3;
     pointer-events: none;
+    background:
+        linear-gradient(90deg, 
+            rgba(255, 248, 236, 0.99) 0%, 
+            rgba(255, 248, 236, 0.96) 28%, 
+            rgba(255, 248, 236, 0.88) 42%, 
+            rgba(255, 248, 236, 0.55) 58%, 
+            rgba(255, 248, 236, 0.18) 75%, 
+            rgba(255, 248, 236, 0) 90%
+        ),
+        linear-gradient(180deg, 
+            rgba(255, 248, 236, 0.45) 0%, 
+            transparent 22%, 
+            transparent 80%, 
+            rgba(255, 248, 236, 0.4) 100%
+        );
 }
 
 .rs-hero-image-wrapper img {
@@ -572,12 +581,15 @@ select {
 
 .rs-hero-slideshow {
     isolation: isolate;
+    position: relative;
 }
 
 .rs-hero-slides {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    background: #1a0808;
+    border-radius: inherit;
 }
 
 .rs-hero-slides .rs-hero-slide {
@@ -588,13 +600,26 @@ select {
     object-fit: cover;
     object-position: center;
     opacity: 0;
-    transform: scale(1.015);
-    transition: opacity 1.8s ease, transform 12s ease;
+    z-index: 0;
+    transform: scale(1.04);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 6s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: opacity, transform;
+    pointer-events: none;
+}
+
+.rs-hero-slides .rs-hero-slide.is-previous {
+    opacity: 1 !important;
+    z-index: 1 !important;
+    transform: scale(1) !important;
+    transition: none !important;
+    pointer-events: none;
 }
 
 .rs-hero-slides .rs-hero-slide.is-active {
-    opacity: 1;
-    transform: scale(1);
+    opacity: 1 !important;
+    z-index: 2 !important;
+    transform: scale(1) !important;
+    pointer-events: auto;
 }
 
 .rs-hero-slide-dots {

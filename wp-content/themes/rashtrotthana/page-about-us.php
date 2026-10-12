@@ -703,9 +703,142 @@ get_header();
     }
 }
 
-@media (max-width: 768px) {
-    .rs-team-grid {
-        grid-template-columns: 1fr;
+/* ============================================================
+   Center Slideshow in History Section
+   ============================================================ */
+.rs-history-slideshow {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    min-height: 0;
+    align-self: center;
+    border-radius: 1.35rem;
+    overflow: hidden;
+    border: 1px solid rgba(143, 23, 29, .14);
+    box-shadow: 0 16px 38px rgba(89, 37, 24, .1), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: #1a0808;
+}
+
+.rs-history-slides {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.rs-history-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 0;
+    transform: scale(1.03);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 5s ease-out;
+    pointer-events: none;
+    will-change: opacity, transform;
+}
+
+.rs-history-slide.is-previous {
+    opacity: 1 !important;
+    z-index: 1 !important;
+    transform: scale(1) !important;
+    transition: none !important;
+    pointer-events: none;
+}
+
+.rs-history-slide.is-active {
+    opacity: 1 !important;
+    z-index: 2 !important;
+    transform: scale(1) !important;
+    pointer-events: auto;
+}
+
+.rs-history-slide img {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block;
+}
+
+.rs-history-slideshow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 65%, rgba(20, 8, 8, 0.68) 100%);
+}
+
+.rs-history-slide-caption {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 4;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(30, 10, 10, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 0.84rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+.rs-history-slide-dots {
+    position: absolute;
+    bottom: 24px;
+    right: 20px;
+    z-index: 4;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.rs-history-slide-dots button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.4);
+    padding: 0;
+    cursor: pointer;
+    transition: all 220ms ease;
+}
+
+.rs-history-slide-dots button.is-active {
+    background: var(--color-gold, #F9B72A);
+    border-color: #fff;
+    transform: scale(1.35);
+    box-shadow: 0 0 10px rgba(249, 183, 42, 0.85);
+}
+
+@media (max-width: 1024px) {
+    .rs-history-slideshow {
+        width: 100%;
+        height: 380px;
+        min-height: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .rs-history-slideshow {
+        height: 280px;
+        min-height: 0;
+    }
+    .rs-history-slide-caption {
+        bottom: 14px;
+        left: 14px;
+        font-size: 0.78rem;
+        padding: 5px 12px;
+    }
+    .rs-history-slide-dots {
+        bottom: 18px;
+        right: 14px;
     }
 }
 </style>
@@ -808,13 +941,13 @@ get_header();
                         </div>
 
                         <div class="rs-history-step-card">
-                            <h4>Ajith Kumar’s Role</h4>
+                            <h4>Ajith Kumar&rsquo;s Role</h4>
                             <p>Ajith Kumar, a Pracharak of the Rashtriya Swayamsevak Sangh, played a key role in promoting Yoga. He trained under renowned Yoga teachers Pattabhi Jois in Mysuru and later B.K.S. Iyengar.</p>
                         </div>
 
                         <div class="rs-history-step-card">
                             <h4>Yoga Training &amp; Expansion</h4>
-                            <p>Under Ajith Kumar’s leadership, Rashtrotthana workers and Yoga enthusiasts began practicing Yoga. Regular Yoga classes were gradually introduced, and practitioners were trained to become Yoga instructors.</p>
+                            <p>Under Ajith Kumar&rsquo;s leadership, Rashtrotthana workers and Yoga enthusiasts began practicing Yoga. Regular Yoga classes were gradually introduced, and practitioners were trained to become Yoga instructors.</p>
                         </div>
 
                         <div class="rs-history-step-card">
@@ -824,8 +957,26 @@ get_header();
                     </div>
                 </div>
 
-                <div class="rs-framed-image">
-                    <img src="<?php echo esc_url( content_url( '/uploads/2026/10/evolution.jpeg' ) ); ?>" alt="Rashtrotthana Yoga Evolution" loading="lazy">
+                <div class="rs-framed-image rs-history-slideshow" aria-label="Rashtrotthana Yoga Centers Evolution" data-slide-interval="3500">
+                    <div class="rs-history-slides">
+                        <div class="rs-history-slide is-active">
+                            <img src="<?php echo esc_url( content_url( '/uploads/2026/10/Kundalahalli.jpg' ) ); ?>" alt="Kundalahalli Center" loading="lazy">
+                            <div class="rs-history-slide-caption">Kundalahalli Center</div>
+                        </div>
+                        <div class="rs-history-slide">
+                            <img src="<?php echo esc_url( content_url( '/uploads/2026/10/Jayanagara.jpg' ) ); ?>" alt="Jayanagar Center" loading="lazy">
+                            <div class="rs-history-slide-caption">Jayanagar Center</div>
+                        </div>
+                        <div class="rs-history-slide">
+                            <img src="<?php echo esc_url( content_url( '/uploads/2026/10/Kempegowda-Nagar.jpg' ) ); ?>" alt="KG Nagar Center" loading="lazy">
+                            <div class="rs-history-slide-caption">KG Nagar Center</div>
+                        </div>
+                    </div>
+                    <div class="rs-history-slide-dots" aria-label="Centers slideshow navigation">
+                        <button type="button" class="is-active" aria-label="Show Kundalahalli Center"></button>
+                        <button type="button" aria-label="Show Jayanagar Center"></button>
+                        <button type="button" aria-label="Show KG Nagar Center"></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -880,5 +1031,78 @@ get_header();
     </section>
 
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var slideshow = document.querySelector('.rs-history-slideshow');
+    if (!slideshow) return;
+
+    var slides = Array.from(slideshow.querySelectorAll('.rs-history-slide'));
+    var dots   = Array.from(slideshow.querySelectorAll('.rs-history-slide-dots button'));
+    var interval = Number(slideshow.dataset.slideInterval) || 3500;
+    var current = 0;
+    var prevIndex = -1;
+    var timer = null;
+    var cleanTimeout = null;
+
+    function showSlide(index) {
+        var nextIndex = (index + slides.length) % slides.length;
+        if (nextIndex === current && prevIndex !== -1) return;
+
+        prevIndex = current;
+        current = nextIndex;
+
+        slides.forEach(function (slide, i) {
+            if (i === current) {
+                slide.classList.remove('is-previous');
+                slide.classList.add('is-active');
+            } else if (i === prevIndex) {
+                slide.classList.remove('is-active');
+                slide.classList.add('is-previous');
+            } else {
+                slide.classList.remove('is-active');
+                slide.classList.remove('is-previous');
+            }
+        });
+
+        dots.forEach(function (dot, dotIndex) {
+            var active = dotIndex === current;
+            dot.classList.toggle('is-active', active);
+            dot.setAttribute('aria-current', active ? 'true' : 'false');
+        });
+
+        if (cleanTimeout) clearTimeout(cleanTimeout);
+        cleanTimeout = setTimeout(function () {
+            slides.forEach(function (slide, i) {
+                if (i !== current) {
+                    slide.classList.remove('is-previous');
+                }
+            });
+        }, 1300);
+    }
+
+    function startSlideshow() {
+        if (timer) clearInterval(timer);
+        timer = setInterval(function () {
+            showSlide(current + 1);
+        }, interval);
+    }
+
+    dots.forEach(function (dot, dotIndex) {
+        dot.addEventListener('click', function () {
+            showSlide(dotIndex);
+            startSlideshow();
+        });
+    });
+
+    slideshow.addEventListener('mouseenter', function () {
+        if (timer) clearInterval(timer);
+    });
+    slideshow.addEventListener('mouseleave', startSlideshow);
+
+    showSlide(0);
+    startSlideshow();
+});
+</script>
 
 <?php get_footer(); ?>

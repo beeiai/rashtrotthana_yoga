@@ -2,6 +2,7 @@
 $address = function_exists('get_field') ? get_field('ry_address_primary', 'option') : "#1, Rashtrotthana Complex,\nMalleswaram, Bengaluru - 560003\nKarnataka, India";
 $phone   = function_exists('get_field') ? get_field('ry_phone_primary', 'option') : '+91 80 1234 5678';
 $email   = function_exists('get_field') ? get_field('ry_email_primary', 'option') : 'info@rashtrotthana.org';
+$whatsapp_num = function_exists('get_field') ? (get_field('ry_whatsapp_number', 'option') ?: '+91 96060 44453') : '+91 96060 44453';
 
 $fb_url  = function_exists('get_field') ? get_field('ry_facebook_url', 'option') : '#';
 $tw_url  = function_exists('get_field') ? get_field('ry_twitter_url', 'option') : '#';
@@ -16,10 +17,10 @@ $yt_url  = function_exists('get_field') ? get_field('ry_youtube_url', 'option') 
 .rs-footer-tagline{width:100%;margin:0 0 20px!important;text-align:left}
 .rs-socials{justify-content:flex-start;width:100%;margin-top:0;gap:12px;display:flex;}
 .rs-socials svg{width:20px;height:20px}
-.rs-whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:1090;display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;box-shadow:0 8px 20px rgba(21,112,56,.34);transition:transform 180ms ease,box-shadow 180ms ease}
-.rs-whatsapp-float:hover{color:#fff;transform:translateY(-3px);box-shadow:0 12px 24px rgba(21,112,56,.4)}
-.rs-whatsapp-float svg{width:27px;height:27px;fill:currentColor}
-@media(max-width:600px){.rs-whatsapp-float{right:16px;bottom:16px;width:48px;height:48px}}
+.rs-whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:1090;display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:transparent;box-shadow:0 8px 24px rgba(0,0,0,.18),0 4px 12px rgba(37,211,102,.35);transition:transform 220ms cubic-bezier(.34,1.56,.64,1),box-shadow 220ms ease;text-decoration:none;line-height:0}
+.rs-whatsapp-float:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 14px 28px rgba(0,0,0,.22),0 6px 18px rgba(37,211,102,.45)}
+.rs-whatsapp-float img{width:100%;height:100%;display:block;object-fit:contain;border-radius:50%;pointer-events:none}
+@media(max-width:600px){.rs-whatsapp-float{right:16px;bottom:16px;width:50px;height:50px}}
 </style>
 <footer class="rs-footer">
     <div class="rs-container rs-footer-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
@@ -58,8 +59,8 @@ $yt_url  = function_exists('get_field') ? get_field('ry_youtube_url', 'option') 
     </div>
     <div class="rs-container rs-footer-bottom"><span>&copy; <?php echo esc_html( date( 'Y' ) ); ?> Rashtrotthana Parishat. All Rights Reserved.</span><span>Privacy Policy &nbsp;|&nbsp; Terms &amp; Conditions</span></div>
 </footer>
-<a class="rs-whatsapp-float" href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $phone) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 2.2 17.7L1 22.8l5.2-1.2A11.8 11.8 0 1 0 20.5 3.5ZM12 21a9 9 0 0 1-4.5-1.2l-.3-.2-3.1.7.7-3-.2-.3A9 9 0 1 1 12 21Zm4.9-6.7c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-.9 1.1-.4.2-.7 0a7.4 7.4 0 0 1-2.2-1.4 8.4 8.4 0 0 1-1.6-2c-.2-.3 0-.5.1-.7l.4-.5c.1-.2.2-.4.3-.6s0-.4 0-.6l-1-2.4c-.2-.5-.5-.4-.7-.4h-.6c-.2 0-.6.1-.9.5s-1.2 1.1-1.2 2.7 1.2 3.1 1.4 3.4a10.5 10.5 0 0 0 4 3.7c.6.3 1 .5 1.4.6.6.2 1.1.2 1.5.1.5-.1 1.8-.7 2-1.4s.3-1.3.2-1.4-.3-.2-.6-.4Z"/></svg>
+<a class="rs-whatsapp-float" href="https://wa.me/<?php echo esc_attr( preg_replace('/[^0-9]/', '', $whatsapp_num) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
+    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/whatsapp-icon.png' ); ?>" alt="WhatsApp" width="58" height="58">
 </a>
 
 <?php wp_footer(); ?>

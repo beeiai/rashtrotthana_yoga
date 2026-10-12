@@ -30,20 +30,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const slides = Array.from(slideshow.querySelectorAll('.rs-hero-slide'));
   const dots = Array.from(slideshow.querySelectorAll('.rs-hero-slide-dots button'));
-  const interval = Number(slideshow.dataset.slideInterval) || 4000;
+  const interval = Number(slideshow.dataset.slideInterval) || 4500;
   let current = 0;
-  let timer;
+  let prevIndex = -1;
+  let timer = null;
+  let cleanupTimeout = null;
 
   function showSlide(index) {
-    current = (index + slides.length) % slides.length;
-    slides.forEach(function (slide, slideIndex) {
-      slide.classList.toggle('is-active', slideIndex === current);
+    const nextIndex = (index + slides.length) % slides.length;
+    if (nextIndex === current && prevIndex !== -1) return;
+
+    prevIndex = current;
+    current = nextIndex;
+
+    slides.forEach(function (slide, i) {
+      if (i === current) {
+        slide.classList.remove('is-previous');
+        slide.classList.add('is-active');
+      } else if (i === prevIndex) {
+        slide.classList.remove('is-active');
+        slide.classList.add('is-previous');
+      } else {
+        slide.classList.remove('is-active');
+        slide.classList.remove('is-previous');
+      }
     });
+
     dots.forEach(function (dot, dotIndex) {
       const active = dotIndex === current;
       dot.classList.toggle('is-active', active);
       dot.setAttribute('aria-current', active ? 'true' : 'false');
     });
+
+    if (cleanupTimeout) clearTimeout(cleanupTimeout);
+    cleanupTimeout = setTimeout(function () {
+      slides.forEach(function (slide, i) {
+        if (i !== current) {
+          slide.classList.remove('is-previous');
+        }
+      });
+    }, 1300);
   }
 
   function startSlideshow() {

@@ -16,7 +16,7 @@ function rashtrotthana_enqueue_assets() {
         'rashtrotthana-style',
         get_stylesheet_uri(),
         array(),
-        '1.0.8'
+        '1.1.0'
     );
 
     wp_enqueue_style(
@@ -39,7 +39,7 @@ function rashtrotthana_enqueue_assets() {
         'rashtrotthana-navigation',
         get_template_directory_uri() . '/assets/js/navigation.js',
         array(),
-        '1.0.1',
+        '1.0.2',
         true
     );
 
@@ -49,13 +49,13 @@ function rashtrotthana_enqueue_assets() {
             'rashtrotthana-homepage-effects',
             get_template_directory_uri() . '/assets/css/homepage-effects.css',
             array( 'rashtrotthana-style' ),
-            '2.0.2'
+            '2.0.3'
         );
         wp_enqueue_script(
             'rashtrotthana-homepage-effects',
             get_template_directory_uri() . '/assets/js/homepage-effects.js',
             array(),
-            '2.0.2',
+            '2.0.3',
             true
         );
     }

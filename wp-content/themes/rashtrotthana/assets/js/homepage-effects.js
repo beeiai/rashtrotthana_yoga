@@ -183,8 +183,9 @@
         (function step(now) {
           var elapsed = now - start;
           var p    = Math.min(elapsed / dur, 1);
-          var ease = 1 - Math.pow(2, -10 * p);
-          el.textContent = Math.round(ease * target).toLocaleString() + suffix;
+          var currentVal = Math.round(ease * target);
+          var noComma = target === 1972 || el.getAttribute('data-no-comma') === 'true' || (target >= 1900 && target <= 2099);
+          el.textContent = (noComma ? String(currentVal) : currentVal.toLocaleString()) + suffix;
           if (p < 1) requestAnimationFrame(step);
         })(performance.now());
       });
