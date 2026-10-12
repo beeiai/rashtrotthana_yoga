@@ -306,10 +306,13 @@ foreach ( $activity_categories as $cat ) {
 
 .rs-pillar-card .rs-pillar-title {
     margin: 0 0 .5rem;
-    font-size: 0.88rem !important;
+    font-size: clamp(1.15rem, 1.28vw, 1.3rem) !important;
     font-weight: 700;
     color: #542019;
     line-height: 1.25;
+    min-height: 2.6rem;
+    display: flex;
+    align-items: center;
 }
 
 .rs-pillar-desc {

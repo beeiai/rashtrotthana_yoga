@@ -134,16 +134,16 @@ $rs_home_activities = array(
         'link'  => home_url( '/activities/#fitness-sports' ),
     ),
     array(
-        'name'  => 'Music and dance',
-        'desc'  => 'Classical Carnatic vocal, instrumental music training, and expressive traditional dance forms.',
-        'image' => content_url( '/uploads/2026/10/Music.jpg' ),
-        'link'  => home_url( '/activities/#arts-music' ),
-    ),
-    array(
         'name'  => 'Karate',
         'desc'  => 'Martial arts discipline, self-defense technique, mental focus, and agility training for all ages.',
         'image' => content_url( '/uploads/2026/10/karate.jpg' ),
         'link'  => home_url( '/activities/#martial-arts' ),
+    ),
+    array(
+        'name'  => 'Music & Dance',
+        'desc'  => 'Classical Carnatic vocal, instrumental music training, and expressive traditional dance forms.',
+        'image' => content_url( '/uploads/2026/10/Music.jpg' ),
+        'link'  => home_url( '/activities/#arts-music' ),
     ),
 );
 

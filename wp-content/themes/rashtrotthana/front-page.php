@@ -425,19 +425,20 @@
     }
     .rs-homepage .rs-activity-card-body h3,
     .rs-homepage .rs-activity-card h3 {
-        font-size: 1.05rem !important;
+        font-size: clamp(1.15rem, 1.25vw, 1.28rem) !important;
         font-weight: 700 !important;
         color: #542019 !important;
         margin: 0 0 0.75rem !important;
-        height: 2.2rem !important;
-        min-height: 2.2rem !important;
-        max-height: 2.2rem !important;
+        height: 2.6rem !important;
+        min-height: 2.6rem !important;
+        max-height: 2.6rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
         line-height: 1.25 !important;
         width: 100% !important;
+        white-space: nowrap !important;
     }
     .rs-homepage .rs-activity-card-body p,
     .rs-homepage .rs-activity-card p {

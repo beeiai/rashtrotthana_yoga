@@ -303,24 +303,37 @@ function rs_get_activity_categories() {
 
     // Desired category display order matching Home page
     $order_map = array(
-        'yoga'        => 1,
-        'gym'         => 2,
-        'karate'      => 3,
-        'music-dance' => 4,
+        'yoga'           => 1,
+        'yoga-wellness'  => 1,
+        'gym'            => 2,
+        'fitness-sports' => 2,
+        'karate'         => 3,
+        'martial-arts'   => 3,
+        'music-dance'    => 4,
+        'arts-music'     => 4,
+        'dance'          => 5,
     );
 
     $fallback_images = array(
-        'yoga'        => content_url( '/uploads/2026/10/Yoga.jpg' ),
-        'gym'         => content_url( '/uploads/2026/10/GYM.webp' ),
-        'karate'      => content_url( '/uploads/2026/10/karate.jpg' ),
-        'music-dance' => content_url( '/uploads/2026/10/Music.jpg' ),
+        'yoga'           => content_url( '/uploads/2026/10/Yoga.jpg' ),
+        'yoga-wellness'  => content_url( '/uploads/2026/10/Yoga.jpg' ),
+        'gym'            => content_url( '/uploads/2026/10/GYM.webp' ),
+        'fitness-sports' => content_url( '/uploads/2026/10/GYM.webp' ),
+        'karate'         => content_url( '/uploads/2026/10/karate.jpg' ),
+        'martial-arts'   => content_url( '/uploads/2026/10/karate.jpg' ),
+        'music-dance'    => content_url( '/uploads/2026/10/Music.jpg' ),
+        'arts-music'     => content_url( '/uploads/2026/10/Music.jpg' ),
     );
 
     $fallback_taglines = array(
-        'yoga'        => 'Strength, Balance & Inner Peace',
-        'gym'         => 'Strength, Stamina & Peak Fitness',
-        'karate'      => 'Discipline, Agility & Self-Defence',
-        'music-dance' => 'Creativity, Harmony & Soul',
+        'yoga'           => 'Strength, Balance & Inner Peace',
+        'yoga-wellness'  => 'Strength, Balance & Inner Peace',
+        'gym'            => 'Strength, Stamina & Peak Fitness',
+        'fitness-sports' => 'Strength, Stamina & Peak Fitness',
+        'karate'         => 'Discipline, Agility & Self-Defence',
+        'martial-arts'   => 'Discipline, Agility & Self-Defence',
+        'music-dance'    => 'Creativity, Harmony & Soul',
+        'arts-music'     => 'Creativity, Harmony & Soul',
     );
 
     $categories = array();
