@@ -1779,3 +1779,172 @@ function radm_ajax_delete_inquiry(): void {
         wp_send_json_error( [ 'message' => 'Failed to remove inquiry.' ] );
     }
 }
+
+// ── Direct Image Upload (Custom In-Portal Local File Upload) ─────────────────
+add_action( 'wp_ajax_radm_direct_image_upload', 'radm_ajax_direct_image_upload' );
+function radm_ajax_direct_image_upload(): void {
+    radm_ajax_auth();
+
+    if ( empty( $_FILES['image_file'] ) || empty( $_FILES['image_file']['name'] ) ) {
+        wp_send_json_error( [ 'message' => 'No image file was received.' ], 400 );
+    }
+
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+
+    $attachment_id = media_handle_upload( 'image_file', 0 );
+    if ( is_wp_error( $attachment_id ) ) {
+        wp_send_json_error( [ 'message' => 'Upload failed: ' . $attachment_id->get_error_message() ], 400 );
+    }
+
+    $url       = wp_get_attachment_url( $attachment_id );
+    $thumb     = wp_get_attachment_image_url( $attachment_id, 'medium' ) ?: $url;
+    $file_path = get_attached_file( $attachment_id );
+    $filename  = $file_path ? basename( $file_path ) : '';
+
+    wp_send_json_success( [
+        'attachment_id' => $attachment_id,
+        'url'           => $url,
+        'thumb_url'     => $thumb,
+        'filename'      => $filename,
+        'message'       => 'Image uploaded successfully.',
+    ] );
+}
+
+// ── Query Database Images (Custom In-Portal Media Library Browser) ───────────
+add_action( 'wp_ajax_radm_get_db_images', 'radm_ajax_get_db_images' );
+function radm_ajax_get_db_images(): void {
+    radm_ajax_auth();
+
+    $search   = sanitize_text_field( $_POST['search'] ?? '' );
+    $page     = max( 1, absint( $_POST['page'] ?? 1 ) );
+    $per_page = max( 1, min( 60, absint( $_POST['per_page'] ?? 24 ) ) );
+
+    $query_args = [
+        'post_type'      => 'attachment',
+        'post_mime_type' => 'image',
+        'post_status'    => 'inherit',
+        'posts_per_page' => $per_page,
+        'paged'          => $page,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ];
+
+    if ( ! empty( $search ) ) {
+        $query_args['s'] = $search;
+    }
+
+    $q = new WP_Query( $query_args );
+
+    $items = [];
+    foreach ( $q->posts as $post ) {
+        $att_id   = $post->ID;
+        $url      = wp_get_attachment_url( $att_id );
+        $thumb    = wp_get_attachment_image_url( $att_id, 'thumbnail' ) ?: $url;
+        $meta     = wp_get_attachment_metadata( $att_id );
+        $file     = get_attached_file( $att_id );
+        $filename = $file ? basename( $file ) : ( $post->post_name ?: 'image' );
+        $dims     = '';
+        if ( ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
+            $dims = $meta['width'] . ' × ' . $meta['height'];
+        }
+
+        $items[] = [
+            'id'         => $att_id,
+            'title'      => $post->post_title ?: $filename,
+            'filename'   => $filename,
+            'url'        => $url,
+            'thumb'      => $thumb,
+            'dimensions' => $dims,
+            'date'       => get_the_date( 'M j, Y', $post ),
+        ];
+    }
+
+    wp_send_json_success( [
+        'items'       => $items,
+        'total'       => (int) $q->found_posts,
+        'page'        => $page,
+        'per_page'    => $per_page,
+        'total_pages' => (int) $q->max_num_pages,
+    ] );
+}
+
+// ── Check If Attachment is Used Elsewhere ────────────────────────────────────
+add_action( 'wp_ajax_radm_check_attachment_usage', 'radm_ajax_check_attachment_usage' );
+function radm_ajax_check_attachment_usage(): void {
+    radm_ajax_auth();
+
+    $att_id  = absint( $_POST['attachment_id'] ?? 0 );
+    $post_id = absint( $_POST['current_post_id'] ?? 0 );
+
+    if ( ! $att_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid attachment ID.' ], 400 );
+    }
+
+    global $wpdb;
+
+    // 1. Post thumbnail check in wp_postmeta
+    $thumb_count = (int) $wpdb->get_var( $wpdb->prepare(
+        "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = '_thumbnail_id' AND meta_value = %d AND post_id != %d",
+        $att_id, $post_id
+    ) );
+
+    // 2. Postmeta URL check
+    $att_url = wp_get_attachment_url( $att_id );
+    $meta_url_count = 0;
+    if ( $att_url ) {
+        $meta_url_count = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE (meta_value = %s OR meta_value LIKE %s) AND post_id != %d",
+            $att_url, '%' . $wpdb->esc_like( basename( $att_url ) ) . '%', $post_id
+        ) );
+    }
+
+    // 3. Post content check across posts
+    $content_count = 0;
+    $file_path = get_attached_file( $att_id );
+    $filename = $file_path ? basename( $file_path ) : '';
+    if ( $filename ) {
+        $content_count = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_content LIKE %s AND ID != %d AND post_status NOT IN ('trash', 'auto-draft')",
+            '%' . $wpdb->esc_like( $filename ) . '%', $post_id
+        ) );
+    }
+
+    // 4. Site icon or custom logo check
+    $is_site_logo = false;
+    $site_icon   = (int) get_option( 'site_icon' );
+    $custom_logo = (int) get_theme_mod( 'custom_logo' );
+    if ( $site_icon === $att_id || $custom_logo === $att_id ) {
+        $is_site_logo = true;
+    }
+
+    $total_usage = $thumb_count + $meta_url_count + $content_count + ( $is_site_logo ? 1 : 0 );
+
+    wp_send_json_success( [
+        'attachment_id' => $att_id,
+        'filename'      => $filename,
+        'url'           => $att_url,
+        'usage_count'   => $total_usage,
+        'is_used'       => ( $total_usage > 0 ),
+    ] );
+}
+
+// ── Delete Attachment Permanently ─────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_attachment', 'radm_ajax_delete_attachment' );
+function radm_ajax_delete_attachment(): void {
+    radm_ajax_auth();
+
+    $att_id = absint( $_POST['attachment_id'] ?? 0 );
+    if ( ! $att_id || get_post_type( $att_id ) !== 'attachment' ) {
+        wp_send_json_error( [ 'message' => 'Invalid attachment ID.' ], 400 );
+    }
+
+    $res = wp_delete_attachment( $att_id, true );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Unused image file deleted permanently from storage.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to delete attachment.' ], 500 );
+    }
+}
+

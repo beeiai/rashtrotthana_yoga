@@ -361,4 +361,113 @@ function radm_portal_footer(): void { ?>
         </div><!-- /.radm-content -->
     </main>
 </div><!-- /.radm-portal -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     UNIVERSAL IN-PORTAL MEDIA PICKER MODAL (NO WP.MEDIA)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-db-media-picker-modal" aria-hidden="true">
+    <div class="radm-modal radm-modal--media-picker">
+        <div class="radm-modal-header">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:34px; height:34px; border-radius:8px; background:rgba(46,125,50,0.12); display:flex; align-items:center; justify-content:center; color:#2E7D32;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="margin:0; font-size:16px; font-weight:700;">Select from Media Library</h3>
+                    <p style="margin:2px 0 0; font-size:12px; color:var(--radm-text-muted);">Choose an existing image or upload directly from your device</p>
+                </div>
+            </div>
+            <button type="button" class="radm-modal-close" onclick="radmCloseMediaPickerModal()" title="Close">✕</button>
+        </div>
+
+        <!-- Search Bar & Direct Local Upload Trigger -->
+        <div style="padding:12px 20px; background:#f8fafc; border-bottom:1px solid var(--radm-border); display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div style="position:relative; flex:1; min-width:220px;">
+                <input type="text" id="radm-media-picker-search" class="radm-input" placeholder="Search images by filename or title…" style="padding-left:36px; height:38px; width:100%; box-sizing:border-box;" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:12px; top:11px; color:var(--radm-text-muted); pointer-events:none;">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </div>
+            <button type="button" class="radm-btn radm-btn-primary" onclick="radmTriggerPickerUpload()" style="height:38px; display:inline-flex; align-items:center; gap:6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                + Upload from Local
+            </button>
+        </div>
+
+        <!-- Media Grid -->
+        <div class="radm-modal-body" id="radm-media-picker-grid-wrap" style="padding:16px 20px; overflow-y:auto; flex:1; min-height:280px;">
+            <div id="radm-media-picker-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(115px, 1fr)); gap:12px;"></div>
+            <div id="radm-media-picker-loading" style="display:none; text-align:center; padding:48px 20px; color:var(--radm-text-muted);">
+                <div style="font-size:14px; font-weight:600;">Loading Media Library…</div>
+            </div>
+            <div id="radm-media-picker-empty" style="display:none; text-align:center; padding:48px 20px; color:var(--radm-text-muted);">
+                <p style="margin:0; font-size:14px;">No images found matching your search.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="radm-modal-footer" style="padding:12px 20px; display:flex; justify-content:space-between; align-items:center;">
+            <div id="radm-media-picker-info" style="font-size:12.5px; color:var(--radm-text-muted); display:flex; align-items:center; gap:8px;">
+                <span>Click an image to select</span>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button type="button" class="radm-btn radm-btn-outline" onclick="radmCloseMediaPickerModal()">Cancel</button>
+                <button type="button" class="radm-btn radm-btn-primary" id="radm-media-picker-select-btn" disabled onclick="radmConfirmMediaPickerSelection()">
+                    Use Selected Image
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     MODAL: ORPHAN IMAGE DELETION CONFIRMATION
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-orphan-delete-modal" aria-hidden="true">
+    <div class="radm-modal radm-modal--sm" style="max-width:440px;">
+        <div class="radm-modal-header" style="border-bottom:1px solid var(--radm-border); padding:16px 20px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:34px; height:34px; border-radius:50%; background:#FEF3C7; color:#D97706; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:bold;">
+                    ⚠️
+                </div>
+                <div>
+                    <h3 style="margin:0; font-size:15px; font-weight:700; color:#B45309;">Unused Image Detected</h3>
+                    <p style="margin:1px 0 0; font-size:11.5px; color:var(--radm-text-muted);">Storage Cleanup Confirmation</p>
+                </div>
+            </div>
+            <button type="button" class="radm-modal-close" onclick="radmDismissOrphanModal()">✕</button>
+        </div>
+        <div class="radm-modal-body" style="padding:18px 20px;">
+            <p style="margin:0; font-size:13.5px; color:var(--radm-text); line-height:1.5;">
+                The previous image <strong id="radm-orphan-filename" style="word-break:break-all; color:#1e293b;"></strong> is <strong>not used anywhere else</strong> on your website.
+            </p>
+            <p style="margin:10px 0 0; font-size:12.5px; color:var(--radm-text-muted); line-height:1.5;">
+                Would you like to permanently delete this unused file from the server storage and database to free up disk space?
+            </p>
+        </div>
+        <div class="radm-modal-footer" style="padding:14px 20px; display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="radm-btn radm-btn-outline" id="radm-orphan-keep-btn" onclick="radmDismissOrphanModal()">
+                Keep in Library
+            </button>
+            <button type="button" class="radm-btn radm-btn-danger" id="radm-orphan-delete-btn" onclick="radmExecuteOrphanDelete()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/>
+                </svg>
+                Delete from Storage
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Universal File Input for Local Uploads -->
+<input type="file" id="radm-universal-file-input" accept="image/*" style="display:none;" onchange="radmHandleUniversalFileSelect(this)" />
 <?php }
+

@@ -2263,33 +2263,25 @@
 
         // WP Media Library Picker
         if ( gPickMediaBtn ) {
-            var mediaFrame;
             gPickMediaBtn.addEventListener( 'click', function ( e ) {
                 e.preventDefault();
                 e.stopPropagation();
-                if ( mediaFrame ) { mediaFrame.open(); return; }
-                if ( ! window.wp || ! window.wp.media ) {
-                    radmToast( 'WordPress Media Library is not available. Please use Browse Device or Image URL.', 'error' );
-                    return;
-                }
-                mediaFrame = window.wp.media( {
-                    title: 'Select or Upload Photo',
-                    button: { text: 'Use this photo' },
-                    multiple: false,
-                    library: { type: 'image' }
-                } );
-                mediaFrame.on( 'select', function () {
-                    var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
-                    if ( attachment && attachment.url ) {
-                        if ( gImageUrl ) gImageUrl.value = attachment.url;
-                        if ( gFileInput ) gFileInput.value = '';
-                        if ( gTitleInput && ! gTitleInput.value.trim() ) {
-                            gTitleInput.value = attachment.title || attachment.caption || attachment.filename || '';
+                window.radmOpenDbMediaPicker(
+                    'radm-gimage-url',
+                    null,
+                    'radm-gpreview-wrap',
+                    null,
+                    function ( attachment ) {
+                        if ( attachment && attachment.url ) {
+                            if ( gImageUrl ) gImageUrl.value = attachment.url;
+                            if ( gFileInput ) gFileInput.value = '';
+                            if ( gTitleInput && ! gTitleInput.value.trim() ) {
+                                gTitleInput.value = attachment.title || attachment.caption || attachment.filename || '';
+                            }
+                            setPreviewImage( attachment.url );
                         }
-                        setPreviewImage( attachment.url );
                     }
-                } );
-                mediaFrame.open();
+                );
             } );
         }
 
@@ -3027,35 +3019,23 @@
         var saveOrgBtn     = document.getElementById( 'radm-save-org-btn' );
         var saveOrgText    = document.getElementById( 'radm-save-org-text' );
 
-        // WP Media Uploader for Logo
+        // In-Portal Media Picker for Logo
         if ( changeLogoBtn ) {
             changeLogoBtn.addEventListener( 'click', function ( e ) {
                 e.preventDefault();
-                if ( typeof wp !== 'undefined' && wp.media ) {
-                    var mediaFrame = wp.media( {
-                        title: 'Select or Upload Organization Logo',
-                        button: { text: 'Use this logo' },
-                        multiple: false,
-                        library: { type: 'image' }
-                    } );
-
-                    mediaFrame.on( 'select', function () {
-                        var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
+                window.radmOpenDbMediaPicker(
+                    'radm-org-logo-url',
+                    null,
+                    null,
+                    null,
+                    function ( attachment ) {
                         if ( attachment && attachment.url ) {
                             if ( orgLogoInput ) orgLogoInput.value = attachment.url;
                             if ( orgLogoImg ) orgLogoImg.src = attachment.url;
                             radmToast( 'Logo selected. Click "Save Changes" to apply.', 'success' );
                         }
-                    } );
-
-                    mediaFrame.open();
-                } else {
-                    var manualUrl = prompt( 'Enter Logo Image URL:', orgLogoInput ? orgLogoInput.value : '' );
-                    if ( manualUrl ) {
-                        if ( orgLogoInput ) orgLogoInput.value = manualUrl;
-                        if ( orgLogoImg ) orgLogoImg.src = manualUrl;
                     }
-                }
+                );
             } );
         }
 
@@ -3342,10 +3322,381 @@
             if ( typeof closeCreateUserModal === 'function' ) closeCreateUserModal();
             if ( typeof closeCenterModal === 'function' ) closeCenterModal();
             if ( typeof closeDeleteCenterModal === 'function' ) closeDeleteCenterModal();
+            if ( typeof radmCloseMediaPickerModal === 'function' ) radmCloseMediaPickerModal();
+            if ( typeof radmDismissOrphanModal === 'function' ) radmDismissOrphanModal();
         }
     } );
 
+    /* ══════════════════════════════════════════════════════════════════════════
+       UNIVERSAL IN-PORTAL MEDIA PICKER & ORPHAN DELETION CONTROLLER
+       ══════════════════════════════════════════════════════════════════════════ */
+    window.radmMediaPickerState = {
+        targetUrlId: null,
+        targetAttId: null,
+        targetPrevId: null,
+        targetOldAttId: null,
+        onSelectCallback: null,
+        selectedItem: null,
+        items: [],
+        page: 1,
+        search: ''
+    };
+
+    window.radmOrphanState = {
+        attachmentId: 0,
+        filename: '',
+        onComplete: null
+    };
+
+    window.radmOpenDbMediaPicker = function(urlInputId, attInputId, previewId, oldAttInputId, onSelectCallback) {
+        window.radmMediaPickerState.targetUrlId       = urlInputId;
+        window.radmMediaPickerState.targetAttId       = attInputId;
+        window.radmMediaPickerState.targetPrevId      = previewId;
+        window.radmMediaPickerState.targetOldAttId    = oldAttInputId;
+        window.radmMediaPickerState.onSelectCallback  = onSelectCallback || null;
+        window.radmMediaPickerState.selectedItem      = null;
+
+        var modal = document.getElementById('radm-db-media-picker-modal');
+        if (!modal) return;
+
+        var selectBtn = document.getElementById('radm-media-picker-select-btn');
+        if (selectBtn) selectBtn.disabled = true;
+
+        var infoEl = document.getElementById('radm-media-picker-info');
+        if (infoEl) infoEl.innerHTML = '<span>Click an image to select</span>';
+
+        modal.classList.add('radm-modal-open');
+        modal.setAttribute('aria-hidden', 'false');
+
+        radmLoadDbMediaItems('');
+    };
+
+    window.radmCloseMediaPickerModal = function() {
+        var modal = document.getElementById('radm-db-media-picker-modal');
+        if (modal) {
+            modal.classList.remove('radm-modal-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+    };
+
+    window.radmTriggerPickerUpload = function() {
+        var fileIn = document.getElementById('radm-universal-file-input');
+        if (fileIn) {
+            fileIn.value = '';
+            fileIn.click();
+        }
+    };
+
+    window.radmUploadFromLocal = function(urlInputId, attInputId, previewId, oldAttInputId, onSelectCallback) {
+        window.radmMediaPickerState.targetUrlId       = urlInputId;
+        window.radmMediaPickerState.targetAttId       = attInputId;
+        window.radmMediaPickerState.targetPrevId      = previewId;
+        window.radmMediaPickerState.targetOldAttId    = oldAttInputId;
+        window.radmMediaPickerState.onSelectCallback  = onSelectCallback || null;
+
+        var fileIn = document.getElementById('radm-universal-file-input');
+        if (fileIn) {
+            fileIn.value = '';
+            fileIn.click();
+        }
+    };
+
+    window.radmHandleUniversalFileSelect = function(fileInput) {
+        if (!fileInput.files || !fileInput.files[0]) return;
+        var file = fileInput.files[0];
+
+        radmToast('Uploading image directly to database…', 'info');
+
+        var fd = new FormData();
+        fd.append('action', 'radm_direct_image_upload');
+        fd.append('image_file', file);
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (res.success && res.data) {
+                radmToast('Image uploaded and registered in database!', 'success');
+                var data = res.data;
+
+                // Apply to targeted form fields
+                radmApplySelectedMedia({
+                    id: data.attachment_id,
+                    url: data.url,
+                    thumb: data.thumb_url || data.url,
+                    filename: data.filename,
+                    title: data.filename
+                });
+
+                // If media picker modal is open, refresh grid
+                var modal = document.getElementById('radm-db-media-picker-modal');
+                if (modal && modal.classList.contains('radm-modal-open')) {
+                    radmLoadDbMediaItems('');
+                }
+            } else {
+                radmToast((res.data && res.data.message) || 'Image upload failed.', 'error');
+            }
+        })
+        .catch(function() {
+            radmToast('Network error during image upload.', 'error');
+        });
+    };
+
+    function radmLoadDbMediaItems(searchQuery) {
+        var grid = document.getElementById('radm-media-picker-grid');
+        var loading = document.getElementById('radm-media-picker-loading');
+        var empty = document.getElementById('radm-media-picker-empty');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+        if (loading) loading.style.display = 'block';
+        if (empty) empty.style.display = 'none';
+
+        var fd = new FormData();
+        fd.append('action', 'radm_get_db_images');
+        fd.append('search', searchQuery || '');
+        fd.append('per_page', '36');
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (loading) loading.style.display = 'none';
+            if (res.success && res.data && res.data.items) {
+                var items = res.data.items;
+                window.radmMediaPickerState.items = items;
+
+                if (!items.length) {
+                    if (empty) empty.style.display = 'block';
+                    return;
+                }
+
+                items.forEach(function(item) {
+                    var el = document.createElement('div');
+                    el.className = 'radm-media-grid-item';
+                    el.setAttribute('data-id', item.id);
+                    el.innerHTML =
+                        '<img class="radm-grid-thumb" src="' + escAttr(item.thumb || item.url) + '" alt="' + escAttr(item.title) + '" loading="lazy" />' +
+                        '<div class="radm-grid-title" title="' + escAttr(item.title || item.filename) + '">' + escHtml(item.title || item.filename) + '</div>' +
+                        '<div class="radm-grid-check">✓</div>';
+
+                    el.addEventListener('click', function() {
+                        document.querySelectorAll('.radm-media-grid-item').forEach(function(c) {
+                            c.classList.remove('is-selected');
+                        });
+                        el.classList.add('is-selected');
+                        window.radmMediaPickerState.selectedItem = item;
+
+                        var selectBtn = document.getElementById('radm-media-picker-select-btn');
+                        if (selectBtn) selectBtn.disabled = false;
+
+                        var infoEl = document.getElementById('radm-media-picker-info');
+                        if (infoEl) {
+                            infoEl.innerHTML = '<strong>' + escHtml(item.filename) + '</strong> ' + (item.dimensions ? '<span>(' + escHtml(item.dimensions) + ')</span>' : '');
+                        }
+                    });
+
+                    // Double click to instantly select and confirm
+                    el.addEventListener('dblclick', function() {
+                        window.radmMediaPickerState.selectedItem = item;
+                        radmConfirmMediaPickerSelection();
+                    });
+
+                    grid.appendChild(el);
+                });
+            } else {
+                if (empty) empty.style.display = 'block';
+            }
+        })
+        .catch(function() {
+            if (loading) loading.style.display = 'none';
+            if (empty) empty.style.display = 'block';
+        });
+    }
+
+    var pickerSearchInput = document.getElementById('radm-media-picker-search');
+    if (pickerSearchInput) {
+        var pTimer = null;
+        pickerSearchInput.addEventListener('input', function() {
+            clearTimeout(pTimer);
+            var q = this.value;
+            pTimer = setTimeout(function() {
+                radmLoadDbMediaItems(q);
+            }, 300);
+        });
+    }
+
+    window.radmConfirmMediaPickerSelection = function() {
+        var item = window.radmMediaPickerState.selectedItem;
+        if (!item) return;
+
+        radmApplySelectedMedia(item);
+        radmCloseMediaPickerModal();
+    };
+
+    function radmApplySelectedMedia(item) {
+        var state = window.radmMediaPickerState;
+
+        if (state.targetUrlId) {
+            var urlIn = document.getElementById(state.targetUrlId);
+            if (urlIn) urlIn.value = item.url;
+        }
+
+        if (state.targetAttId) {
+            var attIn = document.getElementById(state.targetAttId);
+            if (attIn) attIn.value = item.id;
+        }
+
+        if (state.targetPrevId) {
+            var prevWrap = document.getElementById(state.targetPrevId);
+            if (prevWrap) {
+                prevWrap.style.display = 'flex';
+                var img = prevWrap.querySelector('img');
+                if (img) img.src = item.url;
+                var nameEl = prevWrap.querySelector('.radm-image-preview-name');
+                if (nameEl) nameEl.textContent = item.filename || item.title || 'Selected Image';
+                var urlEl = prevWrap.querySelector('.radm-image-preview-url');
+                if (urlEl) urlEl.textContent = item.url;
+            }
+        }
+
+        if (typeof state.onSelectCallback === 'function') {
+            state.onSelectCallback(item);
+        }
+    }
+
+    window.radmClearSelectedImage = function(urlInputId, attInputId, previewId) {
+        if (urlInputId) {
+            var u = document.getElementById(urlInputId);
+            if (u) u.value = '';
+        }
+        if (attInputId) {
+            var a = document.getElementById(attInputId);
+            if (a) a.value = '0';
+        }
+        if (previewId) {
+            var p = document.getElementById(previewId);
+            if (p) p.style.display = 'none';
+        }
+    };
+
+    // ── Orphan Image Detection and Cleanup Prompt ──────────────────────────────
+    window.radmCheckAndPromptOrphan = function(oldAttId, currentPostId, callback) {
+        oldAttId = parseInt(oldAttId, 10) || 0;
+        currentPostId = parseInt(currentPostId, 10) || 0;
+
+        if (!oldAttId || oldAttId <= 0) {
+            if (typeof callback === 'function') callback();
+            return;
+        }
+
+        var fd = new FormData();
+        fd.append('action', 'radm_check_attachment_usage');
+        fd.append('attachment_id', oldAttId);
+        fd.append('current_post_id', currentPostId);
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (res.success && res.data && !res.data.is_used) {
+                // Image is completely unused anywhere else! Prompt for deletion
+                window.radmOrphanState.attachmentId = oldAttId;
+                window.radmOrphanState.filename     = res.data.filename || ('image #' + oldAttId);
+                window.radmOrphanState.onComplete   = callback;
+
+                var fNameEl = document.getElementById('radm-orphan-filename');
+                if (fNameEl) fNameEl.textContent = window.radmOrphanState.filename;
+
+                var modal = document.getElementById('radm-orphan-delete-modal');
+                if (modal) {
+                    modal.classList.add('radm-modal-open');
+                    modal.setAttribute('aria-hidden', 'false');
+                }
+            } else {
+                // In use elsewhere or check failed; safely proceed
+                if (typeof callback === 'function') callback();
+            }
+        })
+        .catch(function() {
+            if (typeof callback === 'function') callback();
+        });
+    };
+
+    window.radmDismissOrphanModal = function() {
+        var modal = document.getElementById('radm-orphan-delete-modal');
+        if (modal) {
+            modal.classList.remove('radm-modal-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+        if (typeof window.radmOrphanState.onComplete === 'function') {
+            window.radmOrphanState.onComplete();
+        }
+    };
+
+    window.radmExecuteOrphanDelete = function() {
+        var attId = window.radmOrphanState.attachmentId;
+        var btn = document.getElementById('radm-orphan-delete-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Deleting…';
+        }
+
+        var fd = new FormData();
+        fd.append('action', 'radm_delete_attachment');
+        fd.append('attachment_id', attId);
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Delete from Storage';
+            }
+            radmToast('Unused previous image deleted from server storage.', 'success');
+            radmDismissOrphanModal();
+        })
+        .catch(function() {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Delete from Storage';
+            }
+            radmDismissOrphanModal();
+        });
+    };
+
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escAttr(str) {
+        if (!str) return '';
+        return String(str).replace(/"/g, '&quot;');
+    }
+
 } )();
+
 
 
 

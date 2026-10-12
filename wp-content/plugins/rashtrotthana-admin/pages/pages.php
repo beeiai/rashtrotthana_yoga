@@ -133,6 +133,7 @@ $centers_query = new WP_Query( [
                         $fb_url  = get_post_meta( $cid, 'facebook_url', true ) ?: '';
                         $lt_url  = get_post_meta( $cid, 'linktree_url', true ) ?: '';
                         $img     = get_the_post_thumbnail_url( $cid, 'medium' ) ?: ( get_post_meta( $cid, '_ry_image_url', true ) ?: '' );
+                        $att_id  = (int) get_post_thumbnail_id( $cid );
                         $status  = get_post_status( $cid );
                         $status_label = $status === 'publish' ? 'Published' : 'Draft';
                         $status_class = $status === 'publish' ? 'radm-badge--green' : 'radm-badge--orange';
@@ -208,6 +209,7 @@ $centers_query = new WP_Query( [
                                         'facebook_url'  => $fb_url,
                                         'linktree_url'  => $lt_url,
                                         'image_url'     => $img,
+                                        'attachment_id' => $att_id,
                                         'status'        => $status,
                                     ] ); ?>)'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -215,7 +217,7 @@ $centers_query = new WP_Query( [
                                 </svg>
                             </button>
                             <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Center"
-                                    onclick="radmPromptDelete(<?php echo esc_attr( $cid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'center')">
+                                    onclick="radmPromptDelete(<?php echo esc_attr( $cid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'center', <?php echo esc_attr( $att_id ); ?>)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
@@ -317,6 +319,7 @@ $categories = get_terms( [
                         $centers = get_post_meta( $aid, 'centers_text', true ) ?: '';
                         $content = get_the_content();
                         $img     = get_the_post_thumbnail_url( $aid, 'medium' ) ?: ( get_post_meta( $aid, '_ry_image_url', true ) ?: '' );
+                        $att_id  = (int) get_post_thumbnail_id( $aid );
                         $terms   = get_the_terms( $aid, 'activity_category' );
                         $cat_name = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->name : 'General';
                         $cat_slug = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->slug : '';
@@ -375,6 +378,7 @@ $categories = get_terms( [
                                         'eligibility_text' => $elig,
                                         'centers_text'     => $centers,
                                         'image_url'        => $img,
+                                        'attachment_id'    => $att_id,
                                         'status'           => $status,
                                     ] ); ?>)'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -382,7 +386,7 @@ $categories = get_terms( [
                                 </svg>
                             </button>
                             <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Activity"
-                                    onclick="radmPromptDelete(<?php echo esc_attr( $aid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'activity')">
+                                    onclick="radmPromptDelete(<?php echo esc_attr( $aid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'activity', <?php echo esc_attr( $att_id ); ?>)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
@@ -586,7 +590,8 @@ $news_query = new WP_Query( [
                         $author  = get_the_author();
                         $content = get_the_content();
                         $excerpt = get_the_excerpt();
-                        $img     = get_the_post_thumbnail_url( $nid, 'medium' ) ?: '';
+                        $img     = get_the_post_thumbnail_url( $nid, 'medium' ) ?: ( get_post_meta( $nid, '_ry_image_url', true ) ?: '' );
+                        $att_id  = (int) get_post_thumbnail_id( $nid );
                         $status  = get_post_status( $nid );
                 ?>
                 <tr class="radm-news-row" data-title="<?php echo esc_attr( strtolower( $title ) ); ?>" id="news-row-<?php echo esc_attr( $nid ); ?>">
@@ -621,19 +626,20 @@ $news_query = new WP_Query( [
                         <div class="radm-action-group" style="justify-content:flex-end;">
                             <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="Edit Article"
                                     onclick='radmEditNews(<?php echo wp_json_encode( [
-                                        'id'        => $nid,
-                                        'title'     => $title,
-                                        'content'   => $content,
-                                        'excerpt'   => $excerpt,
-                                        'image_url' => $img,
-                                        'status'    => $status,
+                                        'id'            => $nid,
+                                        'title'         => $title,
+                                        'content'       => $content,
+                                        'excerpt'       => $excerpt,
+                                        'image_url'     => $img,
+                                        'attachment_id' => $att_id,
+                                        'status'        => $status,
                                     ] ); ?>)'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
                             </button>
                             <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Article"
-                                    onclick="radmPromptDelete(<?php echo esc_attr( $nid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'post')">
+                                    onclick="radmPromptDelete(<?php echo esc_attr( $nid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'post', <?php echo esc_attr( $att_id ); ?>)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
@@ -775,6 +781,7 @@ $inq_query = new WP_Query( [
         <form id="radm-center-form" onsubmit="radmSubmitCenter(event)">
             <input type="hidden" id="center-id" name="post_id" value="0" />
             <input type="hidden" id="center-attachment-id" name="attachment_id" value="0" />
+            <input type="hidden" id="center-old-attachment-id" name="old_attachment_id" value="0" />
             
             <div class="radm-modal-body" style="padding:22px 24px; overflow-y:auto; max-height:70vh; display:flex; flex-direction:column; gap:16px;">
                 <div class="radm-form-group">
@@ -838,14 +845,26 @@ $inq_query = new WP_Query( [
                 <!-- Center Image Selection -->
                 <div class="radm-form-group">
                     <label class="radm-label">Featured Image</label>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="text" id="center-image-url" name="image_url" class="radm-input" placeholder="Image URL or choose from library…" style="flex:1;" />
-                        <button type="button" class="radm-btn radm-btn-outline" onclick="radmPickMedia('center-image-url', 'center-attachment-id', 'center-img-preview')">
-                            Choose Image
-                        </button>
-                    </div>
-                    <div id="center-img-preview" style="margin-top:8px; display:none;">
-                        <img src="" style="max-height:90px; border-radius:6px; border:1px solid var(--radm-border);" />
+                    <input type="hidden" id="center-image-url" name="image_url" value="" />
+                    <div class="radm-image-selector-wrap" id="center-image-picker-box">
+                        <div id="center-img-preview" class="radm-image-preview-card" style="display:none;">
+                            <img src="" alt="Center Preview" />
+                            <div class="radm-image-preview-details">
+                                <div class="radm-image-preview-name">Selected Center Image</div>
+                                <div class="radm-image-preview-url"></div>
+                            </div>
+                            <button type="button" class="radm-btn-remove-img" onclick="radmClearSelectedImage('center-image-url', 'center-attachment-id', 'center-img-preview')">✕ Remove</button>
+                        </div>
+                        <div class="radm-image-action-buttons">
+                            <button type="button" class="radm-btn radm-btn-primary" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmUploadFromLocal('center-image-url', 'center-attachment-id', 'center-img-preview', 'center-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Upload from Local
+                            </button>
+                            <button type="button" class="radm-btn radm-btn-outline" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmOpenDbMediaPicker('center-image-url', 'center-attachment-id', 'center-img-preview', 'center-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                Choose from Database
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -878,6 +897,7 @@ $inq_query = new WP_Query( [
         <form id="radm-activity-form" onsubmit="radmSubmitActivity(event)">
             <input type="hidden" id="act-id" name="post_id" value="0" />
             <input type="hidden" id="act-attachment-id" name="attachment_id" value="0" />
+            <input type="hidden" id="act-old-attachment-id" name="old_attachment_id" value="0" />
 
             <div class="radm-modal-body" style="padding:22px 24px; overflow-y:auto; max-height:70vh; display:flex; flex-direction:column; gap:16px;">
                 <div class="radm-form-group">
@@ -937,14 +957,26 @@ $inq_query = new WP_Query( [
                 <!-- Activity Image Selection -->
                 <div class="radm-form-group">
                     <label class="radm-label">Featured Image</label>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="text" id="act-image-url" name="image_url" class="radm-input" placeholder="Image URL or select from library…" style="flex:1;" />
-                        <button type="button" class="radm-btn radm-btn-outline" onclick="radmPickMedia('act-image-url', 'act-attachment-id', 'act-img-preview')">
-                            Choose Image
-                        </button>
-                    </div>
-                    <div id="act-img-preview" style="margin-top:8px; display:none;">
-                        <img src="" style="max-height:90px; border-radius:6px; border:1px solid var(--radm-border);" />
+                    <input type="hidden" id="act-image-url" name="image_url" value="" />
+                    <div class="radm-image-selector-wrap" id="act-image-picker-box">
+                        <div id="act-img-preview" class="radm-image-preview-card" style="display:none;">
+                            <img src="" alt="Activity Preview" />
+                            <div class="radm-image-preview-details">
+                                <div class="radm-image-preview-name">Selected Activity Image</div>
+                                <div class="radm-image-preview-url"></div>
+                            </div>
+                            <button type="button" class="radm-btn-remove-img" onclick="radmClearSelectedImage('act-image-url', 'act-attachment-id', 'act-img-preview')">✕ Remove</button>
+                        </div>
+                        <div class="radm-image-action-buttons">
+                            <button type="button" class="radm-btn radm-btn-primary" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmUploadFromLocal('act-image-url', 'act-attachment-id', 'act-img-preview', 'act-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Upload from Local
+                            </button>
+                            <button type="button" class="radm-btn radm-btn-outline" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmOpenDbMediaPicker('act-image-url', 'act-attachment-id', 'act-img-preview', 'act-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                Choose from Database
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -977,6 +1009,7 @@ $inq_query = new WP_Query( [
         <form id="radm-news-form" onsubmit="radmSubmitNews(event)">
             <input type="hidden" id="news-id" name="post_id" value="0" />
             <input type="hidden" id="news-attachment-id" name="attachment_id" value="0" />
+            <input type="hidden" id="news-old-attachment-id" name="old_attachment_id" value="0" />
 
             <div class="radm-modal-body" style="padding:22px 24px; overflow-y:auto; max-height:70vh; display:flex; flex-direction:column; gap:16px;">
                 <div class="radm-form-group">
@@ -994,16 +1027,29 @@ $inq_query = new WP_Query( [
                     <textarea id="news-content" name="content" class="radm-textarea" rows="6" placeholder="Full announcement or press release body…"></textarea>
                 </div>
 
+                <!-- News Image Selection -->
                 <div class="radm-form-group">
                     <label class="radm-label">Featured Image</label>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="text" id="news-image-url" name="image_url" class="radm-input" placeholder="Image URL or choose from library…" style="flex:1;" />
-                        <button type="button" class="radm-btn radm-btn-outline" onclick="radmPickMedia('news-image-url', 'news-attachment-id', 'news-img-preview')">
-                            Choose Image
-                        </button>
-                    </div>
-                    <div id="news-img-preview" style="margin-top:8px; display:none;">
-                        <img src="" style="max-height:90px; border-radius:6px; border:1px solid var(--radm-border);" />
+                    <input type="hidden" id="news-image-url" name="image_url" value="" />
+                    <div class="radm-image-selector-wrap" id="news-image-picker-box">
+                        <div id="news-img-preview" class="radm-image-preview-card" style="display:none;">
+                            <img src="" alt="News Preview" />
+                            <div class="radm-image-preview-details">
+                                <div class="radm-image-preview-name">Selected News Image</div>
+                                <div class="radm-image-preview-url"></div>
+                            </div>
+                            <button type="button" class="radm-btn-remove-img" onclick="radmClearSelectedImage('news-image-url', 'news-attachment-id', 'news-img-preview')">✕ Remove</button>
+                        </div>
+                        <div class="radm-image-action-buttons">
+                            <button type="button" class="radm-btn radm-btn-primary" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmUploadFromLocal('news-image-url', 'news-attachment-id', 'news-img-preview', 'news-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Upload from Local
+                            </button>
+                            <button type="button" class="radm-btn radm-btn-outline" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmOpenDbMediaPicker('news-image-url', 'news-attachment-id', 'news-img-preview', 'news-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                Choose from Database
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1185,33 +1231,10 @@ $inq_query = new WP_Query( [
         });
     };
 
+    // Forward radmPickMedia to custom in-portal media picker (No wp.media)
     window.radmPickMedia = function(urlInputId, attachmentInputId, previewId) {
-        if (typeof wp !== 'undefined' && wp.media) {
-            var frame = wp.media({
-                title: 'Select or Upload Image',
-                button: { text: 'Use this image' },
-                multiple: false
-            });
-            frame.on('select', function() {
-                var att = frame.state().get('selection').first().toJSON();
-                var urlInput = document.getElementById(urlInputId);
-                var attInput = document.getElementById(attachmentInputId);
-                var prevWrap = document.getElementById(previewId);
-                if (urlInput) urlInput.value = att.url;
-                if (attInput) attInput.value = att.id;
-                if (prevWrap) {
-                    prevWrap.style.display = 'block';
-                    var img = prevWrap.querySelector('img');
-                    if (img) img.src = att.url;
-                }
-            });
-            frame.open();
-        } else {
-            var url = prompt('Enter Image URL:');
-            if (url) {
-                var uIn = document.getElementById(urlInputId);
-                if (uIn) uIn.value = url;
-            }
+        if (typeof window.radmOpenDbMediaPicker === 'function') {
+            window.radmOpenDbMediaPicker(urlInputId, attachmentInputId, previewId, null);
         }
     };
 
@@ -1220,6 +1243,8 @@ $inq_query = new WP_Query( [
         document.getElementById('radm-center-form').reset();
         document.getElementById('center-id').value = '0';
         document.getElementById('center-attachment-id').value = '0';
+        document.getElementById('center-old-attachment-id').value = '0';
+        document.getElementById('center-image-url').value = '';
         document.getElementById('radm-center-modal-title').textContent = 'Add New Center';
         var prev = document.getElementById('center-img-preview');
         if (prev) prev.style.display = 'none';
@@ -1239,13 +1264,18 @@ $inq_query = new WP_Query( [
         document.getElementById('center-ig').value = data.instagram_url || '';
         document.getElementById('center-fb').value = data.facebook_url || '';
         document.getElementById('center-image-url').value = data.image_url || '';
+        document.getElementById('center-attachment-id').value = data.attachment_id || '0';
+        document.getElementById('center-old-attachment-id').value = data.attachment_id || '0';
         document.getElementById('center-status').value = data.status || 'publish';
 
         var prev = document.getElementById('center-img-preview');
         if (prev) {
             if (data.image_url) {
-                prev.style.display = 'block';
-                prev.querySelector('img').src = data.image_url;
+                prev.style.display = 'flex';
+                var img = prev.querySelector('img');
+                if (img) img.src = data.image_url;
+                var urlEl = prev.querySelector('.radm-image-preview-url');
+                if (urlEl) urlEl.textContent = data.image_url;
             } else {
                 prev.style.display = 'none';
             }
@@ -1260,6 +1290,9 @@ $inq_query = new WP_Query( [
         btn.disabled = true;
         btn.textContent = 'Saving…';
 
+        var oldAtt = parseInt(document.getElementById('center-old-attachment-id').value, 10) || 0;
+        var newAtt = parseInt(document.getElementById('center-attachment-id').value, 10) || 0;
+
         var fd = new FormData(document.getElementById('radm-center-form'));
         fd.append('action', 'radm_save_content_center');
         fd.append('nonce', nonce);
@@ -1270,8 +1303,19 @@ $inq_query = new WP_Query( [
                 btn.disabled = false;
                 btn.textContent = 'Save Center';
                 if (res.success) {
-                    alert(res.data.message || 'Center saved successfully!');
-                    window.location.reload();
+                    var savedId = res.data.id || 0;
+                    radmCloseModals();
+
+                    // Check if previous image was changed and is now an orphan
+                    if (oldAtt > 0 && oldAtt !== newAtt && typeof window.radmCheckAndPromptOrphan === 'function') {
+                        window.radmCheckAndPromptOrphan(oldAtt, savedId, function() {
+                            alert(res.data.message || 'Center saved successfully!');
+                            window.location.reload();
+                        });
+                    } else {
+                        alert(res.data.message || 'Center saved successfully!');
+                        window.location.reload();
+                    }
                 } else {
                     alert(res.data.message || 'Error saving center.');
                 }
@@ -1288,6 +1332,8 @@ $inq_query = new WP_Query( [
         document.getElementById('radm-activity-form').reset();
         document.getElementById('act-id').value = '0';
         document.getElementById('act-attachment-id').value = '0';
+        document.getElementById('act-old-attachment-id').value = '0';
+        document.getElementById('act-image-url').value = '';
         document.getElementById('radm-activity-modal-title').textContent = 'Add New Activity';
         var prev = document.getElementById('act-img-preview');
         if (prev) prev.style.display = 'none';
@@ -1306,13 +1352,18 @@ $inq_query = new WP_Query( [
         document.getElementById('act-eligibility').value = data.eligibility_text || '';
         document.getElementById('act-centers').value = data.centers_text || '';
         document.getElementById('act-image-url').value = data.image_url || '';
+        document.getElementById('act-attachment-id').value = data.attachment_id || '0';
+        document.getElementById('act-old-attachment-id').value = data.attachment_id || '0';
         document.getElementById('act-status').value = data.status || 'publish';
 
         var prev = document.getElementById('act-img-preview');
         if (prev) {
             if (data.image_url) {
-                prev.style.display = 'block';
-                prev.querySelector('img').src = data.image_url;
+                prev.style.display = 'flex';
+                var img = prev.querySelector('img');
+                if (img) img.src = data.image_url;
+                var urlEl = prev.querySelector('.radm-image-preview-url');
+                if (urlEl) urlEl.textContent = data.image_url;
             } else {
                 prev.style.display = 'none';
             }
@@ -1327,6 +1378,9 @@ $inq_query = new WP_Query( [
         btn.disabled = true;
         btn.textContent = 'Saving…';
 
+        var oldAtt = parseInt(document.getElementById('act-old-attachment-id').value, 10) || 0;
+        var newAtt = parseInt(document.getElementById('act-attachment-id').value, 10) || 0;
+
         var fd = new FormData(document.getElementById('radm-activity-form'));
         fd.append('action', 'radm_save_activity');
         fd.append('nonce', nonce);
@@ -1337,8 +1391,19 @@ $inq_query = new WP_Query( [
                 btn.disabled = false;
                 btn.textContent = 'Save Activity';
                 if (res.success) {
-                    alert(res.data.message || 'Activity saved successfully!');
-                    window.location.reload();
+                    var savedId = res.data.id || 0;
+                    radmCloseModals();
+
+                    // Check if previous image was changed and is now an orphan
+                    if (oldAtt > 0 && oldAtt !== newAtt && typeof window.radmCheckAndPromptOrphan === 'function') {
+                        window.radmCheckAndPromptOrphan(oldAtt, savedId, function() {
+                            alert(res.data.message || 'Activity saved successfully!');
+                            window.location.reload();
+                        });
+                    } else {
+                        alert(res.data.message || 'Activity saved successfully!');
+                        window.location.reload();
+                    }
                 } else {
                     alert(res.data.message || 'Error saving activity.');
                 }
@@ -1355,6 +1420,8 @@ $inq_query = new WP_Query( [
         document.getElementById('radm-news-form').reset();
         document.getElementById('news-id').value = '0';
         document.getElementById('news-attachment-id').value = '0';
+        document.getElementById('news-old-attachment-id').value = '0';
+        document.getElementById('news-image-url').value = '';
         document.getElementById('radm-news-modal-title').textContent = 'Add News Article';
         var prev = document.getElementById('news-img-preview');
         if (prev) prev.style.display = 'none';
@@ -1367,13 +1434,18 @@ $inq_query = new WP_Query( [
         document.getElementById('news-excerpt').value = data.excerpt || '';
         document.getElementById('news-content').value = data.content || '';
         document.getElementById('news-image-url').value = data.image_url || '';
+        document.getElementById('news-attachment-id').value = data.attachment_id || '0';
+        document.getElementById('news-old-attachment-id').value = data.attachment_id || '0';
         document.getElementById('news-status').value = data.status || 'publish';
 
         var prev = document.getElementById('news-img-preview');
         if (prev) {
             if (data.image_url) {
-                prev.style.display = 'block';
-                prev.querySelector('img').src = data.image_url;
+                prev.style.display = 'flex';
+                var img = prev.querySelector('img');
+                if (img) img.src = data.image_url;
+                var urlEl = prev.querySelector('.radm-image-preview-url');
+                if (urlEl) urlEl.textContent = data.image_url;
             } else {
                 prev.style.display = 'none';
             }
@@ -1388,6 +1460,9 @@ $inq_query = new WP_Query( [
         btn.disabled = true;
         btn.textContent = 'Saving…';
 
+        var oldAtt = parseInt(document.getElementById('news-old-attachment-id').value, 10) || 0;
+        var newAtt = parseInt(document.getElementById('news-attachment-id').value, 10) || 0;
+
         var fd = new FormData(document.getElementById('radm-news-form'));
         fd.append('action', 'radm_save_post');
         fd.append('nonce', nonce);
@@ -1398,8 +1473,19 @@ $inq_query = new WP_Query( [
                 btn.disabled = false;
                 btn.textContent = 'Save Article';
                 if (res.success) {
-                    alert(res.data.message || 'Article saved successfully!');
-                    window.location.reload();
+                    var savedId = res.data.id || 0;
+                    radmCloseModals();
+
+                    // Check if previous image was changed and is now an orphan
+                    if (oldAtt > 0 && oldAtt !== newAtt && typeof window.radmCheckAndPromptOrphan === 'function') {
+                        window.radmCheckAndPromptOrphan(oldAtt, savedId, function() {
+                            alert(res.data.message || 'Article saved successfully!');
+                            window.location.reload();
+                        });
+                    } else {
+                        alert(res.data.message || 'Article saved successfully!');
+                        window.location.reload();
+                    }
                 } else {
                     alert(res.data.message || 'Error saving article.');
                 }
@@ -1425,10 +1511,12 @@ $inq_query = new WP_Query( [
     // Generic Delete Controller
     var activeDeleteId = 0;
     var activeDeleteType = '';
+    var activeDeleteAttachmentId = 0;
 
-    window.radmPromptDelete = function(id, title, type) {
+    window.radmPromptDelete = function(id, title, type, attachmentId) {
         activeDeleteId = id;
         activeDeleteType = type;
+        activeDeleteAttachmentId = parseInt(attachmentId, 10) || 0;
         document.getElementById('delete-target-title').textContent = title;
         document.getElementById('radm-delete-modal').classList.add('radm-modal-open');
     };
@@ -1439,6 +1527,7 @@ $inq_query = new WP_Query( [
         btn.disabled = true;
         btn.textContent = 'Deleting…';
 
+        var deletedAttId = activeDeleteAttachmentId;
         var actionName = (activeDeleteType === 'center') ? 'radm_delete_content_center' : ('radm_delete_' + activeDeleteType);
         var fd = new FormData();
         fd.append('action', actionName);
@@ -1452,10 +1541,16 @@ $inq_query = new WP_Query( [
                 btn.textContent = 'Yes, Delete';
                 radmCloseModals();
                 if (res.success) {
-                    // Remove row from table
                     var row = document.getElementById(activeDeleteType + '-row-' + activeDeleteId);
                     if (row) row.remove();
-                    alert(res.data.message || 'Item removed successfully.');
+
+                    if (deletedAttId > 0 && typeof window.radmCheckAndPromptOrphan === 'function') {
+                        window.radmCheckAndPromptOrphan(deletedAttId, 0, function() {
+                            alert(res.data.message || 'Item removed successfully.');
+                        });
+                    } else {
+                        alert(res.data.message || 'Item removed successfully.');
+                    }
                 } else {
                     alert(res.data.message || 'Error removing item.');
                 }
