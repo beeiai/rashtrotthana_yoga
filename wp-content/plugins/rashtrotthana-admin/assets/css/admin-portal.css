@@ -161,6 +161,49 @@
 .radm-nav-item:hover svg,
 .radm-nav-item.active svg { opacity: 1; }
 
+/* Sub-nav items (under Content Pages) */
+.radm-nav-sub {
+    margin: 2px 0 6px 16px;
+    padding-left: 12px;
+    border-left: 2px solid var(--radm-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.radm-nav-sub-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: var(--radm-radius-sm);
+    text-decoration: none;
+    color: var(--radm-text-muted);
+    font-size: 12.5px;
+    font-weight: 500;
+    transition: all .15s ease;
+}
+.radm-nav-sub-item:hover {
+    background: var(--radm-green-bg);
+    color: var(--radm-green);
+}
+.radm-nav-sub-item.active {
+    background: var(--radm-green-bg);
+    color: var(--radm-green);
+    font-weight: 600;
+}
+.radm-sub-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: background .15s;
+    flex-shrink: 0;
+}
+.radm-nav-sub-item:hover .radm-sub-dot,
+.radm-nav-sub-item.active .radm-sub-dot {
+    background: var(--radm-green);
+}
+
 /* Sidebar Footer */
 .radm-sidebar-footer {
     padding: 16px 20px;

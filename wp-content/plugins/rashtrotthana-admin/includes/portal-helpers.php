@@ -288,6 +288,27 @@ function radm_portal_header( string $page_title, string $page_subtitle ): void {
                 </svg>
                 <?php echo esc_html( $item['label'] ); ?>
             </a>
+            <?php if ( $mod_key === 'pages' ) : 
+                $cur_sec = sanitize_key( $_GET['section'] ?? 'centers' );
+            ?>
+            <div class="radm-nav-sub">
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=centers' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'centers' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> Centers
+                </a>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activities' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'activities' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> Activities
+                </a>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=events' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'events' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> Events
+                </a>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=news' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'news' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> News &amp; Updates
+                </a>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=inquiries' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'inquiries' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> Inquiries
+                </a>
+            </div>
+            <?php endif; ?>
             <?php endforeach; ?>
         </nav>
 

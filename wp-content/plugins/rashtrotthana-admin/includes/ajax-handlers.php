@@ -1509,3 +1509,273 @@ $message
         wp_send_json_error( [ 'message' => 'Failed to send message. Please try again later.' ], 500 );
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTENT PAGES IN-PORTAL MANAGEMENT (Centers, Activities, Posts, Inquiries)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Save Center (Content Post) ───────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_content_center', 'radm_ajax_save_content_center' );
+function radm_ajax_save_content_center(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $post_title = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Center Name is required.' ] );
+    }
+
+    $area          = sanitize_text_field( $_POST['area'] ?? '' );
+    $zone          = sanitize_text_field( $_POST['zone'] ?? 'South Bengaluru' );
+    $phone         = sanitize_text_field( $_POST['phone'] ?? '' );
+    $email         = sanitize_email( $_POST['email'] ?? '' );
+    $hours         = sanitize_text_field( $_POST['hours'] ?? '' );
+    $address       = sanitize_textarea_field( $_POST['address'] ?? '' );
+    $map_url       = esc_url_raw( $_POST['map_url'] ?? '' );
+    $instagram_url = esc_url_raw( $_POST['instagram_url'] ?? '' );
+    $facebook_url  = esc_url_raw( $_POST['facebook_url'] ?? '' );
+    $linktree_url  = esc_url_raw( $_POST['linktree_url'] ?? '' );
+    $image_url     = esc_url_raw( $_POST['image_url'] ?? '' );
+    $attachment_id = absint( $_POST['attachment_id'] ?? 0 );
+    $post_status   = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $address,
+        'post_status'  => $post_status,
+        'post_type'    => 'rs_center',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save center.' ] );
+    }
+
+    // Save Meta Fields
+    update_post_meta( $saved_id, 'area', $area );
+    update_post_meta( $saved_id, 'zone', $zone );
+    update_post_meta( $saved_id, 'phone', $phone );
+    update_post_meta( $saved_id, 'email', $email );
+    update_post_meta( $saved_id, 'hours', $hours );
+    update_post_meta( $saved_id, 'address', $address );
+    update_post_meta( $saved_id, 'map_url', $map_url );
+    update_post_meta( $saved_id, 'instagram_url', $instagram_url );
+    update_post_meta( $saved_id, 'facebook_url', $facebook_url );
+    update_post_meta( $saved_id, 'linktree_url', $linktree_url );
+
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+
+    // Also update ACF fields if ACF is installed
+    if ( function_exists( 'update_field' ) ) {
+        update_field( 'area', $area, $saved_id );
+        update_field( 'zone', $zone, $saved_id );
+        update_field( 'phone', $phone, $saved_id );
+        update_field( 'email', $email, $saved_id );
+        update_field( 'hours', $hours, $saved_id );
+        update_field( 'address', $address, $saved_id );
+        update_field( 'map_url', $map_url, $saved_id );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Center saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete Center (Content Post) ─────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_content_center', 'radm_ajax_delete_content_center' );
+function radm_ajax_delete_content_center(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'rs_center' ) {
+        wp_send_json_error( [ 'message' => 'Invalid center ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Center removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove center.' ] );
+    }
+}
+
+// ── Save Activity ────────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_activity', 'radm_ajax_save_activity' );
+function radm_ajax_save_activity(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $post_title = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Activity Name is required.' ] );
+    }
+
+    $category_id      = absint( $_POST['category_id'] ?? 0 );
+    $badge            = sanitize_text_field( $_POST['badge'] ?? 'Regular Batch' );
+    $content          = sanitize_textarea_field( $_POST['content'] ?? '' );
+    $batches_text     = sanitize_text_field( $_POST['batches_text'] ?? '' );
+    $duration_text    = sanitize_text_field( $_POST['duration_text'] ?? '' );
+    $frequency_text   = sanitize_text_field( $_POST['frequency_text'] ?? '' );
+    $eligibility_text = sanitize_text_field( $_POST['eligibility_text'] ?? '' );
+    $centers_text     = sanitize_text_field( $_POST['centers_text'] ?? '' );
+    $image_url        = esc_url_raw( $_POST['image_url'] ?? '' );
+    $attachment_id    = absint( $_POST['attachment_id'] ?? 0 );
+    $post_status      = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $content,
+        'post_status'  => $post_status,
+        'post_type'    => 'activity',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save activity.' ] );
+    }
+
+    if ( $category_id > 0 ) {
+        wp_set_object_terms( $saved_id, [ $category_id ], 'activity_category' );
+    }
+
+    update_post_meta( $saved_id, 'badge', $badge );
+    update_post_meta( $saved_id, 'batches_text', $batches_text );
+    update_post_meta( $saved_id, 'duration_text', $duration_text );
+    update_post_meta( $saved_id, 'frequency_text', $frequency_text );
+    update_post_meta( $saved_id, 'eligibility_text', $eligibility_text );
+    update_post_meta( $saved_id, 'centers_text', $centers_text );
+
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+
+    if ( function_exists( 'update_field' ) ) {
+        update_field( 'badge', $badge, $saved_id );
+        update_field( 'batches_text', $batches_text, $saved_id );
+        update_field( 'duration_text', $duration_text, $saved_id );
+        update_field( 'frequency_text', $frequency_text, $saved_id );
+        update_field( 'eligibility_text', $eligibility_text, $saved_id );
+        update_field( 'centers_text', $centers_text, $saved_id );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Activity saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete Activity ──────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_activity', 'radm_ajax_delete_activity' );
+function radm_ajax_delete_activity(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || ( get_post_type( $post_id ) !== 'activity' && get_post_type( $post_id ) !== 'rs_activity' ) ) {
+        wp_send_json_error( [ 'message' => 'Invalid activity ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Activity removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove activity.' ] );
+    }
+}
+
+// ── Save News Article (Post) ─────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_post', 'radm_ajax_save_post' );
+function radm_ajax_save_post(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $post_title = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Article Title is required.' ] );
+    }
+
+    $content       = wp_kses_post( $_POST['content'] ?? '' );
+    $excerpt       = sanitize_textarea_field( $_POST['excerpt'] ?? '' );
+    $attachment_id = absint( $_POST['attachment_id'] ?? 0 );
+    $image_url     = esc_url_raw( $_POST['image_url'] ?? '' );
+    $post_status   = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $content,
+        'post_excerpt' => $excerpt,
+        'post_status'  => $post_status,
+        'post_type'    => 'post',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save article.' ] );
+    }
+
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Article saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete News Article ──────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_post', 'radm_ajax_delete_post' );
+function radm_ajax_delete_post(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'post' ) {
+        wp_send_json_error( [ 'message' => 'Invalid article ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Article removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove article.' ] );
+    }
+}
+
+// ── Delete Inquiry ───────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_inquiry', 'radm_ajax_delete_inquiry' );
+function radm_ajax_delete_inquiry(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'rs_inquiry' ) {
+        wp_send_json_error( [ 'message' => 'Invalid inquiry ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Inquiry removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove inquiry.' ] );
+    }
+}
