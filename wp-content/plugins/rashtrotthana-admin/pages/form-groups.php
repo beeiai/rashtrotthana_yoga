@@ -189,6 +189,23 @@ radm_portal_header( 'Form Groups', 'Manage center-wise Google Form links. Users 
                         </div>
 
                         <div class="radm-center-rows-container">
+                            <?php
+                            $all_fg_centers = get_posts( [
+                                'post_type'      => [ 'rs_center', 'center' ],
+                                'post_status'    => 'publish',
+                                'posts_per_page' => -1,
+                                'orderby'        => 'title',
+                                'order'          => 'ASC',
+                            ] );
+                            ?>
+                            <datalist id="radm-fg-centers-datalist">
+                                <?php if ( ! empty( $all_fg_centers ) ) : ?>
+                                    <?php foreach ( $all_fg_centers as $fgc ) : ?>
+                                        <option value="<?php echo esc_attr( $fgc->post_title ); ?>"></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </datalist>
+
                             <table class="radm-center-table">
                                 <thead>
                                     <tr>

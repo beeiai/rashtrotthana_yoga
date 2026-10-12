@@ -293,25 +293,41 @@
     var editUseGoogleForm = document.getElementById( 'radm-edit-use-google-form' );
     var editGoogleFormUrl = document.getElementById( 'radm-edit-google-form-url' );
 
+    function getEditEventElements() {
+        return {
+            overlay:     document.getElementById( 'radm-edit-event-overlay' ),
+            idInput:     document.getElementById( 'radm-edit-event-id' ),
+            nameInput:   document.getElementById( 'radm-edit-event-name' ),
+            dateInput:   document.getElementById( 'radm-edit-event-date' ),
+            regInput:    document.getElementById( 'radm-edit-event-reg-open' ),
+            regLbl:      document.getElementById( 'radm-edit-reg-label' ),
+            saveBtn:     document.getElementById( 'radm-edit-event-save' ),
+            useGfInput:  document.getElementById( 'radm-edit-use-google-form' ),
+            gfUrlInput:  document.getElementById( 'radm-edit-google-form-url' )
+        };
+    }
+
     function openEditEventModal( btn ) {
-        if ( !editOverlay ) return;
-        editIdInput.value   = btn.dataset.id     || '';
-        editNameInput.value = btn.dataset.name   || '';
-        editDateInput.value = btn.dataset.date   || '';
+        var els = getEditEventElements();
+        if ( !els.overlay ) return;
+        if ( els.idInput )   els.idInput.value   = btn.dataset.id     || '';
+        if ( els.nameInput ) els.nameInput.value = btn.dataset.name   || '';
+        if ( els.dateInput ) els.dateInput.value = btn.dataset.date   || '';
         var open = btn.dataset.status === 'open';
-        editRegInput.checked = open;
-        if ( editUseGoogleForm ) editUseGoogleForm.checked = btn.dataset.useGoogleForm === '1';
-        if ( editGoogleFormUrl ) editGoogleFormUrl.value   = btn.dataset.googleFormUrl || '';
-        if ( editRegLbl ) editRegLbl.textContent = open ? 'Registrations are open' : 'Registrations are closed';
-        editOverlay.setAttribute( 'aria-hidden', 'false' );
-        editOverlay.classList.add( 'radm-modal-open' );
-        editNameInput.focus();
+        if ( els.regInput )  els.regInput.checked = open;
+        if ( els.useGfInput ) els.useGfInput.checked = btn.dataset.useGoogleForm === '1';
+        if ( els.gfUrlInput ) els.gfUrlInput.value   = btn.dataset.googleFormUrl || '';
+        if ( els.regLbl )    els.regLbl.textContent = open ? 'Registrations are open' : 'Registrations are closed';
+        els.overlay.setAttribute( 'aria-hidden', 'false' );
+        els.overlay.classList.add( 'radm-modal-open' );
+        if ( els.nameInput ) els.nameInput.focus();
     }
 
     function closeEditEventModal() {
-        if ( !editOverlay ) return;
-        editOverlay.classList.remove( 'radm-modal-open' );
-        editOverlay.setAttribute( 'aria-hidden', 'true' );
+        var els = getEditEventElements();
+        if ( !els.overlay ) return;
+        els.overlay.classList.remove( 'radm-modal-open' );
+        els.overlay.setAttribute( 'aria-hidden', 'true' );
     }
 
     document.addEventListener( 'click', function ( e ) {
@@ -319,83 +335,86 @@
         if ( btn ) openEditEventModal( btn );
         var close = e.target.closest( '#radm-edit-event-close, #radm-edit-event-cancel' );
         if ( close ) closeEditEventModal();
-    } );
-    if ( editOverlay ) {
-        editOverlay.addEventListener( 'click', function ( e ) {
-            if ( e.target === editOverlay ) closeEditEventModal();
-        } );
-    }
 
-    if ( editSaveBtn ) {
-        editSaveBtn.addEventListener( 'click', function () {
-            var evId  = editIdInput && editIdInput.value;
-            var evNm  = editNameInput && editNameInput.value.trim();
-            var evDt  = editDateInput && editDateInput.value;
-            var regOp = editRegInput  && editRegInput.checked ? '1' : '0';
-            if ( !evNm ) { radmToast( 'Event name is required.', 'error' ); return; }
-            setLoading( editSaveBtn, true );
-            ajaxPost( 'radm_update_event', {
-                event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (editUseGoogleForm && editUseGoogleForm.checked ? 1 : 0), google_form_url: (editGoogleFormUrl ? editGoogleFormUrl.value : '')
-            }, function ( res ) {
-                setLoading( editSaveBtn, false );
-                if ( res.success ) {
-                    closeEditEventModal();
-                    var row = document.querySelector( '.radm-event-row[data-id="' + evId + '"]' );
-                    if ( row ) {
-                        var nc = row.querySelector( '.radm-event-name' );
-                        if ( nc ) nc.textContent = res.data.new_name;
-                        var badge = row.querySelector( '.radm-badge' );
-                        if ( badge ) {
-                            badge.className   = 'radm-badge ' + res.data.new_status;
-                            badge.textContent = res.data.new_status.charAt(0).toUpperCase() + res.data.new_status.slice(1);
-                        }
-                        var eb = row.querySelector( '.radm-edit-event-btn' );
-                        if ( eb ) {
-                            eb.dataset.name   = res.data.new_name;
-                            eb.dataset.date   = evDt;
-                            eb.dataset.status = res.data.new_status;
-                        }
+        var overlay = document.getElementById( 'radm-edit-event-overlay' );
+        if ( overlay && e.target === overlay ) closeEditEventModal();
+    } );
+
+    document.addEventListener( 'click', function ( e ) {
+        var saveBtn = e.target.closest( '#radm-edit-event-save' );
+        if ( !saveBtn ) return;
+        var els = getEditEventElements();
+        var evId  = els.idInput && els.idInput.value;
+        var evNm  = els.nameInput && els.nameInput.value.trim();
+        var evDt  = els.dateInput && els.dateInput.value;
+        var regOp = els.regInput  && els.regInput.checked ? '1' : '0';
+        if ( !evNm ) { radmToast( 'Event name is required.', 'error' ); return; }
+        setLoading( saveBtn, true );
+        ajaxPost( 'radm_update_event', {
+            event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (els.useGfInput && els.useGfInput.checked ? 1 : 0), google_form_url: (els.gfUrlInput ? els.gfUrlInput.value : '')
+        }, function ( res ) {
+            setLoading( saveBtn, false );
+            if ( res.success ) {
+                closeEditEventModal();
+                var row = document.querySelector( '.radm-event-row[data-id="' + evId + '"]' );
+                if ( row ) {
+                    var nc = row.querySelector( '.radm-event-name' );
+                    if ( nc ) nc.textContent = res.data.new_name;
+                    var badge = row.querySelector( '.radm-badge' );
+                    if ( badge ) {
+                        badge.className   = 'radm-badge ' + res.data.new_status;
+                        badge.textContent = res.data.new_status.charAt(0).toUpperCase() + res.data.new_status.slice(1);
                     }
-                    radmToast( 'Event updated.', 'success' );
-                } else {
-                    radmToast( ( res.data && res.data.message ) || 'Update failed.', 'error' );
+                    var eb = row.querySelector( '.radm-edit-event-btn' );
+                    if ( eb ) {
+                        eb.dataset.name   = res.data.new_name;
+                        eb.dataset.date   = evDt;
+                        eb.dataset.status = res.data.new_status;
+                    }
                 }
-            } );
+                radmToast( 'Event updated.', 'success' );
+            } else {
+                radmToast( ( res.data && res.data.message ) || 'Update failed.', 'error' );
+            }
         } );
-    }
+    } );
 
     /* ================================================================
        DELETE CONFIRM MODAL (events + participants)
     ================================================================ */
 
-    var delOverlay = document.getElementById( 'radm-delete-modal-overlay' );
-    var delLblEl   = document.getElementById( 'radm-delete-label' );
-    var delYesBtn  = document.getElementById( 'radm-delete-confirm-btn' );
     var pendTarget = null;
 
+    function getDelModalElements() {
+        return {
+            overlay: document.getElementById( 'radm-delete-modal-overlay' ),
+            labelEl: document.getElementById( 'radm-delete-label' ),
+            yesBtn:  document.getElementById( 'radm-delete-confirm-btn' )
+        };
+    }
+
     function openDelModal( target ) {
-        if ( !delOverlay ) return;
+        var els = getDelModalElements();
+        if ( !els.overlay ) return;
         pendTarget = target;
-        if ( delLblEl ) delLblEl.textContent = target.label;
-        delOverlay.setAttribute( 'aria-hidden', 'false' );
-        delOverlay.classList.add( 'radm-modal-open' );
+        if ( els.labelEl ) els.labelEl.textContent = target.label;
+        els.overlay.setAttribute( 'aria-hidden', 'false' );
+        els.overlay.classList.add( 'radm-modal-open' );
     }
 
     function closeDelModal() {
-        if ( !delOverlay ) return;
-        delOverlay.classList.remove( 'radm-modal-open' );
-        delOverlay.setAttribute( 'aria-hidden', 'true' );
+        var els = getDelModalElements();
+        if ( !els.overlay ) return;
+        els.overlay.classList.remove( 'radm-modal-open' );
+        els.overlay.setAttribute( 'aria-hidden', 'true' );
         pendTarget = null;
     }
 
     document.addEventListener( 'click', function ( e ) {
         if ( e.target.closest( '#radm-delete-cancel-btn, #radm-delete-modal-close' ) ) closeDelModal();
+        var overlay = document.getElementById( 'radm-delete-modal-overlay' );
+        if ( overlay && e.target === overlay ) closeDelModal();
     } );
-    if ( delOverlay ) {
-        delOverlay.addEventListener( 'click', function ( e ) {
-            if ( e.target === delOverlay ) closeDelModal();
-        } );
-    }
 
     /* Delete event trigger */
     document.addEventListener( 'click', function ( e ) {
@@ -424,11 +443,11 @@
         }
     } );
 
-    if ( delYesBtn ) {
-        delYesBtn.addEventListener( 'click', function () {
-            if ( !pendTarget ) return;
-            var t = pendTarget;
-            closeDelModal();
+    document.addEventListener( 'click', function ( e ) {
+        var yesBtn = e.target.closest( '#radm-delete-confirm-btn' );
+        if ( !yesBtn || !pendTarget ) return;
+        var t = pendTarget;
+        closeDelModal();
 
             if ( t.type === 'event' ) {
                 ajaxPost( 'radm_delete_event', { event_id: t.id }, function ( res ) {
@@ -460,7 +479,6 @@
                 } );
             }
         } );
-    }
 
     /* ================================================================
        PARTICIPANTS -- Search + serial rebuild
@@ -477,20 +495,37 @@
         if ( cnt ) cnt.textContent = ( n - 1 ) + ' participant' + ( n - 1 !== 1 ? 's' : '' );
     }
 
-    var usersSearch = document.getElementById( 'radm-users-search' );
-    if ( usersSearch ) {
-        usersSearch.addEventListener( 'input', function () {
-            var q = this.value.trim().toLowerCase();
-            document.querySelectorAll( '#radm-users-table .radm-user-row' ).forEach( function ( row ) {
-                var match = !q
-                    || row.dataset.name.includes( q )
-                    || row.dataset.phone.includes( q )
-                    || row.dataset.email.includes( q )
-                    || row.dataset.branch.includes( q );
-                row.style.display = match ? '' : 'none';
-            } );
+    var usersSearch   = document.getElementById( 'radm-users-search' );
+    var branchFilter  = document.getElementById( 'radm-users-branch-filter' );
+    var statusFilter  = document.getElementById( 'radm-users-status-filter' );
+
+    window.filterParticipants = function() {
+        var q = ( usersSearch ? usersSearch.value : '' ).trim().toLowerCase();
+        var b = ( branchFilter ? branchFilter.value : '' ).trim().toLowerCase();
+        var s = ( statusFilter ? statusFilter.value : '' ).trim().toLowerCase();
+
+        var visibleCount = 0;
+        document.querySelectorAll( '#radm-users-table .radm-user-row' ).forEach( function ( row ) {
+            var matchQ = !q
+                || ( row.dataset.name && row.dataset.name.includes( q ) )
+                || ( row.dataset.phone && row.dataset.phone.includes( q ) )
+                || ( row.dataset.email && row.dataset.email.includes( q ) )
+                || ( row.dataset.branch && row.dataset.branch.includes( q ) );
+            var matchB = !b || ( row.dataset.branch && row.dataset.branch.toLowerCase().includes( b ) );
+            var matchS = !s || ( row.dataset.status && row.dataset.status.toLowerCase() === s );
+
+            var show = matchQ && matchB && matchS;
+            row.style.display = show ? '' : 'none';
+            if ( show ) visibleCount++;
         } );
-    }
+
+        var cnt = document.getElementById( 'radm-users-count' );
+        if ( cnt ) cnt.textContent = visibleCount + ' participant' + ( visibleCount !== 1 ? 's' : '' );
+    };
+
+    if ( usersSearch )  usersSearch.addEventListener( 'input', window.filterParticipants );
+    if ( branchFilter ) branchFilter.addEventListener( 'change', window.filterParticipants );
+    if ( statusFilter ) statusFilter.addEventListener( 'change', window.filterParticipants );
 
     /* ================================================================
        ADD / EDIT PARTICIPANT MODAL
@@ -660,32 +695,7 @@
         } );
     }
 
-    /* ── Edit Event Modal save ────────────────────────────────────────── */
-    var origSaveEdit = document.getElementById( 'radm-edit-event-save' );
-    if ( origSaveEdit ) {
-        origSaveEdit.addEventListener( 'click', function () {
-            var eid   = document.getElementById( 'radm-edit-event-id' ) ? document.getElementById( 'radm-edit-event-id' ).value : '';
-            var nm    = document.getElementById( 'radm-edit-event-name' ) ? document.getElementById( 'radm-edit-event-name' ).value.trim() : '';
-            var dt    = document.getElementById( 'radm-edit-event-date' ) ? document.getElementById( 'radm-edit-event-date' ).value : '';
-            var op    = document.getElementById( 'radm-edit-event-reg-open' ) ? ( document.getElementById( 'radm-edit-event-reg-open' ).checked ? 1 : 0 ) : 1;
 
-            if ( !eid || !nm ) return;
-
-            setLoading( origSaveEdit, true );
-            ajaxPost( 'radm_update_event', {
-                event_id: eid, event_name: nm, event_date: dt, registration_open: op
-            }, function ( res ) {
-                setLoading( origSaveEdit, false );
-                if ( res.success ) {
-                    closeEditEventModal();
-                    radmToast( 'Event updated successfully.', 'success' );
-                    setTimeout( function () { location.reload(); }, 600 );
-                } else {
-                    radmToast( ( res.data && res.data.message ) || 'Failed to update event.', 'error' );
-                }
-            } );
-        } );
-    }
 
     /* ═══════════════════════════════════════════════════════════════════
        FORM GROUPS PAGE LOGIC (CRUD + DYNAMIC CENTRES + PREVIEW + ANALYTICS)
@@ -1413,7 +1423,7 @@
             var tr = document.createElement( 'tr' );
             tr.className = 'radm-center-entry-row';
             tr.innerHTML = '<td class="radm-row-num" style="text-align:center;color:var(--radm-text-muted);font-weight:600;">1</td>'
-                + '<td><input type="text" class="radm-input radm-center-name-input" placeholder="e.g. Jayanagar" value="' + esc( name || '' ) + '" required /></td>'
+                + '<td><input type="text" list="radm-fg-centers-datalist" class="radm-input radm-center-name-input" placeholder="Choose or type center..." value="' + esc( name || '' ) + '" required /></td>'
                 + '<td><input type="url" class="radm-input radm-center-url-input" placeholder="https://forms.gle/..." value="' + esc( url || '' ) + '" required /></td>'
                 + '<td style="text-align:center;"><button type="button" class="radm-btn-trash" title="Remove row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button></td>';
             centersTbody.appendChild( tr );
@@ -1825,6 +1835,7 @@
         var gType     = 'all';
         var gCategory = '';
         var gEventId  = 0;
+        var gAlbumId  = 0;
         var gStatus   = '';
         var gSearch   = '';
         var gSort     = 'latest';
@@ -1844,6 +1855,7 @@
 
         var searchInput   = document.getElementById( 'radm-gallery-search-input' );
         var catSelect     = document.getElementById( 'radm-filter-category' );
+        var albumSelect   = document.getElementById( 'radm-filter-album' );
         var eventSelect   = document.getElementById( 'radm-filter-event' );
         var statusSelect  = document.getElementById( 'radm-filter-status' );
         var sortSelect    = document.getElementById( 'radm-filter-sort' );
@@ -1866,6 +1878,7 @@
         var gTitleInput   = document.getElementById( 'radm-gtitle' );
         var gCatInput     = document.getElementById( 'radm-gcategory' );
         var gEventIdInput = document.getElementById( 'radm-gevent-id' );
+        var gAlbumIdInput = document.getElementById( 'radm-galbum-id' );
         var gImageUrl     = document.getElementById( 'radm-gimage-url' );
         var gVideoUrl     = document.getElementById( 'radm-gvideo-url' );
         var gVideoDur     = document.getElementById( 'radm-gvideo-dur' );
@@ -1897,6 +1910,7 @@
                 type:      gType,
                 category:  gCategory,
                 event_id:  gEventId,
+                album_id:  gAlbumId,
                 status:    gStatus,
                 search:    gSearch,
                 sort:      gSort,
@@ -1916,6 +1930,8 @@
                     if ( countImageEl ) countImageEl.textContent = d.counts.image || 0;
                     if ( countVideoEl ) countVideoEl.textContent = d.counts.video || 0;
                 }
+                var curBadge = document.getElementById( 'radm-badge-curated-count' );
+                if ( curBadge ) curBadge.textContent = ( d.counts && d.counts.all != null ) ? d.counts.all : d.total;
 
                 if ( !d.items || d.items.length === 0 ) {
                     gridEl.innerHTML = '<div style="grid-column:1/-1;background:#ffffff;border:1px dashed var(--radm-border);border-radius:12px;text-align:center;padding:60px 20px;">'
@@ -2037,6 +2053,13 @@
             catSelect.addEventListener( 'change', function () {
                 gCategory = this.value;
                 gPage     = 1;
+                loadGallery();
+            } );
+        }
+        if ( albumSelect ) {
+            albumSelect.addEventListener( 'change', function () {
+                gAlbumId = parseInt( this.value, 10 ) || 0;
+                gPage    = 1;
                 loadGallery();
             } );
         }
@@ -2296,6 +2319,36 @@
             if ( gTitleInput ) gTitleInput.value = isEdit ? ( item.title || '' ) : '';
             if ( gCatInput ) gCatInput.value = ( isEdit && item.category ) ? item.category : 'General';
             if ( gEventIdInput ) gEventIdInput.value = ( isEdit && item.event_id ) ? item.event_id : '0';
+            if ( gAlbumIdInput ) gAlbumIdInput.value = ( isEdit && item.album_id ) ? item.album_id : '0';
+            var inlineAlbumWrap = document.getElementById( 'radm-inline-album-wrap' );
+            if ( inlineAlbumWrap ) inlineAlbumWrap.style.display = 'none';
+            var newAlbumInput = document.getElementById( 'radm-new-album-title' );
+            if ( newAlbumInput ) newAlbumInput.value = '';
+
+            // Multi-select albums setup
+            var checkedAids = [];
+            if ( isEdit ) {
+                if ( item.album_ids && item.album_ids.length ) {
+                    checkedAids = item.album_ids.map( String );
+                } else if ( item.album_id ) {
+                    checkedAids = [ String( item.album_id ) ];
+                }
+            }
+            document.querySelectorAll( '.radm-galbum-cb' ).forEach( function ( cb ) {
+                cb.checked = checkedAids.indexOf( String( cb.value ) ) !== -1;
+            } );
+            updateGalbumSelection();
+
+            // Multi-select centers setup
+            var checkedCids = [];
+            if ( isEdit && item.center_ids && item.center_ids.length ) {
+                checkedCids = item.center_ids.map( String );
+            }
+            document.querySelectorAll( '.radm-gcenter-cb' ).forEach( function ( cb ) {
+                cb.checked = checkedCids.indexOf( String( cb.value ) ) !== -1;
+            } );
+            updateGcenterSelection();
+
             if ( gImageUrl ) gImageUrl.value = ( isEdit && item.image_url ) ? item.image_url : '';
             if ( gVideoUrl ) gVideoUrl.value = ( isEdit && item.video_url ) ? item.video_url : '';
             if ( gVideoDur ) gVideoDur.value = ( isEdit && item.video_duration ) ? item.video_duration : '';
@@ -2314,6 +2367,202 @@
         }
 
         window.radmOpenGalleryModal = openGalleryModal;
+
+        // ── Album Dropdown Multi-Select Handlers ────────────────────────
+        var galbumMsBtn      = document.getElementById( 'radm-galbum-ms-btn' );
+        var galbumMsDropdown = document.getElementById( 'radm-galbum-ms-dropdown' );
+        var galbumSearchBox  = document.getElementById( 'radm-galbum-search-box' );
+        var galbumPills      = document.getElementById( 'radm-galbum-pills' );
+        var galbumMsLabel    = document.getElementById( 'radm-galbum-ms-label' );
+
+        function toggleGalbumDropdown() {
+            if ( galbumMsDropdown ) {
+                var isOpen = galbumMsDropdown.style.display === 'block';
+                galbumMsDropdown.style.display = isOpen ? 'none' : 'block';
+                if ( !isOpen && galbumSearchBox ) {
+                    galbumSearchBox.value = '';
+                    filterGalbumOptions( '' );
+                    galbumSearchBox.focus();
+                }
+            }
+        }
+        if ( galbumMsBtn ) galbumMsBtn.addEventListener( 'click', toggleGalbumDropdown );
+
+        function filterGalbumOptions( q ) {
+            var query = ( q || '' ).trim().toLowerCase();
+            var items = document.querySelectorAll( '#radm-galbum-options-list .radm-ms-item' );
+            items.forEach( function ( it ) {
+                var t = it.getAttribute( 'data-title' ) || '';
+                it.style.display = ( !query || t.indexOf( query ) !== -1 ) ? 'flex' : 'none';
+            } );
+        }
+        if ( galbumSearchBox ) {
+            galbumSearchBox.addEventListener( 'input', function () { filterGalbumOptions( this.value ); } );
+        }
+
+        function renderGalbumPills( selected ) {
+            if ( !galbumPills ) return;
+            galbumPills.innerHTML = '';
+            if ( !selected || !selected.length ) {
+                if ( galbumMsLabel ) galbumMsLabel.textContent = 'Choose Albums…';
+                return;
+            }
+            if ( galbumMsLabel ) galbumMsLabel.textContent = selected.length + ' Album' + ( selected.length > 1 ? 's' : '' ) + ' selected';
+
+            selected.forEach( function ( item ) {
+                var pill = document.createElement( 'span' );
+                pill.style.cssText = 'display:inline-flex; align-items:center; gap:5px; background:#e8f5e9; color:#1b5e20; padding:3px 9px; border-radius:14px; font-size:12px; font-weight:600; border:1px solid #c8e6c9;';
+                pill.innerHTML = '<span>' + esc( item.name ) + '</span><button type="button" style="background:none; border:none; color:#1b5e20; font-size:13px; cursor:pointer; padding:0; line-height:1;" title="Remove">×</button>';
+                pill.querySelector( 'button' ).onclick = function () {
+                    var cb = document.querySelector( '.radm-galbum-cb[value="' + CSS.escape( item.id ) + '"]' );
+                    if ( cb ) { cb.checked = false; }
+                    updateGalbumSelection();
+                };
+                galbumPills.appendChild( pill );
+            } );
+        }
+
+        function updateGalbumSelection() {
+            var cbs = document.querySelectorAll( '.radm-galbum-cb:checked' );
+            var selected = [];
+            cbs.forEach( function ( cb ) {
+                selected.push( { id: cb.value, name: cb.getAttribute( 'data-name' ) || cb.parentElement.textContent.trim() } );
+            } );
+            renderGalbumPills( selected );
+            if ( gAlbumIdInput && selected.length ) {
+                gAlbumIdInput.value = selected[0].id;
+            } else if ( gAlbumIdInput ) {
+                gAlbumIdInput.value = '0';
+            }
+        }
+
+        document.querySelectorAll( '.radm-galbum-cb' ).forEach( function ( cb ) {
+            cb.addEventListener( 'change', updateGalbumSelection );
+        } );
+
+        // ── Center Dropdown Multi-Select Handlers in Gallery Modal ──────
+        var gcenterMsBtn      = document.getElementById( 'radm-gcenter-ms-btn' );
+        var gcenterMsDropdown = document.getElementById( 'radm-gcenter-ms-dropdown' );
+        var gcenterPills      = document.getElementById( 'radm-gcenter-pills' );
+        var gcenterMsLabel    = document.getElementById( 'radm-gcenter-ms-label' );
+
+        function toggleGcenterDropdown() {
+            if ( gcenterMsDropdown ) {
+                var isOpen = gcenterMsDropdown.style.display === 'block';
+                gcenterMsDropdown.style.display = isOpen ? 'none' : 'block';
+            }
+        }
+        if ( gcenterMsBtn ) gcenterMsBtn.addEventListener( 'click', toggleGcenterDropdown );
+
+        function renderGcenterPills( selected ) {
+            if ( !gcenterPills ) return;
+            gcenterPills.innerHTML = '';
+            if ( !selected || !selected.length ) {
+                if ( gcenterMsLabel ) gcenterMsLabel.textContent = 'Choose Centers…';
+                return;
+            }
+            if ( gcenterMsLabel ) gcenterMsLabel.textContent = selected.length + ' Center' + ( selected.length > 1 ? 's' : '' ) + ' tagged';
+
+            selected.forEach( function ( item ) {
+                var pill = document.createElement( 'span' );
+                pill.style.cssText = 'display:inline-flex; align-items:center; gap:5px; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:14px; font-size:12px; font-weight:600; border:1px solid #bae6fd;';
+                pill.innerHTML = '<span>' + esc( item.name ) + '</span><button type="button" style="background:none; border:none; color:#0369a1; font-size:13px; cursor:pointer; padding:0; line-height:1;" title="Remove">×</button>';
+                pill.querySelector( 'button' ).onclick = function () {
+                    var cb = document.querySelector( '.radm-gcenter-cb[value="' + CSS.escape( item.id ) + '"]' );
+                    if ( cb ) { cb.checked = false; }
+                    updateGcenterSelection();
+                };
+                gcenterPills.appendChild( pill );
+            } );
+        }
+
+        function updateGcenterSelection() {
+            var cbs = document.querySelectorAll( '.radm-gcenter-cb:checked' );
+            var selected = [];
+            cbs.forEach( function ( cb ) {
+                selected.push( { id: cb.value, name: cb.getAttribute( 'data-name' ) || cb.parentElement.textContent.trim() } );
+            } );
+            renderGcenterPills( selected );
+        }
+
+        document.querySelectorAll( '.radm-gcenter-cb' ).forEach( function ( cb ) {
+            cb.addEventListener( 'change', updateGcenterSelection );
+        } );
+
+        // Close gallery multiselect dropdowns when clicking outside
+        document.addEventListener( 'click', function ( e ) {
+            var aWrap = document.getElementById( 'radm-galbum-ms-wrap' );
+            if ( aWrap && !aWrap.contains( e.target ) && galbumMsDropdown ) {
+                galbumMsDropdown.style.display = 'none';
+            }
+            var cWrap = document.getElementById( 'radm-gcenter-ms-wrap' );
+            if ( cWrap && !cWrap.contains( e.target ) && gcenterMsDropdown ) {
+                gcenterMsDropdown.style.display = 'none';
+            }
+        } );
+
+        // Inline Album Create wiring
+        var createAlbumBtn = document.getElementById( 'radm-create-album-btn' );
+        var inlineAlbumWrap = document.getElementById( 'radm-inline-album-wrap' );
+        var cancelAlbumBtn = document.getElementById( 'radm-cancel-album-btn' );
+        var saveAlbumBtn = document.getElementById( 'radm-save-album-btn' );
+        var newAlbumInput = document.getElementById( 'radm-new-album-title' );
+
+        if ( createAlbumBtn && inlineAlbumWrap ) {
+            createAlbumBtn.addEventListener( 'click', function( e ) {
+                e.preventDefault();
+                inlineAlbumWrap.style.display = inlineAlbumWrap.style.display === 'none' ? 'block' : 'none';
+                if ( newAlbumInput && inlineAlbumWrap.style.display === 'block' ) {
+                    newAlbumInput.focus();
+                }
+            } );
+        }
+        if ( cancelAlbumBtn && inlineAlbumWrap ) {
+            cancelAlbumBtn.addEventListener( 'click', function( e ) {
+                e.preventDefault();
+                inlineAlbumWrap.style.display = 'none';
+                if ( newAlbumInput ) newAlbumInput.value = '';
+            } );
+        }
+        if ( saveAlbumBtn && newAlbumInput ) {
+            saveAlbumBtn.addEventListener( 'click', function( e ) {
+                e.preventDefault();
+                var albumTitle = newAlbumInput.value.trim();
+                if ( !albumTitle ) {
+                    radmToast( 'Please enter an album name.', 'error' );
+                    return;
+                }
+                saveAlbumBtn.disabled = true;
+                saveAlbumBtn.textContent = 'Saving…';
+                ajaxPost( 'radm_create_gallery_album', {
+                    title: albumTitle,
+                    category: gCatInput ? gCatInput.value : 'General'
+                }, function( res ) {
+                    saveAlbumBtn.disabled = false;
+                    saveAlbumBtn.textContent = 'Save Album';
+                    if ( res.success && res.data.album_id ) {
+                        // Add checkbox to list, check it and update
+                        var optList = document.getElementById( 'radm-galbum-options-list' );
+                        if ( optList ) {
+                            var lbl = document.createElement( 'label' );
+                            lbl.className = 'radm-ms-item';
+                            lbl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; cursor:pointer; font-size:13px;';
+                            lbl.setAttribute( 'data-title', albumTitle.toLowerCase() );
+                            lbl.innerHTML = '<input type="checkbox" name="album_ids[]" value="' + res.data.album_id + '" class="radm-galbum-cb" data-name="' + esc( res.data.title ) + '" checked /><span>' + esc( res.data.title ) + '</span>';
+                            lbl.querySelector( 'input' ).addEventListener( 'change', updateGalbumSelection );
+                            optList.appendChild( lbl );
+                        }
+                        updateGalbumSelection();
+
+                        inlineAlbumWrap.style.display = 'none';
+                        newAlbumInput.value = '';
+                        radmToast( 'Album created and selected!', 'success' );
+                    } else {
+                        radmToast( res.data && res.data.message ? res.data.message : 'Error creating album.', 'error' );
+                    }
+                } );
+            } );
+        }
 
         function closeGalleryModal() {
             if ( !gModalOverlay ) return;
@@ -2368,10 +2617,10 @@
                         setLoading( gSubmitBtn, false );
                         if ( res.success ) {
                             closeGalleryModal();
-                            radmToast( res.data.message || 'Media uploaded successfully!', 'success' );
+                            radmToast( res.data.message || 'Media saved successfully!', 'success' );
                             loadGallery();
                         } else {
-                            radmToast( ( res.data && res.data.message ) || 'Failed to upload media.', 'error' );
+                            radmToast( ( res.data && res.data.message ) || 'Failed to save media.', 'error' );
                         }
                     } )
                     .catch( function () {
@@ -2430,6 +2679,320 @@
                         radmToast( ( res.data && res.data.message ) || 'Failed to delete media.', 'error' );
                     }
                 } );
+            } );
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
+        // DUAL-TAB SWITCHER & "ALL MEDIA FILES" (WORDPRESS MEDIA FOLDER)
+        // ═══════════════════════════════════════════════════════════════════
+        window.radmSwitchGalleryMainTab = function( tabKey ) {
+            var curatedView   = document.getElementById( 'radm-gallery-curated-view' );
+            var allMediaView  = document.getElementById( 'radm-gallery-all-media-view' );
+            var curatedTabBtn = document.getElementById( 'radm-main-tab-curated' );
+            var allMediaTabBtn= document.getElementById( 'radm-main-tab-all-media' );
+
+            if ( tabKey === 'all-media' ) {
+                if ( curatedView ) curatedView.style.display = 'none';
+                if ( allMediaView ) allMediaView.style.display = 'block';
+                if ( curatedTabBtn ) curatedTabBtn.classList.remove( 'is-active' );
+                if ( allMediaTabBtn ) allMediaTabBtn.classList.add( 'is-active' );
+                loadAllMediaFiles();
+            } else {
+                if ( curatedView ) curatedView.style.display = 'block';
+                if ( allMediaView ) allMediaView.style.display = 'none';
+                if ( curatedTabBtn ) curatedTabBtn.classList.add( 'is-active' );
+                if ( allMediaTabBtn ) allMediaTabBtn.classList.remove( 'is-active' );
+                loadGallery();
+            }
+        };
+
+        var allMediaGrid       = document.getElementById( 'radm-allmedia-grid' );
+        var allMediaFooter     = document.getElementById( 'radm-allmedia-footer' );
+        var allMediaPgStart    = document.getElementById( 'radm-allmedia-pg-start' );
+        var allMediaPgEnd      = document.getElementById( 'radm-allmedia-pg-end' );
+        var allMediaPgTotal    = document.getElementById( 'radm-allmedia-pg-total' );
+        var allMediaPagination = document.getElementById( 'radm-allmedia-pagination' );
+        var allMediaSearch     = document.getElementById( 'radm-allmedia-search-input' );
+
+        var amMime  = 'all';
+        var amQuery = '';
+        var amPage  = 1;
+        var amPerPg = 24;
+        var pendingAllMediaDelId = null;
+
+        function loadAllMediaFiles() {
+            if ( !allMediaGrid ) return;
+            allMediaGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--radm-text-muted);"><div class="radm-spinner" style="margin:0 auto 12px;"></div>Loading media files from WordPress storage...</div>';
+
+            ajaxPost( 'radm_get_db_images', {
+                search:    amQuery,
+                mime_type: amMime,
+                page:      amPage,
+                per_page:  amPerPg
+            }, function( res ) {
+                if ( !res.success || !res.data ) {
+                    allMediaGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#ef4444;">Failed to load media files.</div>';
+                    return;
+                }
+                var d = res.data;
+                var mediaBadge = document.getElementById( 'radm-badge-media-count' );
+                if ( mediaBadge ) mediaBadge.textContent = d.total || 0;
+
+                if ( !d.items || !d.items.length ) {
+                    allMediaGrid.innerHTML = '<div style="grid-column:1/-1;background:#ffffff;border:1px dashed var(--radm-border);border-radius:12px;text-align:center;padding:60px 20px;">'
+                        + '<h3 style="font-size:16px;color:var(--radm-text);margin:0 0 6px;">No media files found</h3>'
+                        + '<p style="font-size:13px;color:var(--radm-text-muted);margin:0 0 16px;">Upload images or documents to your WordPress storage using the button above.</p>'
+                        + '</div>';
+                    if ( allMediaFooter ) allMediaFooter.style.display = 'none';
+                    return;
+                }
+
+                var html = '';
+                d.items.forEach( function( item ) {
+                    var thumbHtml = item.is_image
+                        ? '<img class="radm-allmedia-thumb" src="' + esc( item.thumb || item.url ) + '" alt="' + esc( item.title ) + '" loading="lazy" />'
+                        : '<div class="radm-allmedia-doc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span style="font-size:11px; font-weight:600;">' + esc( ( item.mime && item.mime.split('/')[1] ) ? item.mime.split('/')[1].toUpperCase() : 'DOC' ) + '</span></div>';
+
+                    html += '<div class="radm-allmedia-card" data-id="' + item.id + '" data-item=\'' + esc( JSON.stringify( item ) ) + '\'>'
+                        + '<div class="radm-allmedia-thumb-box" onclick="radmOpenMediaPreviewModal(' + item.id + ')" style="cursor:pointer;" title="Click to view details">'
+                        + thumbHtml
+                        + '</div>'
+                        + '<div class="radm-allmedia-info">'
+                        + '<div class="radm-allmedia-title" title="' + esc( item.filename ) + '">' + esc( item.title || item.filename ) + '</div>'
+                        + '<div class="radm-allmedia-meta">'
+                        + '<span>' + esc( item.dimensions || item.filesize || '' ) + '</span>'
+                        + '<span>' + esc( item.date ) + '</span>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="radm-allmedia-actions">'
+                        + '<button type="button" class="radm-allmedia-btn radm-allmedia-btn--copy" onclick="radmCopyMediaUrl(\'' + esc( item.url ) + '\')" title="Copy Direct URL">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy URL'
+                        + '</button>'
+                        + '<button type="button" class="radm-allmedia-btn" onclick="radmOpenMediaPreviewModal(' + item.id + ')" title="Preview">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View'
+                        + '</button>'
+                        + '<button type="button" class="radm-allmedia-btn radm-allmedia-btn--delete" onclick="radmPromptDeleteAllMedia(' + item.id + ', \'' + esc( addslashes( item.filename ) ) + '\')" title="Delete File">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>'
+                        + '</button>'
+                        + '</div>'
+                        + '</div>';
+                } );
+
+                allMediaGrid.innerHTML = html;
+
+                if ( allMediaFooter ) {
+                    allMediaFooter.style.display = 'flex';
+                    var startIdx = ( ( d.page - 1 ) * d.per_page ) + 1;
+                    var endIdx   = Math.min( d.page * d.per_page, d.total );
+                    if ( allMediaPgStart ) allMediaPgStart.textContent = startIdx;
+                    if ( allMediaPgEnd )   allMediaPgEnd.textContent   = endIdx;
+                    if ( allMediaPgTotal ) allMediaPgTotal.textContent = d.total;
+
+                    if ( allMediaPagination ) {
+                        var pBtns = '';
+                        pBtns += '<button type="button" class="radm-pg-btn" data-ampage="' + ( d.page - 1 ) + '" ' + ( d.page <= 1 ? 'disabled' : '' ) + '>&lt;</button>';
+                        for ( var p = 1; p <= d.total_pages; p++ ) {
+                            pBtns += '<button type="button" class="radm-pg-btn ' + ( p === d.page ? 'is-active' : '' ) + '" data-ampage="' + p + '">' + p + '</button>';
+                        }
+                        pBtns += '<button type="button" class="radm-pg-btn" data-ampage="' + ( d.page + 1 ) + '" ' + ( d.page >= d.total_pages ? 'disabled' : '' ) + '>&gt;</button>';
+                        allMediaPagination.innerHTML = pBtns;
+                    }
+                }
+            } );
+        }
+
+        window.radmFilterAllMediaMime = function( mime ) {
+            amMime = mime;
+            amPage = 1;
+            document.querySelectorAll( '#radm-allmedia-mime-tabs .radm-gallery-tab' ).forEach( function( t ) {
+                t.classList.toggle( 'is-active', t.getAttribute( 'data-mime' ) === mime );
+            } );
+            loadAllMediaFiles();
+        };
+
+        if ( allMediaSearch ) {
+            var amSearchTimer = null;
+            allMediaSearch.addEventListener( 'input', function() {
+                var val = this.value.trim();
+                clearTimeout( amSearchTimer );
+                amSearchTimer = setTimeout( function() {
+                    amQuery = val;
+                    amPage  = 1;
+                    loadAllMediaFiles();
+                }, 300 );
+            } );
+        }
+
+        if ( allMediaPagination ) {
+            allMediaPagination.addEventListener( 'click', function( e ) {
+                var btn = e.target.closest( '.radm-pg-btn' );
+                if ( !btn || btn.disabled ) return;
+                var p = parseInt( btn.getAttribute( 'data-ampage' ), 10 );
+                if ( p && p !== amPage ) {
+                    amPage = p;
+                    loadAllMediaFiles();
+                    window.scrollTo( { top: 0, behavior: 'smooth' } );
+                }
+            } );
+        }
+
+        window.radmCopyMediaUrl = function( url ) {
+            if ( navigator.clipboard && navigator.clipboard.writeText ) {
+                navigator.clipboard.writeText( url ).then( function() {
+                    radmToast( 'Media URL copied to clipboard!', 'success' );
+                } ).catch( function() {
+                    prompt( 'Copy media URL:', url );
+                } );
+            } else {
+                prompt( 'Copy media URL:', url );
+            }
+        };
+
+        window.radmCopyMediaUrlFromModal = function() {
+            var inp = document.getElementById( 'radm-media-prev-url-input' );
+            if ( inp && inp.value ) {
+                radmCopyMediaUrl( inp.value );
+            }
+        };
+
+        window.radmOpenMediaPreviewModal = function( id ) {
+            var card = document.querySelector( '.radm-allmedia-card[data-id="' + id + '"]' );
+            if ( !card || !card.getAttribute( 'data-item' ) ) return;
+            try {
+                var item = JSON.parse( card.getAttribute( 'data-item' ) );
+                var overlay = document.getElementById( 'radm-media-preview-modal-overlay' );
+                if ( !overlay ) return;
+
+                document.getElementById( 'radm-media-prev-title' ).textContent = item.title || item.filename;
+                document.getElementById( 'radm-media-prev-filename' ).textContent = item.filename;
+                document.getElementById( 'radm-media-prev-date' ).textContent = item.date;
+                document.getElementById( 'radm-media-prev-dims' ).textContent = item.dimensions || 'N/A';
+                document.getElementById( 'radm-media-prev-size' ).textContent = item.filesize || 'N/A';
+                document.getElementById( 'radm-media-prev-url-input' ).value = item.url;
+                document.getElementById( 'radm-media-prev-open-link' ).href = item.url;
+
+                var imgEl = document.getElementById( 'radm-media-prev-img' );
+                var docEl = document.getElementById( 'radm-media-prev-doc' );
+                if ( item.is_image ) {
+                    imgEl.src = item.url;
+                    imgEl.style.display = 'block';
+                    docEl.style.display = 'none';
+                } else {
+                    imgEl.style.display = 'none';
+                    docEl.style.display = 'block';
+                    document.getElementById( 'radm-media-prev-docname' ).textContent = item.filename;
+                }
+
+                overlay.classList.add( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'false' );
+            } catch( e ) {}
+        };
+
+        window.radmCloseMediaPreviewModal = function() {
+            var overlay = document.getElementById( 'radm-media-preview-modal-overlay' );
+            if ( overlay ) {
+                overlay.classList.remove( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'true' );
+            }
+        };
+
+        window.radmPromptDeleteAllMedia = function( id, name ) {
+            pendingAllMediaDelId = id;
+            var overlay = document.getElementById( 'radm-allmedia-delete-overlay' );
+            var nameEl  = document.getElementById( 'radm-allmedia-delete-name' );
+            if ( nameEl ) nameEl.textContent = '"' + name + '"';
+            if ( overlay ) {
+                overlay.classList.add( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'false' );
+            }
+        };
+
+        window.radmCloseAllMediaDeleteModal = function() {
+            var overlay = document.getElementById( 'radm-allmedia-delete-overlay' );
+            if ( overlay ) {
+                overlay.classList.remove( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'true' );
+            }
+            pendingAllMediaDelId = null;
+        };
+
+        var allMediaDelConfirmBtn = document.getElementById( 'radm-allmedia-delete-confirm-btn' );
+        if ( allMediaDelConfirmBtn ) {
+            allMediaDelConfirmBtn.addEventListener( 'click', function() {
+                if ( !pendingAllMediaDelId ) return;
+                var id = pendingAllMediaDelId;
+                allMediaDelConfirmBtn.disabled = true;
+                allMediaDelConfirmBtn.textContent = 'Deleting…';
+
+                ajaxPost( 'radm_delete_attachment', { attachment_id: id }, function( res ) {
+                    allMediaDelConfirmBtn.disabled = false;
+                    allMediaDelConfirmBtn.textContent = 'Delete File';
+                    radmCloseAllMediaDeleteModal();
+                    if ( res.success ) {
+                        radmToast( 'File deleted permanently.', 'success' );
+                        loadAllMediaFiles();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to delete file.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        window.radmHandleAllMediaUpload = function( input ) {
+            var files = input.files;
+            if ( !files || !files.length ) return;
+            var total = files.length;
+            var completed = 0;
+            radmToast( 'Uploading ' + total + ' file(s) to WordPress...', 'info' );
+
+            Array.from( files ).forEach( function( file ) {
+                var fd = new FormData();
+                fd.append( 'action', 'radm_upload_image_file' );
+                fd.append( 'image_file', file );
+                fd.append( 'nonce', nonce );
+
+                fetch( ajaxUrl, { method: 'POST', body: fd } )
+                    .then( function( r ) { return r.json(); } )
+                    .then( function( res ) {
+                        completed++;
+                        if ( completed === total ) {
+                            input.value = '';
+                            radmToast( 'All ' + total + ' file(s) uploaded successfully!', 'success' );
+                            loadAllMediaFiles();
+                        }
+                    } )
+                    .catch( function() {
+                        completed++;
+                        if ( completed === total ) {
+                            input.value = '';
+                            loadAllMediaFiles();
+                        }
+                    } );
+            } );
+        };
+
+        // Drag & drop on all media dropzone banner
+        var amDropzone = document.getElementById( 'radm-allmedia-dropzone' );
+        var amFileInput = document.getElementById( 'radm-allmedia-file-input' );
+        if ( amDropzone && amFileInput ) {
+            amDropzone.addEventListener( 'dragover', function( e ) {
+                e.preventDefault();
+                amDropzone.style.borderColor = '#2E7D32';
+                amDropzone.style.background = '#f0fdf4';
+            } );
+            amDropzone.addEventListener( 'dragleave', function( e ) {
+                e.preventDefault();
+                amDropzone.style.borderColor = '#cbd5e1';
+                amDropzone.style.background = '#f8fafc';
+            } );
+            amDropzone.addEventListener( 'drop', function( e ) {
+                e.preventDefault();
+                amDropzone.style.borderColor = '#cbd5e1';
+                amDropzone.style.background = '#f8fafc';
+                if ( e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length ) {
+                    amFileInput.files = e.dataTransfer.files;
+                    radmHandleAllMediaUpload( amFileInput );
+                }
             } );
         }
 

@@ -304,8 +304,14 @@ function radm_portal_header( string $page_title, string $page_subtitle ): void {
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=news' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'news' ) ? ' active' : ''; ?>">
                     <span class="radm-sub-dot"></span> News &amp; Updates
                 </a>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=faqs' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'faqs' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> FAQs
+                </a>
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=inquiries' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'inquiries' ) ? ' active' : ''; ?>">
-                    <span class="radm-sub-dot"></span> Inquiries
+                    <span class="radm-sub-dot"></span> Contact Inquiries
+                </a>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries' ) ); ?>" class="radm-nav-sub-item<?php echo ( $current_page === 'radm-pages' && $cur_sec === 'activity-inquiries' ) ? ' active' : ''; ?>">
+                    <span class="radm-sub-dot"></span> Activity Enquiries
                 </a>
             </div>
             <?php endif; ?>

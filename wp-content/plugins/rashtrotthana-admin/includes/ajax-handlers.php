@@ -252,7 +252,7 @@ add_action( 'wp_ajax_radm_delete_event', 'radm_ajax_delete_event' );
 function radm_ajax_delete_event(): void {
     radm_ajax_auth();
 
-    $post_id = absint( $_POST['event_id'] ?? 0 );
+    $post_id = absint( $_POST['event_id'] ?? ( $_POST['post_id'] ?? 0 ) );
     if ( ! $post_id ) {
         wp_send_json_error( [ 'message' => 'Missing event ID.' ], 400 );
     }
@@ -707,6 +707,7 @@ function radm_ajax_get_gallery_items(): void {
     $type      = sanitize_key( $_POST['type'] ?? 'all' );
     $category  = sanitize_text_field( $_POST['category'] ?? '' );
     $event_id  = absint( $_POST['event_id'] ?? 0 );
+    $album_id  = absint( $_POST['album_id'] ?? 0 );
     $status    = sanitize_key( $_POST['status'] ?? '' );
     $search    = sanitize_text_field( $_POST['search'] ?? '' );
     $sort      = sanitize_key( $_POST['sort'] ?? 'latest' );
@@ -733,6 +734,21 @@ function radm_ajax_get_gallery_items(): void {
             'key'     => '_ry_gallery_event_id',
             'value'   => $event_id,
             'compare' => '=',
+        ];
+    }
+    if ( $album_id > 0 ) {
+        $meta_query[] = [
+            'relation' => 'OR',
+            [
+                'key'     => '_ry_gallery_album_id',
+                'value'   => $album_id,
+                'compare' => '=',
+            ],
+            [
+                'key'     => '_ry_gallery_album_ids',
+                'value'   => (string) $album_id,
+                'compare' => 'LIKE',
+            ],
         ];
     }
 
@@ -815,9 +831,20 @@ function radm_ajax_get_gallery_items(): void {
             }
         }
 
+        $g_album_id = (int) get_post_meta( $post->ID, '_ry_gallery_album_id', true );
+        $album_name = '';
+        if ( $g_album_id > 0 ) {
+            $alb_post = get_post( $g_album_id );
+            if ( $alb_post ) {
+                $album_name = $alb_post->post_title;
+            }
+        }
+
         // Subtitle tag
         $sub_tag = '';
-        if ( ! empty( $event_name ) ) {
+        if ( ! empty( $album_name ) ) {
+            $sub_tag = 'Album: ' . $album_name;
+        } elseif ( ! empty( $event_name ) ) {
             $sub_tag = 'Event: ' . $event_name;
         } elseif ( ! empty( $g_cat ) ) {
             $sub_tag = 'Category: ' . $g_cat;
@@ -832,6 +859,21 @@ function radm_ajax_get_gallery_items(): void {
             }
         }
 
+        $meta_aids = get_post_meta( $post->ID, '_ry_gallery_album_ids', true );
+        $item_album_ids = [];
+        if ( ! empty( $meta_aids ) ) {
+            $item_album_ids = is_array( $meta_aids ) ? $meta_aids : ( json_decode( $meta_aids, true ) ?: [] );
+        }
+        if ( $g_album_id > 0 && ! in_array( $g_album_id, $item_album_ids, true ) ) {
+            array_unshift( $item_album_ids, $g_album_id );
+        }
+
+        $meta_cids = get_post_meta( $post->ID, '_ry_gallery_center_ids', true );
+        $item_center_ids = [];
+        if ( ! empty( $meta_cids ) ) {
+            $item_center_ids = is_array( $meta_cids ) ? $meta_cids : ( json_decode( $meta_cids, true ) ?: [] );
+        }
+
         $items[] = [
             'id'             => $post->ID,
             'title'          => $post->post_title,
@@ -843,6 +885,10 @@ function radm_ajax_get_gallery_items(): void {
             'category'       => $g_cat,
             'event_id'       => $g_event_id,
             'event_name'     => $event_name,
+            'album_id'       => $g_album_id,
+            'album_ids'      => $item_album_ids,
+            'center_ids'     => $item_center_ids,
+            'album_name'     => $album_name,
             'sub_tag'        => $sub_tag,
             'date_raw'       => $g_date_raw,
             'date_fmt'       => $g_date_fmt,
@@ -924,6 +970,51 @@ function radm_ajax_save_gallery_item(): void {
         $image_url = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80';
     }
 
+    $album_ids = [];
+    if ( ! empty( $_POST['album_ids'] ) ) {
+        if ( is_array( $_POST['album_ids'] ) ) {
+            $album_ids = array_filter( array_map( 'absint', $_POST['album_ids'] ) );
+        } else {
+            $album_ids = array_filter( array_map( 'absint', explode( ',', (string) $_POST['album_ids'] ) ) );
+        }
+    }
+    $single_album_id = absint( $_POST['album_id'] ?? 0 );
+    if ( $single_album_id > 0 && ! in_array( $single_album_id, $album_ids, true ) ) {
+        $album_ids[] = $single_album_id;
+    }
+
+    $new_album  = sanitize_text_field( $_POST['new_album_title'] ?? '' );
+
+    // If new album title provided, create rs_gallery_album post
+    if ( ! empty( $new_album ) ) {
+        $new_alb_id = wp_insert_post( [
+            'post_title'   => $new_album,
+            'post_type'    => 'rs_gallery_album',
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+        ] );
+        if ( ! is_wp_error( $new_alb_id ) && $new_alb_id > 0 ) {
+            update_post_meta( $new_alb_id, '_rs_album_date', $media_date );
+            update_post_meta( $new_alb_id, '_rs_album_category', $category );
+            update_post_meta( $new_alb_id, '_rs_album_venue', 'Rashtrotthana Central' );
+            if ( ! in_array( $new_alb_id, $album_ids, true ) ) {
+                $album_ids[] = $new_alb_id;
+            }
+        }
+    }
+
+    $primary_album_id = ! empty( $album_ids ) ? $album_ids[0] : 0;
+
+    // Centers tagging
+    $center_ids = [];
+    if ( ! empty( $_POST['center_ids'] ) ) {
+        if ( is_array( $_POST['center_ids'] ) ) {
+            $center_ids = array_filter( array_map( 'absint', $_POST['center_ids'] ) );
+        } else {
+            $center_ids = array_filter( array_map( 'absint', explode( ',', (string) $_POST['center_ids'] ) ) );
+        }
+    }
+
     $post_data = [
         'post_title'   => $title,
         'post_content' => $desc,
@@ -953,6 +1044,9 @@ function radm_ajax_save_gallery_item(): void {
     update_post_meta( $post_id, '_ry_gallery_video_duration', $video_dur );
     update_post_meta( $post_id, '_ry_gallery_category', $category );
     update_post_meta( $post_id, '_ry_gallery_event_id', $event_id );
+    update_post_meta( $post_id, '_ry_gallery_album_id', $primary_album_id );
+    update_post_meta( $post_id, '_ry_gallery_album_ids', wp_json_encode( array_values( $album_ids ) ) );
+    update_post_meta( $post_id, '_ry_gallery_center_ids', wp_json_encode( array_values( $center_ids ) ) );
     update_post_meta( $post_id, '_ry_gallery_date', $media_date );
 
     if ( $uploaded_attachment_id > 0 ) {
@@ -963,6 +1057,54 @@ function radm_ajax_save_gallery_item(): void {
         ] );
     }
 
+    $photo_att_id = $uploaded_attachment_id > 0 ? $uploaded_attachment_id : get_post_thumbnail_id( $post_id );
+
+    // If linked to rs_gallery_albums, register this item inside each album's photos or videos meta
+    if ( ! empty( $album_ids ) ) {
+        foreach ( $album_ids as $alb_id ) {
+            if ( $media_type === 'image' && $photo_att_id > 0 ) {
+                $photos_raw = get_post_meta( $alb_id, '_rs_album_photos', true );
+                $photo_ids = [];
+                if ( is_string( $photos_raw ) && ! empty( $photos_raw ) ) {
+                    if ( $photos_raw[0] === '[' ) {
+                        $photo_ids = json_decode( $photos_raw, true ) ?: [];
+                    } else {
+                        $photo_ids = array_filter( array_map( 'intval', explode( ',', $photos_raw ) ) );
+                    }
+                } elseif ( is_array( $photos_raw ) ) {
+                    $photo_ids = $photos_raw;
+                }
+                if ( ! in_array( $photo_att_id, $photo_ids, true ) ) {
+                    $photo_ids[] = $photo_att_id;
+                    update_post_meta( $alb_id, '_rs_album_photos', wp_json_encode( array_values( $photo_ids ) ) );
+                }
+            } elseif ( $media_type === 'video' && ! empty( $video_url ) ) {
+                $videos_raw = get_post_meta( $alb_id, '_rs_album_videos', true );
+                $videos = [];
+                if ( is_string( $videos_raw ) && ! empty( $videos_raw ) ) {
+                    $videos = json_decode( $videos_raw, true ) ?: [];
+                } elseif ( is_array( $videos_raw ) ) {
+                    $videos = $videos_raw;
+                }
+                $exists = false;
+                foreach ( $videos as $v ) {
+                    if ( ( isset( $v['url'] ) && $v['url'] === $video_url ) || ( isset( $v['embed_url'] ) && $v['embed_url'] === $video_url ) ) {
+                        $exists = true;
+                        break;
+                    }
+                }
+                if ( ! $exists ) {
+                    $videos[] = [
+                        'title'    => $title,
+                        'duration' => $video_dur ?: '02:30',
+                        'url'      => $video_url,
+                    ];
+                    update_post_meta( $alb_id, '_rs_album_videos', wp_json_encode( $videos ) );
+                }
+            }
+        }
+    }
+
     if ( ! empty( $category ) ) {
         wp_set_object_terms( $post_id, $category, 'gallery_category', false );
     }
@@ -971,7 +1113,45 @@ function radm_ajax_save_gallery_item(): void {
         'id'        => $post_id,
         'image_url' => $image_url,
         'title'     => $title,
-        'message'   => $media_id > 0 ? 'Gallery item updated successfully.' : 'Photo uploaded to gallery successfully.',
+        'album_id'  => $album_id,
+        'message'   => $media_id > 0 ? 'Gallery item updated successfully.' : 'Photo/video uploaded to gallery successfully.',
+    ] );
+}
+
+/**
+ * Quick create rs_gallery_album endpoint
+ */
+add_action( 'wp_ajax_radm_create_gallery_album', 'radm_ajax_create_gallery_album' );
+function radm_ajax_create_gallery_album(): void {
+    radm_ajax_auth();
+    $title    = sanitize_text_field( $_POST['title'] ?? '' );
+    $category = sanitize_text_field( $_POST['category'] ?? 'Special Event' );
+    $venue    = sanitize_text_field( $_POST['venue'] ?? 'Rashtrotthana Central' );
+    $date     = sanitize_text_field( $_POST['date'] ?? current_time( 'F j, Y' ) );
+
+    if ( empty( $title ) ) {
+        wp_send_json_error( [ 'message' => 'Album title is required.' ], 400 );
+    }
+
+    $album_id = wp_insert_post( [
+        'post_title'   => $title,
+        'post_type'    => 'rs_gallery_album',
+        'post_status'  => 'publish',
+        'post_author'  => get_current_user_id(),
+    ], true );
+
+    if ( is_wp_error( $album_id ) ) {
+        wp_send_json_error( [ 'message' => $album_id->get_error_message() ], 500 );
+    }
+
+    update_post_meta( $album_id, '_rs_album_date', $date );
+    update_post_meta( $album_id, '_rs_album_category', $category );
+    update_post_meta( $album_id, '_rs_album_venue', $venue );
+
+    wp_send_json_success( [
+        'album_id' => $album_id,
+        'title'    => $title,
+        'message'  => 'Album created successfully!',
     ] );
 }
 
@@ -1576,6 +1756,40 @@ function radm_ajax_save_content_center(): void {
         set_post_thumbnail( $saved_id, $attachment_id );
     }
 
+    // Process and Save Offered Activities
+    $raw_acts = $_POST['activities'] ?? [];
+    $clean_acts = [];
+    if ( is_array( $raw_acts ) ) {
+        foreach ( $raw_acts as $act ) {
+            $act_clean = sanitize_text_field( $act );
+            if ( $act_clean ) {
+                $clean_acts[] = $act_clean;
+            }
+        }
+    }
+    $clean_acts = array_values( array_unique( $clean_acts ) );
+    update_post_meta( $saved_id, '_ry_center_activities', $clean_acts );
+
+    // Update ACF repeater structure for programs so page-centers.php reflects them immediately
+    $prog_repeater = [];
+    foreach ( $clean_acts as $idx => $act_name ) {
+        update_post_meta( $saved_id, 'programs_' . $idx . '_program_name', $act_name );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_badge', 'Regular Batch' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_days', 'Monday to Saturday' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_timings', 'Morning & Evening Batches' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_dates', 'Ongoing Admissions' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_desc', 'Certified instruction in ' . $act_name );
+        $prog_repeater[] = [
+            'program_name' => $act_name,
+            'badge'        => 'Regular Batch',
+            'days'         => 'Monday to Saturday',
+            'timings'      => 'Morning & Evening Batches',
+            'dates'        => 'Ongoing Admissions',
+            'desc'         => 'Certified instruction in ' . $act_name,
+        ];
+    }
+    update_post_meta( $saved_id, 'programs', count( $clean_acts ) );
+
     // Also update ACF fields if ACF is installed
     if ( function_exists( 'update_field' ) ) {
         update_field( 'area', $area, $saved_id );
@@ -1585,6 +1799,25 @@ function radm_ajax_save_content_center(): void {
         update_field( 'hours', $hours, $saved_id );
         update_field( 'address', $address, $saved_id );
         update_field( 'map_url', $map_url, $saved_id );
+        if ( ! empty( $prog_repeater ) ) {
+            update_field( 'programs', $prog_repeater, $saved_id );
+        }
+    }
+
+    // Bidirectional sync: ensure selected activities also list this center
+    if ( ! empty( $clean_acts ) ) {
+        $center_title_clean = $post_title . ' Center';
+        foreach ( $clean_acts as $act_name ) {
+            $act_post = get_page_by_title( $act_name, OBJECT, [ 'activity', 'rs_activity' ] );
+            if ( $act_post ) {
+                $cur_centers = get_post_meta( $act_post->ID, 'centers_text', true ) ?: ( get_post_meta( $act_post->ID, 'centers', true ) ?: '' );
+                if ( $cur_centers && strpos( $cur_centers, 'all' ) === false && strpos( $cur_centers, $post_title ) === false ) {
+                    $new_centers = trim( $cur_centers . ', ' . $center_title_clean, ', ' );
+                    update_post_meta( $act_post->ID, 'centers_text', $new_centers );
+                    update_post_meta( $act_post->ID, 'centers', $new_centers );
+                }
+            }
+        }
     }
 
     wp_send_json_success( [
@@ -1654,12 +1887,15 @@ function radm_ajax_save_activity(): void {
         wp_set_object_terms( $saved_id, [ $category_id ], 'activity_category' );
     }
 
+    $registration_open = isset( $_POST['registration_open'] ) ? ( ! empty( $_POST['registration_open'] ) ? 1 : 0 ) : 1;
+
     update_post_meta( $saved_id, 'badge', $badge );
     update_post_meta( $saved_id, 'batches_text', $batches_text );
     update_post_meta( $saved_id, 'duration_text', $duration_text );
     update_post_meta( $saved_id, 'frequency_text', $frequency_text );
     update_post_meta( $saved_id, 'eligibility_text', $eligibility_text );
     update_post_meta( $saved_id, 'centers_text', $centers_text );
+    update_post_meta( $saved_id, '_ry_registration_open', $registration_open );
 
     if ( $image_url ) {
         update_post_meta( $saved_id, '_ry_image_url', $image_url );
@@ -1680,6 +1916,27 @@ function radm_ajax_save_activity(): void {
     wp_send_json_success( [
         'message' => 'Activity saved successfully!',
         'id'      => $saved_id,
+    ] );
+}
+
+// ── Toggle Activity Registration Open/Closed ────────────────────────────────
+add_action( 'wp_ajax_radm_toggle_activity_registration', 'radm_ajax_toggle_activity_registration' );
+function radm_ajax_toggle_activity_registration(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid activity ID.' ] );
+    }
+
+    $current = get_post_meta( $post_id, '_ry_registration_open', true );
+    $new_val = ( $current === '0' || $current === 0 ) ? 1 : 0;
+    update_post_meta( $post_id, '_ry_registration_open', $new_val );
+
+    wp_send_json_success( [
+        'id'      => $post_id,
+        'open'    => $new_val,
+        'label'   => $new_val ? 'Open' : 'Closed',
+        'message' => 'Registration is now ' . ( $new_val ? 'Open' : 'Closed' ) . ' for this activity.',
     ] );
 }
 
@@ -1780,6 +2037,121 @@ function radm_ajax_delete_inquiry(): void {
     }
 }
 
+// ── Save Content Event (Add / Edit Event directly in portal) ────────────────
+add_action( 'wp_ajax_radm_save_content_event', 'radm_ajax_save_content_event' );
+function radm_ajax_save_content_event(): void {
+    radm_ajax_auth();
+
+    $post_id       = absint( $_POST['post_id'] ?? 0 );
+    $post_title    = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Event Name is required.' ] );
+    }
+
+    $event_date    = sanitize_text_field( $_POST['event_date'] ?? '' );
+    $start_time    = sanitize_text_field( $_POST['start_time'] ?? '06:00' );
+    $end_time      = sanitize_text_field( $_POST['end_time'] ?? '08:00' );
+    $venue         = sanitize_text_field( $_POST['venue'] ?? 'Rashtrotthana Central' );
+    $reg_open      = isset( $_POST['registration_open'] ) ? ( ! empty( $_POST['registration_open'] ) ? 1 : 0 ) : 1;
+    $content       = wp_kses_post( $_POST['content'] ?? '' );
+    $image_url     = esc_url_raw( $_POST['image_url'] ?? '' );
+    $attachment_id = absint( $_POST['attachment_id'] ?? 0 );
+    $post_status   = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $content,
+        'post_status'  => $post_status,
+        'post_type'    => 'event',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $post_data['post_author'] = get_current_user_id();
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save event.' ] );
+    }
+
+    update_post_meta( $saved_id, '_ry_event_date', $event_date );
+    update_post_meta( $saved_id, '_ry_start_time', $start_time );
+    update_post_meta( $saved_id, '_ry_end_time', $end_time );
+    update_post_meta( $saved_id, '_ry_venue', $venue );
+    update_post_meta( $saved_id, '_ry_registration_open', $reg_open );
+
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Event saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Save FAQ (Add / Edit FAQ) ────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_faq', 'radm_ajax_save_faq' );
+function radm_ajax_save_faq(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $question   = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $question ) ) {
+        wp_send_json_error( [ 'message' => 'Question is required.' ] );
+    }
+
+    $answer      = wp_kses_post( $_POST['content'] ?? '' );
+    $menu_order  = absint( $_POST['menu_order'] ?? 0 );
+    $post_status = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $question,
+        'post_content' => $answer,
+        'menu_order'   => $menu_order,
+        'post_status'  => $post_status,
+        'post_type'    => 'faq',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save FAQ.' ] );
+    }
+
+    wp_send_json_success( [
+        'message' => 'FAQ saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete FAQ ───────────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_faq', 'radm_ajax_delete_faq' );
+function radm_ajax_delete_faq(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'faq' ) {
+        wp_send_json_error( [ 'message' => 'Invalid FAQ ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'FAQ removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove FAQ.' ] );
+    }
+}
+
 // ── Direct Image Upload (Custom In-Portal Local File Upload) ─────────────────
 add_action( 'wp_ajax_radm_direct_image_upload', 'radm_ajax_direct_image_upload' );
 function radm_ajax_direct_image_upload(): void {
@@ -1817,19 +2189,29 @@ add_action( 'wp_ajax_radm_get_db_images', 'radm_ajax_get_db_images' );
 function radm_ajax_get_db_images(): void {
     radm_ajax_auth();
 
-    $search   = sanitize_text_field( $_POST['search'] ?? '' );
-    $page     = max( 1, absint( $_POST['page'] ?? 1 ) );
-    $per_page = max( 1, min( 60, absint( $_POST['per_page'] ?? 24 ) ) );
+    $search    = sanitize_text_field( $_POST['search'] ?? '' );
+    $mime_type = sanitize_text_field( $_POST['mime_type'] ?? '' );
+    $page      = max( 1, absint( $_POST['page'] ?? 1 ) );
+    $per_page  = max( 1, min( 60, absint( $_POST['per_page'] ?? 24 ) ) );
 
     $query_args = [
         'post_type'      => 'attachment',
-        'post_mime_type' => 'image',
         'post_status'    => 'inherit',
         'posts_per_page' => $per_page,
         'paged'          => $page,
         'orderby'        => 'date',
         'order'          => 'DESC',
     ];
+
+    if ( ! empty( $mime_type ) && $mime_type !== 'all' ) {
+        if ( $mime_type === 'image' ) {
+            $query_args['post_mime_type'] = 'image';
+        } elseif ( $mime_type === 'document' || $mime_type === 'application' ) {
+            $query_args['post_mime_type'] = [ 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/plain', 'text/csv' ];
+        } else {
+            $query_args['post_mime_type'] = $mime_type;
+        }
+    }
 
     if ( ! empty( $search ) ) {
         $query_args['s'] = $search;
@@ -1844,8 +2226,17 @@ function radm_ajax_get_db_images(): void {
         $thumb    = wp_get_attachment_image_url( $att_id, 'thumbnail' ) ?: $url;
         $meta     = wp_get_attachment_metadata( $att_id );
         $file     = get_attached_file( $att_id );
-        $filename = $file ? basename( $file ) : ( $post->post_name ?: 'image' );
-        $dims     = '';
+        $filename = $file ? basename( $file ) : ( $post->post_name ?: 'file' );
+        $mime     = get_post_mime_type( $att_id );
+        $is_img   = strpos( $mime, 'image' ) === 0;
+        
+        $filesize = '';
+        if ( $file && file_exists( $file ) ) {
+            $bytes = filesize( $file );
+            $filesize = size_format( $bytes, 1 );
+        }
+
+        $dims = '';
         if ( ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
             $dims = $meta['width'] . ' × ' . $meta['height'];
         }
@@ -1857,6 +2248,9 @@ function radm_ajax_get_db_images(): void {
             'url'        => $url,
             'thumb'      => $thumb,
             'dimensions' => $dims,
+            'filesize'   => $filesize,
+            'mime'       => $mime,
+            'is_image'   => $is_img,
             'date'       => get_the_date( 'M j, Y', $post ),
         ];
     }

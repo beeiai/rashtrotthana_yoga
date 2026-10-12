@@ -7,26 +7,60 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 $section = sanitize_key( $_GET['section'] ?? 'centers' );
-if ( ! in_array( $section, [ 'centers', 'activities', 'events', 'news', 'inquiries' ], true ) ) {
+if ( ! in_array( $section, [ 'centers', 'activities', 'events', 'news', 'faqs', 'inquiries', 'activity-inquiries' ], true ) ) {
     $section = 'centers';
 }
 
+// Global cached lists for dropdowns throughout this module
+$all_centers_list = get_posts( [
+    'post_type'      => [ 'rs_center', 'center' ],
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'orderby'        => 'title',
+    'order'          => 'ASC',
+] );
+
+$all_activities_list = get_posts( [
+    'post_type'      => [ 'activity', 'rs_activity' ],
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'orderby'        => 'title',
+    'order'          => 'ASC',
+] );
+
 // Counts for tabs
-$count_centers    = (int) wp_count_posts( 'rs_center' )->publish;
-$count_activities = (int) wp_count_posts( 'activity' )->publish;
-if ( $count_activities === 0 ) {
-    $count_activities = (int) wp_count_posts( 'rs_activity' )->publish;
+$count_centers    = count( $all_centers_list ) ?: (int) wp_count_posts( 'rs_center' )->publish;
+$count_activities = count( $all_activities_list ) ?: (int) wp_count_posts( 'activity' )->publish;
+$count_events     = (int) wp_count_posts( 'event' )->publish;
+$count_news       = (int) wp_count_posts( 'post' )->publish;
+$count_faqs       = (int) wp_count_posts( 'faq' )->publish;
+
+// Inquiries breakdown: Contact vs Activity Registrations
+$all_inquiry_ids = get_posts( [
+    'post_type'      => 'rs_inquiry',
+    'post_status'    => 'publish',
+    'posts_per_page' => -1,
+    'fields'         => 'ids',
+] );
+$count_contact_inquiries  = 0;
+$count_activity_inquiries = 0;
+foreach ( $all_inquiry_ids as $inq_post_id ) {
+    $inq_act = get_post_meta( $inq_post_id, '_rs_activity', true );
+    if ( ! empty( $inq_act ) ) {
+        $count_activity_inquiries++;
+    } else {
+        $count_contact_inquiries++;
+    }
 }
-$count_events    = (int) wp_count_posts( 'event' )->publish;
-$count_news      = (int) wp_count_posts( 'post' )->publish;
-$count_inquiries = (int) wp_count_posts( 'rs_inquiry' )->publish;
 
 $titles = [
-    'centers'    => [ 'Centers Management', 'Add, edit, or customize Rashtrotthana branch locations & details.' ],
-    'activities' => [ 'Activities & Classes', 'Manage yoga programs, schedules, batches, and activities.' ],
-    'events'     => [ 'Events Management', 'Create and oversee upcoming campus events & masterclasses.' ],
-    'news'       => [ 'News & Press Releases', 'Publish updates, news announcements, and articles.' ],
-    'inquiries'  => [ 'Contact Form Inquiries', 'View and respond to inquiries submitted by visitors.' ],
+    'centers'            => [ 'Centers Management', 'Add, edit, or customize Rashtrotthana branch locations & details.' ],
+    'activities'         => [ 'Activities & Classes', 'Manage yoga programs, schedules, batches, and activities.' ],
+    'events'             => [ 'Events Management', 'Create and oversee upcoming campus events & masterclasses.' ],
+    'news'               => [ 'News & Press Releases', 'Publish updates, news announcements, and articles.' ],
+    'faqs'               => [ 'FAQ Questions Management', 'Manage frequently asked questions displayed on Contact Us and Help pages.' ],
+    'inquiries'          => [ 'Contact Form Inquiries', 'View and respond to general inquiries submitted from the Contact Us page.' ],
+    'activity-inquiries' => [ 'Activity Registrations & Enquiries', 'Manage student applications and batch inquiries submitted for yoga & cultural programs.' ],
 ];
 
 radm_portal_header( $titles[ $section ][0], $titles[ $section ][1] );
@@ -51,9 +85,17 @@ radm_portal_header( $titles[ $section ][0], $titles[ $section ][1] );
            class="radm-tab<?php echo $section === 'news' ? ' active' : ''; ?>">
             📰 News &amp; Updates (<?php echo esc_html( $count_news ); ?>)
         </a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=faqs' ) ); ?>"
+           class="radm-tab<?php echo $section === 'faqs' ? ' active' : ''; ?>">
+            ❓ FAQs (<?php echo esc_html( $count_faqs ); ?>)
+        </a>
         <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=inquiries' ) ); ?>"
            class="radm-tab<?php echo $section === 'inquiries' ? ' active' : ''; ?>">
-            ✉️ Inquiries (<?php echo esc_html( $count_inquiries ); ?>)
+            📞 Contact Inquiries (<?php echo esc_html( $count_contact_inquiries ); ?>)
+        </a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries' ) ); ?>"
+           class="radm-tab<?php echo $section === 'activity-inquiries' ? ' active' : ''; ?>">
+            🧘 Activity Enquiries (<?php echo esc_html( $count_activity_inquiries ); ?>)
         </a>
     </div>
 </div>
@@ -95,7 +137,7 @@ $centers_query = new WP_Query( [
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
                     <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                + Add New Center
+                Add New Center
             </button>
         </div>
     </div>
@@ -194,8 +236,27 @@ $centers_query = new WP_Query( [
                     </td>
                     <td style="text-align:right;">
                         <div class="radm-action-group" style="justify-content:flex-end;">
+                            <?php
+                            $prog_rows = get_field('programs', $cid);
+                            $center_acts = [];
+                            if ( is_numeric($prog_rows) || is_string($prog_rows) ) {
+                                $prog_cnt = intval($prog_rows);
+                                for ( $pi = 0; $pi < $prog_cnt; $pi++ ) {
+                                    $pname = get_post_meta($cid, 'programs_' . $pi . '_program_name', true);
+                                    if ($pname) { $center_acts[] = $pname; }
+                                }
+                            } elseif ( is_array($prog_rows) ) {
+                                foreach ($prog_rows as $prow) {
+                                    if (!empty($prow['program_name'])) { $center_acts[] = $prow['program_name']; }
+                                }
+                            }
+                            $saved_acts = get_post_meta($cid, '_ry_center_activities', true);
+                            if ( is_array($saved_acts) ) {
+                                $center_acts = array_values(array_unique(array_merge($center_acts, $saved_acts)));
+                            }
+                            ?>
                             <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="Edit Center"
-                                    onclick='radmEditCenter(<?php echo wp_json_encode( [
+                                    data-center="<?php echo esc_attr( wp_json_encode( [
                                         'id'            => $cid,
                                         'title'         => $title,
                                         'area'          => $area,
@@ -211,13 +272,18 @@ $centers_query = new WP_Query( [
                                         'image_url'     => $img,
                                         'attachment_id' => $att_id,
                                         'status'        => $status,
-                                    ] ); ?>)'>
+                                        'activities'    => $center_acts,
+                                    ] ) ); ?>"
+                                    onclick="radmEditCenter(this)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
                             </button>
                             <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Center"
-                                    onclick="radmPromptDelete(<?php echo esc_attr( $cid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'center', <?php echo esc_attr( $att_id ); ?>)">
+                                    data-id="<?php echo esc_attr( $cid ); ?>"
+                                    data-title="<?php echo esc_attr( $title ); ?>"
+                                    data-attachment-id="<?php echo esc_attr( $att_id ); ?>"
+                                    onclick="radmPromptDelete(this, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'center', <?php echo esc_attr( $att_id ); ?>)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
@@ -284,7 +350,7 @@ $categories = get_terms( [
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
                     <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                + Add New Activity
+                Add New Activity
             </button>
         </div>
     </div>
@@ -299,6 +365,7 @@ $categories = get_terms( [
                     <th>Category</th>
                     <th>Batches / Schedule</th>
                     <th>Duration &amp; Frequency</th>
+                    <th>Registration</th>
                     <th>Status</th>
                     <th style="text-align:right;">Actions</th>
                 </tr>
@@ -317,6 +384,8 @@ $categories = get_terms( [
                         $freq    = get_post_meta( $aid, 'frequency_text', true ) ?: ( get_post_meta( $aid, 'frequency', true ) ?: 'Weekly Schedule' );
                         $elig    = get_post_meta( $aid, 'eligibility_text', true ) ?: ( get_post_meta( $aid, 'eligibility', true ) ?: 'All Age Groups' );
                         $centers = get_post_meta( $aid, 'centers_text', true ) ?: '';
+                        $reg_open_meta = get_post_meta( $aid, '_ry_registration_open', true );
+                        $is_reg_open   = ( $reg_open_meta === '' || $reg_open_meta === false || $reg_open_meta === '1' || $reg_open_meta === 1 );
                         $content = get_the_content();
                         $img     = get_the_post_thumbnail_url( $aid, 'medium' ) ?: ( get_post_meta( $aid, '_ry_image_url', true ) ?: '' );
                         $att_id  = (int) get_post_thumbnail_id( $aid );
@@ -325,6 +394,14 @@ $categories = get_terms( [
                         $cat_slug = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->slug : '';
                         $cat_id   = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->term_id : 0;
                         $status   = get_post_status( $aid );
+
+                        global $wpdb;
+                        $inq_count = (int) $wpdb->get_var( $wpdb->prepare(
+                            "SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
+                             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
+                             WHERE pm.meta_key = '_rs_activity' AND pm.meta_value = %s AND p.post_status != 'trash'",
+                            $title
+                        ) );
                 ?>
                 <tr class="radm-activity-row"
                     data-title="<?php echo esc_attr( strtolower( $title ) ); ?>"
@@ -359,6 +436,22 @@ $categories = get_terms( [
                         <div style="font-size:11px; color:var(--radm-text-muted);"><?php echo esc_html( $freq ); ?></div>
                     </td>
                     <td>
+                        <div style="display:flex; flex-direction:column; gap:4px;">
+                            <button type="button" 
+                                    class="radm-btn <?php echo $is_reg_open ? 'radm-btn-success' : 'radm-btn-outline'; ?> radm-btn-sm" 
+                                    style="padding:3px 10px; font-size:11.5px; display:inline-flex; align-items:center; gap:5px;"
+                                    onclick="radmToggleActivityReg(<?php echo esc_attr( $aid ); ?>, this)"
+                                    title="Click to toggle Registration open/closed on website">
+                                <span class="radm-status-dot" style="display:inline-block; width:7px; height:7px; border-radius:50%; background:<?php echo $is_reg_open ? '#10b981' : '#94a3b8'; ?>;"></span>
+                                <span class="reg-label"><?php echo $is_reg_open ? 'Open' : 'Closed'; ?></span>
+                            </button>
+                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries&activity=' . urlencode( $title ) ) ); ?>" 
+                               style="font-size:11.5px; color:var(--radm-green); font-weight:600; text-decoration:none;">
+                               <?php echo esc_html( $inq_count ); ?> inquiries &rarr;
+                            </a>
+                        </div>
+                    </td>
+                    <td>
                         <span class="radm-badge <?php echo $status === 'publish' ? 'radm-badge--green' : 'radm-badge--orange'; ?>">
                             <?php echo esc_html( ucfirst( $status ) ); ?>
                         </span>
@@ -366,27 +459,32 @@ $categories = get_terms( [
                     <td style="text-align:right;">
                         <div class="radm-action-group" style="justify-content:flex-end;">
                             <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="Edit Activity"
-                                    onclick='radmEditActivity(<?php echo wp_json_encode( [
-                                        'id'               => $aid,
-                                        'title'            => $title,
-                                        'category_id'      => $cat_id,
-                                        'badge'            => $badge,
-                                        'content'          => $content,
-                                        'batches_text'     => $batches,
-                                        'duration_text'    => $dur,
-                                        'frequency_text'   => $freq,
-                                        'eligibility_text' => $elig,
-                                        'centers_text'     => $centers,
-                                        'image_url'        => $img,
-                                        'attachment_id'    => $att_id,
-                                        'status'           => $status,
-                                    ] ); ?>)'>
+                                    data-activity="<?php echo esc_attr( wp_json_encode( [
+                                        'id'                => $aid,
+                                        'title'             => $title,
+                                        'category_id'       => $cat_id,
+                                        'badge'             => $badge,
+                                        'content'           => $content,
+                                        'batches_text'      => $batches,
+                                        'duration_text'     => $dur,
+                                        'frequency_text'    => $freq,
+                                        'eligibility_text'  => $elig,
+                                        'centers_text'      => $centers,
+                                        'registration_open' => $is_reg_open ? 1 : 0,
+                                        'image_url'         => $img,
+                                        'attachment_id'     => $att_id,
+                                        'status'            => $status,
+                                    ] ) ); ?>"
+                                    onclick="radmEditActivity(this)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
                             </button>
                             <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Activity"
-                                    onclick="radmPromptDelete(<?php echo esc_attr( $aid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'activity', <?php echo esc_attr( $att_id ); ?>)">
+                                    data-id="<?php echo esc_attr( $aid ); ?>"
+                                    data-title="<?php echo esc_attr( $title ); ?>"
+                                    data-attachment-id="<?php echo esc_attr( $att_id ); ?>"
+                                    onclick="radmPromptDelete(this, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'activity', <?php echo esc_attr( $att_id ); ?>)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
@@ -436,12 +534,12 @@ $event_query = new WP_Query( [
         </div>
         <div style="display:flex; align-items:center; gap:12px;">
             <span class="radm-count-label"><strong><?php echo esc_html( $event_query->found_posts ); ?></strong> Events Total</span>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-registrations&radm_view=create' ) ); ?>" class="radm-btn radm-btn-primary">
+            <button type="button" class="radm-btn radm-btn-primary" onclick="radmOpenEventModal()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
                     <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                + Create New Event
-            </a>
+                Create New Event
+            </button>
         </div>
     </div>
 
@@ -473,11 +571,14 @@ $event_query = new WP_Query( [
                         $start   = get_post_meta( $eid, '_ry_start_time', true ) ?: '06:00';
                         $end     = get_post_meta( $eid, '_ry_end_time', true ) ?: '08:00';
                         $venue   = get_post_meta( $eid, '_ry_venue', true ) ?: 'Rashtrotthana Central';
+                        $reg_open= get_post_meta( $eid, '_ry_registration_open', true );
+                        $content = get_the_content();
                         $img     = get_the_post_thumbnail_url( $eid, 'medium' ) ?: ( get_post_meta( $eid, '_ry_image_url', true ) ?: '' );
+                        $att_id  = (int) get_post_thumbnail_id( $eid );
                         $status  = get_post_status( $eid );
                         $reg_cnt = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$reg_table} WHERE event_id = %d AND status != 'cancelled'", $eid ) );
                 ?>
-                <tr class="radm-event-row" data-title="<?php echo esc_attr( strtolower( $title ) ); ?>">
+                <tr class="radm-event-row" data-title="<?php echo esc_attr( strtolower( $title ) ); ?>" id="event-row-<?php echo esc_attr( $eid ); ?>">
                     <td style="color:var(--radm-text-muted); font-size:12px;"><?php echo esc_html( $idx++ ); ?></td>
                     <td>
                         <div style="width:48px; height:48px; border-radius:8px; overflow:hidden; background:#f1f5f9; display:flex; align-items:center; justify-content:center; border:1px solid var(--radm-border);">
@@ -513,8 +614,36 @@ $event_query = new WP_Query( [
                     </td>
                     <td style="text-align:right;">
                         <div class="radm-action-group" style="justify-content:flex-end;">
+                            <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="Edit Event"
+                                    data-event="<?php echo esc_attr( wp_json_encode( [
+                                        'id'                => $eid,
+                                        'title'             => $title,
+                                        'event_date'        => $date,
+                                        'start_time'        => $start,
+                                        'end_time'          => $end,
+                                        'venue'             => $venue,
+                                        'registration_open' => ( $reg_open === '0' || $reg_open === 0 ) ? 0 : 1,
+                                        'content'           => $content,
+                                        'image_url'         => $img,
+                                        'attachment_id'     => $att_id,
+                                        'status'            => $status,
+                                    ] ) ); ?>"
+                                    onclick="radmEditEvent(this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Event"
+                                    data-id="<?php echo esc_attr( $eid ); ?>"
+                                    data-title="<?php echo esc_attr( $title ); ?>"
+                                    data-attachment-id="<?php echo esc_attr( $att_id ); ?>"
+                                    onclick="radmPromptDelete(this, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'event', <?php echo esc_attr( $att_id ); ?>)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
                             <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-registrations&event_id=' . $eid ) ); ?>"
-                               class="radm-btn radm-btn-outline radm-btn-sm" title="View Registrations">
+                               class="radm-btn radm-btn-outline radm-btn-sm" title="View Registrations" style="margin-left:4px;">
                                 Registrations
                             </a>
                         </div>
@@ -560,7 +689,7 @@ $news_query = new WP_Query( [
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
                     <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>
-                + Add New Article
+                Add New Article
             </button>
         </div>
     </div>
@@ -625,7 +754,7 @@ $news_query = new WP_Query( [
                     <td style="text-align:right;">
                         <div class="radm-action-group" style="justify-content:flex-end;">
                             <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="Edit Article"
-                                    onclick='radmEditNews(<?php echo wp_json_encode( [
+                                    data-news="<?php echo esc_attr( wp_json_encode( [
                                         'id'            => $nid,
                                         'title'         => $title,
                                         'content'       => $content,
@@ -633,13 +762,17 @@ $news_query = new WP_Query( [
                                         'image_url'     => $img,
                                         'attachment_id' => $att_id,
                                         'status'        => $status,
-                                    ] ); ?>)'>
+                                    ] ) ); ?>"
+                                    onclick="radmEditNews(this)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
                             </button>
                             <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Article"
-                                    onclick="radmPromptDelete(<?php echo esc_attr( $nid ); ?>, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'post', <?php echo esc_attr( $att_id ); ?>)">
+                                    data-id="<?php echo esc_attr( $nid ); ?>"
+                                    data-title="<?php echo esc_attr( $title ); ?>"
+                                    data-attachment-id="<?php echo esc_attr( $att_id ); ?>"
+                                    onclick="radmPromptDelete(this, '<?php echo esc_attr( addslashes( $title ) ); ?>', 'post', <?php echo esc_attr( $att_id ); ?>)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                 </svg>
@@ -657,6 +790,124 @@ $news_query = new WP_Query( [
     </div>
 </div>
 
+<?php elseif ( $section === 'faqs' ) : ?>
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION: FAQ QUESTIONS MANAGEMENT
+     ══════════════════════════════════════════════════════════════════════════ -->
+<?php
+$faq_query = new WP_Query( [
+    'post_type'      => 'faq',
+    'posts_per_page' => -1,
+    'post_status'    => [ 'publish', 'draft' ],
+    'orderby'        => [ 'menu_order' => 'ASC', 'date' => 'DESC' ],
+] );
+?>
+
+<div class="radm-card">
+    <div class="radm-table-toolbar">
+        <div style="display:flex; align-items:center; gap:12px; flex:1;">
+            <div class="radm-search-wrap" style="position:relative; width:300px; max-width:100%;">
+                <input type="text" id="radm-faq-search" class="radm-input" placeholder="Search FAQs by question or answer…" style="padding-left:36px;" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:12px; top:12px; color:var(--radm-text-muted); pointer-events:none;">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <span class="radm-count-label"><strong><?php echo esc_html( $faq_query->found_posts ); ?></strong> FAQs Total</span>
+            <button type="button" class="radm-btn radm-btn-primary" onclick="radmOpenFaqModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Add New FAQ
+            </button>
+        </div>
+    </div>
+
+    <div class="radm-table-wrap">
+        <table class="radm-table" id="radm-faqs-table">
+            <thead>
+                <tr>
+                    <th style="width:50px;">#</th>
+                    <th style="width:30%;">Question</th>
+                    <th>Answer</th>
+                    <th style="width:80px;">Order</th>
+                    <th>Status</th>
+                    <th style="text-align:right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ( $faq_query->have_posts() ) :
+                    $idx = 1;
+                    while ( $faq_query->have_posts() ) :
+                        $faq_query->the_post();
+                        $fid        = get_the_ID();
+                        $question   = get_the_title();
+                        $answer     = get_the_content();
+                        $menu_order = (int) $post->menu_order;
+                        $status     = get_post_status( $fid );
+                ?>
+                <tr class="radm-faq-row" data-title="<?php echo esc_attr( strtolower( $question . ' ' . wp_strip_all_tags( $answer ) ) ); ?>" id="faq-row-<?php echo esc_attr( $fid ); ?>">
+                    <td style="color:var(--radm-text-muted); font-size:12px;"><?php echo esc_html( $idx++ ); ?></td>
+                    <td>
+                        <strong style="font-size:13.5px; color:var(--radm-text); display:block;"><?php echo esc_html( $question ); ?></strong>
+                    </td>
+                    <td>
+                        <div style="font-size:12.5px; color:var(--radm-text-muted); max-width:420px; line-height:1.5;">
+                            <?php echo esc_html( wp_trim_words( wp_strip_all_tags( $answer ), 24, '…' ) ); ?>
+                        </div>
+                    </td>
+                    <td>
+                        <span style="font-size:12.5px; font-weight:600;"><?php echo esc_html( $menu_order ); ?></span>
+                    </td>
+                    <td>
+                        <span class="radm-badge <?php echo $status === 'publish' ? 'radm-badge--green' : 'radm-badge--orange'; ?>">
+                            <?php echo esc_html( ucfirst( $status ) ); ?>
+                        </span>
+                    </td>
+                    <td style="text-align:right;">
+                        <div class="radm-action-group" style="justify-content:flex-end;">
+                            <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="Edit FAQ"
+                                    data-faq="<?php echo esc_attr( wp_json_encode( [
+                                        'id'         => $fid,
+                                        'title'      => $question,
+                                        'content'    => $answer,
+                                        'menu_order' => $menu_order,
+                                        'status'     => $status,
+                                    ] ) ); ?>"
+                                    onclick="radmEditFaq(this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete FAQ"
+                                    data-id="<?php echo esc_attr( $fid ); ?>"
+                                    data-title="<?php echo esc_attr( $question ); ?>"
+                                    onclick="radmPromptDelete(this, '<?php echo esc_attr( addslashes( $question ) ); ?>', 'faq')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                ?>
+                <tr>
+                    <td colspan="6" style="text-align:center; padding:36px; color:var(--radm-text-muted);">
+                        No FAQs found. Click <strong>+ Add New FAQ</strong> to create one.
+                    </td>
+                </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <?php elseif ( $section === 'inquiries' ) : ?>
 <!-- ══════════════════════════════════════════════════════════════════════════
      SECTION: CONTACT FORM INQUIRIES
@@ -668,6 +919,18 @@ $inq_query = new WP_Query( [
     'post_status'    => 'publish',
     'orderby'        => 'date',
     'order'          => 'DESC',
+    'meta_query'     => [
+        'relation' => 'OR',
+        [
+            'key'     => '_rs_activity',
+            'compare' => 'NOT EXISTS',
+        ],
+        [
+            'key'     => '_rs_activity',
+            'value'   => '',
+            'compare' => '=',
+        ],
+    ],
 ] );
 ?>
 
@@ -675,13 +938,13 @@ $inq_query = new WP_Query( [
     <div class="radm-table-toolbar">
         <div style="display:flex; align-items:center; gap:12px; flex:1;">
             <div class="radm-search-wrap" style="position:relative; width:300px; max-width:100%;">
-                <input type="text" id="radm-inq-search" class="radm-input" placeholder="Search inquiries by name or email…" style="padding-left:36px;" />
+                <input type="text" id="radm-inq-search" class="radm-input" placeholder="Search inquiries by name, email or message…" style="padding-left:36px;" />
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:12px; top:12px; color:var(--radm-text-muted); pointer-events:none;">
                     <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
             </div>
         </div>
-        <span class="radm-count-label"><strong><?php echo esc_html( $inq_query->found_posts ); ?></strong> Inquiries Received</span>
+        <span class="radm-count-label"><strong><?php echo esc_html( $inq_query->found_posts ); ?></strong> Contact Inquiries Received</span>
     </div>
 
     <div class="radm-table-wrap">
@@ -708,10 +971,10 @@ $inq_query = new WP_Query( [
                         $name    = get_post_meta( $iid, 'inquiry_name', true ) ?: ( get_post_meta( $iid, '_rs_name', true ) ?: get_the_title() );
                         $email   = get_post_meta( $iid, 'inquiry_email', true ) ?: get_post_meta( $iid, '_rs_email', true );
                         $phone   = get_post_meta( $iid, 'inquiry_phone', true ) ?: get_post_meta( $iid, '_rs_phone', true );
-                        $subj    = get_post_meta( $iid, 'inquiry_subject', true ) ?: ( get_post_meta( $iid, '_rs_center', true ) ?: 'General Inquiry' );
+                        $subj    = get_post_meta( $iid, 'inquiry_subject', true ) ?: 'General Inquiry';
                         $msg     = get_the_content();
                 ?>
-                <tr class="radm-inquiry-row" data-title="<?php echo esc_attr( strtolower( $name . ' ' . $email ) ); ?>" id="inq-row-<?php echo esc_attr( $iid ); ?>">
+                <tr class="radm-inquiry-row" data-title="<?php echo esc_attr( strtolower( $name . ' ' . $email . ' ' . $subj . ' ' . $msg ) ); ?>" id="inq-row-<?php echo esc_attr( $iid ); ?>">
                     <td style="color:var(--radm-text-muted); font-size:12px;"><?php echo esc_html( $idx++ ); ?></td>
                     <td><span style="font-size:12.5px; color:var(--radm-text-muted);"><?php echo esc_html( $date ); ?></span></td>
                     <td><strong style="font-size:13.5px; color:var(--radm-text);"><?php echo esc_html( $name ); ?></strong></td>
@@ -759,6 +1022,193 @@ $inq_query = new WP_Query( [
                 <tr>
                     <td colspan="7" style="text-align:center; padding:36px; color:var(--radm-text-muted);">
                         No contact inquiries received yet.
+                    </td>
+                </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php elseif ( $section === 'activity-inquiries' ) : ?>
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SECTION: ACTIVITY REGISTRATIONS & PROGRAM ENQUIRIES
+     ══════════════════════════════════════════════════════════════════════════ -->
+<?php
+$filter_act = sanitize_text_field( $_GET['activity'] ?? '' );
+$filter_cen = sanitize_text_field( $_GET['center'] ?? '' );
+
+$act_meta_query = [
+    [
+        'key'     => '_rs_activity',
+        'value'   => '',
+        'compare' => '!=',
+    ],
+];
+if ( ! empty( $filter_act ) ) {
+    $act_meta_query[] = [
+        'key'     => '_rs_activity',
+        'value'   => $filter_act,
+        'compare' => '=',
+    ];
+}
+if ( ! empty( $filter_cen ) ) {
+    $act_meta_query[] = [
+        'key'     => '_rs_center',
+        'value'   => $filter_cen,
+        'compare' => '=',
+    ];
+}
+
+$act_inq_query = new WP_Query( [
+    'post_type'      => 'rs_inquiry',
+    'posts_per_page' => -1,
+    'post_status'    => 'publish',
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+    'meta_query'     => $act_meta_query,
+] );
+?>
+
+<div class="radm-card">
+    <div class="radm-table-toolbar" style="flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex:1;">
+            <div class="radm-search-wrap" style="position:relative; width:260px; max-width:100%;">
+                <input type="text" id="radm-actinq-search" class="radm-input" placeholder="Search student name, phone, email…" style="padding-left:36px;" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute; left:12px; top:12px; color:var(--radm-text-muted); pointer-events:none;">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </div>
+
+            <!-- Activity Dropdown Filter -->
+            <div style="display:flex; align-items:center; gap:6px;">
+                <label for="radm-actinq-filter-activity" style="font-size:12px; font-weight:600; color:var(--radm-text-muted);">Activity:</label>
+                <select id="radm-actinq-filter-activity" class="radm-select" style="font-size:13px; max-width:240px;" onchange="radmFilterActInquiries()">
+                    <option value="">All Activities</option>
+                    <?php foreach ( $all_activities_list as $act_obj ) : ?>
+                        <option value="<?php echo esc_attr( $act_obj->post_title ); ?>" <?php selected( $filter_act, $act_obj->post_title ); ?>>
+                            <?php echo esc_html( $act_obj->post_title ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- Center Dropdown Filter -->
+            <div style="display:flex; align-items:center; gap:6px;">
+                <label for="radm-actinq-filter-center" style="font-size:12px; font-weight:600; color:var(--radm-text-muted);">Center:</label>
+                <select id="radm-actinq-filter-center" class="radm-select" style="font-size:13px; max-width:200px;" onchange="radmFilterActInquiries()">
+                    <option value="">All Centers</option>
+                    <?php foreach ( $all_centers_list as $cen_obj ) : ?>
+                        <option value="<?php echo esc_attr( $cen_obj->post_title ); ?>" <?php selected( $filter_cen, $cen_obj->post_title ); ?>>
+                            <?php echo esc_html( $cen_obj->post_title ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <?php if ( ! empty( $filter_act ) || ! empty( $filter_cen ) ) : ?>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries' ) ); ?>" class="radm-btn radm-btn-outline radm-btn-sm" style="font-size:12px; color:#ef4444; border-color:#fca5a5;">
+                    ✕ Clear Filter
+                </a>
+            <?php endif; ?>
+        </div>
+
+        <span class="radm-count-label"><strong><?php echo esc_html( $act_inq_query->found_posts ); ?></strong> Registrations</span>
+    </div>
+
+    <div class="radm-table-wrap">
+        <table class="radm-table" id="radm-activity-inquiries-table">
+            <thead>
+                <tr>
+                    <th style="width:45px;">#</th>
+                    <th>Date</th>
+                    <th>Student Name</th>
+                    <th>Contact</th>
+                    <th>Activity Program</th>
+                    <th>Center / Branch</th>
+                    <th>Timing</th>
+                    <th>Notes</th>
+                    <th style="text-align:right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ( $act_inq_query->have_posts() ) :
+                    $idx = 1;
+                    while ( $act_inq_query->have_posts() ) :
+                        $act_inq_query->the_post();
+                        $aid     = get_the_ID();
+                        $date    = get_the_date( 'M d, Y H:i' );
+                        $s_name  = get_post_meta( $aid, '_rs_student_name', true ) ?: ( get_post_meta( $aid, 'inquiry_name', true ) ?: get_the_title() );
+                        $s_phone = get_post_meta( $aid, '_rs_student_phone', true ) ?: get_post_meta( $aid, 'inquiry_phone', true );
+                        $s_email = get_post_meta( $aid, '_rs_student_email', true ) ?: get_post_meta( $aid, 'inquiry_email', true );
+                        $s_act   = get_post_meta( $aid, '_rs_activity', true );
+                        $s_cen   = get_post_meta( $aid, '_rs_center', true ) ?: 'All Centers';
+                        $s_time  = get_post_meta( $aid, '_rs_timing', true ) ?: 'Flexible';
+                        $content = get_the_content();
+                ?>
+                <tr class="radm-actinq-row" 
+                    data-title="<?php echo esc_attr( strtolower( $s_name . ' ' . $s_phone . ' ' . $s_email . ' ' . $s_act . ' ' . $s_cen ) ); ?>"
+                    data-act="<?php echo esc_attr( $s_act ); ?>"
+                    data-cen="<?php echo esc_attr( $s_cen ); ?>"
+                    id="actinq-row-<?php echo esc_attr( $aid ); ?>">
+                    <td style="color:var(--radm-text-muted); font-size:12px;"><?php echo esc_html( $idx++ ); ?></td>
+                    <td><span style="font-size:12.5px; color:var(--radm-text-muted);"><?php echo esc_html( $date ); ?></span></td>
+                    <td><strong style="font-size:13.5px; color:var(--radm-text);"><?php echo esc_html( $s_name ); ?></strong></td>
+                    <td>
+                        <?php if ( $s_phone ) : ?>
+                            <div style="font-size:13px; font-weight:600;"><a href="tel:<?php echo esc_attr( $s_phone ); ?>" style="color:var(--radm-text); text-decoration:none;">📞 <?php echo esc_html( $s_phone ); ?></a></div>
+                        <?php endif; ?>
+                        <?php if ( $s_email ) : ?>
+                            <div style="font-size:12px;"><a href="mailto:<?php echo esc_attr( $s_email ); ?>" style="color:var(--radm-green);"><?php echo esc_html( $s_email ); ?></a></div>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <span class="radm-badge radm-badge--green" style="font-weight:600;">
+                            <?php echo esc_html( $s_act ); ?>
+                        </span>
+                    </td>
+                    <td><span class="radm-branch-badge"><?php echo esc_html( $s_cen ); ?></span></td>
+                    <td><span style="font-size:12.5px; color:var(--radm-text);"><?php echo esc_html( $s_time ); ?></span></td>
+                    <td>
+                        <div style="font-size:12px; color:var(--radm-text-muted); max-width:240px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                            <?php echo esc_html( wp_strip_all_tags( $content ) ); ?>
+                        </div>
+                    </td>
+                    <td style="text-align:right;">
+                        <div class="radm-action-group" style="justify-content:flex-end;">
+                            <button type="button" class="radm-icon-btn radm-icon-btn--edit" title="View Full Registration"
+                                    onclick='radmViewActivityInquiry(<?php echo wp_json_encode( [
+                                        'name'     => $s_name,
+                                        'phone'    => $s_phone,
+                                        'email'    => $s_email,
+                                        'activity' => $s_act,
+                                        'center'   => $s_cen,
+                                        'timing'   => $s_time,
+                                        'date'     => $date,
+                                        'notes'    => $content,
+                                    ] ); ?>)'>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="radm-icon-btn radm-icon-btn--delete" title="Delete Registration"
+                                    onclick="radmPromptDelete(<?php echo esc_attr( $aid ); ?>, 'Registration from <?php echo esc_attr( addslashes( $s_name ) ); ?>', 'inquiry')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                ?>
+                <tr>
+                    <td colspan="9" style="text-align:center; padding:36px; color:var(--radm-text-muted);">
+                        No activity registrations received yet.
                     </td>
                 </tr>
                 <?php endif; ?>
@@ -829,6 +1279,42 @@ $inq_query = new WP_Query( [
                 <div class="radm-form-group">
                     <label class="radm-label" for="center-map-url">Google Maps Directions URL</label>
                     <input type="url" id="center-map-url" name="map_url" class="radm-input" placeholder="https://maps.app.goo.gl/..." />
+                </div>
+
+                <!-- Offered Activities / Programs Multi-select -->
+                <div class="radm-form-group">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <label class="radm-label" style="margin-bottom:0;">Offered Activities / Programs <small style="font-weight:400; color:var(--radm-text-muted);">(Select multiple)</small></label>
+                        <button type="button" id="center-toggle-all-acts-btn" onclick="radmToggleAllCenterActs()" style="background:none; border:none; color:var(--radm-green); font-size:12px; font-weight:600; cursor:pointer; text-decoration:underline;">
+                            Select All Activities
+                        </button>
+                    </div>
+
+                    <!-- Selected Activities Pills Display -->
+                    <div id="center-activities-pills" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;"></div>
+
+                    <!-- Multi-select Dropdown Trigger -->
+                    <div class="radm-multiselect-wrap" id="center-activities-ms-wrap" style="position:relative;">
+                        <button type="button" class="radm-multiselect-btn radm-input" id="center-activities-ms-btn" onclick="radmToggleCenterActsDropdown()" style="display:flex; justify-content:space-between; align-items:center; text-align:left; cursor:pointer; font-size:13px; background:#fff;">
+                            <span id="center-activities-ms-label" style="color:var(--radm-text-muted);">Choose Activities offered at this Center…</span>
+                            <span style="font-size:10px; color:#64748b;">▼</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div class="radm-multiselect-dropdown" id="center-activities-ms-dropdown" style="display:none; position:absolute; top:100%; left:0; right:0; z-index:60; background:#fff; border:1px solid var(--radm-border); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); padding:8px; max-height:240px; overflow-y:auto; margin-top:4px;">
+                            <div style="margin-bottom:6px; padding:2px;">
+                                <input type="text" id="center-acts-search-box" class="radm-input" placeholder="Search activities..." style="font-size:12px; padding:5px 8px;" oninput="radmFilterCenterActsList(this.value)" />
+                            </div>
+                            <div class="radm-ms-options-list" id="center-acts-options-list">
+                                <?php foreach ( $all_activities_list as $act_item ) : ?>
+                                    <label class="radm-ms-item center-act-opt" style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; cursor:pointer; font-size:13px;" data-title="<?php echo esc_attr( strtolower( $act_item->post_title ) ); ?>">
+                                        <input type="checkbox" name="activities[]" class="center-act-cb" value="<?php echo esc_attr( $act_item->post_title ); ?>" data-name="<?php echo esc_attr( $act_item->post_title ); ?>" onchange="radmOnCenterActCbChange()" />
+                                        <span><?php echo esc_html( $act_item->post_title ); ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
@@ -950,8 +1436,46 @@ $inq_query = new WP_Query( [
                 </div>
 
                 <div class="radm-form-group">
-                    <label class="radm-label" for="act-centers">Available Centers</label>
-                    <input type="text" id="act-centers" name="centers_text" class="radm-input" placeholder="e.g. Available across all Bangalore Centers" />
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <label class="radm-label" style="margin-bottom:0;">Available Centers <small style="font-weight:400; color:var(--radm-text-muted);">(Select multiple)</small></label>
+                        <button type="button" id="act-toggle-all-centers-btn" onclick="radmToggleAllActCenters()" style="background:none; border:none; color:var(--radm-green); font-size:12px; font-weight:600; cursor:pointer; text-decoration:underline;">
+                            Select All Centers
+                        </button>
+                    </div>
+
+                    <!-- Selected Centers Pills Display -->
+                    <div id="act-centers-pills" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;"></div>
+
+                    <!-- Multi-select Dropdown Trigger -->
+                    <div class="radm-multiselect-wrap" id="act-centers-ms-wrap" style="position:relative;">
+                        <button type="button" class="radm-multiselect-btn radm-input" id="act-centers-ms-btn" onclick="radmToggleActCentersDropdown()" style="display:flex; justify-content:space-between; align-items:center; text-align:left; cursor:pointer; font-size:13px; background:#fff;">
+                            <span id="act-centers-ms-label" style="color:var(--radm-text);">Available across all Bangalore Centers</span>
+                            <span style="font-size:10px; color:#64748b;">▼</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div class="radm-multiselect-dropdown" id="act-centers-ms-dropdown" style="display:none; position:absolute; top:100%; left:0; right:0; z-index:60; background:#fff; border:1px solid var(--radm-border); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); padding:8px; max-height:240px; overflow-y:auto; margin-top:4px;">
+                            <div style="margin-bottom:6px; padding:2px;">
+                                <input type="text" id="act-centers-search-box" class="radm-input" placeholder="Search centers..." style="font-size:12px; padding:5px 8px;" oninput="radmFilterActCentersList(this.value)" />
+                            </div>
+                            <div style="border-bottom:1px solid var(--radm-border); padding-bottom:6px; margin-bottom:6px;">
+                                <label class="radm-ms-item" style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; background:#f0fdf4; color:#166534;">
+                                    <input type="checkbox" id="act-center-all-cb" value="Available across all Bangalore Centers" onchange="radmOnActAllCentersCbChange(this)" />
+                                    <span>All Bangalore Centers (Available Everywhere)</span>
+                                </label>
+                            </div>
+                            <div class="radm-ms-options-list" id="act-centers-options-list">
+                                <?php foreach ( $all_centers_list as $cen ) : ?>
+                                    <label class="radm-ms-item act-center-opt" style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; cursor:pointer; font-size:13px;" data-title="<?php echo esc_attr( strtolower( $cen->post_title ) ); ?>">
+                                        <input type="checkbox" class="act-center-cb" value="<?php echo esc_attr( $cen->post_title . ' Center' ); ?>" data-name="<?php echo esc_attr( $cen->post_title ); ?>" onchange="radmOnActCenterCbChange()" />
+                                        <span><?php echo esc_html( $cen->post_title ); ?> Center</span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="text" id="act-centers" name="centers_text" class="radm-input" value="Available across all Bangalore Centers" style="display:none; margin-top:8px;" />
                 </div>
 
                 <!-- Activity Image Selection -->
@@ -980,12 +1504,21 @@ $inq_query = new WP_Query( [
                     </div>
                 </div>
 
-                <div class="radm-form-group">
-                    <label class="radm-label" for="act-status">Status</label>
-                    <select id="act-status" name="post_status" class="radm-select">
-                        <option value="publish">Published (Visible on site)</option>
-                        <option value="draft">Draft (Hidden)</option>
-                    </select>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="act-reg-open">Registration Open?</label>
+                        <select id="act-reg-open" name="registration_open" class="radm-select">
+                            <option value="1">Yes (Registration Open)</option>
+                            <option value="0">No (Registration Closed)</option>
+                        </select>
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="act-status">Status</label>
+                        <select id="act-status" name="post_status" class="radm-select">
+                            <option value="publish">Published (Visible on site)</option>
+                            <option value="draft">Draft (Hidden)</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -1071,6 +1604,158 @@ $inq_query = new WP_Query( [
 </div>
 
 <!-- ══════════════════════════════════════════════════════════════════════════
+     MODAL: ADD / EDIT EVENT
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-event-modal" aria-hidden="true">
+    <div class="radm-modal" style="max-width: 600px;">
+        <div class="radm-modal-header" style="padding:18px 24px; border-bottom:1px solid var(--radm-border); display:flex; justify-content:space-between; align-items:center;">
+            <h3 id="radm-event-modal-title" style="margin:0; font-size:17px; font-weight:700;">Add New Event</h3>
+            <button type="button" class="radm-icon-btn" onclick="radmCloseModals()" style="border:none;">✕</button>
+        </div>
+        <form id="radm-event-form" onsubmit="radmSubmitEvent(event)">
+            <input type="hidden" id="event-id" name="post_id" value="0" />
+            <input type="hidden" id="event-attachment-id" name="attachment_id" value="0" />
+            <input type="hidden" id="event-old-attachment-id" name="old_attachment_id" value="0" />
+
+            <div class="radm-modal-body" style="padding:22px 24px; overflow-y:auto; max-height:70vh; display:flex; flex-direction:column; gap:16px;">
+                <div class="radm-form-group">
+                    <label class="radm-label" for="event-title">Event Name <span style="color:#ef4444;">*</span></label>
+                    <input type="text" id="event-title" name="post_title" class="radm-input" placeholder="e.g. International Yoga Day 2025" required />
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="event-date">Event Date <span style="color:#ef4444;">*</span></label>
+                        <input type="date" id="event-date" name="event_date" class="radm-input" required />
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="event-venue-select">Venue / Location</label>
+                        <select id="event-venue-select" class="radm-select" onchange="radmOnVenueSelectChange(this)">
+                            <option value="">-- Choose Center / Venue --</option>
+                            <?php foreach ( $all_centers_list as $cen ) : ?>
+                                <option value="<?php echo esc_attr( $cen->post_title . ' Center' ); ?>"><?php echo esc_html( $cen->post_title ); ?> Center</option>
+                            <?php endforeach; ?>
+                            <option value="__custom__">Other / Custom Venue…</option>
+                        </select>
+                        <input type="text" id="event-venue" name="venue" class="radm-input" placeholder="e.g. Jayanagar Central Yogashala" style="display:none; margin-top:8px;" />
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="event-start">Start Time</label>
+                        <input type="time" id="event-start" name="start_time" class="radm-input" value="06:00" />
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="event-end">End Time</label>
+                        <input type="time" id="event-end" name="end_time" class="radm-input" value="08:00" />
+                    </div>
+                </div>
+
+                <div class="radm-form-group">
+                    <label class="radm-label" for="event-desc">Description</label>
+                    <textarea id="event-desc" name="content" class="radm-textarea" rows="3" placeholder="Overview of the event, schedule, highlights…"></textarea>
+                </div>
+
+                <!-- Event Image Selection -->
+                <div class="radm-form-group">
+                    <label class="radm-label">Featured Image / Banner</label>
+                    <input type="hidden" id="event-image-url" name="image_url" value="" />
+                    <div class="radm-image-selector-wrap" id="event-image-picker-box">
+                        <div id="event-img-preview" class="radm-image-preview-card" style="display:none;">
+                            <img src="" alt="Event Preview" />
+                            <div class="radm-image-preview-details">
+                                <div class="radm-image-preview-name">Selected Event Banner</div>
+                                <div class="radm-image-preview-url"></div>
+                            </div>
+                            <button type="button" class="radm-btn-remove-img" onclick="radmClearSelectedImage('event-image-url', 'event-attachment-id', 'event-img-preview')">✕ Remove</button>
+                        </div>
+                        <div class="radm-image-action-buttons">
+                            <button type="button" class="radm-btn radm-btn-primary" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmUploadFromLocal('event-image-url', 'event-attachment-id', 'event-img-preview', 'event-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Upload from Local
+                            </button>
+                            <button type="button" class="radm-btn radm-btn-outline" style="font-size:12.5px; padding:7px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="radmOpenDbMediaPicker('event-image-url', 'event-attachment-id', 'event-img-preview', 'event-old-attachment-id')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                Choose from Database
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="event-reg-open">Registrations Open?</label>
+                        <select id="event-reg-open" name="registration_open" class="radm-select">
+                            <option value="1">Yes (Open)</option>
+                            <option value="0">No (Closed)</option>
+                        </select>
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="event-status">Status</label>
+                        <select id="event-status" name="post_status" class="radm-select">
+                            <option value="publish">Published</option>
+                            <option value="draft">Draft</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="radm-modal-footer" style="padding:16px 24px; border-top:1px solid var(--radm-border); display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="radm-btn radm-btn-outline" onclick="radmCloseModals()">Cancel</button>
+                <button type="submit" class="radm-btn radm-btn-primary" id="event-save-btn">Save Event</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     MODAL: ADD / EDIT FAQ
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-faq-modal" aria-hidden="true">
+    <div class="radm-modal" style="max-width: 560px;">
+        <div class="radm-modal-header" style="padding:18px 24px; border-bottom:1px solid var(--radm-border); display:flex; justify-content:space-between; align-items:center;">
+            <h3 id="radm-faq-modal-title" style="margin:0; font-size:17px; font-weight:700;">Add FAQ Question</h3>
+            <button type="button" class="radm-icon-btn" onclick="radmCloseModals()" style="border:none;">✕</button>
+        </div>
+        <form id="radm-faq-form" onsubmit="radmSubmitFaq(event)">
+            <input type="hidden" id="faq-id" name="post_id" value="0" />
+
+            <div class="radm-modal-body" style="padding:22px 24px; overflow-y:auto; max-height:70vh; display:flex; flex-direction:column; gap:16px;">
+                <div class="radm-form-group">
+                    <label class="radm-label" for="faq-question">Question <span style="color:#ef4444;">*</span></label>
+                    <input type="text" id="faq-question" name="post_title" class="radm-input" placeholder="e.g. What are the timings for beginner yoga classes?" required />
+                </div>
+
+                <div class="radm-form-group">
+                    <label class="radm-label" for="faq-answer">Answer <span style="color:#ef4444;">*</span></label>
+                    <textarea id="faq-answer" name="content" class="radm-textarea" rows="5" placeholder="Provide a helpful and clear answer for visitors…" required></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="faq-order">Display Order</label>
+                        <input type="number" id="faq-order" name="menu_order" class="radm-input" value="0" min="0" placeholder="0" />
+                    </div>
+                    <div class="radm-form-group">
+                        <label class="radm-label" for="faq-status">Status</label>
+                        <select id="faq-status" name="post_status" class="radm-select">
+                            <option value="publish">Published (Visible on site)</option>
+                            <option value="draft">Draft (Hidden)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="radm-modal-footer" style="padding:16px 24px; border-top:1px solid var(--radm-border); display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="radm-btn radm-btn-outline" onclick="radmCloseModals()">Cancel</button>
+                <button type="submit" class="radm-btn radm-btn-primary" id="faq-save-btn">Save FAQ</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
      MODAL: VIEW INQUIRY DETAILS
      ══════════════════════════════════════════════════════════════════════════ -->
 <div class="radm-modal-overlay" id="radm-inquiry-modal" aria-hidden="true">
@@ -1108,6 +1793,62 @@ $inq_query = new WP_Query( [
             </div>
         </div>
         <div class="radm-modal-footer" style="padding:16px 24px; border-top:1px solid var(--radm-border); display:flex; justify-content:flex-end;">
+            <button type="button" class="radm-btn radm-btn-primary" onclick="radmCloseModals()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     MODAL: VIEW ACTIVITY REGISTRATION DETAILS
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div class="radm-modal-overlay" id="radm-activity-inquiry-modal" aria-hidden="true">
+    <div class="radm-modal" style="max-width: 540px;">
+        <div class="radm-modal-header" style="padding:18px 24px; border-bottom:1px solid var(--radm-border); display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-size:17px; font-weight:700;">Student Registration Details</h3>
+            <button type="button" class="radm-icon-btn" onclick="radmCloseModals()" style="border:none;">✕</button>
+        </div>
+        <div class="radm-modal-body" style="padding:22px 24px; display:flex; flex-direction:column; gap:14px;">
+            <div>
+                <span style="font-size:12px; color:var(--radm-text-muted);">Student Name:</span>
+                <strong id="act-modal-name" style="font-size:16px; color:var(--radm-text); display:block;"></strong>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                    <span style="font-size:12px; color:var(--radm-text-muted);">Phone Number:</span>
+                    <div id="act-modal-phone" style="font-size:13.5px; font-weight:600; color:var(--radm-text);"></div>
+                </div>
+                <div>
+                    <span style="font-size:12px; color:var(--radm-text-muted);">Email Address:</span>
+                    <div id="act-modal-email" style="font-size:13px; color:var(--radm-green); font-weight:600;"></div>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                    <span style="font-size:12px; color:var(--radm-text-muted);">Program / Activity:</span>
+                    <div id="act-modal-activity" style="font-size:13.5px; font-weight:600; color:#15803d;"></div>
+                </div>
+                <div>
+                    <span style="font-size:12px; color:var(--radm-text-muted);">Selected Center:</span>
+                    <div id="act-modal-center" style="font-size:13px; font-weight:600;"></div>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                    <span style="font-size:12px; color:var(--radm-text-muted);">Preferred Timing:</span>
+                    <div id="act-modal-timing" style="font-size:13px; color:var(--radm-text);"></div>
+                </div>
+                <div>
+                    <span style="font-size:12px; color:var(--radm-text-muted);">Submitted On:</span>
+                    <div id="act-modal-date" style="font-size:12px; color:var(--radm-text-muted);"></div>
+                </div>
+            </div>
+            <div>
+                <span style="font-size:12px; color:var(--radm-text-muted);">Student Notes / Details:</span>
+                <div id="act-modal-notes" style="padding:14px; background:#f8fafc; border:1px solid var(--radm-border); border-radius:8px; font-size:13px; line-height:1.6; color:var(--radm-text); white-space:pre-wrap; margin-top:4px;"></div>
+            </div>
+        </div>
+        <div class="radm-modal-footer" style="padding:16px 24px; border-top:1px solid var(--radm-border); display:flex; justify-content:space-between; align-items:center;">
+            <div id="act-modal-whatsapp-wrap"></div>
             <button type="button" class="radm-btn radm-btn-primary" onclick="radmCloseModals()">Close</button>
         </div>
     </div>
@@ -1212,12 +1953,36 @@ $inq_query = new WP_Query( [
         });
     }
 
+    // Search: FAQs
+    var fSearch = document.getElementById('radm-faq-search');
+    if (fSearch) {
+        fSearch.addEventListener('input', function() {
+            var q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.radm-faq-row').forEach(function(row) {
+                var title = row.getAttribute('data-title') || '';
+                row.style.display = (!q || title.indexOf(q) !== -1) ? '' : 'none';
+            });
+        });
+    }
+
     // Search: Inquiries
     var iSearch = document.getElementById('radm-inq-search');
     if (iSearch) {
         iSearch.addEventListener('input', function() {
             var q = this.value.toLowerCase().trim();
             document.querySelectorAll('.radm-inquiry-row').forEach(function(row) {
+                var title = row.getAttribute('data-title') || '';
+                row.style.display = (!q || title.indexOf(q) !== -1) ? '' : 'none';
+            });
+        });
+    }
+
+    // Search: Activity Inquiries
+    var actInqSearch = document.getElementById('radm-actinq-search');
+    if (actInqSearch) {
+        actInqSearch.addEventListener('input', function() {
+            var q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.radm-actinq-row').forEach(function(row) {
                 var title = row.getAttribute('data-title') || '';
                 row.style.display = (!q || title.indexOf(q) !== -1) ? '' : 'none';
             });
@@ -1248,10 +2013,27 @@ $inq_query = new WP_Query( [
         document.getElementById('radm-center-modal-title').textContent = 'Add New Center';
         var prev = document.getElementById('center-img-preview');
         if (prev) prev.style.display = 'none';
+
+        // Reset activities multi-select
+        document.querySelectorAll('.center-act-cb').forEach(function(cb) { cb.checked = false; });
+        radmRenderCenterActPills([]);
+        var actLbl = document.getElementById('center-activities-ms-label');
+        if (actLbl) actLbl.textContent = 'Choose Activities offered at this Center…';
+
         document.getElementById('radm-center-modal').classList.add('radm-modal-open');
     };
 
-    window.radmEditCenter = function(data) {
+    window.radmEditCenter = function(dataOrEl) {
+        var data = dataOrEl;
+        if (dataOrEl && dataOrEl.nodeType) {
+            try {
+                data = JSON.parse(dataOrEl.getAttribute('data-center') || dataOrEl.getAttribute('data-json') || '{}');
+            } catch(e) {
+                console.error('Error parsing center data:', e);
+                data = {};
+            }
+        }
+        if (!data) data = {};
         document.getElementById('center-id').value = data.id || '0';
         document.getElementById('center-name').value = data.title || '';
         document.getElementById('center-area').value = data.area || '';
@@ -1268,6 +2050,17 @@ $inq_query = new WP_Query( [
         document.getElementById('center-old-attachment-id').value = data.attachment_id || '0';
         document.getElementById('center-status').value = data.status || 'publish';
 
+        // Populate activities
+        var acts = Array.isArray(data.activities) ? data.activities : [];
+        document.querySelectorAll('.center-act-cb').forEach(function(cb) {
+            cb.checked = acts.indexOf(cb.value) !== -1;
+        });
+        radmRenderCenterActPills(acts);
+        var actLbl = document.getElementById('center-activities-ms-label');
+        if (actLbl) {
+            actLbl.textContent = acts.length > 0 ? (acts.length + ' Activities selected') : 'Choose Activities offered at this Center…';
+        }
+
         var prev = document.getElementById('center-img-preview');
         if (prev) {
             if (data.image_url) {
@@ -1282,6 +2075,65 @@ $inq_query = new WP_Query( [
         }
         document.getElementById('radm-center-modal-title').textContent = 'Edit Center: ' + (data.title || '');
         document.getElementById('radm-center-modal').classList.add('radm-modal-open');
+    };
+
+    // Center Activities Multi-Select Helpers
+    window.radmToggleCenterActsDropdown = function() {
+        var dd = document.getElementById('center-activities-ms-dropdown');
+        if (dd) {
+            dd.style.display = (dd.style.display === 'none' || !dd.style.display) ? 'block' : 'none';
+        }
+    };
+
+    window.radmFilterCenterActsList = function(q) {
+        var query = (q || '').trim().toLowerCase();
+        var items = document.querySelectorAll('.center-act-opt');
+        items.forEach(function(item) {
+            var title = item.getAttribute('data-title') || '';
+            item.style.display = (!query || title.indexOf(query) !== -1) ? 'flex' : 'none';
+        });
+    };
+
+    window.radmRenderCenterActPills = function(acts) {
+        var wrap = document.getElementById('center-activities-pills');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+        if (!acts || !acts.length) return;
+
+        acts.forEach(function(actName) {
+            var pill = document.createElement('span');
+            pill.className = 'radm-filter-tag';
+            pill.style.cssText = 'display:inline-flex; align-items:center; gap:5px; background:#dcfce7; color:#15803d; padding:3px 9px; border-radius:14px; font-size:12px; font-weight:600;';
+            pill.innerHTML = '<span>' + actName + '</span><button type="button" style="background:none; border:none; color:#15803d; font-size:13px; cursor:pointer; padding:0; line-height:1;" title="Remove">×</button>';
+            pill.querySelector('button').onclick = function() {
+                var cb = document.querySelector('.center-act-cb[value="' + CSS.escape(actName) + '"]');
+                if (cb) { cb.checked = false; }
+                radmOnCenterActCbChange();
+            };
+            wrap.appendChild(pill);
+        });
+    };
+
+    window.radmToggleAllCenterActs = function() {
+        var cbs = document.querySelectorAll('.center-act-cb');
+        var anyUnchecked = Array.prototype.some.call(cbs, function(cb) { return !cb.checked; });
+        cbs.forEach(function(cb) { cb.checked = anyUnchecked; });
+        radmOnCenterActCbChange();
+    };
+
+    window.radmOnCenterActCbChange = function() {
+        var cbs = document.querySelectorAll('.center-act-cb');
+        var selected = [];
+        cbs.forEach(function(cb) {
+            if (cb.checked) {
+                selected.push(cb.value);
+            }
+        });
+        radmRenderCenterActPills(selected);
+        var labelEl = document.getElementById('center-activities-ms-label');
+        if (labelEl) {
+            labelEl.textContent = selected.length > 0 ? (selected.length + ' Activities selected') : 'Choose Activities offered at this Center…';
+        }
     };
 
     window.radmSubmitCenter = function(e) {
@@ -1327,20 +2179,138 @@ $inq_query = new WP_Query( [
             });
     };
 
-    // Activity Modal
+    // Activity Multi-Select Centers Helpers
+    window.radmToggleActCentersDropdown = function() {
+        var dd = document.getElementById('act-centers-ms-dropdown');
+        if (dd) {
+            dd.style.display = (dd.style.display === 'none' || !dd.style.display) ? 'block' : 'none';
+        }
+    };
+
+    window.radmFilterActCentersList = function(q) {
+        var query = (q || '').trim().toLowerCase();
+        var items = document.querySelectorAll('.act-center-opt');
+        items.forEach(function(item) {
+            var title = item.getAttribute('data-title') || '';
+            item.style.display = (!query || title.indexOf(query) !== -1) ? 'flex' : 'none';
+        });
+    };
+
+    window.radmRenderActCenterPills = function(centers) {
+        var wrap = document.getElementById('act-centers-pills');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+        if (!centers || !centers.length) return;
+
+        centers.forEach(function(c) {
+            var pill = document.createElement('span');
+            pill.className = 'radm-filter-tag';
+            pill.style.cssText = 'display:inline-flex; align-items:center; gap:5px; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:14px; font-size:12px; font-weight:600;';
+            pill.innerHTML = '<span>' + (c.replace(/ Center$/i, '')) + '</span><button type="button" style="background:none; border:none; color:#0369a1; font-size:13px; cursor:pointer; padding:0; line-height:1;" title="Remove">×</button>';
+            pill.querySelector('button').onclick = function() {
+                var cb = document.querySelector('.act-center-cb[value="' + CSS.escape(c) + '"]');
+                if (cb) { cb.checked = false; }
+                var allCb = document.getElementById('act-center-all-cb');
+                if (allCb) { allCb.checked = false; }
+                radmOnActCenterCbChange();
+            };
+            wrap.appendChild(pill);
+        });
+    };
+
+    window.radmOnActAllCentersCbChange = function(allCb) {
+        var cbs = document.querySelectorAll('.act-center-cb');
+        var isAll = allCb.checked;
+        cbs.forEach(function(cb) {
+            cb.checked = isAll;
+        });
+        radmOnActCenterCbChange();
+    };
+
+    window.radmOnActCenterCbChange = function() {
+        var cbs = document.querySelectorAll('.act-center-cb');
+        var allCb = document.getElementById('act-center-all-cb');
+        var selected = [];
+        var total = cbs.length;
+        var checkedCount = 0;
+
+        cbs.forEach(function(cb) {
+            if (cb.checked) {
+                selected.push(cb.value);
+                checkedCount++;
+            }
+        });
+
+        var hiddenInput = document.getElementById('act-centers');
+        var labelEl     = document.getElementById('act-centers-ms-label');
+
+        if (checkedCount === total && total > 0) {
+            if (allCb) allCb.checked = true;
+            if (hiddenInput) hiddenInput.value = 'Available across all Bangalore Centers';
+            if (labelEl) labelEl.textContent = 'Available across all Bangalore Centers (' + total + ' Centers)';
+            radmRenderActCenterPills(['All Bangalore Centers']);
+        } else if (checkedCount === 0) {
+            if (allCb) allCb.checked = false;
+            if (hiddenInput) hiddenInput.value = '';
+            if (labelEl) labelEl.textContent = 'None selected (Click to choose centers)';
+            radmRenderActCenterPills([]);
+        } else {
+            if (allCb) allCb.checked = false;
+            if (hiddenInput) hiddenInput.value = selected.join(', ');
+            if (labelEl) labelEl.textContent = checkedCount + ' Centers selected';
+            radmRenderActCenterPills(selected);
+        }
+    };
+
+    window.radmToggleAllActCenters = function() {
+        var allCb = document.getElementById('act-center-all-cb');
+        if (allCb) {
+            allCb.checked = !allCb.checked;
+            radmOnActAllCentersCbChange(allCb);
+        }
+    };
+
+    // Close act centers dropdown when clicked outside
+    document.addEventListener('click', function(e) {
+        var msWrap = document.getElementById('act-centers-ms-wrap');
+        var msDropdown = document.getElementById('act-centers-ms-dropdown');
+        if (msWrap && msDropdown && !msWrap.contains(e.target)) {
+            msDropdown.style.display = 'none';
+        }
+    });
+
     window.radmOpenActivityModal = function() {
         document.getElementById('radm-activity-form').reset();
         document.getElementById('act-id').value = '0';
         document.getElementById('act-attachment-id').value = '0';
         document.getElementById('act-old-attachment-id').value = '0';
         document.getElementById('act-image-url').value = '';
+        
+        // Reset centers to All Bangalore Centers
+        var allCb = document.getElementById('act-center-all-cb');
+        if (allCb) allCb.checked = true;
+        var cbs = document.querySelectorAll('.act-center-cb');
+        cbs.forEach(function(cb) { cb.checked = true; });
+        radmOnActCenterCbChange();
+
+        if (document.getElementById('act-reg-open')) document.getElementById('act-reg-open').value = '1';
         document.getElementById('radm-activity-modal-title').textContent = 'Add New Activity';
         var prev = document.getElementById('act-img-preview');
         if (prev) prev.style.display = 'none';
         document.getElementById('radm-activity-modal').classList.add('radm-modal-open');
     };
 
-    window.radmEditActivity = function(data) {
+    window.radmEditActivity = function(dataOrEl) {
+        var data = dataOrEl;
+        if (dataOrEl && dataOrEl.nodeType) {
+            try {
+                data = JSON.parse(dataOrEl.getAttribute('data-activity') || dataOrEl.getAttribute('data-json') || '{}');
+            } catch(e) {
+                console.error('Error parsing activity data:', e);
+                data = {};
+            }
+        }
+        if (!data) data = {};
         document.getElementById('act-id').value = data.id || '0';
         document.getElementById('act-name').value = data.title || '';
         if (data.category_id) document.getElementById('act-cat').value = data.category_id;
@@ -1350,7 +2320,31 @@ $inq_query = new WP_Query( [
         document.getElementById('act-duration').value = data.duration_text || '';
         document.getElementById('act-frequency').value = data.frequency_text || '';
         document.getElementById('act-eligibility').value = data.eligibility_text || '';
-        document.getElementById('act-centers').value = data.centers_text || '';
+        
+        // Multi-select centers sync
+        var cVal = (data.centers_text || '').trim();
+        var allCb = document.getElementById('act-center-all-cb');
+        var cbs = document.querySelectorAll('.act-center-cb');
+
+        if (!cVal || cVal.toLowerCase().indexOf('all bangalore') !== -1 || cVal.toLowerCase().indexOf('all centers') !== -1) {
+            if (allCb) allCb.checked = true;
+            cbs.forEach(function(cb) { cb.checked = true; });
+            radmOnActCenterCbChange();
+        } else {
+            if (allCb) allCb.checked = false;
+            var parts = cVal.split(',').map(function(s) { return s.trim().toLowerCase(); });
+            cbs.forEach(function(cb) {
+                var v = cb.value.toLowerCase();
+                var n = (cb.getAttribute('data-name') || '').toLowerCase();
+                var isMatch = parts.some(function(p) {
+                    return p === v || p === n || v.indexOf(p) !== -1 || p.indexOf(n) !== -1;
+                });
+                cb.checked = isMatch;
+            });
+            radmOnActCenterCbChange();
+        }
+
+        if (document.getElementById('act-reg-open')) document.getElementById('act-reg-open').value = (data.registration_open === 0 || data.registration_open === '0') ? '0' : '1';
         document.getElementById('act-image-url').value = data.image_url || '';
         document.getElementById('act-attachment-id').value = data.attachment_id || '0';
         document.getElementById('act-old-attachment-id').value = data.attachment_id || '0';
@@ -1428,7 +2422,17 @@ $inq_query = new WP_Query( [
         document.getElementById('radm-news-modal').classList.add('radm-modal-open');
     };
 
-    window.radmEditNews = function(data) {
+    window.radmEditNews = function(dataOrEl) {
+        var data = dataOrEl;
+        if (dataOrEl && dataOrEl.nodeType) {
+            try {
+                data = JSON.parse(dataOrEl.getAttribute('data-news') || dataOrEl.getAttribute('data-json') || '{}');
+            } catch(e) {
+                console.error('Error parsing news data:', e);
+                data = {};
+            }
+        }
+        if (!data) data = {};
         document.getElementById('news-id').value = data.id || '0';
         document.getElementById('news-title').value = data.title || '';
         document.getElementById('news-excerpt').value = data.excerpt || '';
@@ -1490,10 +2494,260 @@ $inq_query = new WP_Query( [
                     alert(res.data.message || 'Error saving article.');
                 }
             })
+    // Toggle Activity Registration Quick Action
+    window.radmToggleActivityReg = function(actId, btn) {
+        var dot = btn.querySelector('.radm-status-dot');
+        var lbl = btn.querySelector('.reg-label');
+        btn.disabled = true;
+
+        var fd = new FormData();
+        fd.append('action', 'radm_toggle_activity_registration');
+        fd.append('nonce', nonce);
+        fd.append('post_id', actId);
+
+        fetch(ajaxUrl, { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                btn.disabled = false;
+                if (res.success) {
+                    var isOpen = res.data.open === 1;
+                    if (isOpen) {
+                        btn.className = 'radm-btn radm-btn-success radm-btn-sm';
+                        if (dot) dot.style.background = '#10b981';
+                        if (lbl) lbl.textContent = 'Open';
+                    } else {
+                        btn.className = 'radm-btn radm-btn-outline radm-btn-sm';
+                        if (dot) dot.style.background = '#94a3b8';
+                        if (lbl) lbl.textContent = 'Closed';
+                    }
+                    radmToast(res.data.message || 'Status updated!', 'success');
+                } else {
+                    alert(res.data.message || 'Error updating registration.');
+                }
+            })
             .catch(function() {
                 btn.disabled = false;
-                btn.textContent = 'Save Article';
-                alert('Network error while saving article.');
+                alert('Network error while toggling registration.');
+            });
+    };
+
+    // Event Modal Controllers
+    window.radmOnVenueSelectChange = function(sel) {
+        var customInput = document.getElementById('event-venue');
+        if (sel.value === '__custom__') {
+            customInput.style.display = 'block';
+            customInput.value = '';
+            customInput.focus();
+        } else {
+            customInput.style.display = 'none';
+            customInput.value = sel.value;
+        }
+    };
+
+    window.radmOpenEventModal = function() {
+        document.getElementById('radm-event-form').reset();
+        document.getElementById('event-id').value = '0';
+        document.getElementById('event-attachment-id').value = '0';
+        document.getElementById('event-old-attachment-id').value = '0';
+        document.getElementById('event-image-url').value = '';
+        var venueSel = document.getElementById('event-venue-select');
+        if (venueSel) venueSel.selectedIndex = 0;
+        var venueInput = document.getElementById('event-venue');
+        if (venueInput) { venueInput.value = ''; venueInput.style.display = 'none'; }
+        document.getElementById('radm-event-modal-title').textContent = 'Add New Event';
+        var prev = document.getElementById('event-img-preview');
+        if (prev) prev.style.display = 'none';
+        document.getElementById('radm-event-modal').classList.add('radm-modal-open');
+    };
+
+    function radmFormatTime24(t) {
+        if (!t) return '';
+        var m = String(t).trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+        if (!m) return t;
+        var h = parseInt(m[1], 10);
+        var min = m[2];
+        var ampm = (m[3] || '').toUpperCase();
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        return (h < 10 ? '0' : '') + h + ':' + min;
+    }
+
+    window.radmEditEvent = function(dataOrEl) {
+        var data = dataOrEl;
+        if (dataOrEl && dataOrEl.nodeType) {
+            try {
+                data = JSON.parse(dataOrEl.getAttribute('data-event') || dataOrEl.getAttribute('data-json') || '{}');
+            } catch(e) {
+                console.error('Error parsing event data:', e);
+                data = {};
+            }
+        }
+        if (!data) data = {};
+
+        var idEl = document.getElementById('event-id');
+        if (idEl) idEl.value = data.id || '0';
+        var titleEl = document.getElementById('event-title');
+        if (titleEl) titleEl.value = data.title || '';
+        var dateEl = document.getElementById('event-date');
+        if (dateEl) dateEl.value = data.event_date || '';
+        var startEl = document.getElementById('event-start');
+        if (startEl) startEl.value = radmFormatTime24(data.start_time) || '06:00';
+        var endEl = document.getElementById('event-end');
+        if (endEl) endEl.value = radmFormatTime24(data.end_time) || '08:00';
+
+        var venueSel = document.getElementById('event-venue-select');
+        var venueInput = document.getElementById('event-venue');
+        var vVal = data.venue || '';
+        if (venueSel) {
+            var found = false;
+            for (var i = 0; i < venueSel.options.length; i++) {
+                if (venueSel.options[i].value === vVal) {
+                    venueSel.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                if (venueInput) { venueInput.value = vVal; venueInput.style.display = 'none'; }
+            } else if (vVal) {
+                venueSel.value = '__custom__';
+                if (venueInput) { venueInput.value = vVal; venueInput.style.display = 'block'; }
+            } else {
+                venueSel.selectedIndex = 0;
+                if (venueInput) { venueInput.value = ''; venueInput.style.display = 'none'; }
+            }
+        } else if (venueInput) {
+            venueInput.value = vVal;
+        }
+
+        var regOpenEl = document.getElementById('event-reg-open');
+        if (regOpenEl) regOpenEl.value = (data.registration_open === 0 || data.registration_open === '0') ? '0' : '1';
+        var descEl = document.getElementById('event-desc');
+        if (descEl) descEl.value = data.content || '';
+        var imgUrlEl = document.getElementById('event-image-url');
+        if (imgUrlEl) imgUrlEl.value = data.image_url || '';
+        var attEl = document.getElementById('event-attachment-id');
+        if (attEl) attEl.value = data.attachment_id || '0';
+        var oldAttEl = document.getElementById('event-old-attachment-id');
+        if (oldAttEl) oldAttEl.value = data.attachment_id || '0';
+        var statEl = document.getElementById('event-status');
+        if (statEl) statEl.value = data.status || 'publish';
+
+        var prev = document.getElementById('event-img-preview');
+        if (prev) {
+            if (data.image_url) {
+                prev.style.display = 'flex';
+                var img = prev.querySelector('img');
+                if (img) img.src = data.image_url;
+                var urlEl = prev.querySelector('.radm-image-preview-url');
+                if (urlEl) urlEl.textContent = data.image_url;
+            } else {
+                prev.style.display = 'none';
+            }
+        }
+        var modalTitleEl = document.getElementById('radm-event-modal-title');
+        if (modalTitleEl) modalTitleEl.textContent = 'Edit Event: ' + (data.title || '');
+        var modalEl = document.getElementById('radm-event-modal');
+        if (modalEl) modalEl.classList.add('radm-modal-open');
+    };
+
+    window.radmSubmitEvent = function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('event-save-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+
+        var oldAtt = parseInt(document.getElementById('event-old-attachment-id').value, 10) || 0;
+        var newAtt = parseInt(document.getElementById('event-attachment-id').value, 10) || 0;
+
+        var fd = new FormData(document.getElementById('radm-event-form'));
+        fd.append('action', 'radm_save_content_event');
+        fd.append('nonce', nonce);
+
+        fetch(ajaxUrl, { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                btn.disabled = false;
+                btn.textContent = 'Save Event';
+                if (res.success) {
+                    var savedId = res.data.id || 0;
+                    radmCloseModals();
+
+                    if (oldAtt > 0 && oldAtt !== newAtt && typeof window.radmCheckAndPromptOrphan === 'function') {
+                        window.radmCheckAndPromptOrphan(oldAtt, savedId, function() {
+                            alert(res.data.message || 'Event saved successfully!');
+                            window.location.reload();
+                        });
+                    } else {
+                        alert(res.data.message || 'Event saved successfully!');
+                        window.location.reload();
+                    }
+                } else {
+                    alert(res.data.message || 'Error saving event.');
+                }
+            })
+            .catch(function() {
+                btn.disabled = false;
+                btn.textContent = 'Save Event';
+                alert('Network error while saving event.');
+            });
+    };
+
+    // FAQ Modal Controllers
+    window.radmOpenFaqModal = function() {
+        document.getElementById('radm-faq-form').reset();
+        document.getElementById('faq-id').value = '0';
+        document.getElementById('radm-faq-modal-title').textContent = 'Add FAQ Question';
+        document.getElementById('radm-faq-modal').classList.add('radm-modal-open');
+    };
+
+    window.radmEditFaq = function(dataOrEl) {
+        var data = dataOrEl;
+        if (dataOrEl && dataOrEl.nodeType) {
+            try {
+                data = JSON.parse(dataOrEl.getAttribute('data-faq') || dataOrEl.getAttribute('data-json') || '{}');
+            } catch(e) {
+                console.error('Error parsing FAQ data:', e);
+                data = {};
+            }
+        }
+        if (!data) data = {};
+        document.getElementById('faq-id').value = data.id || '0';
+        document.getElementById('faq-question').value = data.title || '';
+        document.getElementById('faq-answer').value = data.content || '';
+        document.getElementById('faq-order').value = data.menu_order || '0';
+        document.getElementById('faq-status').value = data.status || 'publish';
+        document.getElementById('radm-faq-modal-title').textContent = 'Edit FAQ Question';
+        document.getElementById('radm-faq-modal').classList.add('radm-modal-open');
+    };
+
+    window.radmSubmitFaq = function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('faq-save-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+
+        var fd = new FormData(document.getElementById('radm-faq-form'));
+        fd.append('action', 'radm_save_faq');
+        fd.append('nonce', nonce);
+
+        fetch(ajaxUrl, { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                btn.disabled = false;
+                btn.textContent = 'Save FAQ';
+                if (res.success) {
+                    radmCloseModals();
+                    alert(res.data.message || 'FAQ saved successfully!');
+                    window.location.reload();
+                } else {
+                    alert(res.data.message || 'Error saving FAQ.');
+                }
+            })
+            .catch(function() {
+                btn.disabled = false;
+                btn.textContent = 'Save FAQ';
+                alert('Network error while saving FAQ.');
             });
     };
 
@@ -1508,24 +2762,77 @@ $inq_query = new WP_Query( [
         document.getElementById('radm-inquiry-modal').classList.add('radm-modal-open');
     };
 
+    // Activity Registration View Modal
+    window.radmViewActivityInquiry = function(data) {
+        document.getElementById('act-modal-name').textContent = data.name || '';
+        document.getElementById('act-modal-phone').innerHTML = data.phone ? ('<a href="tel:' + encodeURIComponent(data.phone) + '" style="color:var(--radm-text); text-decoration:none;">📞 ' + data.phone + '</a>') : 'N/A';
+        document.getElementById('act-modal-email').innerHTML = data.email ? ('<a href="mailto:' + encodeURIComponent(data.email) + '" style="color:var(--radm-green);">' + data.email + '</a>') : 'N/A';
+        document.getElementById('act-modal-activity').textContent = data.activity || '';
+        document.getElementById('act-modal-center').textContent = data.center || 'All Centers';
+        document.getElementById('act-modal-timing').textContent = data.timing || 'Flexible';
+        document.getElementById('act-modal-date').textContent = data.date || '';
+        document.getElementById('act-modal-notes').textContent = data.notes || 'No special notes or medical requirements provided.';
+
+        var waWrap = document.getElementById('act-modal-whatsapp-wrap');
+        if (waWrap) {
+            if (data.phone) {
+                var cleanPhone = data.phone.replace(/[^0-9]/g, '');
+                if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+                var waMsg = encodeURIComponent('Namaste ' + (data.name || '') + ', greetings from Rashtrotthana Yoga regarding your inquiry for ' + (data.activity || 'yoga classes') + '!');
+                waWrap.innerHTML = '<a href="https://wa.me/' + cleanPhone + '?text=' + waMsg + '" target="_blank" class="radm-btn radm-btn-success" style="font-size:12.5px; padding:6px 14px; display:inline-flex; align-items:center; gap:6px; text-decoration:none;">' +
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>' +
+                    'Chat on WhatsApp</a>';
+            } else {
+                waWrap.innerHTML = '';
+            }
+        }
+
+        document.getElementById('radm-activity-inquiry-modal').classList.add('radm-modal-open');
+    };
+
+    // Filter Activity Inquiries on dropdown change
+    window.radmFilterActInquiries = function() {
+        var actEl = document.getElementById('radm-actinq-filter-activity');
+        var cenEl = document.getElementById('radm-actinq-filter-center');
+        var act = actEl ? actEl.value : '';
+        var cen = cenEl ? cenEl.value : '';
+        var url = 'admin.php?page=radm-pages&section=activity-inquiries';
+        if (act) url += '&activity=' + encodeURIComponent(act);
+        if (cen) url += '&center=' + encodeURIComponent(cen);
+        window.location.href = url;
+    };
+
     // Generic Delete Controller
     var activeDeleteId = 0;
     var activeDeleteType = '';
     var activeDeleteAttachmentId = 0;
 
-    window.radmPromptDelete = function(id, title, type, attachmentId) {
-        activeDeleteId = id;
-        activeDeleteType = type;
-        activeDeleteAttachmentId = parseInt(attachmentId, 10) || 0;
-        document.getElementById('delete-target-title').textContent = title;
-        document.getElementById('radm-delete-modal').classList.add('radm-modal-open');
+    window.radmPromptDelete = function(idOrEl, title, type, attachmentId) {
+        if (idOrEl && idOrEl.nodeType) {
+            activeDeleteId = parseInt(idOrEl.getAttribute('data-id'), 10) || 0;
+            activeDeleteType = type || idOrEl.getAttribute('data-type') || 'item';
+            activeDeleteAttachmentId = parseInt(idOrEl.getAttribute('data-att-id') || idOrEl.getAttribute('data-attachment-id'), 10) || 0;
+            var t = idOrEl.getAttribute('data-title') || title || 'this item';
+            var titleEl = document.getElementById('delete-target-title');
+            if (titleEl) titleEl.textContent = t;
+        } else {
+            activeDeleteId = parseInt(idOrEl, 10) || 0;
+            activeDeleteType = type || '';
+            activeDeleteAttachmentId = parseInt(attachmentId, 10) || 0;
+            var titleEl = document.getElementById('delete-target-title');
+            if (titleEl) titleEl.textContent = title || 'this item';
+        }
+        var delModal = document.getElementById('radm-delete-modal');
+        if (delModal) delModal.classList.add('radm-modal-open');
     };
 
     window.radmExecuteDelete = function() {
         if (!activeDeleteId || !activeDeleteType) return;
         var btn = document.getElementById('delete-confirm-btn');
-        btn.disabled = true;
-        btn.textContent = 'Deleting…';
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Deleting…';
+        }
 
         var deletedAttId = activeDeleteAttachmentId;
         var actionName = (activeDeleteType === 'center') ? 'radm_delete_content_center' : ('radm_delete_' + activeDeleteType);
@@ -1533,6 +2840,7 @@ $inq_query = new WP_Query( [
         fd.append('action', actionName);
         fd.append('nonce', nonce);
         fd.append('post_id', activeDeleteId);
+        fd.append('event_id', activeDeleteId);
 
         fetch(ajaxUrl, { method: 'POST', body: fd })
             .then(function(r) { return r.json(); })

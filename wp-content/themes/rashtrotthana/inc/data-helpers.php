@@ -390,16 +390,20 @@ function rs_get_activity_categories() {
             $frequency   = get_field( 'frequency_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'frequency_text', true ) ?: ( get_field( 'frequency', $act->ID ) ?: ( get_post_meta( $act->ID, 'frequency', true ) ?: 'Regular Weekly Schedule' ) ) );
             $eligibility = get_field( 'eligibility_text', $act->ID ) ?: ( get_post_meta( $act->ID, 'eligibility_text', true ) ?: ( get_field( 'eligibility', $act->ID ) ?: ( get_post_meta( $act->ID, 'eligibility', true ) ?: 'All Age Groups' ) ) );
 
+            $reg_open_val = get_post_meta( $act->ID, '_ry_registration_open', true );
+            $is_reg_open  = ( $reg_open_val === '' || $reg_open_val === false || $reg_open_val === '1' || $reg_open_val === 1 );
+
             $cat_data['items'][] = array(
-                'id'          => $act->ID,
-                'name'        => $clean_title,
-                'badge'       => $badge,
-                'desc'        => $act->post_content,
-                'centers'     => $centers_val,
-                'batches'     => $batches,
-                'duration'    => $duration,
-                'frequency'   => $frequency,
-                'eligibility' => $eligibility,
+                'id'                => $act->ID,
+                'name'              => $clean_title,
+                'badge'             => $badge,
+                'desc'              => $act->post_content,
+                'centers'           => $centers_val,
+                'batches'           => $batches,
+                'duration'          => $duration,
+                'frequency'         => $frequency,
+                'eligibility'       => $eligibility,
+                'registration_open' => $is_reg_open,
             );
         }
 

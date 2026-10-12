@@ -1384,12 +1384,22 @@ foreach ( $activity_categories as $cat ) {
 
                             <div class="rs-subact-actions">
                                 <!-- Student Register Button -->
+                                <?php if ( ! empty( $item['registration_open'] ) ) : ?>
                                 <button type="button" 
                                         class="rs-register-btn rs-trigger-reg-modal"
                                         data-activity="<?php echo esc_attr( $item['name'] ); ?>"
                                         data-category="<?php echo esc_attr( $cat['title'] ); ?>">
                                     <span>Register Now</span> &rarr;
                                 </button>
+                                <?php else : ?>
+                                <button type="button" 
+                                        class="rs-register-btn" 
+                                        style="background: #94a3b8; border-color: #94a3b8; cursor: not-allowed; opacity: 0.85;" 
+                                        disabled
+                                        title="Registrations are currently closed for this activity">
+                                    <span>Registrations Closed</span>
+                                </button>
+                                <?php endif; ?>
                             </div>
                         </article>
                     <?php endforeach; ?>

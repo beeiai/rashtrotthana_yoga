@@ -14,12 +14,16 @@ if ( $view === 'create' ) :
     $list_url   = admin_url( 'admin.php?page=radm-registrations' );
     $create_url = admin_url( 'admin.php?page=radm-registrations&radm_view=create' );
 
-    // Centers list
-    $centers = [
-        'Jayanagar', 'Basavanagudi', 'Malleshwaram',
-        'Indiranagar', 'Whitefield', 'HSR Layout',
-        'Rajarajeshwari Nagar', 'Whitefield 2', 'Koramangala',
-        'Yelahanka', 'Electronic City', 'Hebbal',
+    // Centers list dynamically from database
+    $center_posts = get_posts( [
+        'post_type'      => [ 'rs_center', 'center' ],
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ] );
+    $centers = ! empty( $center_posts ) ? wp_list_pluck( $center_posts, 'post_title' ) : [
+        'Jayanagar', 'Basavanagudi', 'Malleshwaram', 'Indiranagar', 'Whitefield', 'HSR Layout'
     ];
 ?>
 
@@ -300,38 +304,61 @@ else :
     $event_label = '';
     $users       = [];
 
-    if ( $active_tab === 'users' && $event_id ) {
-        $event_post = get_post( $event_id );
-        if ( $event_post && $event_post->post_type === 'event' ) {
-            $event_label = $event_post->post_title;
-        }
-
+    if ( $active_tab === 'users' ) {
         $at = $wpdb->prefix . 'ry_registration_answers';
 
-        $raw_users = $wpdb->get_results( $wpdb->prepare(
-            "SELECT r.id, r.name, r.phone, r.email, r.status,
-                    MAX(CASE WHEN a.field_key IN ('branch','center','location') THEN a.field_value END) AS branch
-             FROM {$reg_table} r
-             LEFT JOIN {$at} a ON a.registration_id = r.id
-             WHERE r.event_id = %d AND r.status NOT IN ('cancelled','rejected')
-             GROUP BY r.id
-             ORDER BY r.id ASC",
-            $event_id
-        ), ARRAY_A );
+        if ( $event_id > 0 ) {
+            $event_post = get_post( $event_id );
+            if ( $event_post ) {
+                $event_label = $event_post->post_title;
+            }
+            $raw_users = $wpdb->get_results( $wpdb->prepare(
+                "SELECT r.id, r.name, r.phone, r.email, r.status, r.event_id,
+                        MAX(CASE WHEN a.field_key IN ('branch','center','location') THEN a.field_value END) AS branch
+                 FROM {$reg_table} r
+                 LEFT JOIN {$at} a ON a.registration_id = r.id
+                 WHERE r.event_id = %d AND r.status NOT IN ('rejected')
+                 GROUP BY r.id
+                 ORDER BY r.id DESC",
+                $event_id
+            ), ARRAY_A );
+        } else {
+            $event_label = 'All Events';
+            $raw_users = $wpdb->get_results(
+                "SELECT r.id, r.name, r.phone, r.email, r.status, r.event_id,
+                        MAX(CASE WHEN a.field_key IN ('branch','center','location') THEN a.field_value END) AS branch
+                 FROM {$reg_table} r
+                 LEFT JOIN {$at} a ON a.registration_id = r.id
+                 WHERE r.status NOT IN ('rejected')
+                 GROUP BY r.id
+                 ORDER BY r.id DESC",
+                ARRAY_A
+            );
+        }
 
-        foreach ( $raw_users as $u ) {
-            $users[] = [
-                'id'     => $u['id'],
-                'name'   => $u['name'],
-                'phone'  => $u['phone'],
-                'email'  => $u['email'],
-                'branch' => $u['branch'] ?: '—',
-                'status' => $u['status'],
-            ];
+        if ( ! empty( $raw_users ) ) {
+            foreach ( $raw_users as $u ) {
+                $users[] = [
+                    'id'       => $u['id'],
+                    'name'     => $u['name'],
+                    'phone'    => $u['phone'],
+                    'email'    => $u['email'],
+                    'branch'   => $u['branch'] ?: '—',
+                    'status'   => $u['status'],
+                    'event_id' => $u['event_id'] ?? 0,
+                ];
+            }
         }
     }
 
-    $branch_list = [
+    $c_posts = get_posts( [
+        'post_type'      => [ 'rs_center', 'center' ],
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ] );
+    $branch_list = ! empty( $c_posts ) ? wp_list_pluck( $c_posts, 'post_title' ) : [
         'Jayanagar','Basavanagudi','Malleshwaram','Indiranagar',
         'Whitefield','HSR Layout','Rajarajeshwari Nagar','Whitefield 2',
         'Koramangala','Yelahanka','Electronic City','Hebbal',
@@ -347,7 +374,15 @@ else :
         </a>
         <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-registrations&radm_tab=users' ) ); ?>"
            class="radm-tab <?php echo $active_tab === 'users' ? 'active' : ''; ?>">
-            Registered Users
+            Event Participants
+        </a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries' ) ); ?>"
+           class="radm-tab" style="display:inline-flex; align-items:center; gap:6px;">
+            <span>Activity Registrations</span>
+        </a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=inquiries' ) ); ?>"
+           class="radm-tab" style="display:inline-flex; align-items:center; gap:6px;">
+            <span>Contact Inquiries</span>
         </a>
     </div>
     <a href="<?php echo esc_url( $create_url ); ?>" class="radm-btn radm-btn-primary">
@@ -466,6 +501,22 @@ else :
 
 <!-- ── Registered Users Tab ───────────────────────────────────────────── -->
 
+<!-- ── Event Selector Dropdown Toolbar ────────────────────────────── -->
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; background:#fff; padding:12px 18px; border-radius:8px; border:1px solid var(--radm-border); flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+    <label for="radm-user-event-select" style="font-size:13px; font-weight:600; color:var(--radm-text); display:flex; align-items:center; gap:6px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Select Event:
+    </label>
+    <select id="radm-user-event-select" class="radm-select" style="min-width:300px; max-width:100%;" onchange="location.href='admin.php?page=radm-registrations&radm_tab=users&event=' + this.value">
+        <option value="0">-- Choose an Event to View Registered Participants --</option>
+        <?php foreach ( $events as $ev ) : ?>
+            <option value="<?php echo esc_attr( $ev['id'] ); ?>" <?php selected( $event_id, $ev['id'] ); ?>>
+                <?php echo esc_html( $ev['name'] ); ?> (<?php echo esc_html( $ev['reg_count'] ); ?> registered &bull; <?php echo esc_html( $ev['date'] ); ?>)
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
 <?php if ( $event_label ) : ?>
 <div class="radm-users-context-bar">
     <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-registrations&radm_tab=events' ) ); ?>"
@@ -506,17 +557,44 @@ else :
 
     <?php else : ?>
 
-    <!-- Toolbar: search + add + export + count -->
-    <div class="radm-table-toolbar">
-        <div class="radm-input-icon" style="max-width:280px;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            <input type="text" class="radm-input" id="radm-users-search"
-                   placeholder="Search by name, phone, email or branch…" style="font-size:13px;">
+    <!-- Toolbar: search + dropdown filters + add + export + count -->
+    <div class="radm-table-toolbar" style="flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; flex:1; min-width:280px;">
+            <div class="radm-input-icon" style="max-width:240px; width:100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" class="radm-input" id="radm-users-search"
+                       placeholder="Search participants…" style="font-size:13px;">
+            </div>
+
+            <!-- Event Selector Dropdown -->
+            <select id="radm-users-event-filter" class="radm-input radm-select" style="max-width:210px; font-size:12.5px; height:38px;" onchange="window.location.href='<?php echo esc_url( admin_url('admin.php?page=radm-registrations&radm_tab=users') ); ?>&event=' + this.value;">
+                <option value="0" <?php selected( $event_id, 0 ); ?>>All Events (<?php echo count($events); ?>)</option>
+                <?php foreach ( $events as $ev_item ) : ?>
+                    <option value="<?php echo esc_attr( $ev_item['id'] ); ?>" <?php selected( $event_id, $ev_item['id'] ); ?>>
+                        <?php echo esc_html( $ev_item['name'] ); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <!-- Branch / Center Filter Dropdown -->
+            <select id="radm-users-branch-filter" class="radm-input radm-select" style="max-width:180px; font-size:12.5px; height:38px;">
+                <option value="">All Centers</option>
+                <?php foreach ( $branch_list as $b ) : ?>
+                    <option value="<?php echo esc_attr( strtolower( $b ) ); ?>"><?php echo esc_html( $b ); ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <!-- Status Filter Dropdown -->
+            <select id="radm-users-status-filter" class="radm-input radm-select" style="max-width:130px; font-size:12.5px; height:38px;">
+                <option value="">All Statuses</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="attended">Attended</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <span class="radm-count-label" id="radm-users-count"><?php echo count( $users ); ?> participants</span>
             <a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=radm_export_csv&nonce=' . wp_create_nonce( 'radm_nonce' ) . '&event_id=' . $event_id ) ); ?>"
                class="radm-btn radm-btn-outline radm-btn-sm" id="radm-export-csv">

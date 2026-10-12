@@ -59,14 +59,20 @@ radm_portal_header( 'WhatsApp (WATI)', 'Manage WhatsApp messaging and automation
                 </div>
             </div>
 
+            <!-- Connected Account Badge -->
+            <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); padding:6px 14px; border-radius:8px; margin-bottom:18px;">
+                <span style="width:8px; height:8px; border-radius:50%; background:#22c55e;"></span>
+                <span style="font-size:12.5px; font-weight:600; color:#15803d;">Connected Client ID: <strong>1099969</strong> &bull; accounts.yoga@rashtrotthana.org</span>
+            </div>
+
             <!-- CTA Button -->
-            <a href="https://app.wati.io" target="_blank" rel="noopener noreferrer"
+            <a href="https://live.wati.io/1099969/teamInbox/6abfd0118f52dd8d42ed0bb2?filter=%7B%22channelType%22:0,%22filterType%22:5,%22filterId%22:5,%22filterChannelIds%22:%5B%22%22,%226a674279b0681bed61f4215f%22,%226a67437cb0681bed61f4ab0c%22,%22%22%5D%7D&search=%7B%22searchString%22:%22%22,%22searchOptionType%22:3%7D" target="_blank" rel="noopener noreferrer"
                class="radm-btn radm-btn-primary radm-wati-cta-btn" id="radm-wati-open-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
                 </svg>
-                Open WATI Dashboard
+                Open Live Team Inbox
                 <svg class="radm-wati-ext-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
@@ -74,7 +80,31 @@ radm_portal_header( 'WhatsApp (WATI)', 'Manage WhatsApp messaging and automation
                     <line x1="10" y1="14" x2="21" y2="3"/>
                 </svg>
             </a>
-            <p class="radm-wati-ext-note">Opens in a new tab &nbsp;→&nbsp; app.wati.io</p>
+            <p class="radm-wati-ext-note" style="margin-bottom:14px;">Opens in a new tab &nbsp;→&nbsp; live.wati.io/1099969</p>
+
+            <!-- Quick Login Credentials Assistant -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; max-width:480px; margin-top:8px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                    <span style="font-size:12px; font-weight:700; color:#334155; display:flex; align-items:center; gap:6px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        WATI Sign-In Credentials
+                    </span>
+                    <span style="font-size:11px; color:#64748b;">(Click to copy)</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px; font-size:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                        <span style="color:#64748b;">Email: <strong style="color:#0f172a;">accounts.yoga@rashtrotthana.org</strong></span>
+                        <button type="button" class="radm-btn radm-btn-outline" style="padding:2px 8px; font-size:11px; height:auto;" onclick="navigator.clipboard.writeText('accounts.yoga@rashtrotthana.org'); this.textContent='Copied!'; var b=this; setTimeout(function(){b.textContent='Copy';}, 1500);">Copy</button>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                        <span style="color:#64748b;">Password: <strong style="color:#0f172a;">Yoga@123</strong></span>
+                        <button type="button" class="radm-btn radm-btn-outline" style="padding:2px 8px; font-size:11px; height:auto;" onclick="navigator.clipboard.writeText('Yoga@123'); this.textContent='Copied!'; var b=this; setTimeout(function(){b.textContent='Copy';}, 1500);">Copy</button>
+                    </div>
+                </div>
+                <p style="margin:8px 0 0; font-size:11px; color:#64748b; line-height:1.4;">
+                    💡 <em>Tip: Sign in once and check <strong>&quot;Remember me / Keep me logged in&quot;</strong>. Once your browser session is stored, clicking &quot;Open Live Team Inbox&quot; will open directly without asking for credentials again.</em>
+                </p>
+            </div>
         </div>
 
         <!-- Right: Decorative visual -->
@@ -104,7 +134,27 @@ radm_portal_header( 'WhatsApp (WATI)', 'Manage WhatsApp messaging and automation
     </div>
     <div class="radm-wati-quick-links">
 
-        <a href="https://app.wati.io/contacts" target="_blank" rel="noopener noreferrer"
+        <a href="https://live.wati.io/1099969/teamInbox/6abfd0118f52dd8d42ed0bb2?filter=%7B%22channelType%22:0,%22filterType%22:5,%22filterId%22:5,%22filterChannelIds%22:%5B%22%22,%226a674279b0681bed61f4215f%22,%226a67437cb0681bed61f4ab0c%22,%22%22%5D%7D&search=%7B%22searchString%22:%22%22,%22searchOptionType%22:3%7D" target="_blank" rel="noopener noreferrer"
+           class="radm-wati-quick-item" id="radm-wati-inbox-link">
+            <div class="radm-wati-qi-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+                </svg>
+            </div>
+            <div class="radm-wati-qi-text">
+                <strong>Team Inbox</strong>
+                <span>Direct Live WhatsApp chat stream</span>
+            </div>
+            <svg class="radm-wati-qi-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+        </a>
+
+        <a href="https://live.wati.io/1099969/contacts" target="_blank" rel="noopener noreferrer"
            class="radm-wati-quick-item" id="radm-wati-contacts-link">
             <div class="radm-wati-qi-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -127,7 +177,7 @@ radm_portal_header( 'WhatsApp (WATI)', 'Manage WhatsApp messaging and automation
             </svg>
         </a>
 
-        <a href="https://app.wati.io/broadcast" target="_blank" rel="noopener noreferrer"
+        <a href="https://live.wati.io/1099969/broadcast" target="_blank" rel="noopener noreferrer"
            class="radm-wati-quick-item" id="radm-wati-broadcast-link">
             <div class="radm-wati-qi-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -147,7 +197,7 @@ radm_portal_header( 'WhatsApp (WATI)', 'Manage WhatsApp messaging and automation
             </svg>
         </a>
 
-        <a href="https://app.wati.io/template-messages" target="_blank" rel="noopener noreferrer"
+        <a href="https://live.wati.io/1099969/template-messages" target="_blank" rel="noopener noreferrer"
            class="radm-wati-quick-item" id="radm-wati-templates-link">
             <div class="radm-wati-qi-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -171,7 +221,7 @@ radm_portal_header( 'WhatsApp (WATI)', 'Manage WhatsApp messaging and automation
             </svg>
         </a>
 
-        <a href="https://app.wati.io/automation" target="_blank" rel="noopener noreferrer"
+        <a href="https://live.wati.io/1099969/automation" target="_blank" rel="noopener noreferrer"
            class="radm-wati-quick-item" id="radm-wati-automation-link">
             <div class="radm-wati-qi-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
