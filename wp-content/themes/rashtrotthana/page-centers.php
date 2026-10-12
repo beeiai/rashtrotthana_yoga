@@ -388,7 +388,7 @@ unset( $c );
                 </div>
                 <h1 class="rs-centers-main-title">Explore Our Centers</h1>
                 <p class="rs-centers-main-subtitle">
-                    Discover 12+ vibrant centers across Bengaluru offering certified yoga, holistic therapy, and cultural programs. Find your nearest location, check batch timings, and join our community.
+                    Discover 25+ vibrant centers across Bengaluru offering certified yoga, holistic therapy, and cultural programs. Find your nearest location, check batch timings, and join our community.
                 </p>
             </div>
 
@@ -671,7 +671,7 @@ unset( $c );
             <div id="rs-centers-no-results" class="rs-centers-no-results" style="display: none;">
                 <div class="rs-no-results-icon">⌕</div>
                 <h3>No centers match your filters</h3>
-                <p>Try searching for a different area or clear your filter criteria to see all 12+ locations across Bengaluru.</p>
+                <p>Try searching for a different area or clear your filter criteria to see all 25+ locations across Bengaluru.</p>
                 <button type="button" id="rs-reset-filters-btn" class="rs-reset-filters-btn">Reset All Filters</button>
             </div>
 
@@ -744,6 +744,42 @@ unset( $c );
                         </div>
                     </div>
                 </div>
+
+                <!-- Branch Social Links (Instagram, Facebook, Linktree) -->
+                <?php if ( ! empty( $center['instagram_url'] ) || ! empty( $center['facebook_url'] ) || ! empty( $center['linktree_url'] ) ) : ?>
+                    <div class="rs-center-modal-socials">
+                        <span class="rs-center-socials-label">Connect with this branch:</span>
+                        <div class="rs-center-socials-links">
+                            <?php if ( ! empty( $center['instagram_url'] ) ) : ?>
+                                <a href="<?php echo esc_url( $center['instagram_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="rs-center-social-btn rs-social-ig" title="Follow <?php echo esc_attr( $center['name'] ); ?> on Instagram" aria-label="Instagram">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                    </svg>
+                                    <span>Instagram</span>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $center['facebook_url'] ) ) : ?>
+                                <a href="<?php echo esc_url( $center['facebook_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="rs-center-social-btn rs-social-fb" title="Visit <?php echo esc_attr( $center['name'] ); ?> on Facebook" aria-label="Facebook">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                    </svg>
+                                    <span>Facebook</span>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $center['linktree_url'] ) ) : ?>
+                                <a href="<?php echo esc_url( $center['linktree_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="rs-center-social-btn rs-social-lt" title="Branch Links on Linktree" aria-label="Linktree">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                    </svg>
+                                    <span>Linktree</span>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
                 <!-- Detailed Activities Section with Batch Details Nested Inside Each Card -->
                 <div class="rs-center-modal-section">
@@ -823,7 +859,10 @@ unset( $c );
                         Need personalized batch timings or trial classes? Reach out directly to this center.
                     </p>
                     <div class="rs-center-modal-actions">
-                        <a href="https://www.google.com/maps/search/?api=1&query=<?php echo rawurlencode( 'Rashtrotthana Yoga ' . $center['name'] . ' ' . $center['address'] ); ?>" target="_blank" rel="noopener" class="rs-center-modal-directions-btn">
+                        <?php 
+                        $directions_url = ! empty( $center['map_url'] ) ? $center['map_url'] : ( 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( 'Rashtrotthana Yoga ' . $center['name'] . ' ' . $center['address'] ) );
+                        ?>
+                        <a href="<?php echo esc_url( $directions_url ); ?>" target="_blank" rel="noopener" class="rs-center-modal-directions-btn">
                             <span>Get Directions ↗</span>
                         </a>
                         <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-center-modal-enquire-btn">

@@ -66,7 +66,7 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
             <div class="rs-centers-title-col">
                 <span class="rs-kicker">OUR PRESENCE</span>
                 <h2 class="rs-centers-heading">Find a Center</h2>
-                <p class="rs-centers-subheading">Our <?php echo count(rs_get_centers()); ?> centers bring wellness, learning and community closer to you.</p>
+                <p class="rs-centers-subheading">Our 25+ centers bring wellness, learning and community closer to you.</p>
             </div>
             <div class="rs-centers-action-col">
                 <form class="rs-center-search-box" role="search">
