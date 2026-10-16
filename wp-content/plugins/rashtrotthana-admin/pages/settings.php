@@ -23,7 +23,7 @@ radm_portal_header( 'Settings', 'Manage organization details and centers' );
 
 $org_name      = get_option( 'radm_org_name', get_option( 'blogname', 'Rashtrotthana Yoga' ) );
 $contact_email = get_option( 'radm_contact_email', get_option( 'admin_email', 'info@rashtrotthanayoga.org' ) );
-$default_logo  = get_template_directory_uri() . '/assets/images/rashtrotthana-group-logo.png';
+$default_logo  = get_template_directory_uri() . '/assets/images/rashtrotthana-logo.png';
 $org_logo      = get_option( 'radm_org_logo', $default_logo );
 ?>
 

@@ -21,9 +21,19 @@
     min-height: 62px;
     transition: min-height 260ms ease;
 }
+.rs-brand img {
+    height: auto;
+    max-height: 52px !important;
+    width: auto !important;
+    max-width: 260px;
+    object-fit: contain;
+}
 @media (min-width: 1051px) {
     .rs-nav-link { font-size: 1.0rem !important; font-weight: 700 !important; }
-    .rs-brand img { max-height: 50px !important; }
+    .rs-brand img { max-height: 54px !important; max-width: 270px !important; }
+}
+@media (max-width: 600px) {
+    .rs-brand img { max-height: 44px !important; max-width: 190px !important; }
 }
 @media (min-width:601px){
     .rs-hero-content{width:min(calc(100% - 96px),760px)!important;max-width:760px!important;margin-left:0!important;margin-right:auto!important}
@@ -38,7 +48,7 @@
     <nav class="rs-navbar">
         <div class="rs-container rs-navbar-inner">
             <a class="rs-brand" href="<?php echo esc_url(home_url('/')); ?>">
-                <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-group-logo.png' ); ?>" alt="Rashtrotthana Group">
+                <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-logo.png?v=' . filemtime( get_template_directory() . '/assets/images/rashtrotthana-logo.png' ) ); ?>" alt="Rashtrotthana Yogic Sciences and Research Institute">
             </a>
             <button class="rs-menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span><span></span><span></span>

@@ -256,7 +256,7 @@ function radm_portal_header( string $page_title, string $page_subtitle ): void {
 
         <?php
         $org_logo_url = get_option( 'radm_org_logo', '' );
-        $theme_logo   = get_template_directory_uri() . '/assets/images/rashtrotthana-group-logo.png';
+        $theme_logo   = get_template_directory_uri() . '/assets/images/rashtrotthana-logo.png';
         $display_logo = ! empty( $org_logo_url ) ? $org_logo_url : $theme_logo;
         ?>
         <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-dashboard' ) ); ?>" class="radm-logo" style="padding: 16px 18px; display: flex; align-items: center; justify-content: center; min-height: 64px; background: #ffffff;">

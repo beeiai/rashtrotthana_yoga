@@ -1,22 +1,29 @@
 <?php
-$address = function_exists('get_field') ? get_field('ry_address_primary', 'option') : "#1, Rashtrotthana Complex,\nMalleswaram, Bengaluru - 560003\nKarnataka, India";
-$phone   = function_exists('get_field') ? get_field('ry_phone_primary', 'option') : '+91 80 1234 5678';
-$email   = function_exists('get_field') ? get_field('ry_email_primary', 'option') : 'info@rashtrotthana.org';
-$whatsapp_num = function_exists('get_field') ? (get_field('ry_whatsapp_number', 'option') ?: '+91 96060 44453') : '+91 96060 44453';
+// Contact & social media details hardcoded as requested
+$address = "No. 93/1, ‘Keshava Shilpa’, Kempegowda Nagar, Bengaluru – 560 004";
+$phone   = "+91-96060 80778";
+$email   = "yoga.coord@rashtrotthana.org";
 
-$fb_url  = function_exists('get_field') ? get_field('ry_facebook_url', 'option') : '#';
-$tw_url  = function_exists('get_field') ? get_field('ry_twitter_url', 'option') : '#';
-$in_url  = function_exists('get_field') ? get_field('ry_instagram_url', 'option') : '#';
-$yt_url  = function_exists('get_field') ? get_field('ry_youtube_url', 'option') : '#';
+$instagram_url = "https://www.instagram.com/rashtrotthana_yoga_official/";
+$x_url         = "https://x.com/Rashtrotthana_P";
+$youtube_url   = "https://www.youtube.com/channel/UCccixFI_2_JydCPQWBCYpPQ";
+
+$whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number', 'option') ?: '+91 96060 44453') : '+91 96060 44453';
 ?>
 <style>
 .rs-footer { margin-top: 60px; }
 .rs-footer-brand:after{content:none}
 .rs-footer-brand{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
-.rs-footer-logo{margin:0 0 16px 0}
+.rs-footer-logo{display:block;width:auto!important;max-width:240px!important;height:auto!important;overflow:visible!important;margin:0 0 16px 0}
+.rs-footer-logo img{display:block;width:100%!important;max-width:240px!important;height:auto!important;object-fit:contain}
 .rs-footer-tagline{width:100%;margin:0 0 20px!important;text-align:left}
+.rs-footer a, .rs-footer p, .rs-footer span{color:#fae9de}
+.rs-footer-contact a{display:inline!important;color:inherit;text-decoration:none;transition:color .2s ease}
+.rs-footer-contact a:hover{color:#F9B72A;text-decoration:underline}
 .rs-socials{justify-content:flex-start;width:100%;margin-top:0;gap:12px;display:flex;}
-.rs-socials svg{width:20px;height:20px}
+.rs-socials a{display:grid!important;place-items:center;width:34px;height:34px;border-radius:50%;background:#ffffff;color:#4c5661!important;transition:transform .2s ease,background .2s ease,color .2s ease;text-decoration:none}
+.rs-socials a:hover{transform:translateY(-2px);background:#fff8ec;color:#8F171D!important;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.rs-socials svg{width:18px;height:18px}
 .rs-whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:1090;display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:transparent;box-shadow:0 8px 24px rgba(0,0,0,.18),0 4px 12px rgba(37,211,102,.35);transition:transform 220ms cubic-bezier(.34,1.56,.64,1),box-shadow 220ms ease;text-decoration:none;line-height:0}
 .rs-whatsapp-float:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 14px 28px rgba(0,0,0,.22),0 6px 18px rgba(37,211,102,.45)}
 .rs-whatsapp-float img{width:100%;height:100%;display:block;object-fit:contain;border-radius:50%;pointer-events:none}
@@ -25,8 +32,8 @@ $yt_url  = function_exists('get_field') ? get_field('ry_youtube_url', 'option') 
 <footer class="rs-footer">
     <div class="rs-container rs-footer-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
         <div class="rs-footer-brand">
-            <a class="rs-footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Rashtrotthana Group home">
-                <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-group-logo.png' ); ?>" alt="Rashtrotthana Group">
+            <a class="rs-footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Rashtrotthana Yogic Sciences and Research Institute home">
+                <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-logo.png?v=' . filemtime( get_template_directory() . '/assets/images/rashtrotthana-logo.png' ) ); ?>" alt="Rashtrotthana Yogic Sciences and Research Institute">
             </a>
             <p class="rs-footer-tagline">To create<br>Sustainable Healthy Society</p>
         </div>
@@ -41,19 +48,22 @@ $yt_url  = function_exists('get_field') ? get_field('ry_youtube_url', 'option') 
         </div>
         <div>
             <h3>Connect With Us</h3>
-            <p><?php echo nl2br( esc_html( $address ) ); ?></p>
-            <p><?php echo esc_html( $phone ); ?><br><?php echo esc_html( $email ); ?></p>
+            <p><?php echo esc_html( $address ); ?></p>
+            <p class="rs-footer-contact">
+                <a href="tel:+919606080778"><?php echo esc_html( $phone ); ?></a><br>
+                <a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
+            </p>
             <h3 style="margin-top:20px; font-size:1.1rem;">Follow Us</h3>
             <div class="rs-socials" aria-label="Social media links">
-                <?php if ( $fb_url ) : ?>
-                <a href="<?php echo esc_url( $fb_url ); ?>" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M14 8h3V4h-3c-3.3 0-5 2-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></a>
-                <?php endif; if ( $tw_url ) : ?>
-                <a href="<?php echo esc_url( $tw_url ); ?>" aria-label="Twitter"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M18.9 7.1v.5c0 5.1-3.9 11-11 11-2.2 0-4.2-.6-5.9-1.8h.9c1.8 0 3.4-.6 4.7-1.6a3.9 3.9 0 0 1-3.6-2.7c.6.1 1.1.1 1.7-.1A3.9 3.9 0 0 1 2.6 8.6c.5.3 1.1.5 1.7.5a3.9 3.9 0 0 1-1.2-5.2 11 11 0 0 0 8 4.1 3.9 3.9 0 0 1 6.6-3.6c.9-.2 1.7-.5 2.4-.9-.3.9-.9 1.6-1.7 2.1.8-.1 1.5-.3 2.2-.6-.5.8-1.1 1.5-1.7 2.1Z"/></svg></a>
-                <?php endif; if ( $in_url ) : ?>
-                <a href="<?php echo esc_url( $in_url ); ?>" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                <?php endif; if ( $yt_url ) : ?>
-                <a href="<?php echo esc_url( $yt_url ); ?>" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.8 4.7 12 4.7 12 4.7s-5.8 0-7.6.5a2.8 2.8 0 0 0-2 2C2 9 2 12 2 12s0 3 .4 4.8a2.8 2.8 0 0 0 2 2c1.8.5 7.6.5 7.6.5s5.8 0 7.6-.5a2.8 2.8 0 0 0 2-2C22 15 22 12 22 12s0-3-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg></a>
-                <?php endif; ?>
+                <a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="<?php echo esc_url( $x_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X (Twitter)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="<?php echo esc_url( $youtube_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Subscribe on YouTube">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M21.6 7.2a2.8 2.8 0 0 0-2-2C17.8 4.7 12 4.7 12 4.7s-5.8 0-7.6.5a2.8 2.8 0 0 0-2 2C2 9 2 12 2 12s0 3 .4 4.8a2.8 2.8 0 0 0 2 2c1.8.5 7.6.5 7.6.5s5.8 0 7.6-.5a2.8 2.8 0 0 0 2-2C22 15 22 12 22 12s0-3-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/></svg>
+                </a>
             </div>
         </div>
     </div>

@@ -1238,17 +1238,19 @@ select {
 
 .rs-footer-logo {
     display: block;
-    width: 91px;
-    height: 112px;
-    overflow: hidden;
-    margin-bottom: 12px
+    width: auto;
+    max-width: 240px;
+    height: auto;
+    overflow: visible;
+    margin-bottom: 16px
 }
 
 .rs-footer-logo img {
     display: block;
-    width: auto;
-    height: 112px;
-    max-width: none
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    object-fit: contain
 }
 
 .rs-footer-tagline {
