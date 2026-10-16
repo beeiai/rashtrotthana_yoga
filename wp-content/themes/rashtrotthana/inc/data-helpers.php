@@ -107,14 +107,14 @@ function rs_get_centers( $zone_slug = '' ) {
         $fallback_images = array(
             'sadashivnagar' => $upload_dir['baseurl'] . '/2026/10/Sadashivnagar.jpg',
             'gayathrinagar' => $upload_dir['baseurl'] . '/2026/10/Gayathrinagar.jpg',
-            'rbi-layout'    => $upload_dir['baseurl'] . '/2026/10/RBI-Layout.jpg',
-            'rbilayout'     => $upload_dir['baseurl'] . '/2026/10/RBI-Layout.jpg',
+            'rbi-layout'    => $upload_dir['baseurl'] . '/2026/10/RBI-layout.jpeg',
+            'rbilayout'     => $upload_dir['baseurl'] . '/2026/10/RBI-layout.jpeg',
             'kamakshipalya' => $upload_dir['baseurl'] . '/2026/10/KAMAKSHIPALYA.jpg',
             'kg-nagar'      => $upload_dir['baseurl'] . '/2026/10/Kempegowda-Nagar.jpg',
             'kgnagar'       => $upload_dir['baseurl'] . '/2026/10/Kempegowda-Nagar.jpg',
-            'nagarbhavi'    => $upload_dir['baseurl'] . '/2026/10/nagarbhavi.jpg',
+            'nagarbhavi'    => $upload_dir['baseurl'] . '/2026/10/Nagarbhavi.jpeg',
             'vijaynagar'    => $upload_dir['baseurl'] . '/2026/10/Vijaynagar.jpg',
-            'sunkenahalli'  => $upload_dir['baseurl'] . '/2026/10/Basavangudi.jpg',
+            'sunkenahalli'  => $upload_dir['baseurl'] . '/2026/10/Basavangudi.jpeg',
             'girinagar'     => $upload_dir['baseurl'] . '/2026/10/Girinagar.jpg',
             'aksharam'      => $upload_dir['baseurl'] . '/2026/10/Yoga-Prashikshana.jpg',
             'kundalahalli'  => $upload_dir['baseurl'] . '/2026/10/Kundalahalli.jpg',
@@ -227,6 +227,27 @@ function rs_get_centers( $zone_slug = '' ) {
 
         $address = get_post_meta($p->ID, 'address', true) ?: (get_field('address', $p->ID) ?: $p->post_content);
 
+        $act_tags = [];
+        foreach ($programs as $pr) {
+            $pr_low = strtolower($pr);
+            if (strpos($pr_low, 'gym') !== false || strpos($pr_low, 'swim') !== false || strpos($pr_low, 'tennis') !== false) {
+                $act_tags[] = 'fitness';
+            }
+            if (strpos($pr_low, 'karate') !== false || strpos($pr_low, 'taekwondo') !== false || strpos($pr_low, 'kalari') !== false) {
+                $act_tags[] = 'martial-arts';
+            }
+            if (strpos($pr_low, 'bharatanatyam') !== false || strpos($pr_low, 'music') !== false || strpos($pr_low, 'flute') !== false || strpos($pr_low, 'violin') !== false || strpos($pr_low, 'veena') !== false || strpos($pr_low, 'tabla') !== false || strpos($pr_low, 'keyboard') !== false || strpos($pr_low, 'mridangam') !== false || strpos($pr_low, 'kathak') !== false || strpos($pr_low, 'art') !== false || strpos($pr_low, 'calligraphy') !== false || strpos($pr_low, 'rangoli') !== false || strpos($pr_low, 'kannada') !== false || strpos($pr_low, 'chess') !== false || strpos($pr_low, 'carnatic') !== false || strpos($pr_low, 'hindustani') !== false) {
+                $act_tags[] = 'culture';
+            }
+            if (strpos($pr_low, 'ayurveda') !== false || strpos($pr_low, 'counselling') !== false || strpos($pr_low, 'acupressure') !== false || strpos($pr_low, 'acupuncture') !== false || strpos($pr_low, 'massage') !== false || strpos($pr_low, 'remedies') !== false) {
+                $act_tags[] = 'therapy';
+            }
+            if (strpos($pr_low, 'bala') !== false || strpos($pr_low, 'samskara') !== false || strpos($pr_low, 'vishnu') !== false || strpos($pr_low, 'gita') !== false) {
+                $act_tags[] = 'children';
+            }
+        }
+        $act_tags = array_values(array_unique($act_tags));
+
         $centers[] = array(
             'id' => $p->post_name,
             'name' => $p->post_title,
@@ -239,8 +260,8 @@ function rs_get_centers( $zone_slug = '' ) {
             'hours' => $hours,
             'timing' => 'both',
             'timing_label' => 'Morning & Evening',
-            'programs' => !empty($programs) ? $programs : ['Yoga for Beginners', 'Pranayama'],
-            'activities' => ['yoga', 'wellness'],
+            'programs' => $programs,
+            'activities' => $act_tags,
             'address' => $address,
             'email' => $email,
             'image' => $img,
@@ -301,26 +322,38 @@ function rs_get_activity_categories() {
         return $cached;
     }
 
-    // Desired category display order matching Home page
+    // Desired category display order matching all 8 categories
     $order_map = array(
-        'yoga'        => 1,
-        'gym'         => 2,
-        'karate'      => 3,
-        'music-dance' => 4,
+        'yoga'                           => 1,
+        'music-instrumental-arts'        => 2,
+        'dance-performing-arts'          => 3,
+        'sports-fitness-martial-arts'    => 4,
+        'art-creative-skills'            => 5,
+        'culture-education-values'       => 6,
+        'traditional-therapies-wellness' => 7,
+        'counselling-mental-wellbeing'   => 8,
     );
 
     $fallback_images = array(
-        'yoga'        => content_url( '/uploads/2026/10/Yoga.jpg' ),
-        'gym'         => content_url( '/uploads/2026/10/GYM.webp' ),
-        'karate'      => content_url( '/uploads/2026/10/karate.jpg' ),
-        'music-dance' => content_url( '/uploads/2026/10/Music.jpg' ),
+        'yoga'                           => content_url( '/uploads/2026/10/Yoga.jpg' ),
+        'music-instrumental-arts'        => content_url( '/uploads/2026/10/Music.jpg' ),
+        'dance-performing-arts'          => content_url( '/uploads/2026/10/dance.jpg' ),
+        'sports-fitness-martial-arts'    => content_url( '/uploads/2026/10/martial-arts.jpeg' ),
+        'art-creative-skills'            => content_url( '/uploads/2026/10/arts.webp' ),
+        'culture-education-values'       => content_url( '/uploads/2026/10/culture.jpeg' ),
+        'traditional-therapies-wellness' => content_url( '/uploads/2026/10/Therapy.jpeg' ),
+        'counselling-mental-wellbeing'   => content_url( '/uploads/2026/10/Counselling.jpeg' ),
     );
 
     $fallback_taglines = array(
-        'yoga'        => 'Strength, Balance & Inner Peace',
-        'gym'         => 'Strength, Stamina & Peak Fitness',
-        'karate'      => 'Discipline, Agility & Self-Defence',
-        'music-dance' => 'Creativity, Harmony & Soul',
+        'yoga'                           => 'Authentic Asanas, Pranayama & Inner Harmony',
+        'music-instrumental-arts'        => 'Vocal Classical, Strings & Percussion',
+        'dance-performing-arts'          => 'Classical Expressions, Rhythms & Traditions',
+        'sports-fitness-martial-arts'    => 'Endurance, Martial Disciplines & Agility',
+        'art-creative-skills'            => 'Visual Arts, Fine Lettering & Heritage Designs',
+        'culture-education-values'       => 'Vedic Wisdom, Sanskrit & Foundational Values',
+        'traditional-therapies-wellness' => 'Holistic Healing, Ayurveda & Restorative Care',
+        'counselling-mental-wellbeing'   => 'Adolescent Guidance, Family & Mental Wellness',
     );
 
     $categories = array();

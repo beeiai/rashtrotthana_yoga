@@ -14,12 +14,17 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
 .rs-footer { margin-top: 60px; }
 .rs-footer-brand:after{content:none}
 .rs-footer-brand{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
-.rs-footer-logo{display:block;width:auto!important;max-width:240px!important;height:auto!important;overflow:visible!important;margin:0 0 16px 0}
-.rs-footer-logo img{display:block;width:100%!important;max-width:240px!important;height:auto!important;object-fit:contain}
+.rs-footer-logo{display:block;width:auto!important;max-width:140px!important;height:auto!important;overflow:visible!important;margin:0 0 16px 0}
+.rs-footer-logo img{display:block;width:auto!important;max-width:130px!important;max-height:130px!important;height:auto!important;object-fit:contain}
 .rs-footer-tagline{width:100%;margin:0 0 20px!important;text-align:left}
 .rs-footer a, .rs-footer p, .rs-footer span{color:#fae9de}
-.rs-footer-contact a{display:inline!important;color:inherit;text-decoration:none;transition:color .2s ease}
-.rs-footer-contact a:hover{color:#F9B72A;text-decoration:underline}
+.rs-footer-contact-list{display:flex;flex-direction:column;gap:12px;margin:12px 0 20px;}
+.rs-footer-contact-item{display:flex;align-items:flex-start;gap:10px;margin:0;}
+.rs-footer-contact-icon{flex-shrink:0;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;color:#F9B72A;margin-top:2px;}
+.rs-footer-contact-icon svg{width:16px;height:16px;stroke-width:2.2;}
+.rs-footer-contact-text{margin:0;line-height:1.45;font-size:0.92rem;color:#fae9de;}
+.rs-footer-contact-link{display:inline!important;color:#fae9de!important;text-decoration:none;transition:color .2s ease;font-size:0.92rem;line-height:1.45;}
+.rs-footer-contact-link:hover{color:#F9B72A!important;text-decoration:underline}
 .rs-socials{justify-content:flex-start;width:100%;margin-top:0;gap:12px;display:flex;}
 .rs-socials a{display:grid!important;place-items:center;width:34px;height:34px;border-radius:50%;background:#ffffff;color:#4c5661!important;transition:transform .2s ease,background .2s ease,color .2s ease;text-decoration:none}
 .rs-socials a:hover{transform:translateY(-2px);background:#fff8ec;color:#8F171D!important;box-shadow:0 4px 12px rgba(0,0,0,.15)}
@@ -32,8 +37,8 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
 <footer class="rs-footer">
     <div class="rs-container rs-footer-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
         <div class="rs-footer-brand">
-            <a class="rs-footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Rashtrotthana Yogic Sciences and Research Institute home">
-                <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-logo.png?v=' . filemtime( get_template_directory() . '/assets/images/rashtrotthana-logo.png' ) ); ?>" alt="Rashtrotthana Yogic Sciences and Research Institute">
+            <a class="rs-footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="Rashtrotthana Parishat home">
+                <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-footer-logo.png?v=' . filemtime( get_template_directory() . '/assets/images/rashtrotthana-footer-logo.png' ) ); ?>" alt="Rashtrotthana Parishat">
             </a>
             <p class="rs-footer-tagline">To create<br>Sustainable Healthy Society</p>
         </div>
@@ -48,12 +53,35 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
         </div>
         <div>
             <h3>Connect With Us</h3>
-            <p><?php echo esc_html( $address ); ?></p>
-            <p class="rs-footer-contact">
-                <a href="tel:+919606080778"><?php echo esc_html( $phone ); ?></a><br>
-                <a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
-            </p>
-            <h3 style="margin-top:20px; font-size:1.1rem;">Follow Us</h3>
+            <div class="rs-footer-contact-list">
+                <div class="rs-footer-contact-item">
+                    <span class="rs-footer-contact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8Z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </span>
+                    <span class="rs-footer-contact-text"><?php echo esc_html( $address ); ?></span>
+                </div>
+                <div class="rs-footer-contact-item">
+                    <span class="rs-footer-contact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </span>
+                    <a href="tel:+919606080778" class="rs-footer-contact-link"><?php echo esc_html( $phone ); ?></a>
+                </div>
+                <div class="rs-footer-contact-item">
+                    <span class="rs-footer-contact-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </span>
+                    <a href="mailto:<?php echo esc_attr( $email ); ?>" class="rs-footer-contact-link"><?php echo esc_html( $email ); ?></a>
+                </div>
+            </div>
+            <h3 style="margin-top:16px; font-size:1.1rem;">Follow Us</h3>
             <div class="rs-socials" aria-label="Social media links">
                 <a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
                     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>

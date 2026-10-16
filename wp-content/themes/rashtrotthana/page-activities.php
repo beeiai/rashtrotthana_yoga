@@ -195,25 +195,25 @@ foreach ( $activity_categories as $cat ) {
 }
 
 /* ============================================================
-   The 4 Core Pillar Cards Grid (Initial Primary View)
+   The 8 Core Pillar Cards Grid (Initial Primary View)
    ============================================================ */
 .rs-pillars-section {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .rs-pillars-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.6rem;
+    gap: 1.35rem;
 }
 
 .rs-pillar-card {
     position: relative;
-    border-radius: 1.35rem;
+    border-radius: 1.2rem;
     overflow: hidden;
     background: #fff;
-    border: 2px solid rgba(143, 23, 29, .12);
-    box-shadow: 0 10px 30px rgba(89, 37, 24, .08);
+    border: 1.5px solid rgba(143, 23, 29, .12);
+    box-shadow: 0 8px 24px rgba(89, 37, 24, .06);
     display: flex;
     flex-direction: column;
     transition: all 260ms cubic-bezier(.16, 1, .3, 1);
@@ -222,21 +222,21 @@ foreach ( $activity_categories as $cat ) {
 }
 
 .rs-pillar-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 45px rgba(89, 37, 24, .16);
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(89, 37, 24, .14);
     border-color: var(--color-maroon);
 }
 
 .rs-pillar-card.is-active-pillar {
     border-color: var(--color-saffron);
-    box-shadow: 0 0 0 4px rgba(243, 106, 33, .25), 0 20px 45px rgba(89, 37, 24, .18);
-    transform: translateY(-4px);
+    box-shadow: 0 0 0 4px rgba(243, 106, 33, .25), 0 18px 40px rgba(89, 37, 24, .16);
+    transform: translateY(-3px);
 }
 
 .rs-pillar-media {
     position: relative;
     width: 100%;
-    aspect-ratio: 16/11;
+    aspect-ratio: 16/10;
     overflow: hidden;
     background: #e2e8f0;
 }
@@ -256,41 +256,45 @@ foreach ( $activity_categories as $cat ) {
 .rs-pillar-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(30, 15, 10, 0.72) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(30, 15, 10, 0.65) 100%);
 }
 
 .rs-pillar-badge-count {
     position: absolute;
-    top: .85rem;
-    right: .85rem;
-    padding: .35rem .8rem;
+    top: .75rem;
+    right: .75rem;
+    padding: .3rem .75rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, .95);
+    background: rgba(255, 255, 255, .96);
     color: var(--color-maroon);
-    font-size: .75rem;
+    font-size: .72rem;
     font-weight: 700;
     letter-spacing: .02em;
     backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .14);
 }
 
 .rs-pillar-body {
-    padding: 1.4rem 1.4rem 1.5rem;
+    padding: 1.15rem 1.15rem 1.25rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 
 .rs-pillar-tagline {
-    font-size: .74rem;
+    font-size: .68rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .06em;
+    letter-spacing: .05em;
     color: var(--color-saffron);
-    margin-bottom: .6rem;
+    margin-bottom: .45rem;
     position: relative;
     display: inline-block;
-    padding-bottom: .35rem;
+    padding-bottom: .25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .rs-pillar-tagline::after {
@@ -298,43 +302,56 @@ foreach ( $activity_categories as $cat ) {
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 26px;
-    height: 2.5px;
+    width: 24px;
+    height: 2px;
     background: var(--color-saffron);
     border-radius: 2px;
 }
 
 .rs-pillar-card .rs-pillar-title {
-    margin: 0 0 .5rem;
-    font-size: 0.88rem !important;
+    margin: 0 0 .45rem;
+    font-size: 0.85rem !important;
     font-weight: 700;
     color: #542019;
-    line-height: 1.25;
+    line-height: 1.35;
+    min-height: 2.75rem;
+    display: block !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 .rs-pillar-desc {
-    margin: 0 0 1.25rem;
-    font-size: .84rem;
+    margin: 0 0 .9rem;
+    font-size: .8rem;
     color: #67574c;
-    line-height: 1.55;
+    line-height: 1.5;
     flex-grow: 1;
+    min-height: 3.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .rs-pillar-action-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: .9rem;
-    border-top: 1px solid rgba(143, 23, 29, .1);
+    padding-top: .75rem;
+    border-top: 1px solid rgba(143, 23, 29, .08);
+    margin-top: auto;
 }
 
 .rs-pillar-cta-text {
-    font-size: .88rem;
+    font-size: .82rem;
     font-weight: 700;
     color: var(--color-maroon);
     display: flex;
     align-items: center;
-    gap: .4rem;
+    gap: .35rem;
 }
 
 .rs-pillar-card:hover .rs-pillar-cta-text {
@@ -342,15 +359,15 @@ foreach ( $activity_categories as $cat ) {
 }
 
 .rs-pillar-chevron {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: rgba(143, 23, 29, .08);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-maroon);
-    font-size: .85rem;
+    font-size: .8rem;
     transition: transform 200ms ease, background 200ms ease;
 }
 
@@ -1096,7 +1113,7 @@ foreach ( $activity_categories as $cat ) {
                     Empower Body, Mind &amp; <em>Spirit</em>
                 </h1>
                 <p class="rs-act-page-subtitle">
-                    Select any of our 4 core disciplines below to view comprehensive sub-activity programs, certified centers, and daily batch timings.
+                    Select any of our core disciplines below to view comprehensive sub-activity programs, certified centers, and daily batch timings.
                 </p>
                 <div class="rs-act-instruction-hint">
                     <span>Click any card below to explore its programs &amp; batches</span>
@@ -1107,7 +1124,7 @@ foreach ( $activity_categories as $cat ) {
 
     <div class="rs-container">
 
-        <!-- 4 Primary Activity Pillar Cards (Initial View) -->
+        <!-- 8 Primary Activity Pillar Cards (Initial View) -->
         <section class="rs-pillars-section" id="pillars-section" aria-label="Core Activity Disciplines">
             <div class="rs-pillars-grid">
                 <?php foreach ( $activity_categories as $index => $cat ) : ?>
@@ -1119,7 +1136,11 @@ foreach ( $activity_categories as $cat ) {
                         <div class="rs-pillar-media">
                             <img src="<?php echo esc_url( $cat['image'] ); ?>" alt="<?php echo esc_attr( $cat['title'] ); ?>" loading="lazy">
                             <div class="rs-pillar-overlay"></div>
-                            <span class="rs-pillar-badge-count"><?php echo count( $cat['items'] ); ?> Programs</span>
+                            <?php if ( count( $cat['items'] ) > 0 ) : ?>
+                                <span class="rs-pillar-badge-count"><?php echo count( $cat['items'] ); ?> Programs</span>
+                            <?php else : ?>
+                                <span class="rs-pillar-badge-count" style="background: rgba(243, 106, 33, 0.95); color: #fff;">Upcoming</span>
+                            <?php endif; ?>
                         </div>
 
                         <div class="rs-pillar-body">
@@ -1129,7 +1150,7 @@ foreach ( $activity_categories as $cat ) {
                             
                             <div class="rs-pillar-action-row">
                                 <span class="rs-pillar-cta-text">
-                                    <span>View <?php echo esc_html( $cat['title'] ); ?> Programs</span>
+                                    <span><?php echo count( $cat['items'] ) > 0 ? 'View Programs' : 'Explore Details'; ?></span>
                                 </span>
                                 <span class="rs-pillar-chevron" aria-hidden="true">&rarr;</span>
                             </div>
@@ -1148,7 +1169,7 @@ foreach ( $activity_categories as $cat ) {
                 <!-- Top Row: Back Button & Category Switcher Tabs -->
                 <div class="rs-panel-top-row">
                     <button type="button" class="rs-back-to-categories-btn" id="rs-back-to-categories-btn">
-                        <span>&larr; Back to 4 Categories</span>
+                        <span>&larr; Back to Disciplines</span>
                     </button>
 
                     <div class="rs-category-tabs-nav" role="tablist">
@@ -1197,7 +1218,7 @@ foreach ( $activity_categories as $cat ) {
                     <!-- Filter 1: Center / Location Filter -->
                     <div class="rs-filter-select-wrap">
                         <select id="rs-filter-center" class="rs-filter-select" aria-label="Filter by Center">
-                            <option value="">All 25+ Centers</option>
+                            <option value="">All Centers</option>
                             <?php foreach ( $all_centers as $center ) : ?>
                                 <option value="<?php echo esc_attr( strtolower( $center['name'] ) ); ?>">
                                     <?php echo esc_html( $center['name'] ); ?>
@@ -1761,13 +1782,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Search query match
             var searchMatch = !query || fullText.indexOf(query) !== -1;
 
-            // Center match (includes universal centers phrases)
+            // Center match (strict matching against official directory centers list)
             var centerMatch = true;
             if (centerVal) {
-                centerMatch = (centers.indexOf(centerVal) !== -1 || 
-                               centers.indexOf('all 12') !== -1 || 
-                               centers.indexOf('available across') !== -1 || 
-                               centers.indexOf('all rashtrotthana') !== -1);
+                var normCenterVal = centerVal.replace(/\s+/g, '').toLowerCase();
+                var normCenters = centers.replace(/\s+/g, '').toLowerCase();
+                centerMatch = (normCenters.indexOf(normCenterVal) !== -1);
             }
 
             // Timing match
@@ -1858,6 +1878,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (noResultsBox) {
             if (visibleCount === 0) {
                 noResultsBox.classList.add('is-visible');
+                var noResH3 = noResultsBox.querySelector('h3');
+                var noResP = noResultsBox.querySelector('p');
+                if (currentCategory === 'yoga') {
+                    if (noResH3) noResH3.textContent = 'Yoga Programs Opening Soon';
+                    if (noResP) noResP.textContent = 'Admissions and schedules for Yoga programs will be announced shortly. Feel free to explore our other disciplines or contact our centers directly.';
+                } else {
+                    if (noResH3) noResH3.textContent = 'No Activities Match Your Filters';
+                    if (noResP) noResP.textContent = 'Try searching for a different keyword, clearing your filters, or switching categories.';
+                }
             } else {
                 noResultsBox.classList.remove('is-visible');
             }

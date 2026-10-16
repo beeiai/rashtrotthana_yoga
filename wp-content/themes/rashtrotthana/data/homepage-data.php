@@ -64,13 +64,13 @@ $rs_home_center_cards = array(
     array(
         'name'       => 'Nagarbhavi',
         'slug'       => 'nagarbhavi',
-        'image'      => content_url( '/uploads/2026/10/nagarbhavi.jpg' ),
+        'image'      => content_url( '/uploads/2026/10/Nagarbhavi.jpeg' ),
         'is_default' => false,
     ),
     array(
         'name'       => 'RBI Layout',
         'slug'       => 'rbilayout',
-        'image'      => content_url( '/uploads/2026/10/RBI-Layout.jpg' ),
+        'image'      => content_url( '/uploads/2026/10/RBI-layout.jpeg' ),
         'is_default' => false,
     ),
     array(
@@ -82,7 +82,7 @@ $rs_home_center_cards = array(
     array(
         'name'       => 'Sunkenahalli',
         'slug'       => 'sunkenahalli',
-        'image'      => get_template_directory_uri() . '/assets/images/client/20200529-175453.jpg',
+        'image'      => content_url( '/uploads/2026/10/Basavangudi.jpeg' ),
         'is_default' => false,
     ),
 );
@@ -125,25 +125,25 @@ $rs_home_activities = array(
         'name'  => 'Yoga',
         'desc'  => 'Authentic Patanjali Yoga, therapeutic wellness, and daily sadhana for physical vitality and mental peace.',
         'image' => content_url( '/uploads/2026/10/Yoga.jpg' ),
-        'link'  => home_url( '/activities/#yoga-wellness' ),
+        'link'  => home_url( '/activities/#yoga' ),
     ),
     array(
-        'name'  => 'GYM',
-        'desc'  => 'Modern fitness equipment, strength conditioning, and personalized workout routines for all levels.',
-        'image' => content_url( '/uploads/2026/10/GYM.webp' ),
-        'link'  => home_url( '/activities/#fitness-sports' ),
+        'name'  => 'Fitness & sports',
+        'desc'  => 'Modern strength conditioning, martial arts self-defense, swimming, table tennis, and agility training.',
+        'image' => content_url( '/uploads/2026/10/martial-arts.jpeg' ),
+        'link'  => home_url( '/activities/#sports-fitness-martial-arts' ),
     ),
     array(
         'name'  => 'Music and dance',
-        'desc'  => 'Classical Carnatic vocal, instrumental music training, and expressive traditional dance forms.',
+        'desc'  => 'Classical Carnatic and Hindustani vocal, instrumental music training, and expressive dance forms.',
         'image' => content_url( '/uploads/2026/10/Music.jpg' ),
-        'link'  => home_url( '/activities/#arts-music' ),
+        'link'  => home_url( '/activities/#music-instrumental-arts' ),
     ),
     array(
-        'name'  => 'Karate',
-        'desc'  => 'Martial arts discipline, self-defense technique, mental focus, and agility training for all ages.',
-        'image' => content_url( '/uploads/2026/10/karate.jpg' ),
-        'link'  => home_url( '/activities/#martial-arts' ),
+        'name'  => 'Culture & tradition',
+        'desc'  => 'Value-based cultural learning, Sanskrit fluency, Gita chanting, and moral character building.',
+        'image' => content_url( '/uploads/2026/10/culture.jpeg' ),
+        'link'  => home_url( '/activities/#culture-education-values' ),
     ),
 );
 

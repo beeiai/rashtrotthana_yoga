@@ -94,125 +94,20 @@ if ( ! function_exists( 'rs_get_center_op_hours' ) ) {
  */
 if ( ! function_exists( 'rs_get_center_detailed_activities' ) ) {
     function rs_get_center_detailed_activities( $center ) {
-        $programs = ! empty( $center['programs'] ) ? $center['programs'] : array( 'Yoga for Beginners', 'Yoga for All', 'Yoga Therapy', 'Pranayama' );
-        $activities = array();
-
-        foreach ( $programs as $prog ) {
-            $prog_lower = strtolower( $prog );
-
-            if ( strpos( $prog_lower, 'beginner' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Yoga for Beginners (Sarala Yoga)',
-                    'badge'   => 'Foundational',
-                    'days'    => 'Monday to Friday (5 Days/wk)',
-                    'timings' => 'Morning: 6:00 AM – 7:00 AM | Evening: 6:00 PM – 7:00 PM',
-                    'dates'   => 'New batches start 1st & 16th of every month (Ongoing admissions)',
-                    'desc'    => 'Foundational asanas, joint mobility drills (Sukshma Vyayama), breathing fundamentals, and guided Shavasana relaxation tailored for newcomers.',
-                );
-            } elseif ( strpos( $prog_lower, 'therapy' ) !== false || strpos( $prog_lower, 'therapeutic' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Yoga Chikitsa (Therapeutic Yoga Clinic)',
-                    'badge'   => 'Personalized Care',
-                    'days'    => 'Mon, Wed, Fri & Saturday',
-                    'timings' => 'Morning: 8:30 AM – 9:30 AM, 9:45 AM – 10:45 AM | Evening: 4:30 PM – 5:30 PM',
-                    'dates'   => 'Prior doctor consultation required; individualized daily recovery slots',
-                    'desc'    => 'Targeted clinical yoga modules addressing chronic lumbar & cervical pain, postural correction, hypertension, diabetes, and stress management.',
-                );
-            } elseif ( strpos( $prog_lower, 'pranayama' ) !== false || strpos( $prog_lower, 'meditation' ) !== false || strpos( $prog_lower, 'dhyana' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Pranayama & Dhyana (Breathwork & Meditation)',
-                    'badge'   => 'Mindfulness',
-                    'days'    => 'Tuesday, Thursday & Saturday',
-                    'timings' => 'Morning: 6:30 AM – 7:30 AM | Evening: 7:00 PM – 8:00 PM',
-                    'dates'   => 'Continuous monthly enrollment (Weekday & weekend slots)',
-                    'desc'    => 'Systematic breath control covering Nadi Shodhana, Kapalabhati, Bhramari resonance, and guided silent meditation for nervous system harmony.',
-                );
-            } elseif ( strpos( $prog_lower, 'all' ) !== false || strpos( $prog_lower, 'general' ) !== false || strpos( $prog_lower, 'hatha' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Yoga for All (Samanya & Advanced Yoga)',
-                    'badge'   => 'Daily Batches',
-                    'days'    => 'Monday to Saturday (6 Days/wk)',
-                    'timings' => 'Morning: 5:30 AM – 6:30 AM, 7:15 AM – 8:15 AM | Evening: 5:00 PM – 6:00 PM, 6:30 PM – 7:30 PM',
-                    'dates'   => 'Open admissions — enroll at any time during the month',
-                    'desc'    => 'Comprehensive daily practice incorporating dynamic Surya Namaskar series, posture endurance, core strength, flexibility, and pranayama.',
-                );
-            } elseif ( strpos( $prog_lower, 'child' ) !== false || strpos( $prog_lower, 'kids' ) !== false || strpos( $prog_lower, 'bala' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Bala Yoga & Samskara Kendra (Children)',
-                    'badge'   => 'Ages 6–14',
-                    'days'    => 'Saturday & Sunday (Weekend Batches)',
-                    'timings' => 'Saturday: 4:30 PM – 6:00 PM | Sunday: 8:00 AM – 9:30 AM',
-                    'dates'   => 'Quarterly & annual batches open year-round',
-                    'desc'    => 'Value-based personality development integrating physical agility postures, memory-enhancing shlokas, concentration drills, and cultural games.',
-                );
-            } elseif ( strpos( $prog_lower, 'corporate' ) !== false || strpos( $prog_lower, 'destress' ) !== false || strpos( $prog_lower, 'workplace' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Corporate Destress & Ergonomic Posture Yoga',
-                    'badge'   => 'Working Professionals',
-                    'days'    => 'Monday to Friday',
-                    'timings' => 'Morning: 6:30 AM – 7:30 AM | Evening: 7:00 PM – 8:00 PM',
-                    'dates'   => 'Flexible monthly batches for working professionals',
-                    'desc'    => 'Relieve desk-bound spinal compression, cervical tension, and digital eye strain with targeted corrective yoga and restorative breathwork.',
-                );
-            } elseif ( strpos( $prog_lower, 'karate' ) !== false || strpos( $prog_lower, 'taekwondo' ) !== false || strpos( $prog_lower, 'martial' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Martial Arts & Self-Defence Academy',
-                    'badge'   => 'Discipline & Fitness',
-                    'days'    => 'Tuesday, Thursday & Saturday',
-                    'timings' => 'Morning: 6:00 AM – 7:15 AM | Evening: 5:30 PM – 6:45 PM',
-                    'dates'   => 'New batches start 1st of every month (Belt gradings held periodically)',
-                    'desc'    => 'Self-defence katas, agility conditioning, sparring drills, and mental focus led by certified black-belt instructors for youth and adults.',
-                );
-            } elseif ( strpos( $prog_lower, 'prenatal' ) !== false || strpos( $prog_lower, 'women' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Prenatal & Women\'s Wellness Yoga',
-                    'badge'   => 'Specialized Care',
-                    'days'    => 'Mon, Wed & Friday',
-                    'timings' => 'Morning: 9:30 AM – 10:30 AM | Evening: 4:30 PM – 5:30 PM',
-                    'dates'   => 'Intake on every Monday (Medical clearance recommended)',
-                    'desc'    => 'Safe, nurturing prenatal movements, pelvic floor strengthening, breath coordination, and restorative relaxation supporting maternal wellness.',
-                );
-            } elseif ( strpos( $prog_lower, 'art' ) !== false || strpos( $prog_lower, 'dance' ) !== false || strpos( $prog_lower, 'bharatanatyam' ) !== false || strpos( $prog_lower, 'sanskrit' ) !== false || strpos( $prog_lower, 'chanting' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Classical Arts & Cultural Academy',
-                    'badge'   => 'Heritage & Culture',
-                    'days'    => 'Friday, Saturday & Sunday',
-                    'timings' => 'Evening: 5:00 PM – 7:00 PM',
-                    'dates'   => 'Quarterly admission cycle starting 1st of every month',
-                    'desc'    => 'Indian classical music, Bharatanatyam dance fundamentals, and Vedic shloka recitation cultivating traditional cultural heritage.',
-                );
-            } elseif ( strpos( $prog_lower, 'vinyasa' ) !== false || strpos( $prog_lower, 'power' ) !== false || strpos( $prog_lower, 'weight' ) !== false || strpos( $prog_lower, 'fitness' ) !== false ) {
-                $activities[] = array(
-                    'name'    => 'Vinyasa Flow & Functional Fitness',
-                    'badge'   => 'High Energy',
-                    'days'    => 'Monday to Friday',
-                    'timings' => 'Morning: 6:00 AM – 7:00 AM | Evening: 6:30 PM – 7:30 PM',
-                    'dates'   => 'Continuous admissions on a monthly basis',
-                    'desc'    => 'Dynamic breath-synchronized flow sequences designed to build core strength, cardiovascular stamina, metabolic burn, and bodily flexibility.',
-                );
-            } else {
-                $activities[] = array(
-                    'name'    => $prog,
-                    'badge'   => 'Regular Batch',
-                    'days'    => 'Monday to Friday',
-                    'timings' => 'Morning: 6:00 AM – 7:30 AM | Evening: 5:30 PM – 7:00 PM',
-                    'dates'   => 'Admissions open 1st & 16th of every month',
-                    'desc'    => 'Guided yoga curriculum at ' . $center['name'] . ' fostering health, vitality, mental clarity, and mindfulness.',
-                );
-            }
+        if ( empty( $center['programs'] ) ) {
+            return array();
         }
-
-        if ( count( $activities ) < 3 ) {
+        $activities = array();
+        foreach ( $center['programs'] as $prog ) {
             $activities[] = array(
-                'name'    => 'Pranayama & Guided Meditation',
-                'badge'   => 'All Levels',
-                'days'    => 'Tuesday, Thursday & Saturday',
-                'timings' => 'Morning: 6:30 AM – 7:30 AM | Evening: 7:00 PM – 8:00 PM',
-                'dates'   => 'Continuous monthly admissions',
-                'desc'    => 'Cultivate breath mastery, mental peace, and stress resilience under certified Rashtrotthana Yoga Acharyas.',
+                'name'    => $prog,
+                'badge'   => 'Certified Activity',
+                'days'    => 'Weekly Batches',
+                'timings' => 'Morning & Evening Batches',
+                'dates'   => 'Ongoing admissions',
+                'desc'    => 'Official certified instruction in ' . $prog . ' at ' . ( !empty($center['name']) ? $center['name'] : 'Rashtrotthana Center' ) . '.',
             );
         }
-
         return $activities;
     }
 }
@@ -341,25 +236,6 @@ if ( ! function_exists( 'rs_filter_center_activities' ) ) {
             }
             
             $clean[] = $act;
-        }
-        
-        // If no yoga class present, ensure a foundational Yoga Classes card is present
-        $has_yoga = false;
-        foreach ( $clean as $act ) {
-            if ( stripos( $act['name'], 'yoga' ) !== false ) {
-                $has_yoga = true;
-                break;
-            }
-        }
-        if ( ! $has_yoga ) {
-            array_unshift( $clean, array(
-                'name'    => 'Yoga Classes',
-                'badge'   => 'Foundational to Advanced',
-                'days'    => 'Monday to Saturday',
-                'timings' => 'Morning: 6:00 AM – 7:30 AM | Evening: 5:30 PM – 7:00 PM',
-                'dates'   => 'Ongoing admissions',
-                'desc'    => 'Certified Rashtrotthana Yoga instruction catering to all age groups and experience levels.',
-            ) );
         }
         
         return $clean;
@@ -523,11 +399,15 @@ unset( $c );
                                     </div>
 
                                     <div class="rs-directory-programs-tags">
-                                        <?php foreach ( array_slice($center['programs'], 0, 3) as $program ) : ?>
-                                            <span class="rs-directory-tag"><?php echo esc_html( $program ); ?></span>
-                                        <?php endforeach; ?>
-                                        <?php if ( count($center['programs']) > 3 ) : ?>
-                                            <span class="rs-directory-tag-more">+<?php echo count($center['programs']) - 3; ?> more</span>
+                                        <?php if ( ! empty($center['programs']) ) : ?>
+                                            <?php foreach ( array_slice($center['programs'], 0, 3) as $program ) : ?>
+                                                <span class="rs-directory-tag"><?php echo esc_html( $program ); ?></span>
+                                            <?php endforeach; ?>
+                                            <?php if ( count($center['programs']) > 3 ) : ?>
+                                                <span class="rs-directory-tag-more">+<?php echo count($center['programs']) - 3; ?> more</span>
+                                            <?php endif; ?>
+                                        <?php else : ?>
+                                            <span class="rs-directory-tag rs-directory-tag-empty" style="color: #94a3b8; font-style: italic;">No activities listed</span>
                                         <?php endif; ?>
                                     </div>
 
@@ -630,11 +510,15 @@ unset( $c );
                                 </div>
 
                                 <div class="rs-directory-programs-tags">
-                                    <?php foreach ( array_slice($center['programs'], 0, 3) as $program ) : ?>
-                                        <span class="rs-directory-tag"><?php echo esc_html( $program ); ?></span>
-                                    <?php endforeach; ?>
-                                    <?php if ( count($center['programs']) > 3 ) : ?>
-                                        <span class="rs-directory-tag-more">+<?php echo count($center['programs']) - 3; ?> more</span>
+                                    <?php if ( ! empty($center['programs']) ) : ?>
+                                        <?php foreach ( array_slice($center['programs'], 0, 3) as $program ) : ?>
+                                            <span class="rs-directory-tag"><?php echo esc_html( $program ); ?></span>
+                                        <?php endforeach; ?>
+                                        <?php if ( count($center['programs']) > 3 ) : ?>
+                                            <span class="rs-directory-tag-more">+<?php echo count($center['programs']) - 3; ?> more</span>
+                                        <?php endif; ?>
+                                    <?php else : ?>
+                                        <span class="rs-directory-tag rs-directory-tag-empty" style="color: #94a3b8; font-style: italic;">No activities listed</span>
                                     <?php endif; ?>
                                 </div>
 
@@ -790,53 +674,59 @@ unset( $c );
                         </div>
                     </div>
                     <div class="rs-center-activities-grid">
-                        <?php foreach ( $center_activities as $act ) : ?>
-                            <div class="rs-center-activity-card">
-                                <div class="rs-center-act-top">
-                                    <h4 class="rs-center-act-title"><?php echo esc_html( $act['name'] ); ?></h4>
-                                    <?php if ( ! empty( $act['badge'] ) ) : ?>
-                                        <span class="rs-center-act-badge"><?php echo esc_html( $act['badge'] ); ?></span>
+                        <?php if ( ! empty( $center_activities ) ) : ?>
+                            <?php foreach ( $center_activities as $act ) : ?>
+                                <div class="rs-center-activity-card">
+                                    <div class="rs-center-act-top">
+                                        <h4 class="rs-center-act-title"><?php echo esc_html( $act['name'] ); ?></h4>
+                                        <?php if ( ! empty( $act['badge'] ) ) : ?>
+                                            <span class="rs-center-act-badge"><?php echo esc_html( $act['badge'] ); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php if ( ! empty( $act['desc'] ) ) : ?>
+                                        <p class="rs-center-act-desc"><?php echo esc_html( $act['desc'] ); ?></p>
                                     <?php endif; ?>
-                                </div>
-                                <?php if ( ! empty( $act['desc'] ) ) : ?>
-                                    <p class="rs-center-act-desc"><?php echo esc_html( $act['desc'] ); ?></p>
-                                <?php endif; ?>
 
-                                <!-- Batch Details inside the Activity Card -->
-                                <div class="rs-center-act-batch-details">
-                                    <div class="rs-center-act-batch-header">
-                                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                        <span class="rs-center-act-batch-title">Batch Details</span>
-                                    </div>
-                                    <div class="rs-center-act-details">
-                                        <?php if ( ! empty( $act['timings'] ) ) : ?>
-                                            <div class="rs-center-act-detail-row">
-                                                <span class="rs-act-detail-icon" aria-hidden="true">
-                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                                </span>
-                                                <span class="rs-act-detail-text"><strong>Timings:</strong> <?php echo esc_html( $act['timings'] ); ?></span>
-                                            </div>
-                                        <?php endif; ?>
-                                        <?php if ( ! empty( $act['days'] ) ) : ?>
-                                            <div class="rs-center-act-detail-row">
-                                                <span class="rs-act-detail-icon" aria-hidden="true">
-                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-                                                </span>
-                                                <span class="rs-act-detail-text"><strong>Batches &amp; Days:</strong> <?php echo esc_html( $act['days'] ); ?></span>
-                                            </div>
-                                        <?php endif; ?>
-                                        <?php if ( ! empty( $act['dates'] ) ) : ?>
-                                            <div class="rs-center-act-detail-row">
-                                                <span class="rs-act-detail-icon" aria-hidden="true">
-                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-                                                </span>
-                                                <span class="rs-act-detail-text"><strong>Admissions:</strong> <?php echo esc_html( $act['dates'] ); ?></span>
-                                            </div>
-                                        <?php endif; ?>
+                                    <!-- Batch Details inside the Activity Card -->
+                                    <div class="rs-center-act-batch-details">
+                                        <div class="rs-center-act-batch-header">
+                                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                            <span class="rs-center-act-batch-title">Batch Details</span>
+                                        </div>
+                                        <div class="rs-center-act-details">
+                                            <?php if ( ! empty( $act['timings'] ) ) : ?>
+                                                <div class="rs-center-act-detail-row">
+                                                    <span class="rs-act-detail-icon" aria-hidden="true">
+                                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                                    </span>
+                                                    <span class="rs-act-detail-text"><strong>Timings:</strong> <?php echo esc_html( $act['timings'] ); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ( ! empty( $act['days'] ) ) : ?>
+                                                <div class="rs-center-act-detail-row">
+                                                    <span class="rs-act-detail-icon" aria-hidden="true">
+                                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                                    </span>
+                                                    <span class="rs-act-detail-text"><strong>Batches &amp; Days:</strong> <?php echo esc_html( $act['days'] ); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ( ! empty( $act['dates'] ) ) : ?>
+                                                <div class="rs-center-act-detail-row">
+                                                    <span class="rs-act-detail-icon" aria-hidden="true">
+                                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                                                    </span>
+                                                    <span class="rs-act-detail-text"><strong>Admissions:</strong> <?php echo esc_html( $act['dates'] ); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <div class="rs-center-no-activities" style="grid-column: 1 / -1; padding: 24px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                                <p style="margin: 0; font-size: 15px; font-weight: 500;">No activities currently listed for this center.</p>
                             </div>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
 
