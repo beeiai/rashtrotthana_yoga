@@ -293,25 +293,41 @@
     var editUseGoogleForm = document.getElementById( 'radm-edit-use-google-form' );
     var editGoogleFormUrl = document.getElementById( 'radm-edit-google-form-url' );
 
+    function getEditEventElements() {
+        return {
+            overlay:     document.getElementById( 'radm-edit-event-overlay' ),
+            idInput:     document.getElementById( 'radm-edit-event-id' ),
+            nameInput:   document.getElementById( 'radm-edit-event-name' ),
+            dateInput:   document.getElementById( 'radm-edit-event-date' ),
+            regInput:    document.getElementById( 'radm-edit-event-reg-open' ),
+            regLbl:      document.getElementById( 'radm-edit-reg-label' ),
+            saveBtn:     document.getElementById( 'radm-edit-event-save' ),
+            useGfInput:  document.getElementById( 'radm-edit-use-google-form' ),
+            gfUrlInput:  document.getElementById( 'radm-edit-google-form-url' )
+        };
+    }
+
     function openEditEventModal( btn ) {
-        if ( !editOverlay ) return;
-        editIdInput.value   = btn.dataset.id     || '';
-        editNameInput.value = btn.dataset.name   || '';
-        editDateInput.value = btn.dataset.date   || '';
+        var els = getEditEventElements();
+        if ( !els.overlay ) return;
+        if ( els.idInput )   els.idInput.value   = btn.dataset.id     || '';
+        if ( els.nameInput ) els.nameInput.value = btn.dataset.name   || '';
+        if ( els.dateInput ) els.dateInput.value = btn.dataset.date   || '';
         var open = btn.dataset.status === 'open';
-        editRegInput.checked = open;
-        if ( editUseGoogleForm ) editUseGoogleForm.checked = btn.dataset.useGoogleForm === '1';
-        if ( editGoogleFormUrl ) editGoogleFormUrl.value   = btn.dataset.googleFormUrl || '';
-        if ( editRegLbl ) editRegLbl.textContent = open ? 'Registrations are open' : 'Registrations are closed';
-        editOverlay.setAttribute( 'aria-hidden', 'false' );
-        editOverlay.classList.add( 'radm-modal-open' );
-        editNameInput.focus();
+        if ( els.regInput )  els.regInput.checked = open;
+        if ( els.useGfInput ) els.useGfInput.checked = btn.dataset.useGoogleForm === '1';
+        if ( els.gfUrlInput ) els.gfUrlInput.value   = btn.dataset.googleFormUrl || '';
+        if ( els.regLbl )    els.regLbl.textContent = open ? 'Registrations are open' : 'Registrations are closed';
+        els.overlay.setAttribute( 'aria-hidden', 'false' );
+        els.overlay.classList.add( 'radm-modal-open' );
+        if ( els.nameInput ) els.nameInput.focus();
     }
 
     function closeEditEventModal() {
-        if ( !editOverlay ) return;
-        editOverlay.classList.remove( 'radm-modal-open' );
-        editOverlay.setAttribute( 'aria-hidden', 'true' );
+        var els = getEditEventElements();
+        if ( !els.overlay ) return;
+        els.overlay.classList.remove( 'radm-modal-open' );
+        els.overlay.setAttribute( 'aria-hidden', 'true' );
     }
 
     document.addEventListener( 'click', function ( e ) {
@@ -319,83 +335,86 @@
         if ( btn ) openEditEventModal( btn );
         var close = e.target.closest( '#radm-edit-event-close, #radm-edit-event-cancel' );
         if ( close ) closeEditEventModal();
-    } );
-    if ( editOverlay ) {
-        editOverlay.addEventListener( 'click', function ( e ) {
-            if ( e.target === editOverlay ) closeEditEventModal();
-        } );
-    }
 
-    if ( editSaveBtn ) {
-        editSaveBtn.addEventListener( 'click', function () {
-            var evId  = editIdInput && editIdInput.value;
-            var evNm  = editNameInput && editNameInput.value.trim();
-            var evDt  = editDateInput && editDateInput.value;
-            var regOp = editRegInput  && editRegInput.checked ? '1' : '0';
-            if ( !evNm ) { radmToast( 'Event name is required.', 'error' ); return; }
-            setLoading( editSaveBtn, true );
-            ajaxPost( 'radm_update_event', {
-                event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (editUseGoogleForm && editUseGoogleForm.checked ? 1 : 0), google_form_url: (editGoogleFormUrl ? editGoogleFormUrl.value : '')
-            }, function ( res ) {
-                setLoading( editSaveBtn, false );
-                if ( res.success ) {
-                    closeEditEventModal();
-                    var row = document.querySelector( '.radm-event-row[data-id="' + evId + '"]' );
-                    if ( row ) {
-                        var nc = row.querySelector( '.radm-event-name' );
-                        if ( nc ) nc.textContent = res.data.new_name;
-                        var badge = row.querySelector( '.radm-badge' );
-                        if ( badge ) {
-                            badge.className   = 'radm-badge ' + res.data.new_status;
-                            badge.textContent = res.data.new_status.charAt(0).toUpperCase() + res.data.new_status.slice(1);
-                        }
-                        var eb = row.querySelector( '.radm-edit-event-btn' );
-                        if ( eb ) {
-                            eb.dataset.name   = res.data.new_name;
-                            eb.dataset.date   = evDt;
-                            eb.dataset.status = res.data.new_status;
-                        }
+        var overlay = document.getElementById( 'radm-edit-event-overlay' );
+        if ( overlay && e.target === overlay ) closeEditEventModal();
+    } );
+
+    document.addEventListener( 'click', function ( e ) {
+        var saveBtn = e.target.closest( '#radm-edit-event-save' );
+        if ( !saveBtn ) return;
+        var els = getEditEventElements();
+        var evId  = els.idInput && els.idInput.value;
+        var evNm  = els.nameInput && els.nameInput.value.trim();
+        var evDt  = els.dateInput && els.dateInput.value;
+        var regOp = els.regInput  && els.regInput.checked ? '1' : '0';
+        if ( !evNm ) { radmToast( 'Event name is required.', 'error' ); return; }
+        setLoading( saveBtn, true );
+        ajaxPost( 'radm_update_event', {
+            event_id: evId, event_name: evNm, event_date: evDt, registration_open: regOp, use_google_form: (els.useGfInput && els.useGfInput.checked ? 1 : 0), google_form_url: (els.gfUrlInput ? els.gfUrlInput.value : '')
+        }, function ( res ) {
+            setLoading( saveBtn, false );
+            if ( res.success ) {
+                closeEditEventModal();
+                var row = document.querySelector( '.radm-event-row[data-id="' + evId + '"]' );
+                if ( row ) {
+                    var nc = row.querySelector( '.radm-event-name' );
+                    if ( nc ) nc.textContent = res.data.new_name;
+                    var badge = row.querySelector( '.radm-badge' );
+                    if ( badge ) {
+                        badge.className   = 'radm-badge ' + res.data.new_status;
+                        badge.textContent = res.data.new_status.charAt(0).toUpperCase() + res.data.new_status.slice(1);
                     }
-                    radmToast( 'Event updated.', 'success' );
-                } else {
-                    radmToast( ( res.data && res.data.message ) || 'Update failed.', 'error' );
+                    var eb = row.querySelector( '.radm-edit-event-btn' );
+                    if ( eb ) {
+                        eb.dataset.name   = res.data.new_name;
+                        eb.dataset.date   = evDt;
+                        eb.dataset.status = res.data.new_status;
+                    }
                 }
-            } );
+                radmToast( 'Event updated.', 'success' );
+            } else {
+                radmToast( ( res.data && res.data.message ) || 'Update failed.', 'error' );
+            }
         } );
-    }
+    } );
 
     /* ================================================================
        DELETE CONFIRM MODAL (events + participants)
     ================================================================ */
 
-    var delOverlay = document.getElementById( 'radm-delete-modal-overlay' );
-    var delLblEl   = document.getElementById( 'radm-delete-label' );
-    var delYesBtn  = document.getElementById( 'radm-delete-confirm-btn' );
     var pendTarget = null;
 
+    function getDelModalElements() {
+        return {
+            overlay: document.getElementById( 'radm-delete-modal-overlay' ),
+            labelEl: document.getElementById( 'radm-delete-label' ),
+            yesBtn:  document.getElementById( 'radm-delete-confirm-btn' )
+        };
+    }
+
     function openDelModal( target ) {
-        if ( !delOverlay ) return;
+        var els = getDelModalElements();
+        if ( !els.overlay ) return;
         pendTarget = target;
-        if ( delLblEl ) delLblEl.textContent = target.label;
-        delOverlay.setAttribute( 'aria-hidden', 'false' );
-        delOverlay.classList.add( 'radm-modal-open' );
+        if ( els.labelEl ) els.labelEl.textContent = target.label;
+        els.overlay.setAttribute( 'aria-hidden', 'false' );
+        els.overlay.classList.add( 'radm-modal-open' );
     }
 
     function closeDelModal() {
-        if ( !delOverlay ) return;
-        delOverlay.classList.remove( 'radm-modal-open' );
-        delOverlay.setAttribute( 'aria-hidden', 'true' );
+        var els = getDelModalElements();
+        if ( !els.overlay ) return;
+        els.overlay.classList.remove( 'radm-modal-open' );
+        els.overlay.setAttribute( 'aria-hidden', 'true' );
         pendTarget = null;
     }
 
     document.addEventListener( 'click', function ( e ) {
         if ( e.target.closest( '#radm-delete-cancel-btn, #radm-delete-modal-close' ) ) closeDelModal();
+        var overlay = document.getElementById( 'radm-delete-modal-overlay' );
+        if ( overlay && e.target === overlay ) closeDelModal();
     } );
-    if ( delOverlay ) {
-        delOverlay.addEventListener( 'click', function ( e ) {
-            if ( e.target === delOverlay ) closeDelModal();
-        } );
-    }
 
     /* Delete event trigger */
     document.addEventListener( 'click', function ( e ) {
@@ -424,11 +443,11 @@
         }
     } );
 
-    if ( delYesBtn ) {
-        delYesBtn.addEventListener( 'click', function () {
-            if ( !pendTarget ) return;
-            var t = pendTarget;
-            closeDelModal();
+    document.addEventListener( 'click', function ( e ) {
+        var yesBtn = e.target.closest( '#radm-delete-confirm-btn' );
+        if ( !yesBtn || !pendTarget ) return;
+        var t = pendTarget;
+        closeDelModal();
 
             if ( t.type === 'event' ) {
                 ajaxPost( 'radm_delete_event', { event_id: t.id }, function ( res ) {
@@ -460,7 +479,6 @@
                 } );
             }
         } );
-    }
 
     /* ================================================================
        PARTICIPANTS -- Search + serial rebuild
@@ -477,20 +495,37 @@
         if ( cnt ) cnt.textContent = ( n - 1 ) + ' participant' + ( n - 1 !== 1 ? 's' : '' );
     }
 
-    var usersSearch = document.getElementById( 'radm-users-search' );
-    if ( usersSearch ) {
-        usersSearch.addEventListener( 'input', function () {
-            var q = this.value.trim().toLowerCase();
-            document.querySelectorAll( '#radm-users-table .radm-user-row' ).forEach( function ( row ) {
-                var match = !q
-                    || row.dataset.name.includes( q )
-                    || row.dataset.phone.includes( q )
-                    || row.dataset.email.includes( q )
-                    || row.dataset.branch.includes( q );
-                row.style.display = match ? '' : 'none';
-            } );
+    var usersSearch   = document.getElementById( 'radm-users-search' );
+    var branchFilter  = document.getElementById( 'radm-users-branch-filter' );
+    var statusFilter  = document.getElementById( 'radm-users-status-filter' );
+
+    window.filterParticipants = function() {
+        var q = ( usersSearch ? usersSearch.value : '' ).trim().toLowerCase();
+        var b = ( branchFilter ? branchFilter.value : '' ).trim().toLowerCase();
+        var s = ( statusFilter ? statusFilter.value : '' ).trim().toLowerCase();
+
+        var visibleCount = 0;
+        document.querySelectorAll( '#radm-users-table .radm-user-row' ).forEach( function ( row ) {
+            var matchQ = !q
+                || ( row.dataset.name && row.dataset.name.includes( q ) )
+                || ( row.dataset.phone && row.dataset.phone.includes( q ) )
+                || ( row.dataset.email && row.dataset.email.includes( q ) )
+                || ( row.dataset.branch && row.dataset.branch.includes( q ) );
+            var matchB = !b || ( row.dataset.branch && row.dataset.branch.toLowerCase().includes( b ) );
+            var matchS = !s || ( row.dataset.status && row.dataset.status.toLowerCase() === s );
+
+            var show = matchQ && matchB && matchS;
+            row.style.display = show ? '' : 'none';
+            if ( show ) visibleCount++;
         } );
-    }
+
+        var cnt = document.getElementById( 'radm-users-count' );
+        if ( cnt ) cnt.textContent = visibleCount + ' participant' + ( visibleCount !== 1 ? 's' : '' );
+    };
+
+    if ( usersSearch )  usersSearch.addEventListener( 'input', window.filterParticipants );
+    if ( branchFilter ) branchFilter.addEventListener( 'change', window.filterParticipants );
+    if ( statusFilter ) statusFilter.addEventListener( 'change', window.filterParticipants );
 
     /* ================================================================
        ADD / EDIT PARTICIPANT MODAL
@@ -660,32 +695,7 @@
         } );
     }
 
-    /* ── Edit Event Modal save ────────────────────────────────────────── */
-    var origSaveEdit = document.getElementById( 'radm-edit-event-save' );
-    if ( origSaveEdit ) {
-        origSaveEdit.addEventListener( 'click', function () {
-            var eid   = document.getElementById( 'radm-edit-event-id' ) ? document.getElementById( 'radm-edit-event-id' ).value : '';
-            var nm    = document.getElementById( 'radm-edit-event-name' ) ? document.getElementById( 'radm-edit-event-name' ).value.trim() : '';
-            var dt    = document.getElementById( 'radm-edit-event-date' ) ? document.getElementById( 'radm-edit-event-date' ).value : '';
-            var op    = document.getElementById( 'radm-edit-event-reg-open' ) ? ( document.getElementById( 'radm-edit-event-reg-open' ).checked ? 1 : 0 ) : 1;
 
-            if ( !eid || !nm ) return;
-
-            setLoading( origSaveEdit, true );
-            ajaxPost( 'radm_update_event', {
-                event_id: eid, event_name: nm, event_date: dt, registration_open: op
-            }, function ( res ) {
-                setLoading( origSaveEdit, false );
-                if ( res.success ) {
-                    closeEditEventModal();
-                    radmToast( 'Event updated successfully.', 'success' );
-                    setTimeout( function () { location.reload(); }, 600 );
-                } else {
-                    radmToast( ( res.data && res.data.message ) || 'Failed to update event.', 'error' );
-                }
-            } );
-        } );
-    }
 
     /* ═══════════════════════════════════════════════════════════════════
        FORM GROUPS PAGE LOGIC (CRUD + DYNAMIC CENTRES + PREVIEW + ANALYTICS)
@@ -1413,7 +1423,7 @@
             var tr = document.createElement( 'tr' );
             tr.className = 'radm-center-entry-row';
             tr.innerHTML = '<td class="radm-row-num" style="text-align:center;color:var(--radm-text-muted);font-weight:600;">1</td>'
-                + '<td><input type="text" class="radm-input radm-center-name-input" placeholder="e.g. Jayanagar" value="' + esc( name || '' ) + '" required /></td>'
+                + '<td><input type="text" list="radm-fg-centers-datalist" class="radm-input radm-center-name-input" placeholder="Choose or type center..." value="' + esc( name || '' ) + '" required /></td>'
                 + '<td><input type="url" class="radm-input radm-center-url-input" placeholder="https://forms.gle/..." value="' + esc( url || '' ) + '" required /></td>'
                 + '<td style="text-align:center;"><button type="button" class="radm-btn-trash" title="Remove row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button></td>';
             centersTbody.appendChild( tr );
@@ -1825,6 +1835,7 @@
         var gType     = 'all';
         var gCategory = '';
         var gEventId  = 0;
+        var gAlbumId  = 0;
         var gStatus   = '';
         var gSearch   = '';
         var gSort     = 'latest';
@@ -1844,6 +1855,7 @@
 
         var searchInput   = document.getElementById( 'radm-gallery-search-input' );
         var catSelect     = document.getElementById( 'radm-filter-category' );
+        var albumSelect   = document.getElementById( 'radm-filter-album' );
         var eventSelect   = document.getElementById( 'radm-filter-event' );
         var statusSelect  = document.getElementById( 'radm-filter-status' );
         var sortSelect    = document.getElementById( 'radm-filter-sort' );
@@ -1866,6 +1878,7 @@
         var gTitleInput   = document.getElementById( 'radm-gtitle' );
         var gCatInput     = document.getElementById( 'radm-gcategory' );
         var gEventIdInput = document.getElementById( 'radm-gevent-id' );
+        var gAlbumIdInput = document.getElementById( 'radm-galbum-id' );
         var gImageUrl     = document.getElementById( 'radm-gimage-url' );
         var gVideoUrl     = document.getElementById( 'radm-gvideo-url' );
         var gVideoDur     = document.getElementById( 'radm-gvideo-dur' );
@@ -1897,6 +1910,7 @@
                 type:      gType,
                 category:  gCategory,
                 event_id:  gEventId,
+                album_id:  gAlbumId,
                 status:    gStatus,
                 search:    gSearch,
                 sort:      gSort,
@@ -1916,6 +1930,8 @@
                     if ( countImageEl ) countImageEl.textContent = d.counts.image || 0;
                     if ( countVideoEl ) countVideoEl.textContent = d.counts.video || 0;
                 }
+                var curBadge = document.getElementById( 'radm-badge-curated-count' );
+                if ( curBadge ) curBadge.textContent = ( d.counts && d.counts.all != null ) ? d.counts.all : d.total;
 
                 if ( !d.items || d.items.length === 0 ) {
                     gridEl.innerHTML = '<div style="grid-column:1/-1;background:#ffffff;border:1px dashed var(--radm-border);border-radius:12px;text-align:center;padding:60px 20px;">'
@@ -2037,6 +2053,13 @@
             catSelect.addEventListener( 'change', function () {
                 gCategory = this.value;
                 gPage     = 1;
+                loadGallery();
+            } );
+        }
+        if ( albumSelect ) {
+            albumSelect.addEventListener( 'change', function () {
+                gAlbumId = parseInt( this.value, 10 ) || 0;
+                gPage    = 1;
                 loadGallery();
             } );
         }
@@ -2263,33 +2286,25 @@
 
         // WP Media Library Picker
         if ( gPickMediaBtn ) {
-            var mediaFrame;
             gPickMediaBtn.addEventListener( 'click', function ( e ) {
                 e.preventDefault();
                 e.stopPropagation();
-                if ( mediaFrame ) { mediaFrame.open(); return; }
-                if ( ! window.wp || ! window.wp.media ) {
-                    radmToast( 'WordPress Media Library is not available. Please use Browse Device or Image URL.', 'error' );
-                    return;
-                }
-                mediaFrame = window.wp.media( {
-                    title: 'Select or Upload Photo',
-                    button: { text: 'Use this photo' },
-                    multiple: false,
-                    library: { type: 'image' }
-                } );
-                mediaFrame.on( 'select', function () {
-                    var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
-                    if ( attachment && attachment.url ) {
-                        if ( gImageUrl ) gImageUrl.value = attachment.url;
-                        if ( gFileInput ) gFileInput.value = '';
-                        if ( gTitleInput && ! gTitleInput.value.trim() ) {
-                            gTitleInput.value = attachment.title || attachment.caption || attachment.filename || '';
+                window.radmOpenDbMediaPicker(
+                    'radm-gimage-url',
+                    null,
+                    'radm-gpreview-wrap',
+                    null,
+                    function ( attachment ) {
+                        if ( attachment && attachment.url ) {
+                            if ( gImageUrl ) gImageUrl.value = attachment.url;
+                            if ( gFileInput ) gFileInput.value = '';
+                            if ( gTitleInput && ! gTitleInput.value.trim() ) {
+                                gTitleInput.value = attachment.title || attachment.caption || attachment.filename || '';
+                            }
+                            setPreviewImage( attachment.url );
                         }
-                        setPreviewImage( attachment.url );
                     }
-                } );
-                mediaFrame.open();
+                );
             } );
         }
 
@@ -2304,6 +2319,36 @@
             if ( gTitleInput ) gTitleInput.value = isEdit ? ( item.title || '' ) : '';
             if ( gCatInput ) gCatInput.value = ( isEdit && item.category ) ? item.category : 'General';
             if ( gEventIdInput ) gEventIdInput.value = ( isEdit && item.event_id ) ? item.event_id : '0';
+            if ( gAlbumIdInput ) gAlbumIdInput.value = ( isEdit && item.album_id ) ? item.album_id : '0';
+            var inlineAlbumWrap = document.getElementById( 'radm-inline-album-wrap' );
+            if ( inlineAlbumWrap ) inlineAlbumWrap.style.display = 'none';
+            var newAlbumInput = document.getElementById( 'radm-new-album-title' );
+            if ( newAlbumInput ) newAlbumInput.value = '';
+
+            // Multi-select albums setup
+            var checkedAids = [];
+            if ( isEdit ) {
+                if ( item.album_ids && item.album_ids.length ) {
+                    checkedAids = item.album_ids.map( String );
+                } else if ( item.album_id ) {
+                    checkedAids = [ String( item.album_id ) ];
+                }
+            }
+            document.querySelectorAll( '.radm-galbum-cb' ).forEach( function ( cb ) {
+                cb.checked = checkedAids.indexOf( String( cb.value ) ) !== -1;
+            } );
+            updateGalbumSelection();
+
+            // Multi-select centers setup
+            var checkedCids = [];
+            if ( isEdit && item.center_ids && item.center_ids.length ) {
+                checkedCids = item.center_ids.map( String );
+            }
+            document.querySelectorAll( '.radm-gcenter-cb' ).forEach( function ( cb ) {
+                cb.checked = checkedCids.indexOf( String( cb.value ) ) !== -1;
+            } );
+            updateGcenterSelection();
+
             if ( gImageUrl ) gImageUrl.value = ( isEdit && item.image_url ) ? item.image_url : '';
             if ( gVideoUrl ) gVideoUrl.value = ( isEdit && item.video_url ) ? item.video_url : '';
             if ( gVideoDur ) gVideoDur.value = ( isEdit && item.video_duration ) ? item.video_duration : '';
@@ -2322,6 +2367,202 @@
         }
 
         window.radmOpenGalleryModal = openGalleryModal;
+
+        // ── Album Dropdown Multi-Select Handlers ────────────────────────
+        var galbumMsBtn      = document.getElementById( 'radm-galbum-ms-btn' );
+        var galbumMsDropdown = document.getElementById( 'radm-galbum-ms-dropdown' );
+        var galbumSearchBox  = document.getElementById( 'radm-galbum-search-box' );
+        var galbumPills      = document.getElementById( 'radm-galbum-pills' );
+        var galbumMsLabel    = document.getElementById( 'radm-galbum-ms-label' );
+
+        function toggleGalbumDropdown() {
+            if ( galbumMsDropdown ) {
+                var isOpen = galbumMsDropdown.style.display === 'block';
+                galbumMsDropdown.style.display = isOpen ? 'none' : 'block';
+                if ( !isOpen && galbumSearchBox ) {
+                    galbumSearchBox.value = '';
+                    filterGalbumOptions( '' );
+                    galbumSearchBox.focus();
+                }
+            }
+        }
+        if ( galbumMsBtn ) galbumMsBtn.addEventListener( 'click', toggleGalbumDropdown );
+
+        function filterGalbumOptions( q ) {
+            var query = ( q || '' ).trim().toLowerCase();
+            var items = document.querySelectorAll( '#radm-galbum-options-list .radm-ms-item' );
+            items.forEach( function ( it ) {
+                var t = it.getAttribute( 'data-title' ) || '';
+                it.style.display = ( !query || t.indexOf( query ) !== -1 ) ? 'flex' : 'none';
+            } );
+        }
+        if ( galbumSearchBox ) {
+            galbumSearchBox.addEventListener( 'input', function () { filterGalbumOptions( this.value ); } );
+        }
+
+        function renderGalbumPills( selected ) {
+            if ( !galbumPills ) return;
+            galbumPills.innerHTML = '';
+            if ( !selected || !selected.length ) {
+                if ( galbumMsLabel ) galbumMsLabel.textContent = 'Choose Albums…';
+                return;
+            }
+            if ( galbumMsLabel ) galbumMsLabel.textContent = selected.length + ' Album' + ( selected.length > 1 ? 's' : '' ) + ' selected';
+
+            selected.forEach( function ( item ) {
+                var pill = document.createElement( 'span' );
+                pill.style.cssText = 'display:inline-flex; align-items:center; gap:5px; background:#e8f5e9; color:#1b5e20; padding:3px 9px; border-radius:14px; font-size:12px; font-weight:600; border:1px solid #c8e6c9;';
+                pill.innerHTML = '<span>' + esc( item.name ) + '</span><button type="button" style="background:none; border:none; color:#1b5e20; font-size:13px; cursor:pointer; padding:0; line-height:1;" title="Remove">×</button>';
+                pill.querySelector( 'button' ).onclick = function () {
+                    var cb = document.querySelector( '.radm-galbum-cb[value="' + CSS.escape( item.id ) + '"]' );
+                    if ( cb ) { cb.checked = false; }
+                    updateGalbumSelection();
+                };
+                galbumPills.appendChild( pill );
+            } );
+        }
+
+        function updateGalbumSelection() {
+            var cbs = document.querySelectorAll( '.radm-galbum-cb:checked' );
+            var selected = [];
+            cbs.forEach( function ( cb ) {
+                selected.push( { id: cb.value, name: cb.getAttribute( 'data-name' ) || cb.parentElement.textContent.trim() } );
+            } );
+            renderGalbumPills( selected );
+            if ( gAlbumIdInput && selected.length ) {
+                gAlbumIdInput.value = selected[0].id;
+            } else if ( gAlbumIdInput ) {
+                gAlbumIdInput.value = '0';
+            }
+        }
+
+        document.querySelectorAll( '.radm-galbum-cb' ).forEach( function ( cb ) {
+            cb.addEventListener( 'change', updateGalbumSelection );
+        } );
+
+        // ── Center Dropdown Multi-Select Handlers in Gallery Modal ──────
+        var gcenterMsBtn      = document.getElementById( 'radm-gcenter-ms-btn' );
+        var gcenterMsDropdown = document.getElementById( 'radm-gcenter-ms-dropdown' );
+        var gcenterPills      = document.getElementById( 'radm-gcenter-pills' );
+        var gcenterMsLabel    = document.getElementById( 'radm-gcenter-ms-label' );
+
+        function toggleGcenterDropdown() {
+            if ( gcenterMsDropdown ) {
+                var isOpen = gcenterMsDropdown.style.display === 'block';
+                gcenterMsDropdown.style.display = isOpen ? 'none' : 'block';
+            }
+        }
+        if ( gcenterMsBtn ) gcenterMsBtn.addEventListener( 'click', toggleGcenterDropdown );
+
+        function renderGcenterPills( selected ) {
+            if ( !gcenterPills ) return;
+            gcenterPills.innerHTML = '';
+            if ( !selected || !selected.length ) {
+                if ( gcenterMsLabel ) gcenterMsLabel.textContent = 'Choose Centers…';
+                return;
+            }
+            if ( gcenterMsLabel ) gcenterMsLabel.textContent = selected.length + ' Center' + ( selected.length > 1 ? 's' : '' ) + ' tagged';
+
+            selected.forEach( function ( item ) {
+                var pill = document.createElement( 'span' );
+                pill.style.cssText = 'display:inline-flex; align-items:center; gap:5px; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:14px; font-size:12px; font-weight:600; border:1px solid #bae6fd;';
+                pill.innerHTML = '<span>' + esc( item.name ) + '</span><button type="button" style="background:none; border:none; color:#0369a1; font-size:13px; cursor:pointer; padding:0; line-height:1;" title="Remove">×</button>';
+                pill.querySelector( 'button' ).onclick = function () {
+                    var cb = document.querySelector( '.radm-gcenter-cb[value="' + CSS.escape( item.id ) + '"]' );
+                    if ( cb ) { cb.checked = false; }
+                    updateGcenterSelection();
+                };
+                gcenterPills.appendChild( pill );
+            } );
+        }
+
+        function updateGcenterSelection() {
+            var cbs = document.querySelectorAll( '.radm-gcenter-cb:checked' );
+            var selected = [];
+            cbs.forEach( function ( cb ) {
+                selected.push( { id: cb.value, name: cb.getAttribute( 'data-name' ) || cb.parentElement.textContent.trim() } );
+            } );
+            renderGcenterPills( selected );
+        }
+
+        document.querySelectorAll( '.radm-gcenter-cb' ).forEach( function ( cb ) {
+            cb.addEventListener( 'change', updateGcenterSelection );
+        } );
+
+        // Close gallery multiselect dropdowns when clicking outside
+        document.addEventListener( 'click', function ( e ) {
+            var aWrap = document.getElementById( 'radm-galbum-ms-wrap' );
+            if ( aWrap && !aWrap.contains( e.target ) && galbumMsDropdown ) {
+                galbumMsDropdown.style.display = 'none';
+            }
+            var cWrap = document.getElementById( 'radm-gcenter-ms-wrap' );
+            if ( cWrap && !cWrap.contains( e.target ) && gcenterMsDropdown ) {
+                gcenterMsDropdown.style.display = 'none';
+            }
+        } );
+
+        // Inline Album Create wiring
+        var createAlbumBtn = document.getElementById( 'radm-create-album-btn' );
+        var inlineAlbumWrap = document.getElementById( 'radm-inline-album-wrap' );
+        var cancelAlbumBtn = document.getElementById( 'radm-cancel-album-btn' );
+        var saveAlbumBtn = document.getElementById( 'radm-save-album-btn' );
+        var newAlbumInput = document.getElementById( 'radm-new-album-title' );
+
+        if ( createAlbumBtn && inlineAlbumWrap ) {
+            createAlbumBtn.addEventListener( 'click', function( e ) {
+                e.preventDefault();
+                inlineAlbumWrap.style.display = inlineAlbumWrap.style.display === 'none' ? 'block' : 'none';
+                if ( newAlbumInput && inlineAlbumWrap.style.display === 'block' ) {
+                    newAlbumInput.focus();
+                }
+            } );
+        }
+        if ( cancelAlbumBtn && inlineAlbumWrap ) {
+            cancelAlbumBtn.addEventListener( 'click', function( e ) {
+                e.preventDefault();
+                inlineAlbumWrap.style.display = 'none';
+                if ( newAlbumInput ) newAlbumInput.value = '';
+            } );
+        }
+        if ( saveAlbumBtn && newAlbumInput ) {
+            saveAlbumBtn.addEventListener( 'click', function( e ) {
+                e.preventDefault();
+                var albumTitle = newAlbumInput.value.trim();
+                if ( !albumTitle ) {
+                    radmToast( 'Please enter an album name.', 'error' );
+                    return;
+                }
+                saveAlbumBtn.disabled = true;
+                saveAlbumBtn.textContent = 'Saving…';
+                ajaxPost( 'radm_create_gallery_album', {
+                    title: albumTitle,
+                    category: gCatInput ? gCatInput.value : 'General'
+                }, function( res ) {
+                    saveAlbumBtn.disabled = false;
+                    saveAlbumBtn.textContent = 'Save Album';
+                    if ( res.success && res.data.album_id ) {
+                        // Add checkbox to list, check it and update
+                        var optList = document.getElementById( 'radm-galbum-options-list' );
+                        if ( optList ) {
+                            var lbl = document.createElement( 'label' );
+                            lbl.className = 'radm-ms-item';
+                            lbl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; cursor:pointer; font-size:13px;';
+                            lbl.setAttribute( 'data-title', albumTitle.toLowerCase() );
+                            lbl.innerHTML = '<input type="checkbox" name="album_ids[]" value="' + res.data.album_id + '" class="radm-galbum-cb" data-name="' + esc( res.data.title ) + '" checked /><span>' + esc( res.data.title ) + '</span>';
+                            lbl.querySelector( 'input' ).addEventListener( 'change', updateGalbumSelection );
+                            optList.appendChild( lbl );
+                        }
+                        updateGalbumSelection();
+
+                        inlineAlbumWrap.style.display = 'none';
+                        newAlbumInput.value = '';
+                        radmToast( 'Album created and selected!', 'success' );
+                    } else {
+                        radmToast( res.data && res.data.message ? res.data.message : 'Error creating album.', 'error' );
+                    }
+                } );
+            } );
+        }
 
         function closeGalleryModal() {
             if ( !gModalOverlay ) return;
@@ -2376,10 +2617,10 @@
                         setLoading( gSubmitBtn, false );
                         if ( res.success ) {
                             closeGalleryModal();
-                            radmToast( res.data.message || 'Media uploaded successfully!', 'success' );
+                            radmToast( res.data.message || 'Media saved successfully!', 'success' );
                             loadGallery();
                         } else {
-                            radmToast( ( res.data && res.data.message ) || 'Failed to upload media.', 'error' );
+                            radmToast( ( res.data && res.data.message ) || 'Failed to save media.', 'error' );
                         }
                     } )
                     .catch( function () {
@@ -2441,6 +2682,320 @@
             } );
         }
 
+        // ═══════════════════════════════════════════════════════════════════
+        // DUAL-TAB SWITCHER & "ALL MEDIA FILES" (WORDPRESS MEDIA FOLDER)
+        // ═══════════════════════════════════════════════════════════════════
+        window.radmSwitchGalleryMainTab = function( tabKey ) {
+            var curatedView   = document.getElementById( 'radm-gallery-curated-view' );
+            var allMediaView  = document.getElementById( 'radm-gallery-all-media-view' );
+            var curatedTabBtn = document.getElementById( 'radm-main-tab-curated' );
+            var allMediaTabBtn= document.getElementById( 'radm-main-tab-all-media' );
+
+            if ( tabKey === 'all-media' ) {
+                if ( curatedView ) curatedView.style.display = 'none';
+                if ( allMediaView ) allMediaView.style.display = 'block';
+                if ( curatedTabBtn ) curatedTabBtn.classList.remove( 'is-active' );
+                if ( allMediaTabBtn ) allMediaTabBtn.classList.add( 'is-active' );
+                loadAllMediaFiles();
+            } else {
+                if ( curatedView ) curatedView.style.display = 'block';
+                if ( allMediaView ) allMediaView.style.display = 'none';
+                if ( curatedTabBtn ) curatedTabBtn.classList.add( 'is-active' );
+                if ( allMediaTabBtn ) allMediaTabBtn.classList.remove( 'is-active' );
+                loadGallery();
+            }
+        };
+
+        var allMediaGrid       = document.getElementById( 'radm-allmedia-grid' );
+        var allMediaFooter     = document.getElementById( 'radm-allmedia-footer' );
+        var allMediaPgStart    = document.getElementById( 'radm-allmedia-pg-start' );
+        var allMediaPgEnd      = document.getElementById( 'radm-allmedia-pg-end' );
+        var allMediaPgTotal    = document.getElementById( 'radm-allmedia-pg-total' );
+        var allMediaPagination = document.getElementById( 'radm-allmedia-pagination' );
+        var allMediaSearch     = document.getElementById( 'radm-allmedia-search-input' );
+
+        var amMime  = 'all';
+        var amQuery = '';
+        var amPage  = 1;
+        var amPerPg = 24;
+        var pendingAllMediaDelId = null;
+
+        function loadAllMediaFiles() {
+            if ( !allMediaGrid ) return;
+            allMediaGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--radm-text-muted);"><div class="radm-spinner" style="margin:0 auto 12px;"></div>Loading media files from WordPress storage...</div>';
+
+            ajaxPost( 'radm_get_db_images', {
+                search:    amQuery,
+                mime_type: amMime,
+                page:      amPage,
+                per_page:  amPerPg
+            }, function( res ) {
+                if ( !res.success || !res.data ) {
+                    allMediaGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#ef4444;">Failed to load media files.</div>';
+                    return;
+                }
+                var d = res.data;
+                var mediaBadge = document.getElementById( 'radm-badge-media-count' );
+                if ( mediaBadge ) mediaBadge.textContent = d.total || 0;
+
+                if ( !d.items || !d.items.length ) {
+                    allMediaGrid.innerHTML = '<div style="grid-column:1/-1;background:#ffffff;border:1px dashed var(--radm-border);border-radius:12px;text-align:center;padding:60px 20px;">'
+                        + '<h3 style="font-size:16px;color:var(--radm-text);margin:0 0 6px;">No media files found</h3>'
+                        + '<p style="font-size:13px;color:var(--radm-text-muted);margin:0 0 16px;">Upload images or documents to your WordPress storage using the button above.</p>'
+                        + '</div>';
+                    if ( allMediaFooter ) allMediaFooter.style.display = 'none';
+                    return;
+                }
+
+                var html = '';
+                d.items.forEach( function( item ) {
+                    var thumbHtml = item.is_image
+                        ? '<img class="radm-allmedia-thumb" src="' + esc( item.thumb || item.url ) + '" alt="' + esc( item.title ) + '" loading="lazy" />'
+                        : '<div class="radm-allmedia-doc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span style="font-size:11px; font-weight:600;">' + esc( ( item.mime && item.mime.split('/')[1] ) ? item.mime.split('/')[1].toUpperCase() : 'DOC' ) + '</span></div>';
+
+                    html += '<div class="radm-allmedia-card" data-id="' + item.id + '" data-item=\'' + esc( JSON.stringify( item ) ) + '\'>'
+                        + '<div class="radm-allmedia-thumb-box" onclick="radmOpenMediaPreviewModal(' + item.id + ')" style="cursor:pointer;" title="Click to view details">'
+                        + thumbHtml
+                        + '</div>'
+                        + '<div class="radm-allmedia-info">'
+                        + '<div class="radm-allmedia-title" title="' + esc( item.filename ) + '">' + esc( item.title || item.filename ) + '</div>'
+                        + '<div class="radm-allmedia-meta">'
+                        + '<span>' + esc( item.dimensions || item.filesize || '' ) + '</span>'
+                        + '<span>' + esc( item.date ) + '</span>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="radm-allmedia-actions">'
+                        + '<button type="button" class="radm-allmedia-btn radm-allmedia-btn--copy" onclick="radmCopyMediaUrl(\'' + esc( item.url ) + '\')" title="Copy Direct URL">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy URL'
+                        + '</button>'
+                        + '<button type="button" class="radm-allmedia-btn" onclick="radmOpenMediaPreviewModal(' + item.id + ')" title="Preview">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View'
+                        + '</button>'
+                        + '<button type="button" class="radm-allmedia-btn radm-allmedia-btn--delete" onclick="radmPromptDeleteAllMedia(' + item.id + ', \'' + esc( addslashes( item.filename ) ) + '\')" title="Delete File">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>'
+                        + '</button>'
+                        + '</div>'
+                        + '</div>';
+                } );
+
+                allMediaGrid.innerHTML = html;
+
+                if ( allMediaFooter ) {
+                    allMediaFooter.style.display = 'flex';
+                    var startIdx = ( ( d.page - 1 ) * d.per_page ) + 1;
+                    var endIdx   = Math.min( d.page * d.per_page, d.total );
+                    if ( allMediaPgStart ) allMediaPgStart.textContent = startIdx;
+                    if ( allMediaPgEnd )   allMediaPgEnd.textContent   = endIdx;
+                    if ( allMediaPgTotal ) allMediaPgTotal.textContent = d.total;
+
+                    if ( allMediaPagination ) {
+                        var pBtns = '';
+                        pBtns += '<button type="button" class="radm-pg-btn" data-ampage="' + ( d.page - 1 ) + '" ' + ( d.page <= 1 ? 'disabled' : '' ) + '>&lt;</button>';
+                        for ( var p = 1; p <= d.total_pages; p++ ) {
+                            pBtns += '<button type="button" class="radm-pg-btn ' + ( p === d.page ? 'is-active' : '' ) + '" data-ampage="' + p + '">' + p + '</button>';
+                        }
+                        pBtns += '<button type="button" class="radm-pg-btn" data-ampage="' + ( d.page + 1 ) + '" ' + ( d.page >= d.total_pages ? 'disabled' : '' ) + '>&gt;</button>';
+                        allMediaPagination.innerHTML = pBtns;
+                    }
+                }
+            } );
+        }
+
+        window.radmFilterAllMediaMime = function( mime ) {
+            amMime = mime;
+            amPage = 1;
+            document.querySelectorAll( '#radm-allmedia-mime-tabs .radm-gallery-tab' ).forEach( function( t ) {
+                t.classList.toggle( 'is-active', t.getAttribute( 'data-mime' ) === mime );
+            } );
+            loadAllMediaFiles();
+        };
+
+        if ( allMediaSearch ) {
+            var amSearchTimer = null;
+            allMediaSearch.addEventListener( 'input', function() {
+                var val = this.value.trim();
+                clearTimeout( amSearchTimer );
+                amSearchTimer = setTimeout( function() {
+                    amQuery = val;
+                    amPage  = 1;
+                    loadAllMediaFiles();
+                }, 300 );
+            } );
+        }
+
+        if ( allMediaPagination ) {
+            allMediaPagination.addEventListener( 'click', function( e ) {
+                var btn = e.target.closest( '.radm-pg-btn' );
+                if ( !btn || btn.disabled ) return;
+                var p = parseInt( btn.getAttribute( 'data-ampage' ), 10 );
+                if ( p && p !== amPage ) {
+                    amPage = p;
+                    loadAllMediaFiles();
+                    window.scrollTo( { top: 0, behavior: 'smooth' } );
+                }
+            } );
+        }
+
+        window.radmCopyMediaUrl = function( url ) {
+            if ( navigator.clipboard && navigator.clipboard.writeText ) {
+                navigator.clipboard.writeText( url ).then( function() {
+                    radmToast( 'Media URL copied to clipboard!', 'success' );
+                } ).catch( function() {
+                    prompt( 'Copy media URL:', url );
+                } );
+            } else {
+                prompt( 'Copy media URL:', url );
+            }
+        };
+
+        window.radmCopyMediaUrlFromModal = function() {
+            var inp = document.getElementById( 'radm-media-prev-url-input' );
+            if ( inp && inp.value ) {
+                radmCopyMediaUrl( inp.value );
+            }
+        };
+
+        window.radmOpenMediaPreviewModal = function( id ) {
+            var card = document.querySelector( '.radm-allmedia-card[data-id="' + id + '"]' );
+            if ( !card || !card.getAttribute( 'data-item' ) ) return;
+            try {
+                var item = JSON.parse( card.getAttribute( 'data-item' ) );
+                var overlay = document.getElementById( 'radm-media-preview-modal-overlay' );
+                if ( !overlay ) return;
+
+                document.getElementById( 'radm-media-prev-title' ).textContent = item.title || item.filename;
+                document.getElementById( 'radm-media-prev-filename' ).textContent = item.filename;
+                document.getElementById( 'radm-media-prev-date' ).textContent = item.date;
+                document.getElementById( 'radm-media-prev-dims' ).textContent = item.dimensions || 'N/A';
+                document.getElementById( 'radm-media-prev-size' ).textContent = item.filesize || 'N/A';
+                document.getElementById( 'radm-media-prev-url-input' ).value = item.url;
+                document.getElementById( 'radm-media-prev-open-link' ).href = item.url;
+
+                var imgEl = document.getElementById( 'radm-media-prev-img' );
+                var docEl = document.getElementById( 'radm-media-prev-doc' );
+                if ( item.is_image ) {
+                    imgEl.src = item.url;
+                    imgEl.style.display = 'block';
+                    docEl.style.display = 'none';
+                } else {
+                    imgEl.style.display = 'none';
+                    docEl.style.display = 'block';
+                    document.getElementById( 'radm-media-prev-docname' ).textContent = item.filename;
+                }
+
+                overlay.classList.add( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'false' );
+            } catch( e ) {}
+        };
+
+        window.radmCloseMediaPreviewModal = function() {
+            var overlay = document.getElementById( 'radm-media-preview-modal-overlay' );
+            if ( overlay ) {
+                overlay.classList.remove( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'true' );
+            }
+        };
+
+        window.radmPromptDeleteAllMedia = function( id, name ) {
+            pendingAllMediaDelId = id;
+            var overlay = document.getElementById( 'radm-allmedia-delete-overlay' );
+            var nameEl  = document.getElementById( 'radm-allmedia-delete-name' );
+            if ( nameEl ) nameEl.textContent = '"' + name + '"';
+            if ( overlay ) {
+                overlay.classList.add( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'false' );
+            }
+        };
+
+        window.radmCloseAllMediaDeleteModal = function() {
+            var overlay = document.getElementById( 'radm-allmedia-delete-overlay' );
+            if ( overlay ) {
+                overlay.classList.remove( 'radm-modal-open' );
+                overlay.setAttribute( 'aria-hidden', 'true' );
+            }
+            pendingAllMediaDelId = null;
+        };
+
+        var allMediaDelConfirmBtn = document.getElementById( 'radm-allmedia-delete-confirm-btn' );
+        if ( allMediaDelConfirmBtn ) {
+            allMediaDelConfirmBtn.addEventListener( 'click', function() {
+                if ( !pendingAllMediaDelId ) return;
+                var id = pendingAllMediaDelId;
+                allMediaDelConfirmBtn.disabled = true;
+                allMediaDelConfirmBtn.textContent = 'Deleting…';
+
+                ajaxPost( 'radm_delete_attachment', { attachment_id: id }, function( res ) {
+                    allMediaDelConfirmBtn.disabled = false;
+                    allMediaDelConfirmBtn.textContent = 'Delete File';
+                    radmCloseAllMediaDeleteModal();
+                    if ( res.success ) {
+                        radmToast( 'File deleted permanently.', 'success' );
+                        loadAllMediaFiles();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to delete file.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        window.radmHandleAllMediaUpload = function( input ) {
+            var files = input.files;
+            if ( !files || !files.length ) return;
+            var total = files.length;
+            var completed = 0;
+            radmToast( 'Uploading ' + total + ' file(s) to WordPress...', 'info' );
+
+            Array.from( files ).forEach( function( file ) {
+                var fd = new FormData();
+                fd.append( 'action', 'radm_upload_image_file' );
+                fd.append( 'image_file', file );
+                fd.append( 'nonce', nonce );
+
+                fetch( ajaxUrl, { method: 'POST', body: fd } )
+                    .then( function( r ) { return r.json(); } )
+                    .then( function( res ) {
+                        completed++;
+                        if ( completed === total ) {
+                            input.value = '';
+                            radmToast( 'All ' + total + ' file(s) uploaded successfully!', 'success' );
+                            loadAllMediaFiles();
+                        }
+                    } )
+                    .catch( function() {
+                        completed++;
+                        if ( completed === total ) {
+                            input.value = '';
+                            loadAllMediaFiles();
+                        }
+                    } );
+            } );
+        };
+
+        // Drag & drop on all media dropzone banner
+        var amDropzone = document.getElementById( 'radm-allmedia-dropzone' );
+        var amFileInput = document.getElementById( 'radm-allmedia-file-input' );
+        if ( amDropzone && amFileInput ) {
+            amDropzone.addEventListener( 'dragover', function( e ) {
+                e.preventDefault();
+                amDropzone.style.borderColor = '#2E7D32';
+                amDropzone.style.background = '#f0fdf4';
+            } );
+            amDropzone.addEventListener( 'dragleave', function( e ) {
+                e.preventDefault();
+                amDropzone.style.borderColor = '#cbd5e1';
+                amDropzone.style.background = '#f8fafc';
+            } );
+            amDropzone.addEventListener( 'drop', function( e ) {
+                e.preventDefault();
+                amDropzone.style.borderColor = '#cbd5e1';
+                amDropzone.style.background = '#f8fafc';
+                if ( e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length ) {
+                    amFileInput.files = e.dataTransfer.files;
+                    radmHandleAllMediaUpload( amFileInput );
+                }
+            } );
+        }
+
     } // end radm-gallery
 
     /* ═══════════════════════════════════════════════════════════════════
@@ -2488,7 +3043,47 @@
         // Local state
         var allUsersList    = [];
         var allModulesMap   = {};
+        var allRolesMap     = {};
+        var customRolesMap  = {};
         var selectedModules = [];
+
+        function syncRoleDropdowns() {
+            var roleKeys = Object.keys( allRolesMap );
+            if ( !roleKeys.length ) return;
+
+            if ( roleFilter ) {
+                var curVal = roleFilter.value;
+                var optHtml = '<option value="">All Roles</option>';
+                roleKeys.forEach( function ( rk ) {
+                    optHtml += '<option value="' + esc( rk ) + '">' + esc( allRolesMap[ rk ].name ) + '</option>';
+                } );
+                roleFilter.innerHTML = optHtml;
+                if ( curVal ) roleFilter.value = curVal;
+            }
+
+            var cuRoleSelect = document.getElementById( 'radm-cu-role' );
+            if ( cuRoleSelect ) {
+                var curCuVal = cuRoleSelect.value || 'radm_admin';
+                var cuOptHtml = '';
+                roleKeys.forEach( function ( rk ) {
+                    var isSys = allRolesMap[ rk ].is_system ? '(System)' : '(Custom)';
+                    cuOptHtml += '<option value="' + esc( rk ) + '">' + esc( allRolesMap[ rk ].name ) + ' ' + isSys + '</option>';
+                } );
+                cuRoleSelect.innerHTML = cuOptHtml;
+                if ( curCuVal ) cuRoleSelect.value = curCuVal;
+            }
+
+            if ( uaRoleSelect ) {
+                var curUaVal = uaRoleSelect.value;
+                var uaOptHtml = '';
+                roleKeys.forEach( function ( rk ) {
+                    var isSys = allRolesMap[ rk ].is_system ? '(System)' : '(Custom)';
+                    uaOptHtml += '<option value="' + esc( rk ) + '">' + esc( allRolesMap[ rk ].name ) + ' ' + isSys + '</option>';
+                } );
+                uaRoleSelect.innerHTML = uaOptHtml;
+                if ( curUaVal ) uaRoleSelect.value = curUaVal;
+            }
+        }
 
         function loadStaffUsers() {
             if ( !usersTbody ) return;
@@ -2500,9 +3095,13 @@
                     return;
                 }
 
-                allUsersList  = res.data.users || [];
-                allModulesMap = res.data.all_modules || {};
+                allUsersList   = res.data.users || [];
+                allModulesMap  = res.data.all_modules || {};
+                allRolesMap    = res.data.all_roles || {};
+                customRolesMap = res.data.custom_roles || {};
+                syncRoleDropdowns();
                 renderUsersTable();
+                renderCustomRolesTable();
             } );
         }
 
@@ -2583,6 +3182,9 @@
                     + '<button type="button" class="radm-card-menu-item" data-action="edit-user-access" data-id="' + u.id + '">'
                     + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
                     + ' Edit Access</button>'
+                    + '<button type="button" class="radm-card-menu-item" data-action="reset-user-pwd" data-id="' + u.id + '">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>'
+                    + ' Reset Password</button>'
                     + deleteItemHtml
                     + '</div>'
                     + '</div>'
@@ -2898,6 +3500,15 @@
                 return;
             }
 
+            // Reset User Password inside dropdown
+            var rpBtn = e.target.closest( '[data-action="reset-user-pwd"]' );
+            if ( rpBtn ) {
+                closeAllRolesCardDropdowns();
+                var rpUid = rpBtn.dataset.id;
+                if ( rpUid ) openResetPwdModal( rpUid );
+                return;
+            }
+
             // Delete User inside dropdown
             var delBtn = e.target.closest( '[data-action="delete-user"]' );
             if ( delBtn ) {
@@ -3007,6 +3618,360 @@
             } );
         }
 
+        // ── Reset User Password Modal Logic (Super Admin) ──────────────
+        var rpOverlay    = document.getElementById( 'radm-reset-password-overlay' );
+        var rpCloseBtn   = document.getElementById( 'radm-reset-pwd-close' );
+        var rpCancelBtn  = document.getElementById( 'radm-reset-pwd-cancel' );
+        var rpForm       = document.getElementById( 'radm-reset-password-form' );
+        var rpUserIdIn   = document.getElementById( 'radm-rp-user-id' );
+        var rpUserNameEl = document.getElementById( 'radm-rp-user-name' );
+        var rpUserEmailEl= document.getElementById( 'radm-rp-user-email' );
+        var rpUserInitEl = document.getElementById( 'radm-rp-user-initial' );
+        var rpNewPassIn  = document.getElementById( 'radm-rp-new-password' );
+        var rpConfPassIn = document.getElementById( 'radm-rp-confirm-password' );
+        var rpGenBtn     = document.getElementById( 'radm-rp-generate-btn' );
+        var rpSubmitBtn  = document.getElementById( 'radm-reset-pwd-submit' );
+        var rpSubmitText = document.getElementById( 'radm-reset-pwd-submit-text' );
+
+        function openResetPwdModal( userId ) {
+            var user = allUsersList.find( function ( u ) { return u.id === parseInt( userId, 10 ); } );
+            if ( !user || !rpOverlay ) return;
+
+            if ( rpUserIdIn ) rpUserIdIn.value = user.id;
+            if ( rpUserNameEl ) rpUserNameEl.textContent = user.name;
+            if ( rpUserEmailEl ) rpUserEmailEl.textContent = user.email;
+            if ( rpUserInitEl ) rpUserInitEl.textContent = user.name ? user.name.charAt( 0 ).toUpperCase() : 'U';
+            if ( rpNewPassIn ) rpNewPassIn.value = '';
+            if ( rpConfPassIn ) rpConfPassIn.value = '';
+
+            rpOverlay.setAttribute( 'aria-hidden', 'false' );
+            rpOverlay.classList.add( 'radm-modal-open' );
+            if ( rpNewPassIn ) rpNewPassIn.focus();
+        }
+
+        function closeResetPwdModal() {
+            if ( !rpOverlay ) return;
+            rpOverlay.classList.remove( 'radm-modal-open' );
+            rpOverlay.setAttribute( 'aria-hidden', 'true' );
+        }
+
+        if ( rpCloseBtn ) rpCloseBtn.addEventListener( 'click', closeResetPwdModal );
+        if ( rpCancelBtn ) rpCancelBtn.addEventListener( 'click', closeResetPwdModal );
+
+        if ( rpGenBtn ) {
+            rpGenBtn.addEventListener( 'click', function ( e ) {
+                e.preventDefault();
+                var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
+                var pass = '';
+                for ( var i = 0; i < 12; i++ ) {
+                    pass += chars.charAt( Math.floor( Math.random() * chars.length ) );
+                }
+                if ( rpNewPassIn ) {
+                    rpNewPassIn.value = pass;
+                    rpNewPassIn.type = 'text';
+                }
+                if ( rpConfPassIn ) {
+                    rpConfPassIn.value = pass;
+                    rpConfPassIn.type = 'text';
+                }
+                radmToast( 'Strong password generated!', 'info' );
+            } );
+        }
+
+        if ( rpForm ) {
+            rpForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+                var uid = rpUserIdIn ? parseInt( rpUserIdIn.value, 10 ) : 0;
+                var nPass = rpNewPassIn ? rpNewPassIn.value : '';
+                var cPass = rpConfPassIn ? rpConfPassIn.value : '';
+
+                if ( !uid || !nPass || !cPass ) {
+                    radmToast( 'All password fields are compulsory.', 'warning' );
+                    return;
+                }
+
+                if ( nPass.length < 6 ) {
+                    radmToast( 'Password must be at least 6 characters long.', 'warning' );
+                    return;
+                }
+
+                if ( nPass !== cPass ) {
+                    radmToast( 'Password and confirmation do not match.', 'error' );
+                    return;
+                }
+
+                if ( rpSubmitBtn ) rpSubmitBtn.disabled = true;
+                if ( rpSubmitText ) rpSubmitText.textContent = 'Resetting...';
+
+                ajaxPost( 'radm_admin_reset_user_password', {
+                    user_id: uid,
+                    new_password: nPass,
+                    confirm_password: cPass
+                }, function ( res ) {
+                    if ( rpSubmitBtn ) rpSubmitBtn.disabled = false;
+                    if ( rpSubmitText ) rpSubmitText.textContent = 'Reset Password';
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Password reset successfully!', 'success' );
+                        closeResetPwdModal();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to reset password.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // ── Sub-tabs Switching Logic ────────────────────────────────────
+        var tabBtnStaffUsers   = document.getElementById( 'radm-tab-staff-users' );
+        var tabBtnCustomRoles  = document.getElementById( 'radm-tab-custom-roles' );
+        var tabPaneStaffUsers  = document.getElementById( 'radm-tab-pane-staff-users' );
+        var tabPaneCustomRoles = document.getElementById( 'radm-tab-pane-custom-roles' );
+
+        function switchRolesTab( tabKey ) {
+            if ( tabKey === 'custom-roles' ) {
+                if ( tabBtnCustomRoles ) {
+                    tabBtnCustomRoles.classList.add( 'is-active' );
+                    tabBtnCustomRoles.style.background = '#e8f5e9';
+                    tabBtnCustomRoles.style.color = '#2E7D32';
+                    tabBtnCustomRoles.style.border = 'none';
+                }
+                if ( tabBtnStaffUsers ) {
+                    tabBtnStaffUsers.classList.remove( 'is-active' );
+                    tabBtnStaffUsers.style.background = '#fff';
+                    tabBtnStaffUsers.style.color = 'var(--radm-text)';
+                    tabBtnStaffUsers.style.border = '1px solid var(--radm-border)';
+                }
+                if ( tabPaneStaffUsers ) tabPaneStaffUsers.style.display = 'none';
+                if ( tabPaneCustomRoles ) tabPaneCustomRoles.style.display = 'block';
+            } else {
+                if ( tabBtnStaffUsers ) {
+                    tabBtnStaffUsers.classList.add( 'is-active' );
+                    tabBtnStaffUsers.style.background = '#e8f5e9';
+                    tabBtnStaffUsers.style.color = '#2E7D32';
+                    tabBtnStaffUsers.style.border = 'none';
+                }
+                if ( tabBtnCustomRoles ) {
+                    tabBtnCustomRoles.classList.remove( 'is-active' );
+                    tabBtnCustomRoles.style.background = '#fff';
+                    tabBtnCustomRoles.style.color = 'var(--radm-text)';
+                    tabBtnCustomRoles.style.border = '1px solid var(--radm-border)';
+                }
+                if ( tabPaneStaffUsers ) tabPaneStaffUsers.style.display = 'block';
+                if ( tabPaneCustomRoles ) tabPaneCustomRoles.style.display = 'none';
+            }
+        }
+
+        if ( tabBtnStaffUsers ) {
+            tabBtnStaffUsers.addEventListener( 'click', function () { switchRolesTab( 'staff-users' ); } );
+        }
+        if ( tabBtnCustomRoles ) {
+            tabBtnCustomRoles.addEventListener( 'click', function () { switchRolesTab( 'custom-roles' ); } );
+        }
+
+        // ── Custom Roles Table Rendering & Management ───────────────────
+        var rolesListTbody = document.getElementById( 'radm-roles-list-tbody' );
+
+        function renderCustomRolesTable() {
+            if ( !rolesListTbody ) return;
+            var roleKeys = Object.keys( allRolesMap );
+            if ( !roleKeys.length ) {
+                rolesListTbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--radm-text-muted);">No roles configured.</td></tr>';
+                return;
+            }
+
+            var html = '';
+            roleKeys.forEach( function ( rKey, idx ) {
+                var rInfo = allRolesMap[ rKey ];
+                var isSystem = !!rInfo.is_system;
+
+                // User count
+                var userCount = allUsersList.filter( function ( u ) { return u.role === rKey; } ).length;
+
+                // Modules Tags
+                var modTags = '';
+                if ( rKey === 'administrator' ) {
+                    modTags = '<span class="radm-tag-pill" style="background:#f0fdf4;color:#166534;border-color:#bbf7d0;">👑 Full Access (All 8 Modules)</span>';
+                } else if ( rInfo.modules && rInfo.modules.length ) {
+                    modTags = '<div class="radm-module-tags-list">';
+                    rInfo.modules.forEach( function ( mk ) {
+                        var mLabel = allModulesMap[ mk ] ? allModulesMap[ mk ].label : mk;
+                        modTags += '<span class="radm-tag-pill radm-tag-pill--sm">' + esc( mLabel ) + '</span>';
+                    } );
+                    modTags += '</div>';
+                } else {
+                    modTags = '<span style="color:var(--radm-text-muted);font-size:12px;">No modules</span>';
+                }
+
+                // Scope
+                var scopeText = '';
+                if ( rInfo.restrict_center && rInfo.centers && rInfo.centers.length ) {
+                    scopeText = '<span style="font-size:12px;color:#1e293b;font-weight:600;">📍 ' + esc( rInfo.centers.join( ', ' ) ) + '</span>';
+                } else {
+                    scopeText = '<span style="font-size:12px;color:var(--radm-text-muted);">All Centers</span>';
+                }
+
+                // Action
+                var actionHtml = '';
+                if ( isSystem ) {
+                    actionHtml = '<span class="radm-badge radm-badge--draft" style="font-size:11px;background:#f1f5f9;color:#64748b;border-color:#e2e8f0;">System Protected</span>';
+                } else {
+                    actionHtml = '<button type="button" class="radm-btn radm-btn-danger radm-btn--sm" data-action="delete-custom-role" data-slug="' + esc( rKey ) + '" data-name="' + esc( rInfo.name ) + '" style="background:#fee2e2;color:#dc2626;border-color:#fecaca;padding:4px 10px;font-size:12px;">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:middle;margin-right:2px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>'
+                        + ' Delete</button>';
+                }
+
+                html += '<tr>'
+                    + '<td style="text-align:center;color:var(--radm-text-muted);font-weight:500;">' + ( idx + 1 ) + '</td>'
+                    + '<td><strong style="color:var(--radm-text);font-size:13.5px;">' + esc( rInfo.name ) + '</strong></td>'
+                    + '<td><code style="font-size:12px;background:#f8fafc;padding:2px 6px;border-radius:4px;border:1px solid #e2e8f0;">' + esc( rKey ) + '</code></td>'
+                    + '<td>' + modTags + '</td>'
+                    + '<td>' + scopeText + '</td>'
+                    + '<td style="text-align:center;"><span class="radm-badge radm-badge--open" style="font-weight:700;">' + userCount + '</span></td>'
+                    + '<td style="text-align:right;">' + actionHtml + '</td>'
+                    + '</tr>';
+            } );
+
+            rolesListTbody.innerHTML = html;
+        }
+
+        // Delete Custom Role delegation
+        if ( rolesListTbody ) {
+            rolesListTbody.addEventListener( 'click', function ( e ) {
+                var delRoleBtn = e.target.closest( '[data-action="delete-custom-role"]' );
+                if ( delRoleBtn ) {
+                    var rSlug = delRoleBtn.getAttribute( 'data-slug' );
+                    var rName = delRoleBtn.getAttribute( 'data-name' );
+                    if ( !rSlug ) return;
+
+                    if ( !confirm( 'Are you sure you want to delete custom role "' + rName + '"?\n\nAny users currently assigned this role will be reassigned to Subscriber.' ) ) {
+                        return;
+                    }
+
+                    delRoleBtn.disabled = true;
+                    ajaxPost( 'radm_delete_custom_role', { role_slug: rSlug }, function ( res ) {
+                        if ( res.success ) {
+                            radmToast( res.data.message || 'Custom role deleted successfully.', 'success' );
+                            loadStaffUsers();
+                        } else {
+                            delRoleBtn.disabled = false;
+                            radmToast( ( res.data && res.data.message ) || 'Failed to delete custom role.', 'error' );
+                        }
+                    } );
+                }
+            } );
+        }
+
+        // ── Create Custom Role Modal Logic ──────────────────────────────
+        var crOverlay     = document.getElementById( 'radm-create-role-overlay' );
+        var crOpenBtn     = document.getElementById( 'radm-open-create-role-btn' );
+        var crCloseBtn    = document.getElementById( 'radm-create-role-close' );
+        var crCancelBtn   = document.getElementById( 'radm-create-role-cancel' );
+        var crForm        = document.getElementById( 'radm-create-role-form' );
+        var crNameIn      = document.getElementById( 'radm-cr-name' );
+        var crSlugIn      = document.getElementById( 'radm-cr-slug' );
+        var crSelectAllBtn= document.getElementById( 'radm-cr-select-all-mods' );
+        var crClearAllBtn = document.getElementById( 'radm-cr-clear-all-mods' );
+        var crModChecks   = document.querySelectorAll( 'input[name="radm_cr_mod_check"]' );
+        var crCenterToggle= document.getElementById( 'radm-cr-restrict-center-toggle' );
+        var crCentersWrap = document.getElementById( 'radm-cr-centers-wrapper' );
+        var crCenterChecks= document.querySelectorAll( 'input[name="radm_cr_center_check"]' );
+        var crSubmitBtn   = document.getElementById( 'radm-create-role-submit' );
+        var crSubmitText  = document.getElementById( 'radm-create-role-submit-text' );
+
+        function openCreateRoleModal() {
+            if ( !crOverlay ) return;
+            if ( crForm ) crForm.reset();
+            if ( crCentersWrap ) crCentersWrap.style.display = 'none';
+            if ( crModChecks ) {
+                crModChecks.forEach( function ( cb ) {
+                    cb.checked = ( cb.value === 'dashboard' );
+                } );
+            }
+            crOverlay.setAttribute( 'aria-hidden', 'false' );
+            crOverlay.classList.add( 'radm-modal-open' );
+            if ( crNameIn ) crNameIn.focus();
+        }
+
+        function closeCreateRoleModal() {
+            if ( !crOverlay ) return;
+            crOverlay.classList.remove( 'radm-modal-open' );
+            crOverlay.setAttribute( 'aria-hidden', 'true' );
+        }
+
+        if ( crOpenBtn ) crOpenBtn.addEventListener( 'click', openCreateRoleModal );
+        if ( crCloseBtn ) crCloseBtn.addEventListener( 'click', closeCreateRoleModal );
+        if ( crCancelBtn ) crCancelBtn.addEventListener( 'click', closeCreateRoleModal );
+
+        if ( crSelectAllBtn ) {
+            crSelectAllBtn.addEventListener( 'click', function () {
+                if ( crModChecks ) crModChecks.forEach( function ( cb ) { cb.checked = true; } );
+            } );
+        }
+        if ( crClearAllBtn ) {
+            crClearAllBtn.addEventListener( 'click', function () {
+                if ( crModChecks ) crModChecks.forEach( function ( cb ) { cb.checked = ( cb.value === 'dashboard' ); } );
+            } );
+        }
+
+        if ( crCenterToggle ) {
+            crCenterToggle.addEventListener( 'change', function () {
+                if ( crCentersWrap ) crCentersWrap.style.display = this.checked ? 'block' : 'none';
+            } );
+        }
+
+        if ( crForm ) {
+            crForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+                var rName = crNameIn ? crNameIn.value.trim() : '';
+                var rSlug = crSlugIn ? crSlugIn.value.trim() : '';
+
+                if ( !rName ) {
+                    radmToast( 'Role Display Name is compulsory.', 'warning' );
+                    return;
+                }
+
+                var selectedMods = [];
+                if ( crModChecks ) {
+                    crModChecks.forEach( function ( cb ) {
+                        if ( cb.checked ) selectedMods.push( cb.value );
+                    } );
+                }
+
+                if ( selectedMods.indexOf( 'dashboard' ) === -1 ) {
+                    selectedMods.unshift( 'dashboard' );
+                }
+
+                var selectedCenters = [];
+                if ( crCenterChecks ) {
+                    crCenterChecks.forEach( function ( ccb ) {
+                        if ( ccb.checked ) selectedCenters.push( ccb.value );
+                    } );
+                }
+
+                if ( crSubmitBtn ) crSubmitBtn.disabled = true;
+                if ( crSubmitText ) crSubmitText.textContent = 'Creating...';
+
+                ajaxPost( 'radm_create_custom_role', {
+                    role_name: rName,
+                    role_slug: rSlug,
+                    modules: JSON.stringify( selectedMods ),
+                    restrict_center: ( crCenterToggle && crCenterToggle.checked ) ? 1 : 0,
+                    centers: JSON.stringify( selectedCenters )
+                }, function ( res ) {
+                    if ( crSubmitBtn ) crSubmitBtn.disabled = false;
+                    if ( crSubmitText ) crSubmitText.textContent = 'Create Role';
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Custom role created successfully!', 'success' );
+                        closeCreateRoleModal();
+                        loadStaffUsers();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to create custom role.', 'error' );
+                    }
+                } );
+            } );
+        }
+
         // Initialize Load
         loadStaffUsers();
 
@@ -3015,7 +3980,7 @@
     /* ═══════════════════════════════════════════════════════════════════
        SETTINGS PAGE (ORGANIZATION SETTINGS & CENTERS MANAGEMENT)
        ═══════════════════════════════════════════════════════════════════ */
-    if ( curPage === 'radm-settings' || document.getElementById( 'radm-centers-tbody' ) ) {
+    if ( curPage === 'radm-settings' || document.getElementById( 'radm-centers-tbody' ) || document.getElementById( 'radm-change-password-form' ) ) {
 
         // Organization Settings Form
         var orgForm        = document.getElementById( 'radm-org-settings-form' );
@@ -3027,35 +3992,23 @@
         var saveOrgBtn     = document.getElementById( 'radm-save-org-btn' );
         var saveOrgText    = document.getElementById( 'radm-save-org-text' );
 
-        // WP Media Uploader for Logo
+        // In-Portal Media Picker for Logo
         if ( changeLogoBtn ) {
             changeLogoBtn.addEventListener( 'click', function ( e ) {
                 e.preventDefault();
-                if ( typeof wp !== 'undefined' && wp.media ) {
-                    var mediaFrame = wp.media( {
-                        title: 'Select or Upload Organization Logo',
-                        button: { text: 'Use this logo' },
-                        multiple: false,
-                        library: { type: 'image' }
-                    } );
-
-                    mediaFrame.on( 'select', function () {
-                        var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
+                window.radmOpenDbMediaPicker(
+                    'radm-org-logo-url',
+                    null,
+                    null,
+                    null,
+                    function ( attachment ) {
                         if ( attachment && attachment.url ) {
                             if ( orgLogoInput ) orgLogoInput.value = attachment.url;
                             if ( orgLogoImg ) orgLogoImg.src = attachment.url;
                             radmToast( 'Logo selected. Click "Save Changes" to apply.', 'success' );
                         }
-                    } );
-
-                    mediaFrame.open();
-                } else {
-                    var manualUrl = prompt( 'Enter Logo Image URL:', orgLogoInput ? orgLogoInput.value : '' );
-                    if ( manualUrl ) {
-                        if ( orgLogoInput ) orgLogoInput.value = manualUrl;
-                        if ( orgLogoImg ) orgLogoImg.src = manualUrl;
                     }
-                }
+                );
             } );
         }
 
@@ -3321,10 +4274,78 @@
             }
         } );
 
-        // Initial Load
-        loadCenters();
+        // ── Self Password Change Form Handler ───────────────────────────
+        var changePwdForm = document.getElementById( 'radm-change-password-form' );
+        if ( changePwdForm ) {
+            changePwdForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+                var currPass = document.getElementById( 'radm-current-password' );
+                var newPass  = document.getElementById( 'radm-new-password' );
+                var confPass = document.getElementById( 'radm-confirm-password' );
+                var btn      = document.getElementById( 'radm-change-pwd-btn' );
+                var btnText  = document.getElementById( 'radm-change-pwd-text' );
+
+                var cVal  = currPass ? currPass.value : '';
+                var nVal  = newPass ? newPass.value : '';
+                var cfVal = confPass ? confPass.value : '';
+
+                if ( !cVal || !nVal || !cfVal ) {
+                    radmToast( 'All password fields are compulsory.', 'warning' );
+                    return;
+                }
+
+                if ( nVal.length < 6 ) {
+                    radmToast( 'New password must be at least 6 characters long.', 'warning' );
+                    return;
+                }
+
+                if ( nVal !== cfVal ) {
+                    radmToast( 'New password and confirmation do not match.', 'error' );
+                    return;
+                }
+
+                if ( btn ) btn.disabled = true;
+                if ( btnText ) btnText.textContent = 'Updating...';
+
+                ajaxPost( 'radm_change_own_password', {
+                    current_password: cVal,
+                    new_password: nVal,
+                    confirm_password: cfVal
+                }, function ( res ) {
+                    if ( btn ) btn.disabled = false;
+                    if ( btnText ) btnText.textContent = 'Update Password';
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Password updated successfully!', 'success' );
+                        changePwdForm.reset();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to update password.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // Initial Load (only if centers table is present on page)
+        if ( document.getElementById( 'radm-centers-tbody' ) ) {
+            loadCenters();
+        }
 
     } // end radm-settings
+
+    /* ── Show / Hide Password Toggle ──────────────────────────────────── */
+    document.addEventListener( 'click', function ( e ) {
+        var toggleBtn = e.target.closest( '.radm-pwd-toggle-btn' );
+        if ( toggleBtn ) {
+            e.preventDefault();
+            var targetId = toggleBtn.getAttribute( 'data-target' );
+            var input = targetId ? document.getElementById( targetId ) : null;
+            if ( input ) {
+                var isPass = input.type === 'password';
+                input.type = isPass ? 'text' : 'password';
+                toggleBtn.style.color = isPass ? 'var(--radm-green-primary)' : 'var(--radm-text-muted)';
+            }
+        }
+    } );
 
     /* ── ESC closes any modal ─────────────────────────────────────────── */
     document.addEventListener( 'keydown', function ( e ) {
@@ -3340,12 +4361,385 @@
             if ( typeof closeUserAccessModal === 'function' ) closeUserAccessModal();
             if ( typeof closeDeleteUserModal === 'function' ) closeDeleteUserModal();
             if ( typeof closeCreateUserModal === 'function' ) closeCreateUserModal();
+            if ( typeof closeResetPwdModal === 'function' ) closeResetPwdModal();
+            if ( typeof closeCreateRoleModal === 'function' ) closeCreateRoleModal();
             if ( typeof closeCenterModal === 'function' ) closeCenterModal();
             if ( typeof closeDeleteCenterModal === 'function' ) closeDeleteCenterModal();
+            if ( typeof radmCloseMediaPickerModal === 'function' ) radmCloseMediaPickerModal();
+            if ( typeof radmDismissOrphanModal === 'function' ) radmDismissOrphanModal();
         }
     } );
 
+    /* ══════════════════════════════════════════════════════════════════════════
+       UNIVERSAL IN-PORTAL MEDIA PICKER & ORPHAN DELETION CONTROLLER
+       ══════════════════════════════════════════════════════════════════════════ */
+    window.radmMediaPickerState = {
+        targetUrlId: null,
+        targetAttId: null,
+        targetPrevId: null,
+        targetOldAttId: null,
+        onSelectCallback: null,
+        selectedItem: null,
+        items: [],
+        page: 1,
+        search: ''
+    };
+
+    window.radmOrphanState = {
+        attachmentId: 0,
+        filename: '',
+        onComplete: null
+    };
+
+    window.radmOpenDbMediaPicker = function(urlInputId, attInputId, previewId, oldAttInputId, onSelectCallback) {
+        window.radmMediaPickerState.targetUrlId       = urlInputId;
+        window.radmMediaPickerState.targetAttId       = attInputId;
+        window.radmMediaPickerState.targetPrevId      = previewId;
+        window.radmMediaPickerState.targetOldAttId    = oldAttInputId;
+        window.radmMediaPickerState.onSelectCallback  = onSelectCallback || null;
+        window.radmMediaPickerState.selectedItem      = null;
+
+        var modal = document.getElementById('radm-db-media-picker-modal');
+        if (!modal) return;
+
+        var selectBtn = document.getElementById('radm-media-picker-select-btn');
+        if (selectBtn) selectBtn.disabled = true;
+
+        var infoEl = document.getElementById('radm-media-picker-info');
+        if (infoEl) infoEl.innerHTML = '<span>Click an image to select</span>';
+
+        modal.classList.add('radm-modal-open');
+        modal.setAttribute('aria-hidden', 'false');
+
+        radmLoadDbMediaItems('');
+    };
+
+    window.radmCloseMediaPickerModal = function() {
+        var modal = document.getElementById('radm-db-media-picker-modal');
+        if (modal) {
+            modal.classList.remove('radm-modal-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+    };
+
+    window.radmTriggerPickerUpload = function() {
+        var fileIn = document.getElementById('radm-universal-file-input');
+        if (fileIn) {
+            fileIn.value = '';
+            fileIn.click();
+        }
+    };
+
+    window.radmUploadFromLocal = function(urlInputId, attInputId, previewId, oldAttInputId, onSelectCallback) {
+        window.radmMediaPickerState.targetUrlId       = urlInputId;
+        window.radmMediaPickerState.targetAttId       = attInputId;
+        window.radmMediaPickerState.targetPrevId      = previewId;
+        window.radmMediaPickerState.targetOldAttId    = oldAttInputId;
+        window.radmMediaPickerState.onSelectCallback  = onSelectCallback || null;
+
+        var fileIn = document.getElementById('radm-universal-file-input');
+        if (fileIn) {
+            fileIn.value = '';
+            fileIn.click();
+        }
+    };
+
+    window.radmHandleUniversalFileSelect = function(fileInput) {
+        if (!fileInput.files || !fileInput.files[0]) return;
+        var file = fileInput.files[0];
+
+        radmToast('Uploading image directly to database…', 'info');
+
+        var fd = new FormData();
+        fd.append('action', 'radm_direct_image_upload');
+        fd.append('image_file', file);
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (res.success && res.data) {
+                radmToast('Image uploaded and registered in database!', 'success');
+                var data = res.data;
+
+                // Apply to targeted form fields
+                radmApplySelectedMedia({
+                    id: data.attachment_id,
+                    url: data.url,
+                    thumb: data.thumb_url || data.url,
+                    filename: data.filename,
+                    title: data.filename
+                });
+
+                // If media picker modal is open, refresh grid
+                var modal = document.getElementById('radm-db-media-picker-modal');
+                if (modal && modal.classList.contains('radm-modal-open')) {
+                    radmLoadDbMediaItems('');
+                }
+            } else {
+                radmToast((res.data && res.data.message) || 'Image upload failed.', 'error');
+            }
+        })
+        .catch(function() {
+            radmToast('Network error during image upload.', 'error');
+        });
+    };
+
+    function radmLoadDbMediaItems(searchQuery) {
+        var grid = document.getElementById('radm-media-picker-grid');
+        var loading = document.getElementById('radm-media-picker-loading');
+        var empty = document.getElementById('radm-media-picker-empty');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+        if (loading) loading.style.display = 'block';
+        if (empty) empty.style.display = 'none';
+
+        var fd = new FormData();
+        fd.append('action', 'radm_get_db_images');
+        fd.append('search', searchQuery || '');
+        fd.append('per_page', '36');
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (loading) loading.style.display = 'none';
+            if (res.success && res.data && res.data.items) {
+                var items = res.data.items;
+                window.radmMediaPickerState.items = items;
+
+                if (!items.length) {
+                    if (empty) empty.style.display = 'block';
+                    return;
+                }
+
+                items.forEach(function(item) {
+                    var el = document.createElement('div');
+                    el.className = 'radm-media-grid-item';
+                    el.setAttribute('data-id', item.id);
+                    el.innerHTML =
+                        '<img class="radm-grid-thumb" src="' + escAttr(item.thumb || item.url) + '" alt="' + escAttr(item.title) + '" loading="lazy" />' +
+                        '<div class="radm-grid-title" title="' + escAttr(item.title || item.filename) + '">' + escHtml(item.title || item.filename) + '</div>' +
+                        '<div class="radm-grid-check">✓</div>';
+
+                    el.addEventListener('click', function() {
+                        document.querySelectorAll('.radm-media-grid-item').forEach(function(c) {
+                            c.classList.remove('is-selected');
+                        });
+                        el.classList.add('is-selected');
+                        window.radmMediaPickerState.selectedItem = item;
+
+                        var selectBtn = document.getElementById('radm-media-picker-select-btn');
+                        if (selectBtn) selectBtn.disabled = false;
+
+                        var infoEl = document.getElementById('radm-media-picker-info');
+                        if (infoEl) {
+                            infoEl.innerHTML = '<strong>' + escHtml(item.filename) + '</strong> ' + (item.dimensions ? '<span>(' + escHtml(item.dimensions) + ')</span>' : '');
+                        }
+                    });
+
+                    // Double click to instantly select and confirm
+                    el.addEventListener('dblclick', function() {
+                        window.radmMediaPickerState.selectedItem = item;
+                        radmConfirmMediaPickerSelection();
+                    });
+
+                    grid.appendChild(el);
+                });
+            } else {
+                if (empty) empty.style.display = 'block';
+            }
+        })
+        .catch(function() {
+            if (loading) loading.style.display = 'none';
+            if (empty) empty.style.display = 'block';
+        });
+    }
+
+    var pickerSearchInput = document.getElementById('radm-media-picker-search');
+    if (pickerSearchInput) {
+        var pTimer = null;
+        pickerSearchInput.addEventListener('input', function() {
+            clearTimeout(pTimer);
+            var q = this.value;
+            pTimer = setTimeout(function() {
+                radmLoadDbMediaItems(q);
+            }, 300);
+        });
+    }
+
+    window.radmConfirmMediaPickerSelection = function() {
+        var item = window.radmMediaPickerState.selectedItem;
+        if (!item) return;
+
+        radmApplySelectedMedia(item);
+        radmCloseMediaPickerModal();
+    };
+
+    function radmApplySelectedMedia(item) {
+        var state = window.radmMediaPickerState;
+
+        if (state.targetUrlId) {
+            var urlIn = document.getElementById(state.targetUrlId);
+            if (urlIn) urlIn.value = item.url;
+        }
+
+        if (state.targetAttId) {
+            var attIn = document.getElementById(state.targetAttId);
+            if (attIn) attIn.value = item.id;
+        }
+
+        if (state.targetPrevId) {
+            var prevWrap = document.getElementById(state.targetPrevId);
+            if (prevWrap) {
+                prevWrap.style.display = 'flex';
+                var img = prevWrap.querySelector('img');
+                if (img) img.src = item.url;
+                var nameEl = prevWrap.querySelector('.radm-image-preview-name');
+                if (nameEl) nameEl.textContent = item.filename || item.title || 'Selected Image';
+                var urlEl = prevWrap.querySelector('.radm-image-preview-url');
+                if (urlEl) urlEl.textContent = item.url;
+            }
+        }
+
+        if (typeof state.onSelectCallback === 'function') {
+            state.onSelectCallback(item);
+        }
+    }
+
+    window.radmClearSelectedImage = function(urlInputId, attInputId, previewId) {
+        if (urlInputId) {
+            var u = document.getElementById(urlInputId);
+            if (u) u.value = '';
+        }
+        if (attInputId) {
+            var a = document.getElementById(attInputId);
+            if (a) a.value = '0';
+        }
+        if (previewId) {
+            var p = document.getElementById(previewId);
+            if (p) p.style.display = 'none';
+        }
+    };
+
+    // ── Orphan Image Detection and Cleanup Prompt ──────────────────────────────
+    window.radmCheckAndPromptOrphan = function(oldAttId, currentPostId, callback) {
+        oldAttId = parseInt(oldAttId, 10) || 0;
+        currentPostId = parseInt(currentPostId, 10) || 0;
+
+        if (!oldAttId || oldAttId <= 0) {
+            if (typeof callback === 'function') callback();
+            return;
+        }
+
+        var fd = new FormData();
+        fd.append('action', 'radm_check_attachment_usage');
+        fd.append('attachment_id', oldAttId);
+        fd.append('current_post_id', currentPostId);
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (res.success && res.data && !res.data.is_used) {
+                // Image is completely unused anywhere else! Prompt for deletion
+                window.radmOrphanState.attachmentId = oldAttId;
+                window.radmOrphanState.filename     = res.data.filename || ('image #' + oldAttId);
+                window.radmOrphanState.onComplete   = callback;
+
+                var fNameEl = document.getElementById('radm-orphan-filename');
+                if (fNameEl) fNameEl.textContent = window.radmOrphanState.filename;
+
+                var modal = document.getElementById('radm-orphan-delete-modal');
+                if (modal) {
+                    modal.classList.add('radm-modal-open');
+                    modal.setAttribute('aria-hidden', 'false');
+                }
+            } else {
+                // In use elsewhere or check failed; safely proceed
+                if (typeof callback === 'function') callback();
+            }
+        })
+        .catch(function() {
+            if (typeof callback === 'function') callback();
+        });
+    };
+
+    window.radmDismissOrphanModal = function() {
+        var modal = document.getElementById('radm-orphan-delete-modal');
+        if (modal) {
+            modal.classList.remove('radm-modal-open');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+        if (typeof window.radmOrphanState.onComplete === 'function') {
+            window.radmOrphanState.onComplete();
+        }
+    };
+
+    window.radmExecuteOrphanDelete = function() {
+        var attId = window.radmOrphanState.attachmentId;
+        var btn = document.getElementById('radm-orphan-delete-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Deleting…';
+        }
+
+        var fd = new FormData();
+        fd.append('action', 'radm_delete_attachment');
+        fd.append('attachment_id', attId);
+        if (window.RADMConfig && window.RADMConfig.nonce) {
+            fd.append('nonce', window.RADMConfig.nonce);
+        }
+
+        fetch((window.RADMConfig && window.RADMConfig.ajaxUrl) || '/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Delete from Storage';
+            }
+            radmToast('Unused previous image deleted from server storage.', 'success');
+            radmDismissOrphanModal();
+        })
+        .catch(function() {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Delete from Storage';
+            }
+            radmDismissOrphanModal();
+        });
+    };
+
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escAttr(str) {
+        if (!str) return '';
+        return String(str).replace(/"/g, '&quot;');
+    }
+
 } )();
+
 
 
 

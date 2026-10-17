@@ -252,7 +252,7 @@ add_action( 'wp_ajax_radm_delete_event', 'radm_ajax_delete_event' );
 function radm_ajax_delete_event(): void {
     radm_ajax_auth();
 
-    $post_id = absint( $_POST['event_id'] ?? 0 );
+    $post_id = absint( $_POST['event_id'] ?? ( $_POST['post_id'] ?? 0 ) );
     if ( ! $post_id ) {
         wp_send_json_error( [ 'message' => 'Missing event ID.' ], 400 );
     }
@@ -707,6 +707,7 @@ function radm_ajax_get_gallery_items(): void {
     $type      = sanitize_key( $_POST['type'] ?? 'all' );
     $category  = sanitize_text_field( $_POST['category'] ?? '' );
     $event_id  = absint( $_POST['event_id'] ?? 0 );
+    $album_id  = absint( $_POST['album_id'] ?? 0 );
     $status    = sanitize_key( $_POST['status'] ?? '' );
     $search    = sanitize_text_field( $_POST['search'] ?? '' );
     $sort      = sanitize_key( $_POST['sort'] ?? 'latest' );
@@ -733,6 +734,21 @@ function radm_ajax_get_gallery_items(): void {
             'key'     => '_ry_gallery_event_id',
             'value'   => $event_id,
             'compare' => '=',
+        ];
+    }
+    if ( $album_id > 0 ) {
+        $meta_query[] = [
+            'relation' => 'OR',
+            [
+                'key'     => '_ry_gallery_album_id',
+                'value'   => $album_id,
+                'compare' => '=',
+            ],
+            [
+                'key'     => '_ry_gallery_album_ids',
+                'value'   => (string) $album_id,
+                'compare' => 'LIKE',
+            ],
         ];
     }
 
@@ -815,9 +831,20 @@ function radm_ajax_get_gallery_items(): void {
             }
         }
 
+        $g_album_id = (int) get_post_meta( $post->ID, '_ry_gallery_album_id', true );
+        $album_name = '';
+        if ( $g_album_id > 0 ) {
+            $alb_post = get_post( $g_album_id );
+            if ( $alb_post ) {
+                $album_name = $alb_post->post_title;
+            }
+        }
+
         // Subtitle tag
         $sub_tag = '';
-        if ( ! empty( $event_name ) ) {
+        if ( ! empty( $album_name ) ) {
+            $sub_tag = 'Album: ' . $album_name;
+        } elseif ( ! empty( $event_name ) ) {
             $sub_tag = 'Event: ' . $event_name;
         } elseif ( ! empty( $g_cat ) ) {
             $sub_tag = 'Category: ' . $g_cat;
@@ -832,6 +859,21 @@ function radm_ajax_get_gallery_items(): void {
             }
         }
 
+        $meta_aids = get_post_meta( $post->ID, '_ry_gallery_album_ids', true );
+        $item_album_ids = [];
+        if ( ! empty( $meta_aids ) ) {
+            $item_album_ids = is_array( $meta_aids ) ? $meta_aids : ( json_decode( $meta_aids, true ) ?: [] );
+        }
+        if ( $g_album_id > 0 && ! in_array( $g_album_id, $item_album_ids, true ) ) {
+            array_unshift( $item_album_ids, $g_album_id );
+        }
+
+        $meta_cids = get_post_meta( $post->ID, '_ry_gallery_center_ids', true );
+        $item_center_ids = [];
+        if ( ! empty( $meta_cids ) ) {
+            $item_center_ids = is_array( $meta_cids ) ? $meta_cids : ( json_decode( $meta_cids, true ) ?: [] );
+        }
+
         $items[] = [
             'id'             => $post->ID,
             'title'          => $post->post_title,
@@ -843,6 +885,10 @@ function radm_ajax_get_gallery_items(): void {
             'category'       => $g_cat,
             'event_id'       => $g_event_id,
             'event_name'     => $event_name,
+            'album_id'       => $g_album_id,
+            'album_ids'      => $item_album_ids,
+            'center_ids'     => $item_center_ids,
+            'album_name'     => $album_name,
             'sub_tag'        => $sub_tag,
             'date_raw'       => $g_date_raw,
             'date_fmt'       => $g_date_fmt,
@@ -924,6 +970,51 @@ function radm_ajax_save_gallery_item(): void {
         $image_url = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80';
     }
 
+    $album_ids = [];
+    if ( ! empty( $_POST['album_ids'] ) ) {
+        if ( is_array( $_POST['album_ids'] ) ) {
+            $album_ids = array_filter( array_map( 'absint', $_POST['album_ids'] ) );
+        } else {
+            $album_ids = array_filter( array_map( 'absint', explode( ',', (string) $_POST['album_ids'] ) ) );
+        }
+    }
+    $single_album_id = absint( $_POST['album_id'] ?? 0 );
+    if ( $single_album_id > 0 && ! in_array( $single_album_id, $album_ids, true ) ) {
+        $album_ids[] = $single_album_id;
+    }
+
+    $new_album  = sanitize_text_field( $_POST['new_album_title'] ?? '' );
+
+    // If new album title provided, create rs_gallery_album post
+    if ( ! empty( $new_album ) ) {
+        $new_alb_id = wp_insert_post( [
+            'post_title'   => $new_album,
+            'post_type'    => 'rs_gallery_album',
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+        ] );
+        if ( ! is_wp_error( $new_alb_id ) && $new_alb_id > 0 ) {
+            update_post_meta( $new_alb_id, '_rs_album_date', $media_date );
+            update_post_meta( $new_alb_id, '_rs_album_category', $category );
+            update_post_meta( $new_alb_id, '_rs_album_venue', 'Rashtrotthana Central' );
+            if ( ! in_array( $new_alb_id, $album_ids, true ) ) {
+                $album_ids[] = $new_alb_id;
+            }
+        }
+    }
+
+    $primary_album_id = ! empty( $album_ids ) ? $album_ids[0] : 0;
+
+    // Centers tagging
+    $center_ids = [];
+    if ( ! empty( $_POST['center_ids'] ) ) {
+        if ( is_array( $_POST['center_ids'] ) ) {
+            $center_ids = array_filter( array_map( 'absint', $_POST['center_ids'] ) );
+        } else {
+            $center_ids = array_filter( array_map( 'absint', explode( ',', (string) $_POST['center_ids'] ) ) );
+        }
+    }
+
     $post_data = [
         'post_title'   => $title,
         'post_content' => $desc,
@@ -953,6 +1044,9 @@ function radm_ajax_save_gallery_item(): void {
     update_post_meta( $post_id, '_ry_gallery_video_duration', $video_dur );
     update_post_meta( $post_id, '_ry_gallery_category', $category );
     update_post_meta( $post_id, '_ry_gallery_event_id', $event_id );
+    update_post_meta( $post_id, '_ry_gallery_album_id', $primary_album_id );
+    update_post_meta( $post_id, '_ry_gallery_album_ids', wp_json_encode( array_values( $album_ids ) ) );
+    update_post_meta( $post_id, '_ry_gallery_center_ids', wp_json_encode( array_values( $center_ids ) ) );
     update_post_meta( $post_id, '_ry_gallery_date', $media_date );
 
     if ( $uploaded_attachment_id > 0 ) {
@@ -963,6 +1057,54 @@ function radm_ajax_save_gallery_item(): void {
         ] );
     }
 
+    $photo_att_id = $uploaded_attachment_id > 0 ? $uploaded_attachment_id : get_post_thumbnail_id( $post_id );
+
+    // If linked to rs_gallery_albums, register this item inside each album's photos or videos meta
+    if ( ! empty( $album_ids ) ) {
+        foreach ( $album_ids as $alb_id ) {
+            if ( $media_type === 'image' && $photo_att_id > 0 ) {
+                $photos_raw = get_post_meta( $alb_id, '_rs_album_photos', true );
+                $photo_ids = [];
+                if ( is_string( $photos_raw ) && ! empty( $photos_raw ) ) {
+                    if ( $photos_raw[0] === '[' ) {
+                        $photo_ids = json_decode( $photos_raw, true ) ?: [];
+                    } else {
+                        $photo_ids = array_filter( array_map( 'intval', explode( ',', $photos_raw ) ) );
+                    }
+                } elseif ( is_array( $photos_raw ) ) {
+                    $photo_ids = $photos_raw;
+                }
+                if ( ! in_array( $photo_att_id, $photo_ids, true ) ) {
+                    $photo_ids[] = $photo_att_id;
+                    update_post_meta( $alb_id, '_rs_album_photos', wp_json_encode( array_values( $photo_ids ) ) );
+                }
+            } elseif ( $media_type === 'video' && ! empty( $video_url ) ) {
+                $videos_raw = get_post_meta( $alb_id, '_rs_album_videos', true );
+                $videos = [];
+                if ( is_string( $videos_raw ) && ! empty( $videos_raw ) ) {
+                    $videos = json_decode( $videos_raw, true ) ?: [];
+                } elseif ( is_array( $videos_raw ) ) {
+                    $videos = $videos_raw;
+                }
+                $exists = false;
+                foreach ( $videos as $v ) {
+                    if ( ( isset( $v['url'] ) && $v['url'] === $video_url ) || ( isset( $v['embed_url'] ) && $v['embed_url'] === $video_url ) ) {
+                        $exists = true;
+                        break;
+                    }
+                }
+                if ( ! $exists ) {
+                    $videos[] = [
+                        'title'    => $title,
+                        'duration' => $video_dur ?: '02:30',
+                        'url'      => $video_url,
+                    ];
+                    update_post_meta( $alb_id, '_rs_album_videos', wp_json_encode( $videos ) );
+                }
+            }
+        }
+    }
+
     if ( ! empty( $category ) ) {
         wp_set_object_terms( $post_id, $category, 'gallery_category', false );
     }
@@ -971,7 +1113,45 @@ function radm_ajax_save_gallery_item(): void {
         'id'        => $post_id,
         'image_url' => $image_url,
         'title'     => $title,
-        'message'   => $media_id > 0 ? 'Gallery item updated successfully.' : 'Photo uploaded to gallery successfully.',
+        'album_id'  => $album_id,
+        'message'   => $media_id > 0 ? 'Gallery item updated successfully.' : 'Photo/video uploaded to gallery successfully.',
+    ] );
+}
+
+/**
+ * Quick create rs_gallery_album endpoint
+ */
+add_action( 'wp_ajax_radm_create_gallery_album', 'radm_ajax_create_gallery_album' );
+function radm_ajax_create_gallery_album(): void {
+    radm_ajax_auth();
+    $title    = sanitize_text_field( $_POST['title'] ?? '' );
+    $category = sanitize_text_field( $_POST['category'] ?? 'Special Event' );
+    $venue    = sanitize_text_field( $_POST['venue'] ?? 'Rashtrotthana Central' );
+    $date     = sanitize_text_field( $_POST['date'] ?? current_time( 'F j, Y' ) );
+
+    if ( empty( $title ) ) {
+        wp_send_json_error( [ 'message' => 'Album title is required.' ], 400 );
+    }
+
+    $album_id = wp_insert_post( [
+        'post_title'   => $title,
+        'post_type'    => 'rs_gallery_album',
+        'post_status'  => 'publish',
+        'post_author'  => get_current_user_id(),
+    ], true );
+
+    if ( is_wp_error( $album_id ) ) {
+        wp_send_json_error( [ 'message' => $album_id->get_error_message() ], 500 );
+    }
+
+    update_post_meta( $album_id, '_rs_album_date', $date );
+    update_post_meta( $album_id, '_rs_album_category', $category );
+    update_post_meta( $album_id, '_rs_album_venue', $venue );
+
+    wp_send_json_success( [
+        'album_id' => $album_id,
+        'title'    => $title,
+        'message'  => 'Album created successfully!',
     ] );
 }
 
@@ -1040,13 +1220,11 @@ function radm_ajax_get_staff_users(): void {
     $all_centers = radm_get_all_centers();
     $users = get_users( [ 'orderby' => 'display_name', 'order' => 'ASC' ] );
 
-    $role_labels = [
-        'administrator'    => 'Super Admin',
-        'radm_admin'       => 'Admin (Content & Reg)',
-        'radm_gallery'     => 'Gallery Manager',
-        'radm_center_admin'=> 'Center Admin',
-        'subscriber'       => 'Subscriber',
-    ];
+    $all_roles   = radm_get_all_roles();
+    $role_labels = [];
+    foreach ( $all_roles as $rk => $rinfo ) {
+        $role_labels[ $rk ] = $rinfo['name'];
+    }
 
     $items = [];
     foreach ( $users as $u ) {
@@ -1068,7 +1246,7 @@ function radm_ajax_get_staff_users(): void {
             'name'            => $u->display_name ?: $u->user_login,
             'email'           => $u->user_email,
             'role'            => $role_key,
-            'role_label'      => $role_labels[ $role_key ] ?? ucfirst( $role_key ),
+            'role_label'      => $role_labels[ $role_key ] ?? ucfirst( str_replace( [ 'radm_', '_' ], [ '', ' ' ], $role_key ) ),
             'is_super_admin'  => ! empty( $perms['is_super_admin'] ),
             'modules'         => $perms['modules'] ?? [],
             'module_items'    => $mod_items,
@@ -1080,10 +1258,12 @@ function radm_ajax_get_staff_users(): void {
     }
 
     wp_send_json_success( [
-        'users'       => $items,
-        'all_modules' => $all_modules,
-        'all_centers' => $all_centers,
-        'roles'       => $role_labels,
+        'users'        => $items,
+        'all_modules'  => $all_modules,
+        'all_centers'  => $all_centers,
+        'roles'        => $role_labels,
+        'all_roles'    => $all_roles,
+        'custom_roles' => get_option( 'radm_custom_roles', [] ),
     ] );
 }
 
@@ -1193,21 +1373,30 @@ function radm_ajax_create_staff_user(): void {
     $role     = sanitize_text_field( $_POST['role'] ?? 'radm_admin' );
 
     if ( ! $name || ! $email ) {
-        wp_send_json_error( [ 'message' => 'Name and Email are required.' ], 400 );
+        wp_send_json_error( [ 'message' => 'Full Name and Email Address are compulsory.' ], 400 );
+    }
+    if ( ! is_email( $email ) ) {
+        wp_send_json_error( [ 'message' => 'Please provide a valid email address.' ], 400 );
     }
     if ( email_exists( $email ) ) {
         wp_send_json_error( [ 'message' => 'A user with this email address already exists.' ], 400 );
     }
 
-    if ( ! $username ) {
-        $username = sanitize_user( current( explode( '@', $email ) ) );
-        if ( username_exists( $username ) ) {
-            $username .= '_' . wp_rand( 100, 999 );
-        }
+    if ( empty( $username ) ) {
+        wp_send_json_error( [ 'message' => 'Username is compulsory. Please provide a username.' ], 400 );
+    }
+    if ( ! validate_username( $username ) ) {
+        wp_send_json_error( [ 'message' => 'Username contains invalid characters. Use letters, numbers, hyphens, and underscores only.' ], 400 );
+    }
+    if ( username_exists( $username ) ) {
+        wp_send_json_error( [ 'message' => "The username '{$username}' is already taken. Please choose another." ], 400 );
     }
 
-    if ( ! $password ) {
-        $password = wp_generate_password( 12, false );
+    if ( empty( $password ) ) {
+        wp_send_json_error( [ 'message' => 'Password is compulsory. Please provide a secure password.' ], 400 );
+    }
+    if ( strlen( $password ) < 6 ) {
+        wp_send_json_error( [ 'message' => 'Password must be at least 6 characters long.' ], 400 );
     }
 
     $user_id = wp_create_user( $username, $password, $email );
@@ -1287,6 +1476,254 @@ function radm_ajax_delete_staff_user(): void {
 }
 
 /**
+ * Super Admin Reset Password for any Staff User
+ */
+add_action( 'wp_ajax_radm_admin_reset_user_password', 'radm_ajax_admin_reset_user_password' );
+function radm_ajax_admin_reset_user_password(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $target_user_id = absint( $_POST['user_id'] ?? 0 );
+    $new_pass       = $_POST['new_password'] ?? '';
+    $confirm_pass   = $_POST['confirm_password'] ?? '';
+
+    if ( ! $target_user_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid user ID.' ], 400 );
+    }
+
+    $target_user = get_userdata( $target_user_id );
+    if ( ! $target_user ) {
+        wp_send_json_error( [ 'message' => 'User not found.' ], 404 );
+    }
+
+    if ( empty( $new_pass ) || empty( $confirm_pass ) ) {
+        wp_send_json_error( [ 'message' => 'New password and confirmation are compulsory.' ], 400 );
+    }
+
+    if ( strlen( $new_pass ) < 6 ) {
+        wp_send_json_error( [ 'message' => 'Password must be at least 6 characters long.' ], 400 );
+    }
+
+    if ( $new_pass !== $confirm_pass ) {
+        wp_send_json_error( [ 'message' => 'New password and confirmation do not match.' ], 400 );
+    }
+
+    wp_set_password( $new_pass, $target_user_id );
+
+    // Invalidate stale sessions for target user so they must log in with new credentials
+    if ( class_exists( 'WP_Session_Tokens' ) ) {
+        $sessions = WP_Session_Tokens::get_instance( $target_user_id );
+        $sessions->destroy_all();
+    }
+
+    // If Super Admin reset their own password, refresh auth cookie to keep active session
+    if ( $target_user_id === get_current_user_id() ) {
+        wp_set_current_user( $target_user_id );
+        wp_set_auth_cookie( $target_user_id, true );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Password for ' . esc_html( $target_user->display_name ?: $target_user->user_login ) . ' has been reset successfully!',
+    ] );
+}
+
+/**
+ * Self-Service Change Password for logged-in user (Settings page)
+ */
+add_action( 'wp_ajax_radm_change_own_password', 'radm_ajax_change_own_password' );
+function radm_ajax_change_own_password(): void {
+    radm_ajax_auth();
+    $user_id = get_current_user_id();
+    if ( ! $user_id ) {
+        wp_send_json_error( [ 'message' => 'You must be logged in to change your password.' ], 401 );
+    }
+
+    $current_pass = $_POST['current_password'] ?? '';
+    $new_pass     = $_POST['new_password'] ?? '';
+    $confirm_pass = $_POST['confirm_password'] ?? '';
+
+    if ( empty( $current_pass ) || empty( $new_pass ) || empty( $confirm_pass ) ) {
+        wp_send_json_error( [ 'message' => 'All password fields are compulsory.' ], 400 );
+    }
+
+    $user = get_userdata( $user_id );
+    if ( ! $user || ! wp_check_password( $current_pass, $user->user_pass, $user_id ) ) {
+        wp_send_json_error( [ 'message' => 'The current password you entered is incorrect.' ], 400 );
+    }
+
+    if ( strlen( $new_pass ) < 6 ) {
+        wp_send_json_error( [ 'message' => 'New password must be at least 6 characters long.' ], 400 );
+    }
+
+    if ( $new_pass !== $confirm_pass ) {
+        wp_send_json_error( [ 'message' => 'New password and confirmation do not match.' ], 400 );
+    }
+
+    wp_set_password( $new_pass, $user_id );
+
+    // Keep the current user logged in smoothly
+    wp_set_current_user( $user_id );
+    wp_set_auth_cookie( $user_id, true );
+
+    wp_send_json_success( [
+        'message' => 'Your password has been changed successfully! Your session remains active.',
+    ] );
+}
+
+/**
+ * Create Custom Role with attached access rights & optional center scope
+ */
+add_action( 'wp_ajax_radm_create_custom_role', 'radm_ajax_create_custom_role' );
+function radm_ajax_create_custom_role(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $role_name = sanitize_text_field( $_POST['role_name'] ?? '' );
+    $role_slug = sanitize_key( $_POST['role_slug'] ?? '' );
+
+    if ( empty( $role_name ) ) {
+        wp_send_json_error( [ 'message' => 'Role name is compulsory.' ], 400 );
+    }
+
+    if ( empty( $role_slug ) ) {
+        $clean_slug = sanitize_title( str_replace( ' ', '_', strtolower( $role_name ) ) );
+        $role_slug  = 'radm_' . $clean_slug;
+    } else {
+        if ( strpos( $role_slug, 'radm_' ) !== 0 ) {
+            $role_slug = 'radm_' . $role_slug;
+        }
+    }
+
+    // Ensure role does not collide with existing or reserved roles
+    $reserved = [ 'administrator', 'editor', 'author', 'contributor', 'subscriber' ];
+    if ( in_array( $role_slug, $reserved, true ) || get_role( $role_slug ) ) {
+        wp_send_json_error( [ 'message' => "Role key '{$role_slug}' already exists. Please choose a different name or slug." ], 400 );
+    }
+
+    // Parse attached module access rights
+    $raw_modules = $_POST['modules'] ?? [];
+    if ( is_string( $raw_modules ) ) {
+        $raw_modules = json_decode( stripslashes( $raw_modules ), true ) ?: [];
+    }
+    $valid_keys = array_keys( radm_get_all_modules() );
+    $modules = array_values( array_intersect( (array) $raw_modules, $valid_keys ) );
+    if ( ! in_array( 'dashboard', $modules, true ) ) {
+        array_unshift( $modules, 'dashboard' );
+    }
+
+    // Parse center restriction
+    $restrict_center = ! empty( $_POST['restrict_center'] );
+    $raw_centers = $_POST['centers'] ?? [];
+    if ( is_string( $raw_centers ) ) {
+        $raw_centers = json_decode( stripslashes( $raw_centers ), true ) ?: [];
+    }
+    $centers = array_map( 'sanitize_text_field', (array) $raw_centers );
+
+    // Capabilities based on attached modules
+    $caps = [
+        'read'         => true,
+        'upload_files' => in_array( 'gallery', $modules, true ),
+    ];
+    if ( in_array( 'registrations', $modules, true ) || in_array( 'form-groups', $modules, true ) ) {
+        $caps['manage_ry_registrations'] = true;
+    }
+    if ( in_array( 'pages', $modules, true ) ) {
+        $caps['edit_posts'] = true;
+        $caps['edit_pages'] = true;
+        $caps['edit_others_posts'] = true;
+        $caps['edit_others_pages'] = true;
+    }
+
+    // Register with WordPress
+    $added = add_role( $role_slug, $role_name, $caps );
+    if ( ! $added ) {
+        wp_send_json_error( [ 'message' => 'Failed to create WordPress role.' ], 500 );
+    }
+
+    // Persist in radm_custom_roles option
+    $custom_roles = get_option( 'radm_custom_roles', [] );
+    if ( ! is_array( $custom_roles ) ) { $custom_roles = []; }
+    $custom_roles[ $role_slug ] = [
+        'key'             => $role_slug,
+        'name'            => $role_name,
+        'modules'         => $modules,
+        'restrict_center' => $restrict_center,
+        'centers'         => $centers,
+        'created_at'      => current_time( 'mysql' ),
+    ];
+    update_option( 'radm_custom_roles', $custom_roles );
+
+    // Also persist in radm_role_permissions
+    $role_perms = get_option( 'radm_role_permissions', [] );
+    if ( ! is_array( $role_perms ) ) { $role_perms = []; }
+    $role_perms[ $role_slug ] = [
+        'modules'         => $modules,
+        'restrict_center' => $restrict_center,
+        'centers'         => $centers,
+    ];
+    update_option( 'radm_role_permissions', $role_perms );
+
+    wp_send_json_success( [
+        'message' => "Custom role '{$role_name}' created successfully with " . count( $modules ) . ' module access rights!',
+        'role'    => [
+            'key'             => $role_slug,
+            'name'            => $role_name,
+            'modules'         => $modules,
+            'restrict_center' => $restrict_center,
+            'centers'         => $centers,
+        ],
+    ] );
+}
+
+/**
+ * Delete Custom Role
+ */
+add_action( 'wp_ajax_radm_delete_custom_role', 'radm_ajax_delete_custom_role' );
+function radm_ajax_delete_custom_role(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $role_slug = sanitize_key( $_POST['role_slug'] ?? '' );
+    $built_in = [ 'administrator', 'radm_admin', 'radm_gallery', 'radm_center_admin', 'subscriber', 'editor', 'author', 'contributor' ];
+    if ( in_array( $role_slug, $built_in, true ) ) {
+        wp_send_json_error( [ 'message' => 'Default system roles cannot be deleted.' ], 400 );
+    }
+
+    // Reassign existing users with this role to subscriber
+    $users_with_role = get_users( [ 'role' => $role_slug ] );
+    foreach ( $users_with_role as $u ) {
+        $u->set_role( 'subscriber' );
+    }
+
+    // Remove from WordPress
+    remove_role( $role_slug );
+
+    // Remove from custom roles option & role permissions
+    $custom_roles = get_option( 'radm_custom_roles', [] );
+    if ( isset( $custom_roles[ $role_slug ] ) ) {
+        unset( $custom_roles[ $role_slug ] );
+        update_option( 'radm_custom_roles', $custom_roles );
+    }
+
+    $role_perms = get_option( 'radm_role_permissions', [] );
+    if ( isset( $role_perms[ $role_slug ] ) ) {
+        unset( $role_perms[ $role_slug ] );
+        update_option( 'radm_role_permissions', $role_perms );
+    }
+
+    wp_send_json_success( [
+        'message' => "Custom role '{$role_slug}' deleted successfully.",
+        'role_slug' => $role_slug,
+    ] );
+}
+
+/**
  * Save Organization Settings (Name, Logo, Contact Email)
  */
 add_action( 'wp_ajax_radm_save_org_settings', 'radm_ajax_save_org_settings' );
@@ -1358,36 +1795,36 @@ function radm_ajax_save_center(): void {
         wp_send_json_error( [ 'message' => 'Center name is required.' ], 400 );
     }
 
-    $centers = radm_get_centers_list();
-    $is_edit = false;
+    $cpt_status = ( $status === 'active' ) ? 'publish' : 'draft';
 
-    if ( ! empty( $center_id ) ) {
-        foreach ( $centers as &$c ) {
-            if ( $c['id'] === $center_id ) {
-                $c['name']     = $name;
-                $c['location'] = $location;
-                $c['status']   = in_array( $status, [ 'active', 'inactive' ], true ) ? $status : 'active';
-                $is_edit = true;
-                break;
-            }
+    if ( ! empty( $center_id ) && is_numeric( $center_id ) ) {
+        // Update existing rs_center post in WordPress
+        wp_update_post( [
+            'ID'          => (int) $center_id,
+            'post_title'  => $name,
+            'post_status' => $cpt_status,
+        ] );
+        update_post_meta( (int) $center_id, 'area', $location );
+    } else {
+        // Create new rs_center post in WordPress
+        $new_id = wp_insert_post( [
+            'post_type'   => 'rs_center',
+            'post_title'  => $name,
+            'post_status' => $cpt_status,
+        ] );
+        if ( $new_id && ! is_wp_error( $new_id ) ) {
+            update_post_meta( $new_id, 'area', $location );
+            $center_id = (string) $new_id;
+        } else {
+            $center_id = 'center-' . uniqid();
         }
-        unset( $c );
     }
 
-    if ( ! $is_edit ) {
-        $center_id = 'center-' . uniqid();
-        $centers[] = [
-            'id'       => $center_id,
-            'name'     => $name,
-            'location' => $location ?: 'Bangalore',
-            'status'   => in_array( $status, [ 'active', 'inactive' ], true ) ? $status : 'active',
-        ];
-    }
-
+    $centers = radm_get_centers_list();
     update_option( 'radm_centers_list', $centers );
 
     wp_send_json_success( [
-        'message' => $is_edit ? 'Center updated successfully!' : 'New center added successfully!',
+        'message' => ! empty( $_POST['center_id'] ) ? 'Center updated successfully!' : 'New center added successfully!',
         'center'  => [
             'id'       => $center_id,
             'name'     => $name,
@@ -1413,13 +1850,22 @@ function radm_ajax_delete_center(): void {
         wp_send_json_error( [ 'message' => 'Invalid center ID.' ], 400 );
     }
 
+    $deleted_name = '';
+    if ( is_numeric( $center_id ) ) {
+        $p = get_post( (int) $center_id );
+        if ( $p ) {
+            $deleted_name = $p->post_title;
+            wp_trash_post( (int) $center_id );
+        }
+    }
+
     $centers = radm_get_centers_list();
     $new_centers = [];
-    $deleted_name = '';
-
     foreach ( $centers as $c ) {
-        if ( $c['id'] === $center_id ) {
-            $deleted_name = $c['name'];
+        if ( (string) $c['id'] === (string) $center_id ) {
+            if ( ! $deleted_name ) {
+                $deleted_name = $c['name'];
+            }
         } else {
             $new_centers[] = $c;
         }
@@ -1449,11 +1895,23 @@ function radm_ajax_delete_center(): void {
 add_action('wp_ajax_radm_submit_contact', 'radm_ajax_submit_contact');
 add_action('wp_ajax_nopriv_radm_submit_contact', 'radm_ajax_submit_contact');
 function radm_ajax_submit_contact(): void {
+    if ( isset( $_POST['radm_contact_nonce'] ) ) {
+        wp_verify_nonce( sanitize_text_field( $_POST['radm_contact_nonce'] ), 'radm_contact_nonce' );
+    }
+
     $name    = sanitize_text_field( $_POST['name'] ?? '' );
     $email   = sanitize_email( $_POST['email'] ?? '' );
     $phone   = sanitize_text_field( $_POST['phone'] ?? '' );
+    $topic   = sanitize_text_field( $_POST['topic'] ?? '' );
     $subject = sanitize_text_field( $_POST['subject'] ?? '' );
     $message = sanitize_textarea_field( $_POST['message'] ?? '' );
+    $center  = sanitize_text_field( $_POST['center'] ?? '' );
+
+    if ( empty( $center ) && ! empty( $subject ) ) {
+        if ( preg_match( '/Enquiry for (.+)$/i', $subject, $m ) ) {
+            $center = trim( $m[1] );
+        }
+    }
 
     if ( ! $name || ! $email || ! $message ) {
         wp_send_json_error( [ 'message' => 'Please fill all required fields.' ], 400 );
@@ -1465,47 +1923,708 @@ function radm_ajax_submit_contact(): void {
     }
 
     $email_subject = "New Contact Form Submission: " . ($subject ? $subject : 'General Inquiry');
-    $email_body    = "You have received a new message from the contact form.
-
-";
-    $email_body   .= "Name: $name
-";
-    $email_body   .= "Email: $email
-";
-    $email_body   .= "Phone: $phone
-";
-    $email_body   .= "Subject: $subject
-
-";
-    $email_body   .= "Message:
-$message
-";
+    $email_body    = "You have received a new message from the contact form.\n\n";
+    $email_body   .= "Name: $name\n";
+    $email_body   .= "Email: $email\n";
+    $email_body   .= "Phone: $phone\n";
+    if ( $center ) {
+        $email_body .= "Center: $center\n";
+    }
+    if ( $topic ) {
+        $email_body .= "Topic: $topic\n";
+    }
+    $email_body   .= "Subject: $subject\n\n";
+    $email_body   .= "Message:\n$message\n";
 
     $headers = [ 'Reply-To: ' . $name . ' <' . $email . '>' ];
 
     // Insert into database as rs_inquiry post type
     $post_id = wp_insert_post([
-        'post_title'   => sanitize_text_field($name . ' - ' . $subject),
+        'post_title'   => sanitize_text_field($name . ' - ' . ($subject ?: 'Contact Inquiry')),
         'post_content' => "Name: " . sanitize_text_field($name) . "\n" .
                           "Email: " . sanitize_email($email) . "\n" .
                           "Phone: " . sanitize_text_field($phone) . "\n" .
+                          ($center ? "Center: " . sanitize_text_field($center) . "\n" : "") .
+                          ($topic ? "Topic: " . sanitize_text_field($topic) . "\n" : "") .
                           "Subject: " . sanitize_text_field($subject) . "\n\n" .
                           "Message:\n" . sanitize_textarea_field($message),
         'post_status'  => 'publish',
         'post_type'    => 'rs_inquiry',
         'meta_input'   => [
-            'inquiry_name'    => sanitize_text_field($name),
-            'inquiry_email'   => sanitize_email($email),
-            'inquiry_phone'   => sanitize_text_field($phone),
-            'inquiry_subject' => sanitize_text_field($subject),
+            'inquiry_name'      => sanitize_text_field($name),
+            'inquiry_email'     => sanitize_email($email),
+            'inquiry_phone'     => sanitize_text_field($phone),
+            'inquiry_subject'   => sanitize_text_field($subject),
+            'inquiry_topic'     => sanitize_text_field($topic),
+            'inquiry_center'    => sanitize_text_field($center),
+            '_rs_student_name'  => sanitize_text_field($name),
+            '_rs_student_email' => sanitize_email($email),
+            '_rs_student_phone' => sanitize_text_field($phone),
+            '_rs_topic'         => sanitize_text_field($topic),
+            '_rs_subject'       => sanitize_text_field($subject),
+            '_rs_center'        => sanitize_text_field($center),
+            '_rs_activity'      => '',
         ]
     ]);
 
     $sent = wp_mail( $admin_email, $email_subject, $email_body, $headers );
 
     if ( $post_id || $sent ) {
-        wp_send_json_success( [ 'message' => 'Thank you for reaching out. We will get back to you soon.' ] );
+        wp_send_json_success( [ 'message' => 'Thank you for reaching out. We will get back to you soon.', 'inquiry_id' => $post_id ] );
     } else {
         wp_send_json_error( [ 'message' => 'Failed to send message. Please try again later.' ], 500 );
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTENT PAGES IN-PORTAL MANAGEMENT (Centers, Activities, Posts, Inquiries)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Save Center (Content Post) ───────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_content_center', 'radm_ajax_save_content_center' );
+function radm_ajax_save_content_center(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $post_title = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Center Name is required.' ] );
+    }
+
+    $area          = sanitize_text_field( $_POST['area'] ?? '' );
+    $zone          = sanitize_text_field( $_POST['zone'] ?? 'South Bengaluru' );
+    $phone         = sanitize_text_field( $_POST['phone'] ?? '' );
+    $email         = sanitize_email( $_POST['email'] ?? '' );
+    $hours         = sanitize_text_field( $_POST['hours'] ?? '' );
+    $address       = sanitize_textarea_field( $_POST['address'] ?? '' );
+    $map_url       = esc_url_raw( $_POST['map_url'] ?? '' );
+    $instagram_url = esc_url_raw( $_POST['instagram_url'] ?? '' );
+    $facebook_url  = esc_url_raw( $_POST['facebook_url'] ?? '' );
+    $linktree_url  = esc_url_raw( $_POST['linktree_url'] ?? '' );
+    $image_url     = esc_url_raw( $_POST['image_url'] ?? '' );
+    $attachment_id = absint( $_POST['attachment_id'] ?? 0 );
+    $post_status   = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $address,
+        'post_status'  => $post_status,
+        'post_type'    => 'rs_center',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save center.' ] );
+    }
+
+    // Save Meta Fields
+    update_post_meta( $saved_id, 'area', $area );
+    update_post_meta( $saved_id, 'zone', $zone );
+    update_post_meta( $saved_id, 'phone', $phone );
+    update_post_meta( $saved_id, 'email', $email );
+    update_post_meta( $saved_id, 'hours', $hours );
+    update_post_meta( $saved_id, 'address', $address );
+    update_post_meta( $saved_id, 'map_url', $map_url );
+    update_post_meta( $saved_id, 'instagram_url', $instagram_url );
+    update_post_meta( $saved_id, 'facebook_url', $facebook_url );
+    update_post_meta( $saved_id, 'linktree_url', $linktree_url );
+
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+
+    // Process and Save Offered Activities
+    $raw_acts = $_POST['activities'] ?? [];
+    $clean_acts = [];
+    if ( is_array( $raw_acts ) ) {
+        foreach ( $raw_acts as $act ) {
+            $act_clean = sanitize_text_field( $act );
+            if ( $act_clean ) {
+                $clean_acts[] = $act_clean;
+            }
+        }
+    }
+    $clean_acts = array_values( array_unique( $clean_acts ) );
+    update_post_meta( $saved_id, '_ry_center_activities', $clean_acts );
+
+    // Update ACF repeater structure for programs so page-centers.php reflects them immediately
+    $prog_repeater = [];
+    foreach ( $clean_acts as $idx => $act_name ) {
+        update_post_meta( $saved_id, 'programs_' . $idx . '_program_name', $act_name );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_badge', 'Regular Batch' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_days', 'Monday to Saturday' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_timings', 'Morning & Evening Batches' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_dates', 'Ongoing Admissions' );
+        update_post_meta( $saved_id, 'programs_' . $idx . '_desc', 'Certified instruction in ' . $act_name );
+        $prog_repeater[] = [
+            'program_name' => $act_name,
+            'badge'        => 'Regular Batch',
+            'days'         => 'Monday to Saturday',
+            'timings'      => 'Morning & Evening Batches',
+            'dates'        => 'Ongoing Admissions',
+            'desc'         => 'Certified instruction in ' . $act_name,
+        ];
+    }
+    update_post_meta( $saved_id, 'programs', count( $clean_acts ) );
+
+    // Also update ACF fields if ACF is installed
+    if ( function_exists( 'update_field' ) ) {
+        update_field( 'area', $area, $saved_id );
+        update_field( 'zone', $zone, $saved_id );
+        update_field( 'phone', $phone, $saved_id );
+        update_field( 'email', $email, $saved_id );
+        update_field( 'hours', $hours, $saved_id );
+        update_field( 'address', $address, $saved_id );
+        update_field( 'map_url', $map_url, $saved_id );
+        if ( ! empty( $prog_repeater ) ) {
+            update_field( 'programs', $prog_repeater, $saved_id );
+        }
+    }
+
+    // Bidirectional sync: ensure selected activities also list this center
+    if ( ! empty( $clean_acts ) ) {
+        $center_title_clean = $post_title . ' Center';
+        foreach ( $clean_acts as $act_name ) {
+            $act_post = get_page_by_title( $act_name, OBJECT, [ 'activity', 'rs_activity' ] );
+            if ( $act_post ) {
+                $cur_centers = get_post_meta( $act_post->ID, 'centers_text', true ) ?: ( get_post_meta( $act_post->ID, 'centers', true ) ?: '' );
+                if ( $cur_centers && strpos( $cur_centers, 'all' ) === false && strpos( $cur_centers, $post_title ) === false ) {
+                    $new_centers = trim( $cur_centers . ', ' . $center_title_clean, ', ' );
+                    update_post_meta( $act_post->ID, 'centers_text', $new_centers );
+                    update_post_meta( $act_post->ID, 'centers', $new_centers );
+                }
+            }
+        }
+    }
+
+    wp_send_json_success( [
+        'message' => 'Center saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete Center (Content Post) ─────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_content_center', 'radm_ajax_delete_content_center' );
+function radm_ajax_delete_content_center(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'rs_center' ) {
+        wp_send_json_error( [ 'message' => 'Invalid center ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Center removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove center.' ] );
+    }
+}
+
+// ── Save Activity ────────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_activity', 'radm_ajax_save_activity' );
+function radm_ajax_save_activity(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $post_title = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Activity Name is required.' ] );
+    }
+
+    $category_id      = absint( $_POST['category_id'] ?? 0 );
+    $badge            = sanitize_text_field( $_POST['badge'] ?? 'Regular Batch' );
+    $content          = sanitize_textarea_field( $_POST['content'] ?? '' );
+    $batches_text     = sanitize_text_field( $_POST['batches_text'] ?? '' );
+    $duration_text    = sanitize_text_field( $_POST['duration_text'] ?? '' );
+    $frequency_text   = sanitize_text_field( $_POST['frequency_text'] ?? '' );
+    $eligibility_text = sanitize_text_field( $_POST['eligibility_text'] ?? '' );
+    $centers_text     = sanitize_text_field( $_POST['centers_text'] ?? '' );
+    $image_url        = esc_url_raw( $_POST['image_url'] ?? '' );
+    $attachment_id    = absint( $_POST['attachment_id'] ?? 0 );
+    $post_status      = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $content,
+        'post_status'  => $post_status,
+        'post_type'    => 'activity',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save activity.' ] );
+    }
+
+    if ( $category_id > 0 ) {
+        wp_set_object_terms( $saved_id, [ $category_id ], 'activity_category' );
+    }
+
+    $registration_open = isset( $_POST['registration_open'] ) ? ( ! empty( $_POST['registration_open'] ) ? 1 : 0 ) : 1;
+
+    update_post_meta( $saved_id, 'badge', $badge );
+    update_post_meta( $saved_id, 'batches_text', $batches_text );
+    update_post_meta( $saved_id, 'duration_text', $duration_text );
+    update_post_meta( $saved_id, 'frequency_text', $frequency_text );
+    update_post_meta( $saved_id, 'eligibility_text', $eligibility_text );
+    update_post_meta( $saved_id, 'centers_text', $centers_text );
+    update_post_meta( $saved_id, '_ry_registration_open', $registration_open );
+
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+
+    if ( function_exists( 'update_field' ) ) {
+        update_field( 'badge', $badge, $saved_id );
+        update_field( 'batches_text', $batches_text, $saved_id );
+        update_field( 'duration_text', $duration_text, $saved_id );
+        update_field( 'frequency_text', $frequency_text, $saved_id );
+        update_field( 'eligibility_text', $eligibility_text, $saved_id );
+        update_field( 'centers_text', $centers_text, $saved_id );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Activity saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Toggle Activity Registration Open/Closed ────────────────────────────────
+add_action( 'wp_ajax_radm_toggle_activity_registration', 'radm_ajax_toggle_activity_registration' );
+function radm_ajax_toggle_activity_registration(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid activity ID.' ] );
+    }
+
+    $current = get_post_meta( $post_id, '_ry_registration_open', true );
+    $new_val = ( $current === '0' || $current === 0 ) ? 1 : 0;
+    update_post_meta( $post_id, '_ry_registration_open', $new_val );
+
+    wp_send_json_success( [
+        'id'      => $post_id,
+        'open'    => $new_val,
+        'label'   => $new_val ? 'Open' : 'Closed',
+        'message' => 'Registration is now ' . ( $new_val ? 'Open' : 'Closed' ) . ' for this activity.',
+    ] );
+}
+
+// ── Delete Activity ──────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_activity', 'radm_ajax_delete_activity' );
+function radm_ajax_delete_activity(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || ( get_post_type( $post_id ) !== 'activity' && get_post_type( $post_id ) !== 'rs_activity' ) ) {
+        wp_send_json_error( [ 'message' => 'Invalid activity ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Activity removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove activity.' ] );
+    }
+}
+
+// ── Save News Article (Post) ─────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_post', 'radm_ajax_save_post' );
+function radm_ajax_save_post(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $post_title = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Article Title is required.' ] );
+    }
+
+    $content       = wp_kses_post( $_POST['content'] ?? '' );
+    $excerpt       = sanitize_textarea_field( $_POST['excerpt'] ?? '' );
+    $attachment_id = absint( $_POST['attachment_id'] ?? 0 );
+    $image_url     = esc_url_raw( $_POST['image_url'] ?? '' );
+    $post_status   = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $content,
+        'post_excerpt' => $excerpt,
+        'post_status'  => $post_status,
+        'post_type'    => 'post',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save article.' ] );
+    }
+
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Article saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete News Article ──────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_post', 'radm_ajax_delete_post' );
+function radm_ajax_delete_post(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'post' ) {
+        wp_send_json_error( [ 'message' => 'Invalid article ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Article removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove article.' ] );
+    }
+}
+
+// ── Delete Inquiry ───────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_inquiry', 'radm_ajax_delete_inquiry' );
+function radm_ajax_delete_inquiry(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'rs_inquiry' ) {
+        wp_send_json_error( [ 'message' => 'Invalid inquiry ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Inquiry removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove inquiry.' ] );
+    }
+}
+
+// ── Save Content Event (Add / Edit Event directly in portal) ────────────────
+add_action( 'wp_ajax_radm_save_content_event', 'radm_ajax_save_content_event' );
+function radm_ajax_save_content_event(): void {
+    radm_ajax_auth();
+
+    $post_id       = absint( $_POST['post_id'] ?? 0 );
+    $post_title    = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $post_title ) ) {
+        wp_send_json_error( [ 'message' => 'Event Name is required.' ] );
+    }
+
+    $event_date    = sanitize_text_field( $_POST['event_date'] ?? '' );
+    $start_time    = sanitize_text_field( $_POST['start_time'] ?? '06:00' );
+    $end_time      = sanitize_text_field( $_POST['end_time'] ?? '08:00' );
+    $venue         = sanitize_text_field( $_POST['venue'] ?? 'Rashtrotthana Central' );
+    $reg_open      = isset( $_POST['registration_open'] ) ? ( ! empty( $_POST['registration_open'] ) ? 1 : 0 ) : 1;
+    $content       = wp_kses_post( $_POST['content'] ?? '' );
+    $image_url     = esc_url_raw( $_POST['image_url'] ?? '' );
+    $attachment_id = absint( $_POST['attachment_id'] ?? 0 );
+    $post_status   = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $post_title,
+        'post_content' => $content,
+        'post_status'  => $post_status,
+        'post_type'    => 'event',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $post_data['post_author'] = get_current_user_id();
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save event.' ] );
+    }
+
+    update_post_meta( $saved_id, '_ry_event_date', $event_date );
+    update_post_meta( $saved_id, '_ry_start_time', $start_time );
+    update_post_meta( $saved_id, '_ry_end_time', $end_time );
+    update_post_meta( $saved_id, '_ry_venue', $venue );
+    update_post_meta( $saved_id, '_ry_registration_open', $reg_open );
+
+    if ( $image_url ) {
+        update_post_meta( $saved_id, '_ry_image_url', $image_url );
+    }
+    if ( $attachment_id > 0 ) {
+        set_post_thumbnail( $saved_id, $attachment_id );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Event saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Save FAQ (Add / Edit FAQ) ────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_save_faq', 'radm_ajax_save_faq' );
+function radm_ajax_save_faq(): void {
+    radm_ajax_auth();
+
+    $post_id    = absint( $_POST['post_id'] ?? 0 );
+    $question   = sanitize_text_field( $_POST['post_title'] ?? '' );
+    if ( empty( $question ) ) {
+        wp_send_json_error( [ 'message' => 'Question is required.' ] );
+    }
+
+    $answer      = wp_kses_post( $_POST['content'] ?? '' );
+    $menu_order  = absint( $_POST['menu_order'] ?? 0 );
+    $post_status = in_array( $_POST['post_status'] ?? 'publish', [ 'publish', 'draft' ], true ) ? $_POST['post_status'] : 'publish';
+
+    $post_data = [
+        'post_title'   => $question,
+        'post_content' => $answer,
+        'menu_order'   => $menu_order,
+        'post_status'  => $post_status,
+        'post_type'    => 'faq',
+    ];
+
+    if ( $post_id > 0 ) {
+        $post_data['ID'] = $post_id;
+        $saved_id = wp_update_post( $post_data );
+    } else {
+        $saved_id = wp_insert_post( $post_data );
+    }
+
+    if ( is_wp_error( $saved_id ) || ! $saved_id ) {
+        wp_send_json_error( [ 'message' => 'Failed to save FAQ.' ] );
+    }
+
+    wp_send_json_success( [
+        'message' => 'FAQ saved successfully!',
+        'id'      => $saved_id,
+    ] );
+}
+
+// ── Delete FAQ ───────────────────────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_faq', 'radm_ajax_delete_faq' );
+function radm_ajax_delete_faq(): void {
+    radm_ajax_auth();
+    $post_id = absint( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || get_post_type( $post_id ) !== 'faq' ) {
+        wp_send_json_error( [ 'message' => 'Invalid FAQ ID.' ] );
+    }
+    $res = wp_trash_post( $post_id );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'FAQ removed successfully.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to remove FAQ.' ] );
+    }
+}
+
+// ── Direct Image Upload (Custom In-Portal Local File Upload) ─────────────────
+add_action( 'wp_ajax_radm_direct_image_upload', 'radm_ajax_direct_image_upload' );
+function radm_ajax_direct_image_upload(): void {
+    radm_ajax_auth();
+
+    if ( empty( $_FILES['image_file'] ) || empty( $_FILES['image_file']['name'] ) ) {
+        wp_send_json_error( [ 'message' => 'No image file was received.' ], 400 );
+    }
+
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+
+    $attachment_id = media_handle_upload( 'image_file', 0 );
+    if ( is_wp_error( $attachment_id ) ) {
+        wp_send_json_error( [ 'message' => 'Upload failed: ' . $attachment_id->get_error_message() ], 400 );
+    }
+
+    $url       = wp_get_attachment_url( $attachment_id );
+    $thumb     = wp_get_attachment_image_url( $attachment_id, 'medium' ) ?: $url;
+    $file_path = get_attached_file( $attachment_id );
+    $filename  = $file_path ? basename( $file_path ) : '';
+
+    wp_send_json_success( [
+        'attachment_id' => $attachment_id,
+        'url'           => $url,
+        'thumb_url'     => $thumb,
+        'filename'      => $filename,
+        'message'       => 'Image uploaded successfully.',
+    ] );
+}
+
+// ── Query Database Images (Custom In-Portal Media Library Browser) ───────────
+add_action( 'wp_ajax_radm_get_db_images', 'radm_ajax_get_db_images' );
+function radm_ajax_get_db_images(): void {
+    radm_ajax_auth();
+
+    $search    = sanitize_text_field( $_POST['search'] ?? '' );
+    $mime_type = sanitize_text_field( $_POST['mime_type'] ?? '' );
+    $page      = max( 1, absint( $_POST['page'] ?? 1 ) );
+    $per_page  = max( 1, min( 60, absint( $_POST['per_page'] ?? 24 ) ) );
+
+    $query_args = [
+        'post_type'      => 'attachment',
+        'post_status'    => 'inherit',
+        'posts_per_page' => $per_page,
+        'paged'          => $page,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ];
+
+    if ( ! empty( $mime_type ) && $mime_type !== 'all' ) {
+        if ( $mime_type === 'image' ) {
+            $query_args['post_mime_type'] = 'image';
+        } elseif ( $mime_type === 'document' || $mime_type === 'application' ) {
+            $query_args['post_mime_type'] = [ 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/plain', 'text/csv' ];
+        } else {
+            $query_args['post_mime_type'] = $mime_type;
+        }
+    }
+
+    if ( ! empty( $search ) ) {
+        $query_args['s'] = $search;
+    }
+
+    $q = new WP_Query( $query_args );
+
+    $items = [];
+    foreach ( $q->posts as $post ) {
+        $att_id   = $post->ID;
+        $url      = wp_get_attachment_url( $att_id );
+        $thumb    = wp_get_attachment_image_url( $att_id, 'thumbnail' ) ?: $url;
+        $meta     = wp_get_attachment_metadata( $att_id );
+        $file     = get_attached_file( $att_id );
+        $filename = $file ? basename( $file ) : ( $post->post_name ?: 'file' );
+        $mime     = get_post_mime_type( $att_id );
+        $is_img   = strpos( $mime, 'image' ) === 0;
+        
+        $filesize = '';
+        if ( $file && file_exists( $file ) ) {
+            $bytes = filesize( $file );
+            $filesize = size_format( $bytes, 1 );
+        }
+
+        $dims = '';
+        if ( ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
+            $dims = $meta['width'] . ' × ' . $meta['height'];
+        }
+
+        $items[] = [
+            'id'         => $att_id,
+            'title'      => $post->post_title ?: $filename,
+            'filename'   => $filename,
+            'url'        => $url,
+            'thumb'      => $thumb,
+            'dimensions' => $dims,
+            'filesize'   => $filesize,
+            'mime'       => $mime,
+            'is_image'   => $is_img,
+            'date'       => get_the_date( 'M j, Y', $post ),
+        ];
+    }
+
+    wp_send_json_success( [
+        'items'       => $items,
+        'total'       => (int) $q->found_posts,
+        'page'        => $page,
+        'per_page'    => $per_page,
+        'total_pages' => (int) $q->max_num_pages,
+    ] );
+}
+
+// ── Check If Attachment is Used Elsewhere ────────────────────────────────────
+add_action( 'wp_ajax_radm_check_attachment_usage', 'radm_ajax_check_attachment_usage' );
+function radm_ajax_check_attachment_usage(): void {
+    radm_ajax_auth();
+
+    $att_id  = absint( $_POST['attachment_id'] ?? 0 );
+    $post_id = absint( $_POST['current_post_id'] ?? 0 );
+
+    if ( ! $att_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid attachment ID.' ], 400 );
+    }
+
+    global $wpdb;
+
+    // 1. Post thumbnail check in wp_postmeta
+    $thumb_count = (int) $wpdb->get_var( $wpdb->prepare(
+        "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = '_thumbnail_id' AND meta_value = %d AND post_id != %d",
+        $att_id, $post_id
+    ) );
+
+    // 2. Postmeta URL check
+    $att_url = wp_get_attachment_url( $att_id );
+    $meta_url_count = 0;
+    if ( $att_url ) {
+        $meta_url_count = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE (meta_value = %s OR meta_value LIKE %s) AND post_id != %d",
+            $att_url, '%' . $wpdb->esc_like( basename( $att_url ) ) . '%', $post_id
+        ) );
+    }
+
+    // 3. Post content check across posts
+    $content_count = 0;
+    $file_path = get_attached_file( $att_id );
+    $filename = $file_path ? basename( $file_path ) : '';
+    if ( $filename ) {
+        $content_count = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_content LIKE %s AND ID != %d AND post_status NOT IN ('trash', 'auto-draft')",
+            '%' . $wpdb->esc_like( $filename ) . '%', $post_id
+        ) );
+    }
+
+    // 4. Site icon or custom logo check
+    $is_site_logo = false;
+    $site_icon   = (int) get_option( 'site_icon' );
+    $custom_logo = (int) get_theme_mod( 'custom_logo' );
+    if ( $site_icon === $att_id || $custom_logo === $att_id ) {
+        $is_site_logo = true;
+    }
+
+    $total_usage = $thumb_count + $meta_url_count + $content_count + ( $is_site_logo ? 1 : 0 );
+
+    wp_send_json_success( [
+        'attachment_id' => $att_id,
+        'filename'      => $filename,
+        'url'           => $att_url,
+        'usage_count'   => $total_usage,
+        'is_used'       => ( $total_usage > 0 ),
+    ] );
+}
+
+// ── Delete Attachment Permanently ─────────────────────────────────────────────
+add_action( 'wp_ajax_radm_delete_attachment', 'radm_ajax_delete_attachment' );
+function radm_ajax_delete_attachment(): void {
+    radm_ajax_auth();
+
+    $att_id = absint( $_POST['attachment_id'] ?? 0 );
+    if ( ! $att_id || get_post_type( $att_id ) !== 'attachment' ) {
+        wp_send_json_error( [ 'message' => 'Invalid attachment ID.' ], 400 );
+    }
+
+    $res = wp_delete_attachment( $att_id, true );
+    if ( $res ) {
+        wp_send_json_success( [ 'message' => 'Unused image file deleted permanently from storage.' ] );
+    } else {
+        wp_send_json_error( [ 'message' => 'Failed to delete attachment.' ], 500 );
+    }
+}
+
