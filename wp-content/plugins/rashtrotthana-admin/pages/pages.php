@@ -2578,6 +2578,13 @@ $act_inq_query = new WP_Query( [
                     alert(res.data.message || 'Error saving article.');
                 }
             })
+            .catch(function() {
+                btn.disabled = false;
+                btn.textContent = 'Save Article';
+                alert('Network error while saving article.');
+            });
+    };
+
     // Toggle Activity Registration Quick Action
     window.radmToggleActivityReg = function(actId, btn) {
         var dot = btn.querySelector('.radm-status-dot');
