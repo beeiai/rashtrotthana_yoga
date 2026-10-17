@@ -6,20 +6,13 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-// Verify capabilities (Super Admin / manage_options)
-if ( ! current_user_can( 'manage_options' ) ) {
-    wp_die(
-        '<div style="font-family:sans-serif;text-align:center;padding:50px 20px;">'
-        . '<h2 style="color:#0f172a;">Access Restricted</h2>'
-        . '<p style="color:#64748b;">You do not have sufficient permissions to manage Settings.</p>'
-        . '<a href="' . esc_url( admin_url( 'admin.php?page=radm-dashboard' ) ) . '" style="display:inline-block;margin-top:15px;color:#2E7D32;font-weight:600;text-decoration:none;">&larr; Return to Dashboard</a>'
-        . '</div>',
-        'Permission Denied',
-        [ 'response' => 403 ]
-    );
-}
+$is_super_admin = current_user_can( 'manage_options' );
+$current_user   = wp_get_current_user();
+$all_roles      = radm_get_all_roles();
+$primary_role   = ! empty( $current_user->roles ) ? $current_user->roles[0] : 'subscriber';
+$role_label     = $all_roles[ $primary_role ]['name'] ?? ucfirst( str_replace( [ 'radm_', '_' ], [ '', ' ' ], $primary_role ) );
 
-radm_portal_header( 'Settings', 'Manage organization details and centers' );
+radm_portal_header( 'Settings', $is_super_admin ? 'Manage organization details, centers & account security' : 'Manage your portal account security & credentials' );
 
 $org_name      = get_option( 'radm_org_name', get_option( 'blogname', 'Rashtrotthana Yoga' ) );
 $contact_email = get_option( 'radm_contact_email', get_option( 'admin_email', 'info@rashtrotthanayoga.org' ) );
@@ -27,6 +20,7 @@ $default_logo  = get_template_directory_uri() . '/assets/images/rashtrotthana-gr
 $org_logo      = get_option( 'radm_org_logo', $default_logo );
 ?>
 
+<?php if ( $is_super_admin ) : ?>
 <div class="radm-settings-grid">
     
     <!-- ══════════════════════════════════════════════════════════════════
@@ -154,7 +148,105 @@ $org_logo      = get_option( 'radm_org_logo', $default_logo );
     </div>
 
 </div>
+<?php else : ?>
+<div class="radm-card" style="margin-bottom: 24px; display: flex; align-items: center; gap: 14px; background: #f8fafc; border: 1px solid var(--radm-border); border-left: 4px solid var(--radm-green-primary); padding: 16px 20px;">
+    <div style="width: 36px; height: 36px; border-radius: 50%; background: #e8f5e9; color: var(--radm-green-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </div>
+    <div>
+        <strong style="display: block; font-size: 14px; color: var(--radm-text);">System Settings Managed by Super Admin</strong>
+        <p style="margin: 2px 0 0; font-size: 13px; color: var(--radm-text-muted);">Organization profile and Centers management require Super Administrator permissions. You can manage your personal account security and login password below.</p>
+    </div>
+</div>
+<?php endif; ?>
 
+<!-- ══════════════════════════════════════════════════════════════════
+     ACCOUNT SECURITY & CHANGE PASSWORD CARD (FOR ALL LOGGED-IN USERS)
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="radm-settings-card" style="margin-top: <?php echo $is_super_admin ? '24px' : '0'; ?>; max-width: 100%;">
+    
+    <div class="radm-settings-header" style="border-bottom: 1px solid var(--radm-border); padding-bottom: 16px; margin-bottom: 20px;">
+        <div class="radm-settings-title-group">
+            <div class="radm-settings-icon-badge" style="background: #f3e8ff; color: #7e22ce;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </div>
+            <div>
+                <h2 class="radm-settings-title">Account Security &amp; Password</h2>
+                <p class="radm-settings-subtitle">Update your account login password. Your active session will be renewed automatically.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Strip -->
+    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid var(--radm-border); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: #e8f5e9; color: #2E7D32; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;">
+                <?php echo esc_html( strtoupper( substr( $current_user->display_name ?: $current_user->user_login, 0, 1 ) ) ); ?>
+            </div>
+            <div>
+                <strong style="display: block; font-size: 14.5px; color: var(--radm-text);">
+                    <?php echo esc_html( $current_user->display_name ?: $current_user->user_login ); ?>
+                    <span style="font-size: 12px; font-weight: 500; color: var(--radm-text-muted);">(@<?php echo esc_html( $current_user->user_login ); ?>)</span>
+                </strong>
+                <span style="font-size: 12.5px; color: var(--radm-text-muted);"><?php echo esc_html( $current_user->user_email ); ?></span>
+            </div>
+        </div>
+        <div>
+            <span class="radm-badge radm-badge--open" style="font-size: 12px; padding: 4px 10px;">
+                <?php echo esc_html( $role_label ); ?>
+            </span>
+        </div>
+    </div>
+
+    <form id="radm-change-password-form" style="display: flex; flex-direction: column; gap: 18px;">
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+            <div class="radm-form-group">
+                <label class="radm-label" for="radm-current-password">Current Password <span style="color:#ef4444;">*</span></label>
+                <div style="position: relative;">
+                    <input type="password" id="radm-current-password" class="radm-input" placeholder="Enter current password" required style="padding-right: 40px;" />
+                    <button type="button" class="radm-pwd-toggle-btn" data-target="radm-current-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--radm-text-muted); padding: 4px;" title="Show/Hide Password">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="radm-form-group">
+                <label class="radm-label" for="radm-new-password">New Password <span style="color:#ef4444;">*</span></label>
+                <div style="position: relative;">
+                    <input type="password" id="radm-new-password" class="radm-input" placeholder="Min. 6 characters" minlength="6" required style="padding-right: 40px;" />
+                    <button type="button" class="radm-pwd-toggle-btn" data-target="radm-new-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--radm-text-muted); padding: 4px;" title="Show/Hide Password">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="radm-form-group">
+                <label class="radm-label" for="radm-confirm-password">Confirm New Password <span style="color:#ef4444;">*</span></label>
+                <div style="position: relative;">
+                    <input type="password" id="radm-confirm-password" class="radm-input" placeholder="Re-enter new password" minlength="6" required style="padding-right: 40px;" />
+                    <button type="button" class="radm-pwd-toggle-btn" data-target="radm-confirm-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--radm-text-muted); padding: 4px;" title="Show/Hide Password">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 8px;">
+            <button type="submit" class="radm-btn radm-btn-primary" id="radm-change-pwd-btn" style="padding: 10px 24px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span id="radm-change-pwd-text">Update Password</span>
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<?php if ( $is_super_admin ) : ?>
 <!-- ══════════════════════════════════════════════════════════════════
      ADD / EDIT CENTER MODAL
      ══════════════════════════════════════════════════════════════════ -->
@@ -247,5 +339,6 @@ $org_logo      = get_option( 'radm_org_logo', $default_logo );
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <?php radm_portal_footer(); ?>

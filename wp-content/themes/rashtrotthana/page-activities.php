@@ -1038,6 +1038,125 @@ foreach ( $activity_categories as $cat ) {
     color: #991b1b;
 }
 
+/* Registration Confirmation Card */
+.rs-reg-confirm-card {
+    text-align: center;
+    padding: 1rem 0.5rem 0.5rem;
+    animation: rsFadeInUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes rsFadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.rs-confirm-icon-wrap {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ecfdf5;
+    box-shadow: 0 0 0 8px #f0fdf4;
+}
+.rs-confirm-check-svg {
+    width: 42px;
+    height: 42px;
+}
+.rs-confirm-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #065f46;
+    margin: 0 0 0.3rem;
+}
+.rs-confirm-greeting {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 0.35rem;
+}
+.rs-confirm-desc {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin: 0 0 1.25rem;
+    line-height: 1.45;
+}
+.rs-confirm-summary-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.9rem 1.15rem;
+    text-align: left;
+    margin-bottom: 1.15rem;
+}
+.rs-confirm-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.45rem 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 0.86rem;
+    gap: 0.75rem;
+}
+.rs-confirm-summary-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.rs-confirm-summary-label {
+    color: #64748b;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+.rs-confirm-summary-val {
+    color: #0f172a;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+.rs-confirm-next-steps {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.84rem;
+    color: #166534;
+    text-align: left;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+}
+.rs-confirm-next-steps svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+.rs-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+.rs-confirm-done-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2.25rem;
+    background: var(--color-maroon, #8b2500);
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.rs-confirm-done-btn:hover {
+    background: #6e1c00;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 37, 0, 0.25);
+}
+
 /* ============================================================
    Responsive Layout Breakpoints
    ============================================================ */
@@ -1388,6 +1507,7 @@ foreach ( $activity_categories as $cat ) {
                                 <button type="button" 
                                         class="rs-register-btn rs-trigger-reg-modal"
                                         data-activity="<?php echo esc_attr( $item['name'] ); ?>"
+                                        data-activity-id="<?php echo esc_attr( $item['id'] ); ?>"
                                         data-category="<?php echo esc_attr( $cat['title'] ); ?>">
                                     <span>Register Now</span> &rarr;
                                 </button>
@@ -1442,6 +1562,7 @@ foreach ( $activity_categories as $cat ) {
             <form id="rs-student-reg-form">
                 <?php wp_nonce_field( 'rs_activity_reg_nonce', 'rs_reg_nonce' ); ?>
                 <input type="hidden" name="activity_name" id="rs-reg-activity-input" value="">
+                <input type="hidden" name="activity_id" id="rs-reg-activity-id-input" value="">
 
                 <!-- Student Full Name -->
                 <div class="rs-reg-form-group">
@@ -1502,6 +1623,53 @@ foreach ( $activity_categories as $cat ) {
                 <!-- Feedback Message -->
                 <div class="rs-reg-feedback" id="rs-reg-feedback" role="alert"></div>
             </form>
+
+            <!-- Registration Confirmation Card (Shown when registration succeeds) -->
+            <div class="rs-reg-confirm-card" id="rs-reg-confirm-card" style="display: none;">
+                <div class="rs-confirm-icon-wrap">
+                    <svg viewBox="0 0 24 24" class="rs-confirm-check-svg" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2"/>
+                        <path d="M7.5 12l3 3 6-6"/>
+                    </svg>
+                </div>
+                <h3 class="rs-confirm-title">Registration Confirmed!</h3>
+                <p class="rs-confirm-greeting" id="rs-confirm-greeting">Namaste,</p>
+                <p class="rs-confirm-desc">Your seat has been reserved. Thank you for registering with Rashtrotthana Yoga!</p>
+
+                <div class="rs-confirm-summary-box">
+                    <div class="rs-confirm-summary-row">
+                        <span class="rs-confirm-summary-label">Program:</span>
+                        <span class="rs-confirm-summary-val" id="rs-conf-activity">Yoga Program</span>
+                    </div>
+                    <div class="rs-confirm-summary-row">
+                        <span class="rs-confirm-summary-label">Center:</span>
+                        <span class="rs-confirm-summary-val" id="rs-conf-center">Selected Center</span>
+                    </div>
+                    <div class="rs-confirm-summary-row">
+                        <span class="rs-confirm-summary-label">Batch Timing:</span>
+                        <span class="rs-confirm-summary-val" id="rs-conf-timing">Morning Regular</span>
+                    </div>
+                    <div class="rs-confirm-summary-row">
+                        <span class="rs-confirm-summary-label">Student:</span>
+                        <span class="rs-confirm-summary-val" id="rs-conf-student">-</span>
+                    </div>
+                    <div class="rs-confirm-summary-row" id="rs-conf-ref-row">
+                        <span class="rs-confirm-summary-label">Reference ID:</span>
+                        <span class="rs-confirm-summary-val" id="rs-conf-ref" style="color:#0369a1; font-family:monospace;">#RY-ACT</span>
+                    </div>
+                </div>
+
+                <div class="rs-confirm-next-steps">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <span>Our center coordinator will contact you shortly on your registered number to finalize your batch schedule and enrollment details.</span>
+                </div>
+
+                <div class="rs-confirm-actions">
+                    <button type="button" class="rs-confirm-done-btn" id="rs-reg-confirm-done-btn">Done / Close</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1951,15 +2119,25 @@ document.addEventListener('DOMContentLoaded', function () {
     var regActivityInput = document.getElementById('rs-reg-activity-input');
     var regFeedback = document.getElementById('rs-reg-feedback');
     var regSubmitBtn = document.getElementById('rs-reg-submit-btn');
+    var regConfirmCard = document.getElementById('rs-reg-confirm-card');
+    var regDoneBtn = document.getElementById('rs-reg-confirm-done-btn');
 
-    function openRegModal(activityTitle, categoryTitle) {
+    function openRegModal(activityTitle, categoryTitle, activityId) {
         regActivityDisplay.textContent = 'Enrolling in: ' + activityTitle + ' (' + categoryTitle + ')';
         regActivityInput.value = activityTitle;
+        var regActIdInput = document.getElementById('rs-reg-activity-id-input');
+        if (regActIdInput) regActIdInput.value = activityId || '';
         regFeedback.className = 'rs-reg-feedback';
         regFeedback.textContent = '';
         regFeedback.style.display = 'none';
-        regForm.reset();
+
+        if (regConfirmCard) regConfirmCard.style.display = 'none';
+        if (regForm) {
+            regForm.style.display = 'block';
+            regForm.reset();
+        }
         regActivityInput.value = activityTitle;
+        if (regActIdInput) regActIdInput.value = activityId || '';
         regModal.classList.add('is-open');
         regModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -1974,14 +2152,21 @@ document.addEventListener('DOMContentLoaded', function () {
         regModal.classList.remove('is-open');
         regModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        if (regConfirmCard) regConfirmCard.style.display = 'none';
+        if (regForm) regForm.style.display = 'block';
+    }
+
+    if (regDoneBtn) {
+        regDoneBtn.addEventListener('click', closeRegModal);
     }
 
     // Attach click listeners to all "Register Now" buttons
     document.querySelectorAll('.rs-trigger-reg-modal').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var activity = this.getAttribute('data-activity') || 'Yoga Program';
-            var category = this.getAttribute('data-category') || 'Rashtrotthana Yoga';
-            openRegModal(activity, category);
+            var activity   = this.getAttribute('data-activity') || 'Yoga Program';
+            var category   = this.getAttribute('data-category') || 'Rashtrotthana Yoga';
+            var activityId = this.getAttribute('data-activity-id') || '';
+            openRegModal(activity, category, activityId);
         });
     });
 
@@ -1999,6 +2184,14 @@ document.addEventListener('DOMContentLoaded', function () {
         regForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
+            var sName   = document.getElementById('reg_student_name').value.trim();
+            var sPhone  = document.getElementById('reg_student_phone').value.trim();
+            var sEmail  = document.getElementById('reg_student_email').value.trim();
+            var sAct    = document.getElementById('rs-reg-activity-input').value;
+            var sCenter = document.getElementById('reg_center_choice').value;
+            var sTiming = document.getElementById('reg_preferred_timing').value;
+            var sNotes  = document.getElementById('reg_student_notes').value;
+
             regSubmitBtn.disabled = true;
             regSubmitBtn.textContent = 'Submitting Registration...';
             regFeedback.className = 'rs-reg-feedback';
@@ -2007,13 +2200,15 @@ document.addEventListener('DOMContentLoaded', function () {
             var formData = new FormData();
             formData.append('action', 'rs_submit_activity_registration');
             formData.append('nonce', document.getElementById('rs_reg_nonce').value);
-            formData.append('student_name', document.getElementById('reg_student_name').value);
-            formData.append('student_phone', document.getElementById('reg_student_phone').value);
-            formData.append('student_email', document.getElementById('reg_student_email').value);
-            formData.append('activity_name', document.getElementById('rs-reg-activity-input').value);
-            formData.append('center_choice', document.getElementById('reg_center_choice').value);
-            formData.append('preferred_timing', document.getElementById('reg_preferred_timing').value);
-            formData.append('student_notes', document.getElementById('reg_student_notes').value);
+            formData.append('student_name', sName);
+            formData.append('student_phone', sPhone);
+            formData.append('student_email', sEmail);
+            formData.append('activity_name', sAct);
+            var actIdEl = document.getElementById('rs-reg-activity-id-input');
+            formData.append('activity_id', actIdEl ? actIdEl.value : '');
+            formData.append('center_choice', sCenter);
+            formData.append('preferred_timing', sTiming);
+            formData.append('student_notes', sNotes);
 
             var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
 
@@ -2027,14 +2222,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 regSubmitBtn.textContent = 'Submit Student Registration';
 
                 if (result.success) {
-                    regFeedback.className = 'rs-reg-feedback is-success';
-                    regFeedback.innerHTML = '<strong>Registration Submitted!</strong><br>' + result.data.message;
-                    regFeedback.style.display = 'block';
-                    regForm.reset();
+                    regForm.style.display = 'none';
+                    if (regConfirmCard) {
+                        var confGreet = document.getElementById('rs-confirm-greeting');
+                        if (confGreet) confGreet.textContent = 'Namaste, ' + (sName || 'Student') + '!';
+                        var confAct = document.getElementById('rs-conf-activity');
+                        if (confAct) confAct.textContent = sAct || 'Yoga Program';
+                        var confCen = document.getElementById('rs-conf-center');
+                        if (confCen) confCen.textContent = sCenter || 'Selected Center';
+                        var confTime = document.getElementById('rs-conf-timing');
+                        if (confTime) confTime.textContent = sTiming || 'Regular Batch';
+                        var confStud = document.getElementById('rs-conf-student');
+                        if (confStud) confStud.textContent = sName + (sPhone ? ' • ' + sPhone : '');
+                        var confRef = document.getElementById('rs-conf-ref');
+                        var refId = (result.data && (result.data.registration_id || result.data.inquiry_id)) ? (result.data.registration_id || result.data.inquiry_id) : '';
+                        if (confRef) confRef.textContent = refId ? '#RY-ACT-' + refId : '#RY-ACT';
 
-                    setTimeout(function () {
-                        closeRegModal();
-                    }, 4000);
+                        regConfirmCard.style.display = 'block';
+                    }
+                    regForm.reset();
                 } else {
                     regFeedback.className = 'rs-reg-feedback is-error';
                     regFeedback.textContent = (result.data && result.data.message) ? result.data.message : 'Registration error. Please check required fields.';

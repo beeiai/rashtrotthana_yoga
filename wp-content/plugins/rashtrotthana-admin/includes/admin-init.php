@@ -46,6 +46,30 @@ function radm_create_roles(): void {
             'upload_files'              => true,
         ] );
     }
+
+    // Dynamic Custom Roles registered by Super Admin
+    $custom_roles = get_option( 'radm_custom_roles', [] );
+    if ( is_array( $custom_roles ) ) {
+        foreach ( $custom_roles as $role_slug => $role_data ) {
+            if ( ! get_role( $role_slug ) ) {
+                $modules = $role_data['modules'] ?? [ 'dashboard' ];
+                $caps = [
+                    'read'         => true,
+                    'upload_files' => in_array( 'gallery', $modules, true ),
+                ];
+                if ( in_array( 'registrations', $modules, true ) || in_array( 'form-groups', $modules, true ) ) {
+                    $caps['manage_ry_registrations'] = true;
+                }
+                if ( in_array( 'pages', $modules, true ) ) {
+                    $caps['edit_posts'] = true;
+                    $caps['edit_pages'] = true;
+                    $caps['edit_others_posts'] = true;
+                    $caps['edit_others_pages'] = true;
+                }
+                add_role( $role_slug, $role_data['name'] ?? ucfirst( $role_slug ), $caps );
+            }
+        }
+    }
 }
 add_action( 'admin_init', 'radm_create_roles' );
 
@@ -70,7 +94,7 @@ function radm_register_menu(): void {
         [ 'radm-whatsapp',      'WhatsApp (WATI)',         'read',            'radm_page_whatsapp'      ],
         [ 'radm-pages',         'Content Pages',           'read',            'radm_page_pages'         ],
         [ 'radm-roles',         'Roles & Responsibilities','manage_options',  'radm_page_roles'         ],
-        [ 'radm-settings',      'Settings',                'manage_options',  'radm_page_settings'      ],
+        [ 'radm-settings',      'Settings',                'read',            'radm_page_settings'      ],
     ];
 
     foreach ( $pages as [ $slug, $title, $cap, $callback ] ) {

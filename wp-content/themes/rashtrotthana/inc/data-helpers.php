@@ -426,22 +426,34 @@ add_action( 'wp_ajax_nopriv_rs_submit_activity_registration', 'rs_handle_activit
 function rs_handle_activity_registration() {
     check_ajax_referer( 'rs_activity_reg_nonce', 'nonce' );
 
-    $name     = sanitize_text_field( $_POST['student_name'] ?? '' );
-    $phone    = sanitize_text_field( $_POST['student_phone'] ?? '' );
-    $email    = sanitize_email( $_POST['student_email'] ?? '' );
-    $activity = sanitize_text_field( $_POST['activity_name'] ?? '' );
-    $center   = sanitize_text_field( $_POST['center_choice'] ?? '' );
-    $timing   = sanitize_text_field( $_POST['preferred_timing'] ?? '' );
-    $notes    = sanitize_textarea_field( $_POST['student_notes'] ?? '' );
+    $name        = sanitize_text_field( $_POST['student_name'] ?? '' );
+    $phone       = sanitize_text_field( $_POST['student_phone'] ?? '' );
+    $email       = sanitize_email( $_POST['student_email'] ?? '' );
+    $activity    = sanitize_text_field( $_POST['activity_name'] ?? '' );
+    $activity_id = absint( $_POST['activity_id'] ?? 0 );
+    $center      = sanitize_text_field( $_POST['center_choice'] ?? '' );
+    $timing      = sanitize_text_field( $_POST['preferred_timing'] ?? '' );
+    $notes       = sanitize_textarea_field( $_POST['student_notes'] ?? '' );
 
     if ( empty( $name ) || empty( $phone ) || empty( $center ) ) {
         wp_send_json_error( array( 'message' => 'Please provide your Name, Phone Number, and select a Center.' ) );
     }
 
+    // Resolve activity ID if missing
+    if ( ! $activity_id && ! empty( $activity ) ) {
+        $act_post = get_page_by_title( $activity, OBJECT, 'activity' );
+        if ( ! $act_post ) {
+            $act_post = get_page_by_title( $activity, OBJECT, 'rs_activity' );
+        }
+        if ( $act_post ) {
+            $activity_id = $act_post->ID;
+        }
+    }
+
     $title = sprintf( 'Registration: %s (%s) - %s', $activity, $center, $name );
     $content = sprintf(
-        "Student Registration Details:\n\nName: %s\nPhone: %s\nEmail: %s\nActivity: %s\nCenter: %s\nPreferred Timing: %s\nNotes: %s\nSubmitted: %s",
-        $name, $phone, $email, $activity, $center, $timing, $notes, current_time( 'mysql' )
+        "Student Registration Details:\n\nName: %s\nPhone: %s\nEmail: %s\nActivity: %s\nActivity ID: %d\nCenter: %s\nPreferred Timing: %s\nNotes: %s\nSubmitted: %s",
+        $name, $phone, $email, $activity, $activity_id, $center, $timing, $notes, current_time( 'mysql' )
     );
 
     $inquiry_id = wp_insert_post( array(
@@ -456,19 +468,151 @@ function rs_handle_activity_registration() {
         update_post_meta( $inquiry_id, '_rs_student_phone', $phone );
         update_post_meta( $inquiry_id, '_rs_student_email', $email );
         update_post_meta( $inquiry_id, '_rs_activity', $activity );
+        if ( $activity_id ) {
+            update_post_meta( $inquiry_id, '_rs_activity_id', $activity_id );
+        }
         update_post_meta( $inquiry_id, '_rs_center', $center );
         update_post_meta( $inquiry_id, '_rs_timing', $timing );
+
+        // Also insert into ry_registrations table for unified portal visibility
+        global $wpdb;
+        $reg_table = $wpdb->prefix . 'ry_registrations';
+        $ans_table = $wpdb->prefix . 'ry_registration_answers';
+        $has_reg_table = $wpdb->get_var( "SHOW TABLES LIKE '{$reg_table}'" ) === $reg_table;
+        if ( $has_reg_table ) {
+            $wpdb->insert(
+                $reg_table,
+                array(
+                    'registration_uuid' => wp_generate_uuid4(),
+                    'form_id'           => 1,
+                    'activity_id'       => $activity_id,
+                    'event_id'          => 0,
+                    'name'              => $name,
+                    'email'             => $email,
+                    'phone'             => $phone,
+                    'status'            => 'pending',
+                    'language'          => 'en',
+                    'source'            => 'web',
+                    'submitted_at'      => current_time( 'mysql' ),
+                )
+            );
+            $reg_id = $wpdb->insert_id;
+            if ( $reg_id ) {
+                if ( ! empty( $center ) ) {
+                    $wpdb->insert( $ans_table, array(
+                        'registration_id' => $reg_id,
+                        'field_key'       => 'branch',
+                        'field_value'     => $center,
+                    ) );
+                }
+                if ( ! empty( $timing ) ) {
+                    $wpdb->insert( $ans_table, array(
+                        'registration_id' => $reg_id,
+                        'field_key'       => 'timing',
+                        'field_value'     => $timing,
+                    ) );
+                }
+            }
+        }
 
         wp_send_json_success( array(
             'message' => sprintf(
                 'Namaste %s! Your registration for "%s" at our %s Center has been successfully submitted. Our coordinator will contact you shortly.',
                 $name, $activity, $center
             ),
-            'inquiry_id' => $inquiry_id,
+            'registration_id' => $reg_id ?? 0,
+            'inquiry_id'      => $inquiry_id,
         ) );
     } else {
         wp_send_json_error( array( 'message' => 'Unable to save registration right now. Please try again or call your nearest center directly.' ) );
     }
+}
+
+// ── Event Registration AJAX Handler ───────────────────────────────────────────
+add_action( 'wp_ajax_rs_submit_event_registration', 'rs_handle_event_registration' );
+add_action( 'wp_ajax_nopriv_rs_submit_event_registration', 'rs_handle_event_registration' );
+
+function rs_handle_event_registration() {
+    check_ajax_referer( 'rs_event_reg_nonce', 'nonce' );
+
+    $event_id = absint( $_POST['event_id'] ?? 0 );
+    $name     = sanitize_text_field( $_POST['name'] ?? '' );
+    $phone    = sanitize_text_field( $_POST['phone'] ?? '' );
+    $email    = sanitize_email( $_POST['email'] ?? '' );
+    $center   = sanitize_text_field( $_POST['center'] ?? '' );
+
+    if ( empty( $name ) || empty( $phone ) || empty( $event_id ) ) {
+        wp_send_json_error( array( 'message' => 'Please provide your Full Name, Phone Number, and select an Event.' ) );
+    }
+
+    $event_post  = get_post( $event_id );
+    $event_title = $event_post ? $event_post->post_title : 'Special Event';
+
+    global $wpdb;
+    $reg_table = $wpdb->prefix . 'ry_registrations';
+    $ans_table = $wpdb->prefix . 'ry_registration_answers';
+    $has_reg_table = $wpdb->get_var( "SHOW TABLES LIKE '{$reg_table}'" ) === $reg_table;
+
+    $reg_id = 0;
+    if ( $has_reg_table ) {
+        $wpdb->insert(
+            $reg_table,
+            array(
+                'registration_uuid' => wp_generate_uuid4(),
+                'form_id'           => 1,
+                'activity_id'       => 0,
+                'event_id'          => $event_id,
+                'name'              => $name,
+                'email'             => $email,
+                'phone'             => $phone,
+                'status'            => 'pending',
+                'language'          => 'en',
+                'source'            => 'web',
+                'submitted_at'      => current_time( 'mysql' ),
+            )
+        );
+        $reg_id = $wpdb->insert_id;
+        if ( $reg_id && ! empty( $center ) ) {
+            $wpdb->insert( $ans_table, array(
+                'registration_id' => $reg_id,
+                'field_key'       => 'branch',
+                'field_value'     => $center,
+            ) );
+        }
+    }
+
+    // Also persist as rs_inquiry so it is visible in inquiries & unified search
+    $inquiry_title = sprintf( 'Event Registration: %s (%s) - %s', $event_title, $center ?: 'General', $name );
+    $content = sprintf(
+        "Event Registration Details:\n\nEvent: %s (ID: %d)\nName: %s\nPhone: %s\nEmail: %s\nPreferred Center / Branch: %s\nSubmitted: %s",
+        $event_title, $event_id, $name, $phone, $email, $center ?: 'General', current_time( 'mysql' )
+    );
+
+    $inquiry_id = wp_insert_post( array(
+        'post_title'   => $inquiry_title,
+        'post_content' => $content,
+        'post_status'  => 'publish',
+        'post_type'    => 'rs_inquiry',
+    ) );
+
+    if ( $inquiry_id && ! is_wp_error( $inquiry_id ) ) {
+        update_post_meta( $inquiry_id, '_rs_student_name', $name );
+        update_post_meta( $inquiry_id, '_rs_student_phone', $phone );
+        update_post_meta( $inquiry_id, '_rs_student_email', $email );
+        update_post_meta( $inquiry_id, '_rs_event_id', $event_id );
+        update_post_meta( $inquiry_id, '_rs_event_title', $event_title );
+        update_post_meta( $inquiry_id, '_rs_activity', 'Event: ' . $event_title );
+        update_post_meta( $inquiry_id, '_rs_center', $center );
+    }
+
+    wp_send_json_success( array(
+        'message' => sprintf(
+            'Namaste %s! Your registration for "%s" has been successfully received. Our coordinators will contact you soon.',
+            $name, $event_title
+        ),
+        'registration_id' => $reg_id,
+        'inquiry_id'      => $inquiry_id,
+    ) );
 }
 
 // ── Events ───────────────────────────────────────────────────────────────────

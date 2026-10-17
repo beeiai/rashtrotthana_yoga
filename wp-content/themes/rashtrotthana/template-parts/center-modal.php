@@ -199,11 +199,15 @@ $center_id         = ! empty( $center['id'] ) ? $center['id'] : sanitize_title( 
                 <div class="rs-center-modal-actions">
                     <?php 
                     $directions_url = ! empty( $center['map_url'] ) ? $center['map_url'] : ( 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( 'Rashtrotthana Yoga ' . ( $center['name'] ?? '' ) . ' ' . ( $center['address'] ?? '' ) ) );
+                    $enquire_url    = add_query_arg( array(
+                        'topic'  => 'center-inquiry',
+                        'center' => $center['name'] ?? '',
+                    ), home_url( '/contact-us/' ) );
                     ?>
                     <a href="<?php echo esc_url( $directions_url ); ?>" target="_blank" rel="noopener" class="rs-center-modal-directions-btn">
                         <span>Get Directions ↗</span>
                     </a>
-                    <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-center-modal-enquire-btn">
+                    <a href="<?php echo esc_url( $enquire_url ); ?>" class="rs-center-modal-enquire-btn">
                         <span>Enquire Now →</span>
                     </a>
                 </div>

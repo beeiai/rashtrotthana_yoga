@@ -151,6 +151,7 @@ $centers_query = new WP_Query( [
                     <th>Center Name</th>
                     <th>Zone &amp; Area</th>
                     <th>Contact Info</th>
+                    <th>Inquiries / Registrations</th>
                     <th>Directions Link</th>
                     <th>Status</th>
                     <th style="text-align:right;">Actions</th>
@@ -160,6 +161,7 @@ $centers_query = new WP_Query( [
                 <?php
                 if ( $centers_query->have_posts() ) :
                     $idx = 1;
+                    global $wpdb;
                     while ( $centers_query->have_posts() ) :
                         $centers_query->the_post();
                         $cid     = get_the_ID();
@@ -179,6 +181,29 @@ $centers_query = new WP_Query( [
                         $status  = get_post_status( $cid );
                         $status_label = $status === 'publish' ? 'Published' : 'Draft';
                         $status_class = $status === 'publish' ? 'radm-badge--green' : 'radm-badge--orange';
+
+                        $cen_inq_count = (int) $wpdb->get_var( $wpdb->prepare(
+                            "SELECT COUNT(DISTINCT p.ID) FROM {$wpdb->posts} p
+                             INNER JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID
+                             WHERE p.post_type = 'rs_inquiry'
+                               AND p.post_status != 'trash'
+                               AND pm.meta_key = '_rs_center'
+                               AND (pm.meta_value = %s OR pm.meta_value LIKE %s)",
+                            $title,
+                            '%' . $wpdb->esc_like( $title ) . '%'
+                        ) );
+                        $cen_reg_count = 0;
+                        $has_ans_table = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}ry_registration_answers'" );
+                        if ( $has_ans_table ) {
+                            $cen_reg_count = (int) $wpdb->get_var( $wpdb->prepare(
+                                "SELECT COUNT(DISTINCT a.registration_id) FROM {$wpdb->prefix}ry_registration_answers a
+                                 WHERE a.field_key IN ('branch','center','location')
+                                   AND (a.field_value = %s OR a.field_value LIKE %s)",
+                                $title,
+                                '%' . $wpdb->esc_like( $title ) . '%'
+                            ) );
+                        }
+                        $total_cen_count = max( $cen_inq_count, $cen_reg_count );
                 ?>
                 <tr class="radm-center-row"
                     data-title="<?php echo esc_attr( strtolower( $title ) ); ?>"
@@ -216,6 +241,14 @@ $centers_query = new WP_Query( [
                         <?php if ( $email ) : ?>
                             <div style="font-size:11.5px; color:var(--radm-text-muted);"><?php echo esc_html( $email ); ?></div>
                         <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries&center=' . urlencode( $title ) ) ); ?>"
+                           style="display:inline-flex; align-items:center; gap:5px; font-weight:600; font-size:12.5px; color:<?php echo $total_cen_count > 0 ? 'var(--radm-green)' : 'var(--radm-text-muted)'; ?>; text-decoration:none;"
+                           title="Click to view inquiries received for this center">
+                            <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:<?php echo $total_cen_count > 0 ? '#10b981' : '#cbd5e1'; ?>;"></span>
+                            <strong><?php echo esc_html( $total_cen_count ); ?></strong> inquiries &rarr;
+                        </a>
                     </td>
                     <td>
                         <?php if ( $map_url ) : ?>
@@ -297,7 +330,7 @@ $centers_query = new WP_Query( [
                 else :
                 ?>
                 <tr>
-                    <td colspan="8" style="text-align:center; padding:36px; color:var(--radm-text-muted);">
+                    <td colspan="9" style="text-align:center; padding:36px; color:var(--radm-text-muted);">
                         No centers found in database. Click <strong>+ Add New Center</strong> to create one.
                     </td>
                 </tr>
@@ -335,13 +368,18 @@ $categories = get_terms( [
                     <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
             </div>
-            <select id="radm-activity-cat-filter" class="radm-select" style="width:200px;">
+            <select id="radm-activity-cat-filter" class="radm-select" style="width:180px;">
                 <option value="">All Categories</option>
                 <?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
                     <?php foreach ( $categories as $cat ) : ?>
                         <option value="<?php echo esc_attr( $cat->slug ); ?>"><?php echo esc_html( $cat->name ); ?></option>
                     <?php endforeach; ?>
                 <?php endif; ?>
+            </select>
+            <select id="radm-activity-inq-filter" class="radm-select" style="width:165px;">
+                <option value="">All Inquiries</option>
+                <option value="has_inquiries">With Inquiries Only</option>
+                <option value="no_inquiries">Zero Inquiries</option>
             </select>
         </div>
         <div style="display:flex; align-items:center; gap:12px;">
@@ -396,16 +434,34 @@ $categories = get_terms( [
                         $status   = get_post_status( $aid );
 
                         global $wpdb;
+                        $act_slug  = get_post_field( 'post_name', $aid );
                         $inq_count = (int) $wpdb->get_var( $wpdb->prepare(
-                            "SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
-                             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
-                             WHERE pm.meta_key = '_rs_activity' AND pm.meta_value = %s AND p.post_status != 'trash'",
-                            $title
+                            "SELECT COUNT(DISTINCT p.ID) FROM {$wpdb->posts} p
+                             INNER JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID 
+                             WHERE p.post_type = 'rs_inquiry' AND p.post_status != 'trash'
+                               AND (
+                                   (pm.meta_key = '_rs_activity' AND (pm.meta_value = %s OR pm.meta_value = %s))
+                                   OR (pm.meta_key = '_rs_activity_id' AND pm.meta_value = %d)
+                               )",
+                            $title,
+                            $act_slug,
+                            $aid
                         ) );
+                        $has_reg_table = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}ry_registrations'" );
+                        $reg_count = 0;
+                        if ( $has_reg_table ) {
+                            $reg_count = (int) $wpdb->get_var( $wpdb->prepare(
+                                "SELECT COUNT(*) FROM {$wpdb->prefix}ry_registrations WHERE activity_id = %d AND status NOT IN ('cancelled','rejected')",
+                                $aid
+                            ) );
+                        }
+                        $total_inq = max( $inq_count, $reg_count );
                 ?>
                 <tr class="radm-activity-row"
                     data-title="<?php echo esc_attr( strtolower( $title ) ); ?>"
                     data-cat="<?php echo esc_attr( $cat_slug ); ?>"
+                    data-inquiries="<?php echo esc_attr( $total_inq ); ?>"
+                    style="<?php echo $total_inq > 0 ? 'background: #f0fdf4;' : ''; ?>"
                     id="activity-row-<?php echo esc_attr( $aid ); ?>">
                     <td style="color:var(--radm-text-muted); font-size:12px;"><?php echo esc_html( $idx++ ); ?></td>
                     <td>
@@ -446,8 +502,8 @@ $categories = get_terms( [
                                 <span class="reg-label"><?php echo $is_reg_open ? 'Open' : 'Closed'; ?></span>
                             </button>
                             <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-pages&section=activity-inquiries&activity=' . urlencode( $title ) ) ); ?>" 
-                               style="font-size:11.5px; color:var(--radm-green); font-weight:600; text-decoration:none;">
-                               <?php echo esc_html( $inq_count ); ?> inquiries &rarr;
+                               style="font-size:11.5px; color:<?php echo $total_inq > 0 ? '#047857' : 'var(--radm-text-muted)'; ?>; font-weight:<?php echo $total_inq > 0 ? '700' : '500'; ?>; text-decoration:none;">
+                               <?php echo esc_html( $total_inq ); ?> inquiries &rarr;
                             </a>
                         </div>
                     </td>
@@ -602,7 +658,7 @@ $event_query = new WP_Query( [
                         <span style="font-size:13px; color:var(--radm-text);"><?php echo esc_html( $venue ); ?></span>
                     </td>
                     <td>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-registrations&event_id=' . $eid ) ); ?>"
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=radm-registrations&radm_tab=users&event=' . $eid ) ); ?>"
                            style="display:inline-flex; align-items:center; gap:6px; font-weight:600; color:var(--radm-green); text-decoration:none;">
                             <strong><?php echo esc_html( $reg_cnt ); ?></strong> participants &rarr;
                         </a>
@@ -1039,24 +1095,47 @@ $filter_act = sanitize_text_field( $_GET['activity'] ?? '' );
 $filter_cen = sanitize_text_field( $_GET['center'] ?? '' );
 
 $act_meta_query = [
-    [
-        'key'     => '_rs_activity',
-        'value'   => '',
-        'compare' => '!=',
-    ],
+    'relation' => 'AND',
 ];
 if ( ! empty( $filter_act ) ) {
     $act_meta_query[] = [
-        'key'     => '_rs_activity',
-        'value'   => $filter_act,
-        'compare' => '=',
+        'relation' => 'OR',
+        [
+            'key'     => '_rs_activity',
+            'value'   => $filter_act,
+            'compare' => '=',
+        ],
+        [
+            'key'     => '_rs_activity',
+            'value'   => $filter_act,
+            'compare' => 'LIKE',
+        ],
+        [
+            'key'     => '_rs_event_title',
+            'value'   => $filter_act,
+            'compare' => 'LIKE',
+        ],
+    ];
+} else {
+    $act_meta_query[] = [
+        'relation' => 'OR',
+        [
+            'key'     => '_rs_activity',
+            'value'   => '',
+            'compare' => '!=',
+        ],
+        [
+            'key'     => '_rs_event_id',
+            'value'   => '',
+            'compare' => '!=',
+        ],
     ];
 }
 if ( ! empty( $filter_cen ) ) {
     $act_meta_query[] = [
         'key'     => '_rs_center',
         'value'   => $filter_cen,
-        'compare' => '=',
+        'compare' => 'LIKE',
     ];
 }
 
@@ -1142,7 +1221,7 @@ $act_inq_query = new WP_Query( [
                         $s_name  = get_post_meta( $aid, '_rs_student_name', true ) ?: ( get_post_meta( $aid, 'inquiry_name', true ) ?: get_the_title() );
                         $s_phone = get_post_meta( $aid, '_rs_student_phone', true ) ?: get_post_meta( $aid, 'inquiry_phone', true );
                         $s_email = get_post_meta( $aid, '_rs_student_email', true ) ?: get_post_meta( $aid, 'inquiry_email', true );
-                        $s_act   = get_post_meta( $aid, '_rs_activity', true );
+                        $s_act   = get_post_meta( $aid, '_rs_activity', true ) ?: ( get_post_meta( $aid, '_rs_event_title', true ) ?: 'Program Enrollment' );
                         $s_cen   = get_post_meta( $aid, '_rs_center', true ) ?: 'All Centers';
                         $s_time  = get_post_meta( $aid, '_rs_timing', true ) ?: 'Flexible';
                         $content = get_the_content();
@@ -1916,18 +1995,22 @@ $act_inq_query = new WP_Query( [
     // Search & Filter: Activities
     var aSearch = document.getElementById('radm-activity-search');
     var aCat    = document.getElementById('radm-activity-cat-filter');
-    if (aSearch || aCat) {
+    var aInq    = document.getElementById('radm-activity-inq-filter');
+    if (aSearch || aCat || aInq) {
         function filterActivities() {
             var q = (aSearch ? aSearch.value : '').toLowerCase().trim();
             var c = (aCat ? aCat.value : '');
+            var inqVal = (aInq ? aInq.value : '');
             var rows = document.querySelectorAll('.radm-activity-row');
             var visible = 0;
             rows.forEach(function(row) {
                 var title = row.getAttribute('data-title') || '';
                 var cat   = row.getAttribute('data-cat') || '';
+                var inqCnt = parseInt(row.getAttribute('data-inquiries') || '0', 10);
                 var matchText = !q || title.indexOf(q) !== -1;
                 var matchCat  = !c || cat === c;
-                if (matchText && matchCat) {
+                var matchInq  = !inqVal || (inqVal === 'has_inquiries' ? inqCnt > 0 : inqCnt === 0);
+                if (matchText && matchCat && matchInq) {
                     row.style.display = '';
                     visible++;
                 } else {
@@ -1939,6 +2022,7 @@ $act_inq_query = new WP_Query( [
         }
         if (aSearch) aSearch.addEventListener('input', filterActivities);
         if (aCat) aCat.addEventListener('change', filterActivities);
+        if (aInq) aInq.addEventListener('change', filterActivities);
     }
 
     // Search: News

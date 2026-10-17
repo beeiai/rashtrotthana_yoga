@@ -1220,13 +1220,11 @@ function radm_ajax_get_staff_users(): void {
     $all_centers = radm_get_all_centers();
     $users = get_users( [ 'orderby' => 'display_name', 'order' => 'ASC' ] );
 
-    $role_labels = [
-        'administrator'    => 'Super Admin',
-        'radm_admin'       => 'Admin (Content & Reg)',
-        'radm_gallery'     => 'Gallery Manager',
-        'radm_center_admin'=> 'Center Admin',
-        'subscriber'       => 'Subscriber',
-    ];
+    $all_roles   = radm_get_all_roles();
+    $role_labels = [];
+    foreach ( $all_roles as $rk => $rinfo ) {
+        $role_labels[ $rk ] = $rinfo['name'];
+    }
 
     $items = [];
     foreach ( $users as $u ) {
@@ -1248,7 +1246,7 @@ function radm_ajax_get_staff_users(): void {
             'name'            => $u->display_name ?: $u->user_login,
             'email'           => $u->user_email,
             'role'            => $role_key,
-            'role_label'      => $role_labels[ $role_key ] ?? ucfirst( $role_key ),
+            'role_label'      => $role_labels[ $role_key ] ?? ucfirst( str_replace( [ 'radm_', '_' ], [ '', ' ' ], $role_key ) ),
             'is_super_admin'  => ! empty( $perms['is_super_admin'] ),
             'modules'         => $perms['modules'] ?? [],
             'module_items'    => $mod_items,
@@ -1260,10 +1258,12 @@ function radm_ajax_get_staff_users(): void {
     }
 
     wp_send_json_success( [
-        'users'       => $items,
-        'all_modules' => $all_modules,
-        'all_centers' => $all_centers,
-        'roles'       => $role_labels,
+        'users'        => $items,
+        'all_modules'  => $all_modules,
+        'all_centers'  => $all_centers,
+        'roles'        => $role_labels,
+        'all_roles'    => $all_roles,
+        'custom_roles' => get_option( 'radm_custom_roles', [] ),
     ] );
 }
 
@@ -1373,21 +1373,30 @@ function radm_ajax_create_staff_user(): void {
     $role     = sanitize_text_field( $_POST['role'] ?? 'radm_admin' );
 
     if ( ! $name || ! $email ) {
-        wp_send_json_error( [ 'message' => 'Name and Email are required.' ], 400 );
+        wp_send_json_error( [ 'message' => 'Full Name and Email Address are compulsory.' ], 400 );
+    }
+    if ( ! is_email( $email ) ) {
+        wp_send_json_error( [ 'message' => 'Please provide a valid email address.' ], 400 );
     }
     if ( email_exists( $email ) ) {
         wp_send_json_error( [ 'message' => 'A user with this email address already exists.' ], 400 );
     }
 
-    if ( ! $username ) {
-        $username = sanitize_user( current( explode( '@', $email ) ) );
-        if ( username_exists( $username ) ) {
-            $username .= '_' . wp_rand( 100, 999 );
-        }
+    if ( empty( $username ) ) {
+        wp_send_json_error( [ 'message' => 'Username is compulsory. Please provide a username.' ], 400 );
+    }
+    if ( ! validate_username( $username ) ) {
+        wp_send_json_error( [ 'message' => 'Username contains invalid characters. Use letters, numbers, hyphens, and underscores only.' ], 400 );
+    }
+    if ( username_exists( $username ) ) {
+        wp_send_json_error( [ 'message' => "The username '{$username}' is already taken. Please choose another." ], 400 );
     }
 
-    if ( ! $password ) {
-        $password = wp_generate_password( 12, false );
+    if ( empty( $password ) ) {
+        wp_send_json_error( [ 'message' => 'Password is compulsory. Please provide a secure password.' ], 400 );
+    }
+    if ( strlen( $password ) < 6 ) {
+        wp_send_json_error( [ 'message' => 'Password must be at least 6 characters long.' ], 400 );
     }
 
     $user_id = wp_create_user( $username, $password, $email );
@@ -1467,6 +1476,254 @@ function radm_ajax_delete_staff_user(): void {
 }
 
 /**
+ * Super Admin Reset Password for any Staff User
+ */
+add_action( 'wp_ajax_radm_admin_reset_user_password', 'radm_ajax_admin_reset_user_password' );
+function radm_ajax_admin_reset_user_password(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $target_user_id = absint( $_POST['user_id'] ?? 0 );
+    $new_pass       = $_POST['new_password'] ?? '';
+    $confirm_pass   = $_POST['confirm_password'] ?? '';
+
+    if ( ! $target_user_id ) {
+        wp_send_json_error( [ 'message' => 'Invalid user ID.' ], 400 );
+    }
+
+    $target_user = get_userdata( $target_user_id );
+    if ( ! $target_user ) {
+        wp_send_json_error( [ 'message' => 'User not found.' ], 404 );
+    }
+
+    if ( empty( $new_pass ) || empty( $confirm_pass ) ) {
+        wp_send_json_error( [ 'message' => 'New password and confirmation are compulsory.' ], 400 );
+    }
+
+    if ( strlen( $new_pass ) < 6 ) {
+        wp_send_json_error( [ 'message' => 'Password must be at least 6 characters long.' ], 400 );
+    }
+
+    if ( $new_pass !== $confirm_pass ) {
+        wp_send_json_error( [ 'message' => 'New password and confirmation do not match.' ], 400 );
+    }
+
+    wp_set_password( $new_pass, $target_user_id );
+
+    // Invalidate stale sessions for target user so they must log in with new credentials
+    if ( class_exists( 'WP_Session_Tokens' ) ) {
+        $sessions = WP_Session_Tokens::get_instance( $target_user_id );
+        $sessions->destroy_all();
+    }
+
+    // If Super Admin reset their own password, refresh auth cookie to keep active session
+    if ( $target_user_id === get_current_user_id() ) {
+        wp_set_current_user( $target_user_id );
+        wp_set_auth_cookie( $target_user_id, true );
+    }
+
+    wp_send_json_success( [
+        'message' => 'Password for ' . esc_html( $target_user->display_name ?: $target_user->user_login ) . ' has been reset successfully!',
+    ] );
+}
+
+/**
+ * Self-Service Change Password for logged-in user (Settings page)
+ */
+add_action( 'wp_ajax_radm_change_own_password', 'radm_ajax_change_own_password' );
+function radm_ajax_change_own_password(): void {
+    radm_ajax_auth();
+    $user_id = get_current_user_id();
+    if ( ! $user_id ) {
+        wp_send_json_error( [ 'message' => 'You must be logged in to change your password.' ], 401 );
+    }
+
+    $current_pass = $_POST['current_password'] ?? '';
+    $new_pass     = $_POST['new_password'] ?? '';
+    $confirm_pass = $_POST['confirm_password'] ?? '';
+
+    if ( empty( $current_pass ) || empty( $new_pass ) || empty( $confirm_pass ) ) {
+        wp_send_json_error( [ 'message' => 'All password fields are compulsory.' ], 400 );
+    }
+
+    $user = get_userdata( $user_id );
+    if ( ! $user || ! wp_check_password( $current_pass, $user->user_pass, $user_id ) ) {
+        wp_send_json_error( [ 'message' => 'The current password you entered is incorrect.' ], 400 );
+    }
+
+    if ( strlen( $new_pass ) < 6 ) {
+        wp_send_json_error( [ 'message' => 'New password must be at least 6 characters long.' ], 400 );
+    }
+
+    if ( $new_pass !== $confirm_pass ) {
+        wp_send_json_error( [ 'message' => 'New password and confirmation do not match.' ], 400 );
+    }
+
+    wp_set_password( $new_pass, $user_id );
+
+    // Keep the current user logged in smoothly
+    wp_set_current_user( $user_id );
+    wp_set_auth_cookie( $user_id, true );
+
+    wp_send_json_success( [
+        'message' => 'Your password has been changed successfully! Your session remains active.',
+    ] );
+}
+
+/**
+ * Create Custom Role with attached access rights & optional center scope
+ */
+add_action( 'wp_ajax_radm_create_custom_role', 'radm_ajax_create_custom_role' );
+function radm_ajax_create_custom_role(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $role_name = sanitize_text_field( $_POST['role_name'] ?? '' );
+    $role_slug = sanitize_key( $_POST['role_slug'] ?? '' );
+
+    if ( empty( $role_name ) ) {
+        wp_send_json_error( [ 'message' => 'Role name is compulsory.' ], 400 );
+    }
+
+    if ( empty( $role_slug ) ) {
+        $clean_slug = sanitize_title( str_replace( ' ', '_', strtolower( $role_name ) ) );
+        $role_slug  = 'radm_' . $clean_slug;
+    } else {
+        if ( strpos( $role_slug, 'radm_' ) !== 0 ) {
+            $role_slug = 'radm_' . $role_slug;
+        }
+    }
+
+    // Ensure role does not collide with existing or reserved roles
+    $reserved = [ 'administrator', 'editor', 'author', 'contributor', 'subscriber' ];
+    if ( in_array( $role_slug, $reserved, true ) || get_role( $role_slug ) ) {
+        wp_send_json_error( [ 'message' => "Role key '{$role_slug}' already exists. Please choose a different name or slug." ], 400 );
+    }
+
+    // Parse attached module access rights
+    $raw_modules = $_POST['modules'] ?? [];
+    if ( is_string( $raw_modules ) ) {
+        $raw_modules = json_decode( stripslashes( $raw_modules ), true ) ?: [];
+    }
+    $valid_keys = array_keys( radm_get_all_modules() );
+    $modules = array_values( array_intersect( (array) $raw_modules, $valid_keys ) );
+    if ( ! in_array( 'dashboard', $modules, true ) ) {
+        array_unshift( $modules, 'dashboard' );
+    }
+
+    // Parse center restriction
+    $restrict_center = ! empty( $_POST['restrict_center'] );
+    $raw_centers = $_POST['centers'] ?? [];
+    if ( is_string( $raw_centers ) ) {
+        $raw_centers = json_decode( stripslashes( $raw_centers ), true ) ?: [];
+    }
+    $centers = array_map( 'sanitize_text_field', (array) $raw_centers );
+
+    // Capabilities based on attached modules
+    $caps = [
+        'read'         => true,
+        'upload_files' => in_array( 'gallery', $modules, true ),
+    ];
+    if ( in_array( 'registrations', $modules, true ) || in_array( 'form-groups', $modules, true ) ) {
+        $caps['manage_ry_registrations'] = true;
+    }
+    if ( in_array( 'pages', $modules, true ) ) {
+        $caps['edit_posts'] = true;
+        $caps['edit_pages'] = true;
+        $caps['edit_others_posts'] = true;
+        $caps['edit_others_pages'] = true;
+    }
+
+    // Register with WordPress
+    $added = add_role( $role_slug, $role_name, $caps );
+    if ( ! $added ) {
+        wp_send_json_error( [ 'message' => 'Failed to create WordPress role.' ], 500 );
+    }
+
+    // Persist in radm_custom_roles option
+    $custom_roles = get_option( 'radm_custom_roles', [] );
+    if ( ! is_array( $custom_roles ) ) { $custom_roles = []; }
+    $custom_roles[ $role_slug ] = [
+        'key'             => $role_slug,
+        'name'            => $role_name,
+        'modules'         => $modules,
+        'restrict_center' => $restrict_center,
+        'centers'         => $centers,
+        'created_at'      => current_time( 'mysql' ),
+    ];
+    update_option( 'radm_custom_roles', $custom_roles );
+
+    // Also persist in radm_role_permissions
+    $role_perms = get_option( 'radm_role_permissions', [] );
+    if ( ! is_array( $role_perms ) ) { $role_perms = []; }
+    $role_perms[ $role_slug ] = [
+        'modules'         => $modules,
+        'restrict_center' => $restrict_center,
+        'centers'         => $centers,
+    ];
+    update_option( 'radm_role_permissions', $role_perms );
+
+    wp_send_json_success( [
+        'message' => "Custom role '{$role_name}' created successfully with " . count( $modules ) . ' module access rights!',
+        'role'    => [
+            'key'             => $role_slug,
+            'name'            => $role_name,
+            'modules'         => $modules,
+            'restrict_center' => $restrict_center,
+            'centers'         => $centers,
+        ],
+    ] );
+}
+
+/**
+ * Delete Custom Role
+ */
+add_action( 'wp_ajax_radm_delete_custom_role', 'radm_ajax_delete_custom_role' );
+function radm_ajax_delete_custom_role(): void {
+    radm_ajax_auth();
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( [ 'message' => 'Super Admin permission required.' ], 403 );
+    }
+
+    $role_slug = sanitize_key( $_POST['role_slug'] ?? '' );
+    $built_in = [ 'administrator', 'radm_admin', 'radm_gallery', 'radm_center_admin', 'subscriber', 'editor', 'author', 'contributor' ];
+    if ( in_array( $role_slug, $built_in, true ) ) {
+        wp_send_json_error( [ 'message' => 'Default system roles cannot be deleted.' ], 400 );
+    }
+
+    // Reassign existing users with this role to subscriber
+    $users_with_role = get_users( [ 'role' => $role_slug ] );
+    foreach ( $users_with_role as $u ) {
+        $u->set_role( 'subscriber' );
+    }
+
+    // Remove from WordPress
+    remove_role( $role_slug );
+
+    // Remove from custom roles option & role permissions
+    $custom_roles = get_option( 'radm_custom_roles', [] );
+    if ( isset( $custom_roles[ $role_slug ] ) ) {
+        unset( $custom_roles[ $role_slug ] );
+        update_option( 'radm_custom_roles', $custom_roles );
+    }
+
+    $role_perms = get_option( 'radm_role_permissions', [] );
+    if ( isset( $role_perms[ $role_slug ] ) ) {
+        unset( $role_perms[ $role_slug ] );
+        update_option( 'radm_role_permissions', $role_perms );
+    }
+
+    wp_send_json_success( [
+        'message' => "Custom role '{$role_slug}' deleted successfully.",
+        'role_slug' => $role_slug,
+    ] );
+}
+
+/**
  * Save Organization Settings (Name, Logo, Contact Email)
  */
 add_action( 'wp_ajax_radm_save_org_settings', 'radm_ajax_save_org_settings' );
@@ -1538,36 +1795,36 @@ function radm_ajax_save_center(): void {
         wp_send_json_error( [ 'message' => 'Center name is required.' ], 400 );
     }
 
-    $centers = radm_get_centers_list();
-    $is_edit = false;
+    $cpt_status = ( $status === 'active' ) ? 'publish' : 'draft';
 
-    if ( ! empty( $center_id ) ) {
-        foreach ( $centers as &$c ) {
-            if ( $c['id'] === $center_id ) {
-                $c['name']     = $name;
-                $c['location'] = $location;
-                $c['status']   = in_array( $status, [ 'active', 'inactive' ], true ) ? $status : 'active';
-                $is_edit = true;
-                break;
-            }
+    if ( ! empty( $center_id ) && is_numeric( $center_id ) ) {
+        // Update existing rs_center post in WordPress
+        wp_update_post( [
+            'ID'          => (int) $center_id,
+            'post_title'  => $name,
+            'post_status' => $cpt_status,
+        ] );
+        update_post_meta( (int) $center_id, 'area', $location );
+    } else {
+        // Create new rs_center post in WordPress
+        $new_id = wp_insert_post( [
+            'post_type'   => 'rs_center',
+            'post_title'  => $name,
+            'post_status' => $cpt_status,
+        ] );
+        if ( $new_id && ! is_wp_error( $new_id ) ) {
+            update_post_meta( $new_id, 'area', $location );
+            $center_id = (string) $new_id;
+        } else {
+            $center_id = 'center-' . uniqid();
         }
-        unset( $c );
     }
 
-    if ( ! $is_edit ) {
-        $center_id = 'center-' . uniqid();
-        $centers[] = [
-            'id'       => $center_id,
-            'name'     => $name,
-            'location' => $location ?: 'Bangalore',
-            'status'   => in_array( $status, [ 'active', 'inactive' ], true ) ? $status : 'active',
-        ];
-    }
-
+    $centers = radm_get_centers_list();
     update_option( 'radm_centers_list', $centers );
 
     wp_send_json_success( [
-        'message' => $is_edit ? 'Center updated successfully!' : 'New center added successfully!',
+        'message' => ! empty( $_POST['center_id'] ) ? 'Center updated successfully!' : 'New center added successfully!',
         'center'  => [
             'id'       => $center_id,
             'name'     => $name,
@@ -1593,13 +1850,22 @@ function radm_ajax_delete_center(): void {
         wp_send_json_error( [ 'message' => 'Invalid center ID.' ], 400 );
     }
 
+    $deleted_name = '';
+    if ( is_numeric( $center_id ) ) {
+        $p = get_post( (int) $center_id );
+        if ( $p ) {
+            $deleted_name = $p->post_title;
+            wp_trash_post( (int) $center_id );
+        }
+    }
+
     $centers = radm_get_centers_list();
     $new_centers = [];
-    $deleted_name = '';
-
     foreach ( $centers as $c ) {
-        if ( $c['id'] === $center_id ) {
-            $deleted_name = $c['name'];
+        if ( (string) $c['id'] === (string) $center_id ) {
+            if ( ! $deleted_name ) {
+                $deleted_name = $c['name'];
+            }
         } else {
             $new_centers[] = $c;
         }
@@ -1629,11 +1895,23 @@ function radm_ajax_delete_center(): void {
 add_action('wp_ajax_radm_submit_contact', 'radm_ajax_submit_contact');
 add_action('wp_ajax_nopriv_radm_submit_contact', 'radm_ajax_submit_contact');
 function radm_ajax_submit_contact(): void {
+    if ( isset( $_POST['radm_contact_nonce'] ) ) {
+        wp_verify_nonce( sanitize_text_field( $_POST['radm_contact_nonce'] ), 'radm_contact_nonce' );
+    }
+
     $name    = sanitize_text_field( $_POST['name'] ?? '' );
     $email   = sanitize_email( $_POST['email'] ?? '' );
     $phone   = sanitize_text_field( $_POST['phone'] ?? '' );
+    $topic   = sanitize_text_field( $_POST['topic'] ?? '' );
     $subject = sanitize_text_field( $_POST['subject'] ?? '' );
     $message = sanitize_textarea_field( $_POST['message'] ?? '' );
+    $center  = sanitize_text_field( $_POST['center'] ?? '' );
+
+    if ( empty( $center ) && ! empty( $subject ) ) {
+        if ( preg_match( '/Enquiry for (.+)$/i', $subject, $m ) ) {
+            $center = trim( $m[1] );
+        }
+    }
 
     if ( ! $name || ! $email || ! $message ) {
         wp_send_json_error( [ 'message' => 'Please fill all required fields.' ], 400 );
@@ -1645,46 +1923,54 @@ function radm_ajax_submit_contact(): void {
     }
 
     $email_subject = "New Contact Form Submission: " . ($subject ? $subject : 'General Inquiry');
-    $email_body    = "You have received a new message from the contact form.
-
-";
-    $email_body   .= "Name: $name
-";
-    $email_body   .= "Email: $email
-";
-    $email_body   .= "Phone: $phone
-";
-    $email_body   .= "Subject: $subject
-
-";
-    $email_body   .= "Message:
-$message
-";
+    $email_body    = "You have received a new message from the contact form.\n\n";
+    $email_body   .= "Name: $name\n";
+    $email_body   .= "Email: $email\n";
+    $email_body   .= "Phone: $phone\n";
+    if ( $center ) {
+        $email_body .= "Center: $center\n";
+    }
+    if ( $topic ) {
+        $email_body .= "Topic: $topic\n";
+    }
+    $email_body   .= "Subject: $subject\n\n";
+    $email_body   .= "Message:\n$message\n";
 
     $headers = [ 'Reply-To: ' . $name . ' <' . $email . '>' ];
 
     // Insert into database as rs_inquiry post type
     $post_id = wp_insert_post([
-        'post_title'   => sanitize_text_field($name . ' - ' . $subject),
+        'post_title'   => sanitize_text_field($name . ' - ' . ($subject ?: 'Contact Inquiry')),
         'post_content' => "Name: " . sanitize_text_field($name) . "\n" .
                           "Email: " . sanitize_email($email) . "\n" .
                           "Phone: " . sanitize_text_field($phone) . "\n" .
+                          ($center ? "Center: " . sanitize_text_field($center) . "\n" : "") .
+                          ($topic ? "Topic: " . sanitize_text_field($topic) . "\n" : "") .
                           "Subject: " . sanitize_text_field($subject) . "\n\n" .
                           "Message:\n" . sanitize_textarea_field($message),
         'post_status'  => 'publish',
         'post_type'    => 'rs_inquiry',
         'meta_input'   => [
-            'inquiry_name'    => sanitize_text_field($name),
-            'inquiry_email'   => sanitize_email($email),
-            'inquiry_phone'   => sanitize_text_field($phone),
-            'inquiry_subject' => sanitize_text_field($subject),
+            'inquiry_name'      => sanitize_text_field($name),
+            'inquiry_email'     => sanitize_email($email),
+            'inquiry_phone'     => sanitize_text_field($phone),
+            'inquiry_subject'   => sanitize_text_field($subject),
+            'inquiry_topic'     => sanitize_text_field($topic),
+            'inquiry_center'    => sanitize_text_field($center),
+            '_rs_student_name'  => sanitize_text_field($name),
+            '_rs_student_email' => sanitize_email($email),
+            '_rs_student_phone' => sanitize_text_field($phone),
+            '_rs_topic'         => sanitize_text_field($topic),
+            '_rs_subject'       => sanitize_text_field($subject),
+            '_rs_center'        => sanitize_text_field($center),
+            '_rs_activity'      => '',
         ]
     ]);
 
     $sent = wp_mail( $admin_email, $email_subject, $email_body, $headers );
 
     if ( $post_id || $sent ) {
-        wp_send_json_success( [ 'message' => 'Thank you for reaching out. We will get back to you soon.' ] );
+        wp_send_json_success( [ 'message' => 'Thank you for reaching out. We will get back to you soon.', 'inquiry_id' => $post_id ] );
     } else {
         wp_send_json_error( [ 'message' => 'Failed to send message. Please try again later.' ], 500 );
     }

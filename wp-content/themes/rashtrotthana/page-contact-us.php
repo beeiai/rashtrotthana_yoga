@@ -1333,7 +1333,20 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
                         <p>Fill out the form below with your requirements and our counseling team will get in touch with you shortly.</p>
                     </div>
 
+                    <?php
+                    $preset_topic   = isset( $_GET['topic'] ) ? sanitize_text_field( wp_unslash( $_GET['topic'] ) ) : '';
+                    $preset_center  = isset( $_GET['center'] ) ? sanitize_text_field( wp_unslash( $_GET['center'] ) ) : '';
+                    $preset_subject = '';
+                    if ( ! empty( $preset_center ) ) {
+                        $preset_subject = 'Enquiry for ' . $preset_center;
+                        if ( empty( $preset_topic ) ) {
+                            $preset_topic = 'center-inquiry';
+                        }
+                    }
+                    ?>
                     <form class="rs-contact-interactive-form" id="rs-contact-main-form" action="#" method="post">
+                        <?php wp_nonce_field( 'radm_contact_nonce', 'radm_contact_nonce' ); ?>
+                        <input type="hidden" id="contact-center" name="center" value="<?php echo esc_attr( $preset_center ); ?>">
                         <!-- Full Name -->
                         <div class="rs-form-field-wrap">
                             <label for="contact-name">Full Name <span class="req">*</span></label>
@@ -1356,21 +1369,21 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
                         <div class="rs-form-field-wrap">
                             <label for="contact-topic">Inquiry Topic <span class="req">*</span></label>
                             <select id="contact-topic" name="topic" class="rs-contact-select" required>
-                                <option value="" selected disabled>Select a topic...</option>
-                                <option value="general-classes">Regular Yoga &amp; Pranayama Classes</option>
-                                <option value="center-inquiry">Bengaluru Center Batch Enquiry</option>
-                                <option value="yoga-therapy">Yoga Therapy &amp; Holistic Healing</option>
-                                <option value="online-classes">Online Live Zoom Batches</option>
-                                <option value="children-seniors">Children &amp; Senior Citizen Yoga</option>
-                                <option value="events-workshops">Upcoming Events &amp; Workshops</option>
-                                <option value="other">Other Suggestions / Feedback</option>
+                                <option value="" <?php echo empty( $preset_topic ) ? 'selected' : ''; ?> disabled>Select a topic...</option>
+                                <option value="general-classes" <?php selected( $preset_topic, 'general-classes' ); ?>>Regular Yoga &amp; Pranayama Classes</option>
+                                <option value="center-inquiry" <?php selected( $preset_topic, 'center-inquiry' ); ?>>Bengaluru Center Batch Enquiry</option>
+                                <option value="yoga-therapy" <?php selected( $preset_topic, 'yoga-therapy' ); ?>>Yoga Therapy &amp; Holistic Healing</option>
+                                <option value="online-classes" <?php selected( $preset_topic, 'online-classes' ); ?>>Online Live Zoom Batches</option>
+                                <option value="children-seniors" <?php selected( $preset_topic, 'children-seniors' ); ?>>Children &amp; Senior Citizen Yoga</option>
+                                <option value="events-workshops" <?php selected( $preset_topic, 'events-workshops' ); ?>>Upcoming Events &amp; Workshops</option>
+                                <option value="other" <?php selected( $preset_topic, 'other' ); ?>>Other Suggestions / Feedback</option>
                             </select>
                         </div>
 
                         <!-- Subject -->
                         <div class="rs-form-field-wrap rs-form-group-wide">
                             <label for="contact-subject">Subject <span class="req">*</span></label>
-                            <input type="text" id="contact-subject" name="subject" class="rs-contact-input" placeholder="e.g. Morning batch availability at Jayanagar" required minlength="3" maxlength="120">
+                            <input type="text" id="contact-subject" name="subject" class="rs-contact-input" placeholder="e.g. Morning batch availability at Jayanagar" value="<?php echo esc_attr( $preset_subject ); ?>" required minlength="3" maxlength="120">
                         </div>
 
                         <!-- Message Body -->
@@ -1389,13 +1402,29 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
                         </div>
                     </form>
 
-                    <!-- Success Feedback Alert (Hidden by default, shown only after submit) -->
-                    <div class="rs-form-alert is-success" id="rs-contact-success-alert" role="alert" style="display: none;">
-                        <svg style="width: 24px; height: 24px; stroke: #2b5717; stroke-width: 2.2; fill: none; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        <div>
-                            <strong>Thank you for reaching out!</strong>
-                            <span>Your message has been received. Our counselors will review your request and get back to you within 24 working hours.</span>
+                    <!-- Success Confirmation Banner (Hidden by default, shown only after submit) -->
+                    <div class="rs-form-alert is-success" id="rs-contact-success-alert" role="alert" style="display: none; padding: 1.25rem 1.5rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; margin-top: 1.5rem;">
+                        <div style="display:flex; align-items:flex-start; gap:14px;">
+                            <div style="width:38px; height:38px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg style="width: 22px; height: 22px; stroke: #15803d; stroke-width: 2.5; fill: none;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <div style="flex:1;">
+                                <h4 style="margin:0 0 4px; font-size:1.08rem; color:#14532d; font-weight:700;" id="rs-contact-conf-title">Message Received &amp; Confirmed!</h4>
+                                <p style="margin:0 0 8px; color:#166534; font-size:0.92rem; line-height:1.45;" id="rs-contact-conf-msg">
+                                    Thank you! Your inquiry has been successfully received by our counseling team.
+                                </p>
+                                <div style="display:inline-block; font-size:0.82rem; font-family:monospace; background:#dcfce7; color:#166534; padding:3px 10px; border-radius:6px; font-weight:600;" id="rs-contact-conf-ref">
+                                    Ref: #RY-INQ
+                                </div>
+                                <p style="margin:8px 0 0; font-size:0.84rem; color:#15803d; font-style:italic;">
+                                    Our counselors will review your message and contact you within 24 working hours.
+                                </p>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="rs-form-alert is-error" id="rs-contact-error-alert" role="alert" style="display: none; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; margin-top: 1rem;">
+                        <span id="rs-contact-error-text">Failed to send message. Please try again.</span>
                     </div>
                 </div>
 
@@ -1545,9 +1574,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================================
     // 2. CONTACT FORM SUBMISSION & USER FEEDBACK
     // ============================================================
-    var contactForm = document.getElementById('rs-contact-main-form');
+    var contactForm  = document.getElementById('rs-contact-main-form');
     var successAlert = document.getElementById('rs-contact-success-alert');
-    var submitBtn = document.getElementById('rs-contact-submit-btn');
+    var errorAlert   = document.getElementById('rs-contact-error-alert');
+    var errorText    = document.getElementById('rs-contact-error-text');
+    var submitBtn    = document.getElementById('rs-contact-submit-btn');
 
     if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
@@ -1558,27 +1589,86 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
+            if (errorAlert) errorAlert.style.display = 'none';
+            if (successAlert) {
+                successAlert.style.display = 'none';
+                successAlert.classList.remove('is-visible');
+            }
+
             var originalBtnHtml = submitBtn.innerHTML;
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Sending Message...</span>';
 
-            setTimeout(function () {
-                contactForm.reset();
+            var formData = new FormData(contactForm);
+            formData.append('action', 'radm_submit_contact');
+
+            var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+
+            fetch(ajaxUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (result) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnHtml;
 
-                if (successAlert) {
-                    successAlert.style.display = 'flex';
-                    successAlert.classList.add('is-visible');
-                    successAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                    setTimeout(function () {
-                        successAlert.style.display = 'none';
-                        successAlert.classList.remove('is-visible');
-                    }, 8000);
+                if (result.success) {
+                    var inqName = (formData.get('name') || '').trim();
+                    var inqId = result.data && result.data.inquiry_id ? result.data.inquiry_id : '';
+                    contactForm.reset();
+                    if (successAlert) {
+                        var confTitle = document.getElementById('rs-contact-conf-title');
+                        var confRef = document.getElementById('rs-contact-conf-ref');
+                        if (confTitle && inqName) confTitle.textContent = 'Namaste ' + inqName + ', Message Confirmed!';
+                        if (confRef) confRef.textContent = inqId ? 'Ref: #RY-INQ-' + inqId : 'Ref: #RY-INQ';
+                        successAlert.style.display = 'block';
+                        successAlert.classList.add('is-visible');
+                        successAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                } else {
+                    if (errorAlert) {
+                        if (errorText) {
+                            errorText.textContent = (result.data && result.data.message) ? result.data.message : 'Failed to send message. Please try again.';
+                        }
+                        errorAlert.style.display = 'block';
+                    }
                 }
-            }, 900);
+            })
+            .catch(function (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+                if (errorAlert) {
+                    if (errorText) errorText.textContent = 'Network or server error. Please try again later.';
+                    errorAlert.style.display = 'block';
+                }
+            });
         });
+
+        // Check URL parameters to pre-fill inquiry topic or center if navigated client-side
+        var cParams = new URLSearchParams(window.location.search);
+        var pTopic  = cParams.get('topic');
+        var pCenter = cParams.get('center');
+        if (pTopic || pCenter) {
+            var topicEl   = document.getElementById('contact-topic');
+            var subjEl    = document.getElementById('contact-subject');
+            var centerEl  = document.getElementById('contact-center');
+            if (pTopic && topicEl) {
+                topicEl.value = pTopic;
+            }
+            if (pCenter) {
+                if (centerEl) centerEl.value = pCenter;
+                if (subjEl && !subjEl.value) {
+                    subjEl.value = 'Enquiry for ' + pCenter;
+                }
+            }
+            var formCard = document.querySelector('.rs-contact-form-card');
+            if (formCard) {
+                setTimeout(function() {
+                    formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 200);
+            }
+        }
     }
 
     // ============================================================

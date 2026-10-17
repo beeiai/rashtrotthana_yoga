@@ -4,6 +4,7 @@
  * Template for displaying Events & News with matching Home/Activities/Centers design system.
  */
 get_header();
+$all_event_centers = function_exists( 'rs_get_centers' ) ? rs_get_centers() : [];
 ?>
 
 <!-- ============================================================
@@ -1483,6 +1484,122 @@ get_header();
     text-align: center;
 }
 
+/* Event Registration Confirmation Card */
+.rs-event-confirm-card {
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    animation: rsFadeInUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rs-evt-confirm-icon-wrap {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ecfdf5;
+    box-shadow: 0 0 0 8px #f0fdf4;
+}
+.rs-evt-confirm-check-svg {
+    width: 42px;
+    height: 42px;
+}
+.rs-evt-confirm-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #065f46;
+    margin: 0 0 0.3rem;
+}
+.rs-evt-confirm-greeting {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 0.35rem;
+}
+.rs-evt-confirm-desc {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin: 0 0 1.25rem;
+    line-height: 1.45;
+}
+.rs-evt-confirm-summary-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.9rem 1.15rem;
+    text-align: left;
+    margin-bottom: 1.15rem;
+}
+.rs-evt-confirm-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.45rem 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 0.86rem;
+    gap: 0.75rem;
+}
+.rs-evt-confirm-summary-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.rs-evt-confirm-summary-label {
+    color: #64748b;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+.rs-evt-confirm-summary-val {
+    color: #0f172a;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+.rs-evt-confirm-next-steps {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.84rem;
+    color: #166534;
+    text-align: left;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+}
+.rs-evt-confirm-next-steps svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+.rs-evt-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+.rs-evt-confirm-done-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2.25rem;
+    background: #B31B1B;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(179, 27, 27, 0.25);
+    transition: all 0.2s ease;
+}
+.rs-evt-confirm-done-btn:hover {
+    background: #8F171D;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(179, 27, 27, 0.35);
+}
+
 /* ============================================================
    Big Activities-Style Event & News Detail Modals
    ============================================================ */
@@ -2289,6 +2406,7 @@ $news_dataset   = rs_get_news();
         </div>
 
         <form class="rs-modal-form" id="rs-event-reg-form">
+            <?php wp_nonce_field( 'rs_event_reg_nonce', 'rs_event_reg_nonce' ); ?>
             <input type="hidden" id="rs-reg-event-id" name="event_id" value="">
             
             <div class="rs-modal-field">
@@ -2310,11 +2428,18 @@ $news_dataset   = rs_get_news();
             <div class="rs-modal-field">
                 <label for="rs-reg-center">Preferred Center / Branch</label>
                 <select id="rs-reg-center" name="center">
-                    <option value="Basavanagudi">Basavanagudi</option>
-                    <option value="Jayanagar">Jayanagar</option>
-                    <option value="Sadashivanagar">Sadashivanagar</option>
-                    <option value="KG Nagar">KG Nagar / Sunkenahalli</option>
-                    <option value="Vijayanagar">Vijayanagar</option>
+                    <option value="">Select Nearest Center / Branch</option>
+                    <?php if ( ! empty( $all_event_centers ) ) : ?>
+                        <?php foreach ( $all_event_centers as $c ) : ?>
+                            <option value="<?php echo esc_attr( $c['name'] ); ?>"><?php echo esc_html( $c['name'] . ( ! empty( $c['zone'] ) ? ' (' . $c['zone'] . ')' : '' ) ); ?></option>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <option value="Jayanagar">Jayanagar</option>
+                        <option value="Basavanagudi">Basavanagudi</option>
+                        <option value="Sadashivanagar">Sadashivanagar</option>
+                        <option value="KG Nagar">KG Nagar / Sunkenahalli</option>
+                        <option value="Vijayanagar">Vijayanagar</option>
+                    <?php endif; ?>
                     <option value="Other">Other / Not sure</option>
                 </select>
             </div>
@@ -2323,11 +2448,60 @@ $news_dataset   = rs_get_news();
                 <span>Confirm Registration &rarr;</span>
             </button>
 
+            <div class="rs-modal-error-alert" id="rs-reg-error-msg" style="display:none; color:#ef4444; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 14px; font-size:13px; margin-top:10px;"></div>
+
             <div class="rs-modal-success-alert" id="rs-reg-success-msg">
                 🎉 <strong>Registration Submitted Successfully!</strong><br>
                 Thank you! Our coordinators will contact you with reporting timings and tournament details.
             </div>
         </form>
+
+        <!-- Event Registration Confirmation Card (Shown when registration succeeds) -->
+        <div class="rs-event-confirm-card" id="rs-event-confirm-card" style="display: none;">
+            <div class="rs-evt-confirm-icon-wrap">
+                <svg viewBox="0 0 24 24" class="rs-evt-confirm-check-svg" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2"/>
+                    <path d="M7.5 12l3 3 6-6"/>
+                </svg>
+            </div>
+            <h3 class="rs-evt-confirm-title">Registration Confirmed!</h3>
+            <p class="rs-evt-confirm-greeting" id="rs-evt-confirm-greeting">Namaste,</p>
+            <p class="rs-evt-confirm-desc">Your seat for this event has been reserved. Thank you for registering!</p>
+
+            <div class="rs-evt-confirm-summary-box">
+                <div class="rs-evt-confirm-summary-row">
+                    <span class="rs-evt-confirm-summary-label">Event:</span>
+                    <span class="rs-evt-confirm-summary-val" id="rs-evt-conf-title">Special Event</span>
+                </div>
+                <div class="rs-evt-confirm-summary-row">
+                    <span class="rs-evt-confirm-summary-label">Date &amp; Time:</span>
+                    <span class="rs-evt-confirm-summary-val" id="rs-evt-conf-datetime">-</span>
+                </div>
+                <div class="rs-evt-confirm-summary-row">
+                    <span class="rs-evt-confirm-summary-label">Venue / Center:</span>
+                    <span class="rs-evt-confirm-summary-val" id="rs-evt-conf-venue">-</span>
+                </div>
+                <div class="rs-evt-confirm-summary-row">
+                    <span class="rs-evt-confirm-summary-label">Participant:</span>
+                    <span class="rs-evt-confirm-summary-val" id="rs-evt-conf-name">-</span>
+                </div>
+                <div class="rs-evt-confirm-summary-row" id="rs-evt-conf-ref-row">
+                    <span class="rs-evt-confirm-summary-label">Reference ID:</span>
+                    <span class="rs-evt-confirm-summary-val" id="rs-evt-conf-ref" style="color:#0369a1; font-family:monospace;">#RY-EVT</span>
+                </div>
+            </div>
+
+            <div class="rs-evt-confirm-next-steps">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <span>Reporting time and tournament/session instructions will be communicated via WhatsApp / SMS prior to the event.</span>
+            </div>
+
+            <div class="rs-evt-confirm-actions">
+                <button type="button" class="rs-evt-confirm-done-btn" id="rs-evt-confirm-done-btn">Done / Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -2712,6 +2886,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var regForm = document.getElementById('rs-event-reg-form');
     var regSuccess = document.getElementById('rs-reg-success-msg');
     var regSubmitBtn = document.getElementById('rs-reg-submit-btn');
+    var regConfirmCard = document.getElementById('rs-event-confirm-card');
+    var regDoneBtn = document.getElementById('rs-evt-confirm-done-btn');
 
     function openRegisterModal(eventId) {
         var ev = eventsMap[eventId];
@@ -2729,8 +2905,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (venueEl) venueEl.textContent = ev.venue;
         if (hiddenIdEl) hiddenIdEl.value = ev.id;
 
-        if (regForm) regForm.reset();
+        if (regConfirmCard) regConfirmCard.style.display = 'none';
+        if (regForm) {
+            regForm.style.display = 'block';
+            regForm.reset();
+        }
         if (regSuccess) regSuccess.style.display = 'none';
+        var errorEl = document.getElementById('rs-reg-error-msg');
+        if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
+
         if (regSubmitBtn) {
             regSubmitBtn.disabled = false;
             regSubmitBtn.innerHTML = '<span>Confirm Registration &rarr;</span>';
@@ -2745,10 +2928,16 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!regModal) return;
         regModal.classList.remove('is-active');
         regModal.setAttribute('aria-hidden', 'true');
+        if (regConfirmCard) regConfirmCard.style.display = 'none';
+        if (regForm) regForm.style.display = 'block';
         // Only restore body overflow if event detail modal is not active
         if (!eventModal || !eventModal.classList.contains('is-active')) {
             document.body.style.overflow = '';
         }
+    }
+
+    if (regDoneBtn) {
+        regDoneBtn.addEventListener('click', closeRegisterModal);
     }
 
     // Attach card footer Register Now click listeners
@@ -2772,17 +2961,98 @@ document.addEventListener('DOMContentLoaded', function () {
     if (regForm) {
         regForm.addEventListener('submit', function (e) {
             e.preventDefault();
+
+            var errorEl = document.getElementById('rs-reg-error-msg');
+            if (errorEl) {
+                errorEl.style.display = 'none';
+                errorEl.textContent = '';
+            }
+            if (regSuccess) regSuccess.style.display = 'none';
+
+            var eventId = document.getElementById('rs-reg-event-id') ? document.getElementById('rs-reg-event-id').value : '';
+            var nameVal = document.getElementById('rs-reg-name') ? document.getElementById('rs-reg-name').value.trim() : '';
+            var phoneVal = document.getElementById('rs-reg-phone') ? document.getElementById('rs-reg-phone').value.trim() : '';
+            var emailVal = document.getElementById('rs-reg-email') ? document.getElementById('rs-reg-email').value.trim() : '';
+            var centerVal = document.getElementById('rs-reg-center') ? document.getElementById('rs-reg-center').value : '';
+            var nonceEl = document.getElementById('rs_event_reg_nonce');
+            var nonceVal = nonceEl ? nonceEl.value : '';
+
+            if (!nameVal || !phoneVal || !eventId) {
+                if (errorEl) {
+                    errorEl.textContent = 'Please fill all required fields.';
+                    errorEl.style.display = 'block';
+                }
+                return;
+            }
+
             if (regSubmitBtn) {
                 regSubmitBtn.disabled = true;
-                regSubmitBtn.innerHTML = '<span>Processing...</span>';
+                regSubmitBtn.innerHTML = '<span>Submitting Registration...</span>';
             }
-            setTimeout(function () {
-                if (regSuccess) regSuccess.style.display = 'block';
-                if (regSubmitBtn) regSubmitBtn.innerHTML = '<span>✓ Registered</span>';
-                setTimeout(function () {
-                    closeRegisterModal();
-                }, 2500);
-            }, 500);
+
+            var formData = new FormData();
+            formData.append('action', 'rs_submit_event_registration');
+            formData.append('nonce', nonceVal);
+            formData.append('event_id', eventId);
+            formData.append('name', nameVal);
+            formData.append('phone', phoneVal);
+            formData.append('email', emailVal);
+            formData.append('center', centerVal);
+
+            var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+
+            fetch(ajaxUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (result) {
+                if (regSubmitBtn) {
+                    regSubmitBtn.disabled = false;
+                    regSubmitBtn.innerHTML = '<span>Confirm Registration &rarr;</span>';
+                }
+
+                if (result.success) {
+                    var ev = eventsMap[eventId];
+                    regForm.style.display = 'none';
+                    if (regConfirmCard) {
+                        var confGreet = document.getElementById('rs-evt-confirm-greeting');
+                        if (confGreet) confGreet.textContent = 'Namaste, ' + (nameVal || 'Participant') + '!';
+                        var confTitle = document.getElementById('rs-evt-conf-title');
+                        if (confTitle) confTitle.textContent = ev ? ev.title : 'Special Event';
+                        var confDt = document.getElementById('rs-evt-conf-datetime');
+                        if (confDt) confDt.textContent = (ev ? ev.day + ' ' + ev.month + ' ' + ev.year : '') + (ev && ev.time ? ' • ' + ev.time : '');
+                        var confVenue = document.getElementById('rs-evt-conf-venue');
+                        var vText = (ev ? ev.venue : '');
+                        if (centerVal && centerVal !== 'Other') {
+                            vText = centerVal + (vText ? ' (' + vText + ')' : '');
+                        }
+                        if (confVenue) confVenue.textContent = vText || 'Rashtrotthana Center';
+                        var confName = document.getElementById('rs-evt-conf-name');
+                        if (confName) confName.textContent = nameVal + (phoneVal ? ' • ' + phoneVal : '');
+                        var confRef = document.getElementById('rs-evt-conf-ref');
+                        var refId = (result.data && (result.data.registration_id || result.data.inquiry_id)) ? (result.data.registration_id || result.data.inquiry_id) : '';
+                        if (confRef) confRef.textContent = refId ? '#RY-EVT-' + refId : '#RY-EVT';
+
+                        regConfirmCard.style.display = 'block';
+                    }
+                    regForm.reset();
+                } else {
+                    if (errorEl) {
+                        errorEl.textContent = (result.data && result.data.message) ? result.data.message : 'Registration failed. Please try again.';
+                        errorEl.style.display = 'block';
+                    }
+                }
+            })
+            .catch(function (err) {
+                if (regSubmitBtn) {
+                    regSubmitBtn.disabled = false;
+                    regSubmitBtn.innerHTML = '<span>Confirm Registration &rarr;</span>';
+                }
+                if (errorEl) {
+                    errorEl.textContent = 'Network or server error. Please try again.';
+                    errorEl.style.display = 'block';
+            });
         });
     }
 

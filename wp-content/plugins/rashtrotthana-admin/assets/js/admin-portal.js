@@ -3043,7 +3043,47 @@
         // Local state
         var allUsersList    = [];
         var allModulesMap   = {};
+        var allRolesMap     = {};
+        var customRolesMap  = {};
         var selectedModules = [];
+
+        function syncRoleDropdowns() {
+            var roleKeys = Object.keys( allRolesMap );
+            if ( !roleKeys.length ) return;
+
+            if ( roleFilter ) {
+                var curVal = roleFilter.value;
+                var optHtml = '<option value="">All Roles</option>';
+                roleKeys.forEach( function ( rk ) {
+                    optHtml += '<option value="' + esc( rk ) + '">' + esc( allRolesMap[ rk ].name ) + '</option>';
+                } );
+                roleFilter.innerHTML = optHtml;
+                if ( curVal ) roleFilter.value = curVal;
+            }
+
+            var cuRoleSelect = document.getElementById( 'radm-cu-role' );
+            if ( cuRoleSelect ) {
+                var curCuVal = cuRoleSelect.value || 'radm_admin';
+                var cuOptHtml = '';
+                roleKeys.forEach( function ( rk ) {
+                    var isSys = allRolesMap[ rk ].is_system ? '(System)' : '(Custom)';
+                    cuOptHtml += '<option value="' + esc( rk ) + '">' + esc( allRolesMap[ rk ].name ) + ' ' + isSys + '</option>';
+                } );
+                cuRoleSelect.innerHTML = cuOptHtml;
+                if ( curCuVal ) cuRoleSelect.value = curCuVal;
+            }
+
+            if ( uaRoleSelect ) {
+                var curUaVal = uaRoleSelect.value;
+                var uaOptHtml = '';
+                roleKeys.forEach( function ( rk ) {
+                    var isSys = allRolesMap[ rk ].is_system ? '(System)' : '(Custom)';
+                    uaOptHtml += '<option value="' + esc( rk ) + '">' + esc( allRolesMap[ rk ].name ) + ' ' + isSys + '</option>';
+                } );
+                uaRoleSelect.innerHTML = uaOptHtml;
+                if ( curUaVal ) uaRoleSelect.value = curUaVal;
+            }
+        }
 
         function loadStaffUsers() {
             if ( !usersTbody ) return;
@@ -3055,9 +3095,13 @@
                     return;
                 }
 
-                allUsersList  = res.data.users || [];
-                allModulesMap = res.data.all_modules || {};
+                allUsersList   = res.data.users || [];
+                allModulesMap  = res.data.all_modules || {};
+                allRolesMap    = res.data.all_roles || {};
+                customRolesMap = res.data.custom_roles || {};
+                syncRoleDropdowns();
                 renderUsersTable();
+                renderCustomRolesTable();
             } );
         }
 
@@ -3138,6 +3182,9 @@
                     + '<button type="button" class="radm-card-menu-item" data-action="edit-user-access" data-id="' + u.id + '">'
                     + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
                     + ' Edit Access</button>'
+                    + '<button type="button" class="radm-card-menu-item" data-action="reset-user-pwd" data-id="' + u.id + '">'
+                    + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>'
+                    + ' Reset Password</button>'
                     + deleteItemHtml
                     + '</div>'
                     + '</div>'
@@ -3453,6 +3500,15 @@
                 return;
             }
 
+            // Reset User Password inside dropdown
+            var rpBtn = e.target.closest( '[data-action="reset-user-pwd"]' );
+            if ( rpBtn ) {
+                closeAllRolesCardDropdowns();
+                var rpUid = rpBtn.dataset.id;
+                if ( rpUid ) openResetPwdModal( rpUid );
+                return;
+            }
+
             // Delete User inside dropdown
             var delBtn = e.target.closest( '[data-action="delete-user"]' );
             if ( delBtn ) {
@@ -3562,6 +3618,360 @@
             } );
         }
 
+        // ── Reset User Password Modal Logic (Super Admin) ──────────────
+        var rpOverlay    = document.getElementById( 'radm-reset-password-overlay' );
+        var rpCloseBtn   = document.getElementById( 'radm-reset-pwd-close' );
+        var rpCancelBtn  = document.getElementById( 'radm-reset-pwd-cancel' );
+        var rpForm       = document.getElementById( 'radm-reset-password-form' );
+        var rpUserIdIn   = document.getElementById( 'radm-rp-user-id' );
+        var rpUserNameEl = document.getElementById( 'radm-rp-user-name' );
+        var rpUserEmailEl= document.getElementById( 'radm-rp-user-email' );
+        var rpUserInitEl = document.getElementById( 'radm-rp-user-initial' );
+        var rpNewPassIn  = document.getElementById( 'radm-rp-new-password' );
+        var rpConfPassIn = document.getElementById( 'radm-rp-confirm-password' );
+        var rpGenBtn     = document.getElementById( 'radm-rp-generate-btn' );
+        var rpSubmitBtn  = document.getElementById( 'radm-reset-pwd-submit' );
+        var rpSubmitText = document.getElementById( 'radm-reset-pwd-submit-text' );
+
+        function openResetPwdModal( userId ) {
+            var user = allUsersList.find( function ( u ) { return u.id === parseInt( userId, 10 ); } );
+            if ( !user || !rpOverlay ) return;
+
+            if ( rpUserIdIn ) rpUserIdIn.value = user.id;
+            if ( rpUserNameEl ) rpUserNameEl.textContent = user.name;
+            if ( rpUserEmailEl ) rpUserEmailEl.textContent = user.email;
+            if ( rpUserInitEl ) rpUserInitEl.textContent = user.name ? user.name.charAt( 0 ).toUpperCase() : 'U';
+            if ( rpNewPassIn ) rpNewPassIn.value = '';
+            if ( rpConfPassIn ) rpConfPassIn.value = '';
+
+            rpOverlay.setAttribute( 'aria-hidden', 'false' );
+            rpOverlay.classList.add( 'radm-modal-open' );
+            if ( rpNewPassIn ) rpNewPassIn.focus();
+        }
+
+        function closeResetPwdModal() {
+            if ( !rpOverlay ) return;
+            rpOverlay.classList.remove( 'radm-modal-open' );
+            rpOverlay.setAttribute( 'aria-hidden', 'true' );
+        }
+
+        if ( rpCloseBtn ) rpCloseBtn.addEventListener( 'click', closeResetPwdModal );
+        if ( rpCancelBtn ) rpCancelBtn.addEventListener( 'click', closeResetPwdModal );
+
+        if ( rpGenBtn ) {
+            rpGenBtn.addEventListener( 'click', function ( e ) {
+                e.preventDefault();
+                var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
+                var pass = '';
+                for ( var i = 0; i < 12; i++ ) {
+                    pass += chars.charAt( Math.floor( Math.random() * chars.length ) );
+                }
+                if ( rpNewPassIn ) {
+                    rpNewPassIn.value = pass;
+                    rpNewPassIn.type = 'text';
+                }
+                if ( rpConfPassIn ) {
+                    rpConfPassIn.value = pass;
+                    rpConfPassIn.type = 'text';
+                }
+                radmToast( 'Strong password generated!', 'info' );
+            } );
+        }
+
+        if ( rpForm ) {
+            rpForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+                var uid = rpUserIdIn ? parseInt( rpUserIdIn.value, 10 ) : 0;
+                var nPass = rpNewPassIn ? rpNewPassIn.value : '';
+                var cPass = rpConfPassIn ? rpConfPassIn.value : '';
+
+                if ( !uid || !nPass || !cPass ) {
+                    radmToast( 'All password fields are compulsory.', 'warning' );
+                    return;
+                }
+
+                if ( nPass.length < 6 ) {
+                    radmToast( 'Password must be at least 6 characters long.', 'warning' );
+                    return;
+                }
+
+                if ( nPass !== cPass ) {
+                    radmToast( 'Password and confirmation do not match.', 'error' );
+                    return;
+                }
+
+                if ( rpSubmitBtn ) rpSubmitBtn.disabled = true;
+                if ( rpSubmitText ) rpSubmitText.textContent = 'Resetting...';
+
+                ajaxPost( 'radm_admin_reset_user_password', {
+                    user_id: uid,
+                    new_password: nPass,
+                    confirm_password: cPass
+                }, function ( res ) {
+                    if ( rpSubmitBtn ) rpSubmitBtn.disabled = false;
+                    if ( rpSubmitText ) rpSubmitText.textContent = 'Reset Password';
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Password reset successfully!', 'success' );
+                        closeResetPwdModal();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to reset password.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // ── Sub-tabs Switching Logic ────────────────────────────────────
+        var tabBtnStaffUsers   = document.getElementById( 'radm-tab-staff-users' );
+        var tabBtnCustomRoles  = document.getElementById( 'radm-tab-custom-roles' );
+        var tabPaneStaffUsers  = document.getElementById( 'radm-tab-pane-staff-users' );
+        var tabPaneCustomRoles = document.getElementById( 'radm-tab-pane-custom-roles' );
+
+        function switchRolesTab( tabKey ) {
+            if ( tabKey === 'custom-roles' ) {
+                if ( tabBtnCustomRoles ) {
+                    tabBtnCustomRoles.classList.add( 'is-active' );
+                    tabBtnCustomRoles.style.background = '#e8f5e9';
+                    tabBtnCustomRoles.style.color = '#2E7D32';
+                    tabBtnCustomRoles.style.border = 'none';
+                }
+                if ( tabBtnStaffUsers ) {
+                    tabBtnStaffUsers.classList.remove( 'is-active' );
+                    tabBtnStaffUsers.style.background = '#fff';
+                    tabBtnStaffUsers.style.color = 'var(--radm-text)';
+                    tabBtnStaffUsers.style.border = '1px solid var(--radm-border)';
+                }
+                if ( tabPaneStaffUsers ) tabPaneStaffUsers.style.display = 'none';
+                if ( tabPaneCustomRoles ) tabPaneCustomRoles.style.display = 'block';
+            } else {
+                if ( tabBtnStaffUsers ) {
+                    tabBtnStaffUsers.classList.add( 'is-active' );
+                    tabBtnStaffUsers.style.background = '#e8f5e9';
+                    tabBtnStaffUsers.style.color = '#2E7D32';
+                    tabBtnStaffUsers.style.border = 'none';
+                }
+                if ( tabBtnCustomRoles ) {
+                    tabBtnCustomRoles.classList.remove( 'is-active' );
+                    tabBtnCustomRoles.style.background = '#fff';
+                    tabBtnCustomRoles.style.color = 'var(--radm-text)';
+                    tabBtnCustomRoles.style.border = '1px solid var(--radm-border)';
+                }
+                if ( tabPaneStaffUsers ) tabPaneStaffUsers.style.display = 'block';
+                if ( tabPaneCustomRoles ) tabPaneCustomRoles.style.display = 'none';
+            }
+        }
+
+        if ( tabBtnStaffUsers ) {
+            tabBtnStaffUsers.addEventListener( 'click', function () { switchRolesTab( 'staff-users' ); } );
+        }
+        if ( tabBtnCustomRoles ) {
+            tabBtnCustomRoles.addEventListener( 'click', function () { switchRolesTab( 'custom-roles' ); } );
+        }
+
+        // ── Custom Roles Table Rendering & Management ───────────────────
+        var rolesListTbody = document.getElementById( 'radm-roles-list-tbody' );
+
+        function renderCustomRolesTable() {
+            if ( !rolesListTbody ) return;
+            var roleKeys = Object.keys( allRolesMap );
+            if ( !roleKeys.length ) {
+                rolesListTbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--radm-text-muted);">No roles configured.</td></tr>';
+                return;
+            }
+
+            var html = '';
+            roleKeys.forEach( function ( rKey, idx ) {
+                var rInfo = allRolesMap[ rKey ];
+                var isSystem = !!rInfo.is_system;
+
+                // User count
+                var userCount = allUsersList.filter( function ( u ) { return u.role === rKey; } ).length;
+
+                // Modules Tags
+                var modTags = '';
+                if ( rKey === 'administrator' ) {
+                    modTags = '<span class="radm-tag-pill" style="background:#f0fdf4;color:#166534;border-color:#bbf7d0;">👑 Full Access (All 8 Modules)</span>';
+                } else if ( rInfo.modules && rInfo.modules.length ) {
+                    modTags = '<div class="radm-module-tags-list">';
+                    rInfo.modules.forEach( function ( mk ) {
+                        var mLabel = allModulesMap[ mk ] ? allModulesMap[ mk ].label : mk;
+                        modTags += '<span class="radm-tag-pill radm-tag-pill--sm">' + esc( mLabel ) + '</span>';
+                    } );
+                    modTags += '</div>';
+                } else {
+                    modTags = '<span style="color:var(--radm-text-muted);font-size:12px;">No modules</span>';
+                }
+
+                // Scope
+                var scopeText = '';
+                if ( rInfo.restrict_center && rInfo.centers && rInfo.centers.length ) {
+                    scopeText = '<span style="font-size:12px;color:#1e293b;font-weight:600;">📍 ' + esc( rInfo.centers.join( ', ' ) ) + '</span>';
+                } else {
+                    scopeText = '<span style="font-size:12px;color:var(--radm-text-muted);">All Centers</span>';
+                }
+
+                // Action
+                var actionHtml = '';
+                if ( isSystem ) {
+                    actionHtml = '<span class="radm-badge radm-badge--draft" style="font-size:11px;background:#f1f5f9;color:#64748b;border-color:#e2e8f0;">System Protected</span>';
+                } else {
+                    actionHtml = '<button type="button" class="radm-btn radm-btn-danger radm-btn--sm" data-action="delete-custom-role" data-slug="' + esc( rKey ) + '" data-name="' + esc( rInfo.name ) + '" style="background:#fee2e2;color:#dc2626;border-color:#fecaca;padding:4px 10px;font-size:12px;">'
+                        + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" style="vertical-align:middle;margin-right:2px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>'
+                        + ' Delete</button>';
+                }
+
+                html += '<tr>'
+                    + '<td style="text-align:center;color:var(--radm-text-muted);font-weight:500;">' + ( idx + 1 ) + '</td>'
+                    + '<td><strong style="color:var(--radm-text);font-size:13.5px;">' + esc( rInfo.name ) + '</strong></td>'
+                    + '<td><code style="font-size:12px;background:#f8fafc;padding:2px 6px;border-radius:4px;border:1px solid #e2e8f0;">' + esc( rKey ) + '</code></td>'
+                    + '<td>' + modTags + '</td>'
+                    + '<td>' + scopeText + '</td>'
+                    + '<td style="text-align:center;"><span class="radm-badge radm-badge--open" style="font-weight:700;">' + userCount + '</span></td>'
+                    + '<td style="text-align:right;">' + actionHtml + '</td>'
+                    + '</tr>';
+            } );
+
+            rolesListTbody.innerHTML = html;
+        }
+
+        // Delete Custom Role delegation
+        if ( rolesListTbody ) {
+            rolesListTbody.addEventListener( 'click', function ( e ) {
+                var delRoleBtn = e.target.closest( '[data-action="delete-custom-role"]' );
+                if ( delRoleBtn ) {
+                    var rSlug = delRoleBtn.getAttribute( 'data-slug' );
+                    var rName = delRoleBtn.getAttribute( 'data-name' );
+                    if ( !rSlug ) return;
+
+                    if ( !confirm( 'Are you sure you want to delete custom role "' + rName + '"?\n\nAny users currently assigned this role will be reassigned to Subscriber.' ) ) {
+                        return;
+                    }
+
+                    delRoleBtn.disabled = true;
+                    ajaxPost( 'radm_delete_custom_role', { role_slug: rSlug }, function ( res ) {
+                        if ( res.success ) {
+                            radmToast( res.data.message || 'Custom role deleted successfully.', 'success' );
+                            loadStaffUsers();
+                        } else {
+                            delRoleBtn.disabled = false;
+                            radmToast( ( res.data && res.data.message ) || 'Failed to delete custom role.', 'error' );
+                        }
+                    } );
+                }
+            } );
+        }
+
+        // ── Create Custom Role Modal Logic ──────────────────────────────
+        var crOverlay     = document.getElementById( 'radm-create-role-overlay' );
+        var crOpenBtn     = document.getElementById( 'radm-open-create-role-btn' );
+        var crCloseBtn    = document.getElementById( 'radm-create-role-close' );
+        var crCancelBtn   = document.getElementById( 'radm-create-role-cancel' );
+        var crForm        = document.getElementById( 'radm-create-role-form' );
+        var crNameIn      = document.getElementById( 'radm-cr-name' );
+        var crSlugIn      = document.getElementById( 'radm-cr-slug' );
+        var crSelectAllBtn= document.getElementById( 'radm-cr-select-all-mods' );
+        var crClearAllBtn = document.getElementById( 'radm-cr-clear-all-mods' );
+        var crModChecks   = document.querySelectorAll( 'input[name="radm_cr_mod_check"]' );
+        var crCenterToggle= document.getElementById( 'radm-cr-restrict-center-toggle' );
+        var crCentersWrap = document.getElementById( 'radm-cr-centers-wrapper' );
+        var crCenterChecks= document.querySelectorAll( 'input[name="radm_cr_center_check"]' );
+        var crSubmitBtn   = document.getElementById( 'radm-create-role-submit' );
+        var crSubmitText  = document.getElementById( 'radm-create-role-submit-text' );
+
+        function openCreateRoleModal() {
+            if ( !crOverlay ) return;
+            if ( crForm ) crForm.reset();
+            if ( crCentersWrap ) crCentersWrap.style.display = 'none';
+            if ( crModChecks ) {
+                crModChecks.forEach( function ( cb ) {
+                    cb.checked = ( cb.value === 'dashboard' );
+                } );
+            }
+            crOverlay.setAttribute( 'aria-hidden', 'false' );
+            crOverlay.classList.add( 'radm-modal-open' );
+            if ( crNameIn ) crNameIn.focus();
+        }
+
+        function closeCreateRoleModal() {
+            if ( !crOverlay ) return;
+            crOverlay.classList.remove( 'radm-modal-open' );
+            crOverlay.setAttribute( 'aria-hidden', 'true' );
+        }
+
+        if ( crOpenBtn ) crOpenBtn.addEventListener( 'click', openCreateRoleModal );
+        if ( crCloseBtn ) crCloseBtn.addEventListener( 'click', closeCreateRoleModal );
+        if ( crCancelBtn ) crCancelBtn.addEventListener( 'click', closeCreateRoleModal );
+
+        if ( crSelectAllBtn ) {
+            crSelectAllBtn.addEventListener( 'click', function () {
+                if ( crModChecks ) crModChecks.forEach( function ( cb ) { cb.checked = true; } );
+            } );
+        }
+        if ( crClearAllBtn ) {
+            crClearAllBtn.addEventListener( 'click', function () {
+                if ( crModChecks ) crModChecks.forEach( function ( cb ) { cb.checked = ( cb.value === 'dashboard' ); } );
+            } );
+        }
+
+        if ( crCenterToggle ) {
+            crCenterToggle.addEventListener( 'change', function () {
+                if ( crCentersWrap ) crCentersWrap.style.display = this.checked ? 'block' : 'none';
+            } );
+        }
+
+        if ( crForm ) {
+            crForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+                var rName = crNameIn ? crNameIn.value.trim() : '';
+                var rSlug = crSlugIn ? crSlugIn.value.trim() : '';
+
+                if ( !rName ) {
+                    radmToast( 'Role Display Name is compulsory.', 'warning' );
+                    return;
+                }
+
+                var selectedMods = [];
+                if ( crModChecks ) {
+                    crModChecks.forEach( function ( cb ) {
+                        if ( cb.checked ) selectedMods.push( cb.value );
+                    } );
+                }
+
+                if ( selectedMods.indexOf( 'dashboard' ) === -1 ) {
+                    selectedMods.unshift( 'dashboard' );
+                }
+
+                var selectedCenters = [];
+                if ( crCenterChecks ) {
+                    crCenterChecks.forEach( function ( ccb ) {
+                        if ( ccb.checked ) selectedCenters.push( ccb.value );
+                    } );
+                }
+
+                if ( crSubmitBtn ) crSubmitBtn.disabled = true;
+                if ( crSubmitText ) crSubmitText.textContent = 'Creating...';
+
+                ajaxPost( 'radm_create_custom_role', {
+                    role_name: rName,
+                    role_slug: rSlug,
+                    modules: JSON.stringify( selectedMods ),
+                    restrict_center: ( crCenterToggle && crCenterToggle.checked ) ? 1 : 0,
+                    centers: JSON.stringify( selectedCenters )
+                }, function ( res ) {
+                    if ( crSubmitBtn ) crSubmitBtn.disabled = false;
+                    if ( crSubmitText ) crSubmitText.textContent = 'Create Role';
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Custom role created successfully!', 'success' );
+                        closeCreateRoleModal();
+                        loadStaffUsers();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to create custom role.', 'error' );
+                    }
+                } );
+            } );
+        }
+
         // Initialize Load
         loadStaffUsers();
 
@@ -3570,7 +3980,7 @@
     /* ═══════════════════════════════════════════════════════════════════
        SETTINGS PAGE (ORGANIZATION SETTINGS & CENTERS MANAGEMENT)
        ═══════════════════════════════════════════════════════════════════ */
-    if ( curPage === 'radm-settings' || document.getElementById( 'radm-centers-tbody' ) ) {
+    if ( curPage === 'radm-settings' || document.getElementById( 'radm-centers-tbody' ) || document.getElementById( 'radm-change-password-form' ) ) {
 
         // Organization Settings Form
         var orgForm        = document.getElementById( 'radm-org-settings-form' );
@@ -3864,10 +4274,78 @@
             }
         } );
 
-        // Initial Load
-        loadCenters();
+        // ── Self Password Change Form Handler ───────────────────────────
+        var changePwdForm = document.getElementById( 'radm-change-password-form' );
+        if ( changePwdForm ) {
+            changePwdForm.addEventListener( 'submit', function ( e ) {
+                e.preventDefault();
+                var currPass = document.getElementById( 'radm-current-password' );
+                var newPass  = document.getElementById( 'radm-new-password' );
+                var confPass = document.getElementById( 'radm-confirm-password' );
+                var btn      = document.getElementById( 'radm-change-pwd-btn' );
+                var btnText  = document.getElementById( 'radm-change-pwd-text' );
+
+                var cVal  = currPass ? currPass.value : '';
+                var nVal  = newPass ? newPass.value : '';
+                var cfVal = confPass ? confPass.value : '';
+
+                if ( !cVal || !nVal || !cfVal ) {
+                    radmToast( 'All password fields are compulsory.', 'warning' );
+                    return;
+                }
+
+                if ( nVal.length < 6 ) {
+                    radmToast( 'New password must be at least 6 characters long.', 'warning' );
+                    return;
+                }
+
+                if ( nVal !== cfVal ) {
+                    radmToast( 'New password and confirmation do not match.', 'error' );
+                    return;
+                }
+
+                if ( btn ) btn.disabled = true;
+                if ( btnText ) btnText.textContent = 'Updating...';
+
+                ajaxPost( 'radm_change_own_password', {
+                    current_password: cVal,
+                    new_password: nVal,
+                    confirm_password: cfVal
+                }, function ( res ) {
+                    if ( btn ) btn.disabled = false;
+                    if ( btnText ) btnText.textContent = 'Update Password';
+
+                    if ( res.success ) {
+                        radmToast( res.data.message || 'Password updated successfully!', 'success' );
+                        changePwdForm.reset();
+                    } else {
+                        radmToast( ( res.data && res.data.message ) || 'Failed to update password.', 'error' );
+                    }
+                } );
+            } );
+        }
+
+        // Initial Load (only if centers table is present on page)
+        if ( document.getElementById( 'radm-centers-tbody' ) ) {
+            loadCenters();
+        }
 
     } // end radm-settings
+
+    /* ── Show / Hide Password Toggle ──────────────────────────────────── */
+    document.addEventListener( 'click', function ( e ) {
+        var toggleBtn = e.target.closest( '.radm-pwd-toggle-btn' );
+        if ( toggleBtn ) {
+            e.preventDefault();
+            var targetId = toggleBtn.getAttribute( 'data-target' );
+            var input = targetId ? document.getElementById( targetId ) : null;
+            if ( input ) {
+                var isPass = input.type === 'password';
+                input.type = isPass ? 'text' : 'password';
+                toggleBtn.style.color = isPass ? 'var(--radm-green-primary)' : 'var(--radm-text-muted)';
+            }
+        }
+    } );
 
     /* ── ESC closes any modal ─────────────────────────────────────────── */
     document.addEventListener( 'keydown', function ( e ) {
@@ -3883,6 +4361,8 @@
             if ( typeof closeUserAccessModal === 'function' ) closeUserAccessModal();
             if ( typeof closeDeleteUserModal === 'function' ) closeDeleteUserModal();
             if ( typeof closeCreateUserModal === 'function' ) closeCreateUserModal();
+            if ( typeof closeResetPwdModal === 'function' ) closeResetPwdModal();
+            if ( typeof closeCreateRoleModal === 'function' ) closeCreateRoleModal();
             if ( typeof closeCenterModal === 'function' ) closeCenterModal();
             if ( typeof closeDeleteCenterModal === 'function' ) closeDeleteCenterModal();
             if ( typeof radmCloseMediaPickerModal === 'function' ) radmCloseMediaPickerModal();

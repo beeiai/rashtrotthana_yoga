@@ -2215,7 +2215,13 @@ document.addEventListener('DOMContentLoaded', function () {
         var noResults = centerFinder.querySelector('.rs-center-no-results');
 
         if (centerSearchForm) {
-            centerSearchForm.addEventListener('submit', function (event) { event.preventDefault(); });
+            centerSearchForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                var q = (centerSearch.value || '').trim();
+                if (q) {
+                    window.location.href = '<?php echo esc_url( home_url( "/centers/" ) ); ?>?q=' + encodeURIComponent(q);
+                }
+            });
         }
 
         function filterCenters() {

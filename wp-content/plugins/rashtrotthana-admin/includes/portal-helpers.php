@@ -63,50 +63,87 @@ function radm_get_all_modules(): array {
 }
 
 /**
- * Returns managed centers list (Settings -> Centers Management)
+ * Returns managed centers list (Settings -> Centers Management & Dropdowns)
+ * Dynamically queries the real centers from the database (rs_center / center)
  */
 function radm_get_centers_list(): array {
+    // 1. Fetch real centers directly from the database CPT (rs_center / center)
+    $cpt_centers = get_posts( [
+        'post_type'      => [ 'rs_center', 'center' ],
+        'post_status'    => [ 'publish', 'draft' ],
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ] );
+
+    if ( ! empty( $cpt_centers ) ) {
+        $saved = get_option( 'radm_centers_list', [] );
+        $saved_status = [];
+        if ( is_array( $saved ) ) {
+            foreach ( $saved as $s ) {
+                if ( ! empty( $s['id'] ) && isset( $s['status'] ) ) {
+                    $saved_status[ (string) $s['id'] ] = $s['status'];
+                }
+                if ( ! empty( $s['name'] ) && isset( $s['status'] ) ) {
+                    $saved_status[ strtolower( trim( $s['name'] ) ) ] = $s['status'];
+                }
+            }
+        }
+
+        $list = [];
+        foreach ( $cpt_centers as $c ) {
+            $cid  = (string) $c->ID;
+            $name = $c->post_title;
+            $norm = strtolower( trim( $name ) );
+            $loc  = get_post_meta( $c->ID, 'area', true )
+                ?: ( get_post_meta( $c->ID, 'center_location', true )
+                ?: ( get_post_meta( $c->ID, 'zone', true ) ?: 'Bangalore' ) );
+
+            $status = ( $c->post_status === 'publish' ) ? 'active' : 'inactive';
+            if ( isset( $saved_status[ $cid ] ) ) {
+                $status = $saved_status[ $cid ];
+            } elseif ( isset( $saved_status[ 'center-' . $cid ] ) ) {
+                $status = $saved_status[ 'center-' . $cid ];
+            } elseif ( isset( $saved_status[ $norm ] ) ) {
+                $status = $saved_status[ $norm ];
+            }
+
+            $list[] = [
+                'id'       => $cid,
+                'name'     => $name,
+                'location' => $loc,
+                'status'   => $status,
+            ];
+        }
+
+        // Include any custom extra centers added from Settings -> Centers Management (if not in CPT)
+        if ( is_array( $saved ) ) {
+            foreach ( $saved as $s ) {
+                $s_name = strtolower( trim( $s['name'] ?? '' ) );
+                if ( ! empty( $s_name ) && ! in_array( $s['id'] ?? '', [ 'center-1', 'center-2', 'center-3', 'center-4', 'center-5' ], true ) ) {
+                    $already = false;
+                    foreach ( $list as $existing ) {
+                        if ( strtolower( trim( $existing['name'] ) ) === $s_name ) {
+                            $already = true;
+                            break;
+                        }
+                    }
+                    if ( ! $already ) {
+                        $list[] = $s;
+                    }
+                }
+            }
+        }
+
+        return $list;
+    }
+
     $saved = get_option( 'radm_centers_list', null );
     if ( is_array( $saved ) && ! empty( $saved ) ) {
         return $saved;
     }
 
-    // Default Centers based on standard Rashtrotthana centers
-    $defaults = [
-        [
-            'id'       => 'center-1',
-            'name'     => 'Jayanagar Center',
-            'location' => 'Bangalore',
-            'status'   => 'active',
-        ],
-        [
-            'id'       => 'center-2',
-            'name'     => 'Basavanagudi Center',
-            'location' => 'Bangalore',
-            'status'   => 'active',
-        ],
-        [
-            'id'       => 'center-3',
-            'name'     => 'Malleshwaram Center',
-            'location' => 'Bangalore',
-            'status'   => 'active',
-        ],
-        [
-            'id'       => 'center-4',
-            'name'     => 'Indiranagar Center',
-            'location' => 'Bangalore',
-            'status'   => 'active',
-        ],
-        [
-            'id'       => 'center-5',
-            'name'     => 'Koramangala Center',
-            'location' => 'Bangalore',
-            'status'   => 'inactive',
-        ],
-    ];
-
-    update_option( 'radm_centers_list', $defaults );
-    return $defaults;
+    return [];
 }
 
 /**
@@ -136,6 +173,70 @@ function radm_get_all_centers(): array {
         }
     }
     return $centers;
+}
+
+/**
+ * Returns all portal roles (built-in and custom created)
+ */
+function radm_get_all_roles(): array {
+    $default_roles = [
+        'administrator'    => [
+            'key'             => 'administrator',
+            'name'            => 'Super Admin',
+            'is_system'       => true,
+            'modules'         => array_keys( radm_get_all_modules() ),
+            'restrict_center' => false,
+            'centers'         => [],
+        ],
+        'radm_admin'       => [
+            'key'             => 'radm_admin',
+            'name'            => 'Admin (Content & Reg)',
+            'is_system'       => true,
+            'modules'         => [ 'dashboard', 'registrations', 'gallery', 'form-groups', 'whatsapp', 'pages' ],
+            'restrict_center' => false,
+            'centers'         => [],
+        ],
+        'radm_gallery'     => [
+            'key'             => 'radm_gallery',
+            'name'            => 'Gallery Manager',
+            'is_system'       => true,
+            'modules'         => [ 'dashboard', 'gallery' ],
+            'restrict_center' => false,
+            'centers'         => [],
+        ],
+        'radm_center_admin'=> [
+            'key'             => 'radm_center_admin',
+            'name'            => 'Center Admin',
+            'is_system'       => true,
+            'modules'         => [ 'dashboard', 'registrations', 'form-groups' ],
+            'restrict_center' => true,
+            'centers'         => [],
+        ],
+        'subscriber'       => [
+            'key'             => 'subscriber',
+            'name'            => 'Subscriber',
+            'is_system'       => true,
+            'modules'         => [ 'dashboard' ],
+            'restrict_center' => false,
+            'centers'         => [],
+        ],
+    ];
+
+    $custom_roles = get_option( 'radm_custom_roles', [] );
+    if ( is_array( $custom_roles ) ) {
+        foreach ( $custom_roles as $role_key => $role_data ) {
+            $default_roles[ $role_key ] = array_merge( [
+                'key'             => $role_key,
+                'name'            => $role_data['name'] ?? ucfirst( str_replace( [ 'radm_', '_' ], [ '', ' ' ], $role_key ) ),
+                'is_system'       => false,
+                'modules'         => $role_data['modules'] ?? [ 'dashboard' ],
+                'restrict_center' => ! empty( $role_data['restrict_center'] ),
+                'centers'         => $role_data['centers'] ?? [],
+            ], $role_data );
+        }
+    }
+
+    return $default_roles;
 }
 
 /**
@@ -175,8 +276,19 @@ function radm_get_user_module_permissions( int $user_id = 0 ): array {
         ];
     }
 
-    // Check role-level defaults
+    // Check custom roles option and role-level defaults
     $primary_role = ! empty( $user->roles ) ? $user->roles[0] : 'subscriber';
+
+    $all_roles = radm_get_all_roles();
+    if ( isset( $all_roles[ $primary_role ] ) && ! empty( $all_roles[ $primary_role ]['modules'] ) ) {
+        return [
+            'modules'         => $all_roles[ $primary_role ]['modules'],
+            'restrict_center' => ! empty( $all_roles[ $primary_role ]['restrict_center'] ),
+            'centers'         => $all_roles[ $primary_role ]['centers'] ?? [],
+            'is_super_admin'  => false,
+        ];
+    }
+
     $role_perms = get_option( 'radm_role_permissions', [] );
     if ( isset( $role_perms[ $primary_role ] ) && is_array( $role_perms[ $primary_role ] ) ) {
         return [
@@ -191,7 +303,7 @@ function radm_get_user_module_permissions( int $user_id = 0 ): array {
     switch ( $primary_role ) {
         case 'radm_admin':
             return [
-                'modules'         => [ 'dashboard', 'registrations', 'gallery', 'form-groups', 'whatsapp' ],
+                'modules'         => [ 'dashboard', 'registrations', 'gallery', 'form-groups', 'whatsapp', 'pages' ],
                 'restrict_center' => false,
                 'centers'         => [],
                 'is_super_admin'  => false,
