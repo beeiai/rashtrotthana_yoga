@@ -130,7 +130,7 @@ $rs_home_activities = array(
     array(
         'name'  => 'GYM',
         'desc'  => 'Modern fitness equipment, strength conditioning, and personalized workout routines for all levels.',
-        'image' => content_url( '/uploads/2026/10/GYM.webp' ),
+        'image' => content_url( '/uploads/2026/10/gym.png' ),
         'link'  => home_url( '/activities/#fitness-sports' ),
     ),
     array(

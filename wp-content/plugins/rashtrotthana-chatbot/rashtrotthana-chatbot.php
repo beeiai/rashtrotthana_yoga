@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'RCHT_VERSION',    '1.0.0' );
+define( 'RCHT_VERSION',    '1.0.1' );
 define( 'RCHT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'RCHT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -37,7 +37,7 @@ function rcht_enqueue_assets(): void {
         [
             'dataUrl'  => RCHT_PLUGIN_URL . 'assets/data/responses.json',
             'botName'  => 'Yoga Assistant',
-            'greeting' => 'Namaste \ud83d\ude4f Welcome to Rashtrotthana Yoga! How can I help you today?',
+            'greeting' => 'Namaste 🙏 Welcome to Rashtrotthana Yoga! How can I help you today?',
         ]
     );
 }

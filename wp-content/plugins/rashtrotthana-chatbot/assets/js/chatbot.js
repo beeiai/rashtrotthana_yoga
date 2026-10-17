@@ -40,6 +40,13 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
+  function decodeUnicodeEscapes(str) {
+    if (!str || typeof str !== 'string') return str;
+    return str.replace(/\\u([0-9a-fA-F]{4})/g, function (match, grp) {
+      return String.fromCharCode(parseInt(grp, 16));
+    });
+  }
+
   /* Format raw bot text into clean HTML:
      - converts \n to structured spans
      - wraps bullet lines (• or -) in rcht-bullet spans
@@ -47,6 +54,7 @@
      - wraps plain text lines in rcht-line spans
      - preserves existing <b> tags */
   function formatBotText(text) {
+    text = decodeUnicodeEscapes(text);
     return text
       .split('\n')
       .filter(function (line) { return line.trim() !== ''; }) // skip blank lines between blocks

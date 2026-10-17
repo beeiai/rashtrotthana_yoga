@@ -317,8 +317,8 @@ function rs_get_activity_categories() {
     $fallback_images = array(
         'yoga'           => content_url( '/uploads/2026/10/Yoga.jpg' ),
         'yoga-wellness'  => content_url( '/uploads/2026/10/Yoga.jpg' ),
-        'gym'            => content_url( '/uploads/2026/10/GYM.webp' ),
-        'fitness-sports' => content_url( '/uploads/2026/10/GYM.webp' ),
+        'gym'            => content_url( '/uploads/2026/10/gym.png' ),
+        'fitness-sports' => content_url( '/uploads/2026/10/gym.png' ),
         'karate'         => content_url( '/uploads/2026/10/karate.jpg' ),
         'martial-arts'   => content_url( '/uploads/2026/10/karate.jpg' ),
         'music-dance'    => content_url( '/uploads/2026/10/Music.jpg' ),
