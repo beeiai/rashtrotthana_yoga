@@ -1214,22 +1214,37 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
 }
 
 @media (max-width: 768px) {
+    .rs-contact-header-section {
+        padding: 2.25rem 0 1.25rem;
+    }
+    .rs-contact-page-title {
+        font-size: clamp(1.85rem, 6.8vw, 2.4rem);
+    }
     .rs-contact-channels-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     .rs-contact-centers-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     .rs-contact-interactive-form {
         grid-template-columns: 1fr;
     }
     .rs-contact-form-card {
-        padding: 1.5rem;
+        padding: 1.25rem;
+        border-radius: 18px;
+    }
+    .rs-contact-form-card input,
+    .rs-contact-form-card select,
+    .rs-contact-form-card textarea {
+        font-size: 16px !important;
     }
     .rs-contact-assistance-banner {
         flex-direction: column;
         text-align: center;
-        padding: 1.75rem;
+        padding: 1.5rem 1.25rem;
+        border-radius: 20px;
     }
     .rs-assistance-content {
         flex-direction: column;
@@ -1246,6 +1261,7 @@ $contact_address = !empty($kg_nagar_center['address']) ? $kg_nagar_center['addre
     .rs-map-hq-overlay {
         flex-direction: column;
         align-items: flex-start;
+        padding: 1.25rem;
     }
     .rs-map-hq-directions-btn {
         width: 100%;

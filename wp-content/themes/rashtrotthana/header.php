@@ -33,6 +33,10 @@
     .rs-hero-content{width:calc(100% - 48px)!important}
     .rs-hero-title{max-width:640px!important;font-size:clamp(1.85rem,3.8vw,2.35rem)!important}
 }
+@media (max-width: 992px) {
+    .rs-navbar-inner { min-height: 62px !important; }
+    .rs-brand img { max-height: 42px !important; }
+}
 </style>
 <header class="rs-site-header">
     <nav class="rs-navbar">
@@ -40,10 +44,10 @@
             <a class="rs-brand" href="<?php echo esc_url(home_url('/')); ?>">
                 <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/rashtrotthana-group-logo.png' ); ?>" alt="Rashtrotthana Group">
             </a>
-            <button class="rs-menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+            <button class="rs-menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="rs-site-nav">
                 <span></span><span></span><span></span>
             </button>
-            <div class="rs-navigation">
+            <div class="rs-navigation" id="rs-site-nav">
                 <a class="rs-nav-link<?php echo is_front_page() ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/')); ?>">Home</a>
                 <a class="rs-nav-link<?php echo is_page('about-us') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/about-us/')); ?>">About Us</a>
                 <a class="rs-nav-link<?php echo is_page('activities') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/activities/')); ?>">Activities</a>
@@ -51,7 +55,6 @@
                 <a class="rs-nav-link<?php echo is_page('events') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/events/')); ?>">Events</a>
                 <a class="rs-nav-link<?php echo is_page('gallery') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/gallery/')); ?>">Gallery</a>
                 <a class="rs-nav-link<?php echo is_page('contact-us') ? ' active' : ''; ?>" href="<?php echo esc_url(home_url('/contact-us/')); ?>">Contact Us</a>
-            
             </div>
         </div>
     </nav>
@@ -66,17 +69,6 @@
         };
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
-    }
-
-    /* Mobile nav toggle */
-    var toggle = document.querySelector('.rs-menu-toggle');
-    var nav = document.querySelector('.rs-navigation');
-    if (toggle && nav) {
-        toggle.addEventListener('click', function () {
-            var expanded = toggle.getAttribute('aria-expanded') === 'true';
-            toggle.setAttribute('aria-expanded', String(!expanded));
-            nav.classList.toggle('is-open', !expanded);
-        });
     }
 })();
 </script>

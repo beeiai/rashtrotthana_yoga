@@ -1188,8 +1188,18 @@ foreach ( $activity_categories as $cat ) {
 }
 
 @media (max-width: 600px) {
+    .rs-act-header-section {
+        padding: 2.25rem 0 1.5rem;
+    }
+    .rs-act-page-title {
+        font-size: clamp(1.75rem, 6.8vw, 2.3rem);
+    }
     .rs-pillars-grid {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    .rs-pillar-body {
+        padding: 1.25rem;
     }
     .rs-filters-dropdowns-grid {
         grid-template-columns: 1fr;
@@ -1197,9 +1207,54 @@ foreach ( $activity_categories as $cat ) {
     .rs-panel-top-row {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
     }
     .rs-back-to-categories-btn {
         justify-content: center;
+        width: 100%;
+    }
+    .rs-subactivity-card {
+        padding: 1.2rem;
+    }
+    .rs-subact-batch-pills {
+        flex-wrap: wrap;
+    }
+    /* Mobile Registration Modal */
+    .rs-reg-modal {
+        padding: 10px;
+    }
+    .rs-reg-panel {
+        max-width: 100%;
+        width: 100%;
+        max-height: 94vh;
+        border-radius: 18px;
+    }
+    .rs-reg-header {
+        padding: 1.15rem 1.25rem;
+    }
+    .rs-reg-header-titles h3 {
+        font-size: 1.15rem;
+    }
+    .rs-reg-body {
+        padding: 1.2rem 1.1rem;
+    }
+    .rs-reg-form-row {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+    .rs-reg-input,
+    .rs-reg-select {
+        font-size: 16px !important;
+    }
+    .rs-reg-submit-btn {
+        padding: 0.85rem 1.25rem;
+        font-size: 0.95rem;
+    }
+    .rs-confirm-summary-box {
+        padding: 0.75rem 0.85rem;
+    }
+    .rs-confirm-summary-row {
+        font-size: 0.82rem;
     }
 }
 </style>

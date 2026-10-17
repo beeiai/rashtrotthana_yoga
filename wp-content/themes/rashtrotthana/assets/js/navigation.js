@@ -1,11 +1,50 @@
 document.addEventListener('DOMContentLoaded', function () {
   const button = document.querySelector('.rs-menu-toggle');
   const menu = document.querySelector('.rs-navigation');
+  const header = document.querySelector('.rs-site-header');
+
   if (button && menu) {
-    button.addEventListener('click', function () {
-      const isOpen = menu.classList.toggle('is-open');
+    function setNavState(isOpen) {
+      menu.classList.toggle('is-open', isOpen);
       button.setAttribute('aria-expanded', String(isOpen));
+      button.classList.toggle('is-active', isOpen);
+      document.body.classList.toggle('rs-nav-open', isOpen);
+    }
+
+    button.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const isOpen = !menu.classList.contains('is-open');
+      setNavState(isOpen);
     });
+
+    // Close when tapping any navigation link
+    menu.querySelectorAll('.rs-nav-link').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setNavState(false);
+      });
+    });
+
+    // Close on click outside
+    document.addEventListener('click', function (e) {
+      if (menu.classList.contains('is-open') && header && !header.contains(e.target)) {
+        setNavState(false);
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+        setNavState(false);
+        button.focus();
+      }
+    });
+
+    // Close when window resized to desktop
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 992 && menu.classList.contains('is-open')) {
+        setNavState(false);
+      }
+    }, { passive: true });
   }
 
   const innerPage = document.querySelector('body:not(.home) main[class$="-page"]');

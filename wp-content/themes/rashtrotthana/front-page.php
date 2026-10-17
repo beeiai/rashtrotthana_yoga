@@ -2270,7 +2270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         centerSearch.addEventListener('keyup', filterCenters);
     }
 
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 768) return;
 
     document.querySelectorAll('.rs-activity-grid, .rs-gallery-grid').forEach(function (track) {
         var paused = false;

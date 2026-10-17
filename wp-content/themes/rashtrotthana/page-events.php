@@ -1934,19 +1934,30 @@ $all_event_centers = function_exists( 'rs_get_centers' ) ? rs_get_centers() : []
 
 @media (max-width: 768px) {
     .rs-events-header-section {
-        padding: 2.5rem 0 1.5rem;
+        padding: 2.25rem 0 1.5rem;
+    }
+    .rs-events-page-title {
+        font-size: clamp(1.85rem, 6.8vw, 2.4rem);
     }
     .rs-events-filter-row {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
     }
     .rs-events-nav-tabs {
         overflow-x: auto;
         flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+    }
+    .rs-events-nav-tabs::-webkit-scrollbar {
+        display: none;
     }
     .rs-events-search-box {
         max-width: none;
         min-width: 0;
+        width: 100%;
     }
     .rs-carousel-track > * {
         flex: 0 0 84vw;
@@ -1959,7 +1970,7 @@ $all_event_centers = function_exists( 'rs_get_centers' ) ? rs_get_centers() : []
         right: 0;
     }
     .rs-events-newsletter-card {
-        padding: 1.75rem;
+        padding: 1.5rem 1.25rem;
         flex-direction: column;
     }
     .rs-events-newsletter-content {
@@ -1968,6 +1979,32 @@ $all_event_centers = function_exists( 'rs_get_centers' ) ? rs_get_centers() : []
     }
     .rs-events-newsletter-form {
         min-width: 100%;
+    }
+
+    /* Mobile Event & Registration Modals */
+    .rs-event-modal {
+        padding: 10px;
+    }
+    .rs-event-modal-card {
+        padding: 1.5rem 1.15rem;
+        border-radius: 18px;
+        max-height: 94vh;
+    }
+    .rs-event-big-modal {
+        padding: 8px;
+    }
+    .rs-event-big-card {
+        padding: 20px 14px;
+        border-radius: 18px;
+        max-height: 94vh;
+    }
+    .rs-modal-field input,
+    .rs-modal-field select {
+        font-size: 16px !important;
+    }
+    .rs-modal-submit-btn {
+        font-size: 0.95rem;
+        padding: 0.85rem 1.25rem;
     }
 }
 </style>

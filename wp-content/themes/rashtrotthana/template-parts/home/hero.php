@@ -126,11 +126,37 @@ $hero_images = array(
     transform: translateY(0) scale(1);
     pointer-events: auto;
 }
-.rs-hero-blur-slide.is-exiting {
-    opacity: 0;
-    filter: blur(12px);
-    transform: translateY(-8px) scale(0.99);
-    pointer-events: none;
+.rs-hero-action-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 1.5rem;
+}
+.rs-hero-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+@media (max-width: 600px) {
+    .rs-hero-action-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .rs-hero-icon {
+        display: none;
+    }
+    .rs-hero-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .rs-hero-actions .rs-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 </style>
 

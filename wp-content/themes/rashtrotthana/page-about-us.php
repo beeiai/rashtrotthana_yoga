@@ -704,6 +704,22 @@ get_header();
 }
 
 @media (max-width: 768px) {
+    .rs-about-header-section {
+        padding: 2.25rem 0 1.25rem;
+    }
+    .rs-about-page-title {
+        font-size: clamp(1.85rem, 6.8vw, 2.4rem);
+    }
+    .rs-about-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    .rs-about-stat-pill {
+        justify-content: center;
+        border-radius: 12px;
+        padding: 8px 10px;
+    }
     .rs-team-grid {
         grid-template-columns: 1fr;
     }
