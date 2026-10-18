@@ -119,7 +119,7 @@ $rs_home_founder = array(
     'quote_author'=> 'Sri Ajith Kumar',
 );
 
-// --- 4 Homepage Activities ---
+// --- Homepage Activities (All 8 Core Disciplines) ---
 $rs_home_activities = array(
     array(
         'name'  => 'Yoga',
@@ -144,6 +144,30 @@ $rs_home_activities = array(
         'desc'  => 'Value-based cultural learning, Sanskrit fluency, Gita chanting, and moral character building.',
         'image' => content_url( '/uploads/2026/10/culture.jpeg' ),
         'link'  => home_url( '/activities/#culture-education-values' ),
+    ),
+    array(
+        'name'  => 'Dance & Performing Arts',
+        'desc'  => 'Expressive Indian classical forms including Bharatanatyam, Kathak, and traditional folk dances.',
+        'image' => content_url( '/uploads/2026/10/dance.jpg' ),
+        'link'  => home_url( '/activities/#dance-performing-arts' ),
+    ),
+    array(
+        'name'  => 'Art & Creative Skills',
+        'desc'  => 'Visual arts, traditional Indian painting, sketching, pottery, and creative craftsmanship.',
+        'image' => content_url( '/uploads/2026/10/arts.webp' ),
+        'link'  => home_url( '/activities/#art-creative-skills' ),
+    ),
+    array(
+        'name'  => 'Traditional Therapies & Wellness',
+        'desc'  => 'Holistic Ayurveda, Acupressure, therapeutic massage, Naturopathy, and wellness rejuvenation.',
+        'image' => content_url( '/uploads/2026/10/Therapy.jpeg' ),
+        'link'  => home_url( '/activities/#traditional-therapies-wellness' ),
+    ),
+    array(
+        'name'  => 'Counselling & Mental Well-being',
+        'desc'  => 'Empathetic psychological guidance, adolescent mentorship, stress management, and family counselling.',
+        'image' => content_url( '/uploads/2026/10/Counselling.jpeg' ),
+        'link'  => home_url( '/activities/#counselling-mental-wellbeing' ),
     ),
 );
 

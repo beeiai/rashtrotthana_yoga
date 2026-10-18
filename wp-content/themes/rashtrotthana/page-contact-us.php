@@ -1497,9 +1497,9 @@ document.addEventListener('DOMContentLoaded', function () {
                   '<img src="' + mapIconUrl + '" class="rs-map-flag-img" alt="KG Nagar Center Marker">' +
                   '<div class="rs-flag-pulse"></div>' +
                   '</div>',
-            iconSize: [38, 52],
-            iconAnchor: [4, 51],
-            popupAnchor: [15, -48]
+            iconSize: [40, 40],
+            iconAnchor: [20, 38],
+            popupAnchor: [0, -38]
         });
 
         var marker = L.marker([kgNagarCenter.lat, kgNagarCenter.lng], {

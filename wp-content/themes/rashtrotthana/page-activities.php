@@ -23,6 +23,31 @@ $total_subactivities = 0;
 foreach ( $activity_categories as $cat ) {
     $total_subactivities += count( $cat['items'] );
 }
+
+if ( ! function_exists( 'rs_get_category_icon_svg' ) ) {
+    function rs_get_category_icon_svg( $slug ) {
+        switch ( $slug ) {
+            case 'yoga':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-1.5 6c-.8 0-1.5.7-1.5 1.5v3.2l-3-2a1 1 0 0 0-1.4.3 1 1 0 0 0 .3 1.4l3.8 2.5c.3.2.7.2 1 .1l2.3-1.1v4.1l-4.2 1.4a1 1 0 0 0-.6 1.3 1 1 0 0 0 1.3.6l4-1.3c.3-.1.6-.3.7-.6l.7-1.8.7 1.8c.1.3.4.5.7.6l4 1.3a1 1 0 0 0 1.3-.6 1 1 0 0 0-.6-1.3l-4.2-1.4v-4.1l2.3 1.1c.3.1.7.1 1-.1l3.8-2.5a1 1 0 0 0 .3-1.4 1 1 0 0 0-1.4-.3l-3 2V9.5c0-.8-.7-1.5-1.5-1.5h-5z"/></svg>';
+            case 'music-instrumental-arts':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+            case 'dance-performing-arts':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="m9 20 3-6 3 6M6 12l6-3 6 3M12 9V6"/></svg>';
+            case 'sports-fitness-martial-arts':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>';
+            case 'art-creative-skills':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12c0 3.6 2 6.8 5 8.5.5.3 1.1-.1 1.1-.7v-1.1c0-.6.5-1.2 1.2-1.2h2.2c4.4 0 8-3.6 8-8 0-4.1-3.4-7.5-7.5-7.5z"/></svg>';
+            case 'culture-education-values':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-.5 2.5-2 4-2 6 0 1.7 1.3 3 3 3s3-1.3 3-3c0-2-1.5-3.5-2-6z"/><path d="M4 17c1.5 2.5 4.5 4 8 4s6.5-1.5 8-4H4zM12 11v6"/></svg>';
+            case 'traditional-therapies-wellness':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 17 4.5s-.5 1.5-1.6 7.2A7 7 0 0 1 11 20zM2 21c0-4 3-7 7-7"/></svg>';
+            case 'counselling-mental-wellbeing':
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0-9-9c0 1.5.4 3 1.1 4.2L3 21l4.8-1.1c1.3.7 2.7 1.1 4.2 1.1z"/><path d="M9 10h.01M15 10h.01M9.5 15a3.5 3.5 0 0 0 5 0"/></svg>';
+            default:
+                return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>';
+        }
+    }
+}
 ?>
 
 <style>
@@ -197,161 +222,256 @@ foreach ( $activity_categories as $cat ) {
 /* ============================================================
    The 8 Core Pillar Cards Grid (Initial Primary View)
    ============================================================ */
+/* ============================================================
+   Redesigned Activity Category Cards (Core Disciplines)
+   Systematic, Premium, Balanced Architecture
+   ============================================================ */
 .rs-pillars-section {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.25rem;
 }
 
 .rs-pillars-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.35rem;
+    gap: 1.45rem;
 }
 
 .rs-pillar-card {
     position: relative;
-    border-radius: 1.2rem;
+    border-radius: 1.15rem;
     overflow: hidden;
-    background: #fff;
-    border: 1.5px solid rgba(143, 23, 29, .12);
-    box-shadow: 0 8px 24px rgba(89, 37, 24, .06);
+    background: #ffffff;
+    border: 1px solid rgba(143, 23, 29, .12);
+    box-shadow: 0 6px 20px rgba(89, 37, 24, .06), 0 1px 3px rgba(0, 0, 0, .04);
     display: flex;
     flex-direction: column;
-    transition: all 260ms cubic-bezier(.16, 1, .3, 1);
+    height: 100%;
+    transition: transform 280ms cubic-bezier(.16, 1, .3, 1), box-shadow 280ms cubic-bezier(.16, 1, .3, 1), border-color 260ms ease;
     cursor: pointer;
     text-align: left;
+    outline: none;
 }
 
 .rs-pillar-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 18px 40px rgba(89, 37, 24, .14);
-    border-color: var(--color-maroon);
+    box-shadow: 0 18px 42px rgba(89, 37, 24, .13), 0 0 0 1px rgba(243, 106, 33, .35);
+    border-color: rgba(243, 106, 33, .45);
+}
+
+.rs-pillar-card:focus-visible {
+    box-shadow: 0 0 0 3px rgba(243, 106, 33, .45), 0 12px 30px rgba(89, 37, 24, .12);
+}
+
+/* Active State Top Accent Bar */
+.rs-pillar-active-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3.5px;
+    background: linear-gradient(90deg, #F36A21, #F9B72A, #8F171D);
+    z-index: 5;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: opacity 240ms ease, transform 240ms cubic-bezier(.16, 1, .3, 1);
 }
 
 .rs-pillar-card.is-active-pillar {
-    border-color: var(--color-saffron);
-    box-shadow: 0 0 0 4px rgba(243, 106, 33, .25), 0 18px 40px rgba(89, 37, 24, .16);
-    transform: translateY(-3px);
+    border-color: #F36A21 !important;
+    box-shadow: 0 0 0 3px rgba(243, 106, 33, .22), 0 18px 44px rgba(89, 37, 24, .16) !important;
+    transform: translateY(-4px);
 }
 
+.rs-pillar-card.is-active-pillar .rs-pillar-active-bar {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Media Banner */
 .rs-pillar-media {
     position: relative;
     width: 100%;
-    aspect-ratio: 16/10;
+    aspect-ratio: 16 / 10.2;
     overflow: hidden;
-    background: #e2e8f0;
+    background: #f1ede7;
 }
 
 .rs-pillar-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 550ms ease;
     display: block;
+    transition: transform 600ms cubic-bezier(.16, 1, .3, 1), filter 300ms ease;
 }
 
 .rs-pillar-card:hover .rs-pillar-media img {
-    transform: scale(1.08);
+    transform: scale(1.07);
+    filter: saturate(1.05);
 }
 
 .rs-pillar-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(30, 15, 10, 0.65) 100%);
+    background: linear-gradient(180deg, rgba(20, 10, 8, 0.05) 0%, rgba(30, 12, 8, 0.48) 100%);
+    pointer-events: none;
 }
 
+/* Discipline Vector Icon Floating Badge (Top-Left) */
+.rs-pillar-icon-badge {
+    position: absolute;
+    top: .75rem;
+    left: .75rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, .9);
+    box-shadow: 0 4px 12px rgba(35, 12, 8, .16);
+    color: var(--color-maroon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: transform 260ms ease, background 260ms ease, color 260ms ease;
+}
+
+.rs-pillar-card:hover .rs-pillar-icon-badge {
+    transform: scale(1.1) rotate(-4deg);
+    background: #8F171D;
+    color: #ffffff;
+}
+
+.rs-pillar-card.is-active-pillar .rs-pillar-icon-badge {
+    background: #F36A21;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(243, 106, 33, .35);
+}
+
+/* Programs Count Pill (Top-Right) */
 .rs-pillar-badge-count {
     position: absolute;
     top: .75rem;
     right: .75rem;
-    padding: .3rem .75rem;
+    padding: .28rem .75rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, .96);
-    color: var(--color-maroon);
-    font-size: .72rem;
+    background: rgba(255, 255, 255, .94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, .9);
+    box-shadow: 0 4px 12px rgba(35, 12, 8, .12);
+    color: #541e17;
+    font-size: .72rem !important;
     font-weight: 700;
     letter-spacing: .02em;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .14);
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    z-index: 3;
 }
 
+.rs-badge-pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, .6);
+    flex-shrink: 0;
+}
+
+.rs-pillar-badge-count.rs-badge-upcoming {
+    color: #c2410c;
+}
+
+.rs-pillar-badge-count.rs-badge-upcoming .rs-badge-pulse-dot {
+    background: #F36A21;
+    box-shadow: 0 0 6px rgba(243, 106, 33, .6);
+}
+
+/* Card Body */
 .rs-pillar-body {
-    padding: 1.15rem 1.15rem 1.25rem;
+    padding: 1.15rem 1.25rem 1.25rem !important;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    background: linear-gradient(180deg, #ffffff 0%, #fffdfa 100%);
 }
 
+.rs-pillar-header-group {
+    margin-bottom: .45rem;
+}
+
+/* Tagline Kicker */
 .rs-pillar-tagline {
-    font-size: .68rem;
+    font-size: .68rem !important;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .05em;
+    letter-spacing: .08em;
     color: var(--color-saffron);
-    margin-bottom: .45rem;
-    position: relative;
-    display: inline-block;
-    padding-bottom: .25rem;
+    margin-bottom: .3rem !important;
+    display: block;
+    line-height: 1.35;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
 }
 
-.rs-pillar-tagline::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 24px;
-    height: 2px;
-    background: var(--color-saffron);
-    border-radius: 2px;
+/* Category Title */
+.rs-pillar-card .rs-pillar-title,
+.rs-pillar-card h2.rs-pillar-title,
+.rs-pillar-title {
+    margin: 0 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #421712 !important;
+    line-height: 1.35 !important;
+    min-height: 2rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    letter-spacing: -.01em !important;
+    transition: color 180ms ease;
 }
 
-.rs-pillar-card .rs-pillar-title {
-    margin: 0 0 .45rem;
-    font-size: 0.85rem !important;
-    font-weight: 700;
-    color: #542019;
-    line-height: 1.35;
-    min-height: 2.75rem;
-    display: block !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    white-space: normal !important;
-    word-break: normal;
-    overflow-wrap: break-word;
+.rs-pillar-card:hover .rs-pillar-title {
+    color: #8F171D !important;
 }
 
+/* Description */
 .rs-pillar-desc {
-    margin: 0 0 .9rem;
-    font-size: .8rem;
-    color: #67574c;
-    line-height: 1.5;
+    margin: 0 0 1rem !important;
+    font-size: .81rem !important;
+    color: #69584e !important;
+    line-height: 1.55 !important;
     flex-grow: 1;
-    min-height: 3.6rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    min-height: 3.8rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
 }
 
+/* Bottom Action Row */
 .rs-pillar-action-row {
+    margin-top: auto;
+    padding-top: .85rem !important;
+    border-top: 1px solid rgba(143, 23, 29, .08);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: .75rem;
-    border-top: 1px solid rgba(143, 23, 29, .08);
-    margin-top: auto;
 }
 
 .rs-pillar-cta-text {
-    font-size: .82rem;
+    font-size: .8rem !important;
     font-weight: 700;
     color: var(--color-maroon);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: .35rem;
+    transition: color 180ms ease, transform 180ms ease;
 }
 
 .rs-pillar-card:hover .rs-pillar-cta-text {
@@ -359,22 +479,35 @@ foreach ( $activity_categories as $cat ) {
 }
 
 .rs-pillar-chevron {
-    width: 22px;
-    height: 22px;
+    width: 28px !important;
+    height: 28px !important;
     border-radius: 50%;
-    background: rgba(143, 23, 29, .08);
+    background: rgba(143, 23, 29, .07);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-maroon);
-    font-size: .8rem;
-    transition: transform 200ms ease, background 200ms ease;
+    transition: transform 220ms ease, background 220ms ease, color 220ms ease;
+}
+
+.rs-pillar-chevron svg {
+    display: block;
+    transition: transform 220ms ease;
 }
 
 .rs-pillar-card:hover .rs-pillar-chevron {
     background: var(--color-maroon);
-    color: #fff;
+    color: #ffffff;
     transform: translateX(3px);
+}
+
+.rs-pillar-card.is-active-pillar .rs-pillar-cta-text {
+    color: var(--color-saffron);
+}
+
+.rs-pillar-card.is-active-pillar .rs-pillar-chevron {
+    background: var(--color-saffron);
+    color: #ffffff;
 }
 
 /* ============================================================
@@ -1127,32 +1260,60 @@ foreach ( $activity_categories as $cat ) {
         <!-- 8 Primary Activity Pillar Cards (Initial View) -->
         <section class="rs-pillars-section" id="pillars-section" aria-label="Core Activity Disciplines">
             <div class="rs-pillars-grid">
-                <?php foreach ( $activity_categories as $index => $cat ) : ?>
+                <?php foreach ( $activity_categories as $index => $cat ) : 
+                    $prog_count = count( $cat['items'] );
+                    $has_progs  = $prog_count > 0;
+                ?>
                     <article class="rs-pillar-card" 
+                             id="<?php echo esc_attr( $cat['slug'] ); ?>"
                              data-category-slug="<?php echo esc_attr( $cat['slug'] ); ?>"
                              tabindex="0"
                              role="button"
                              aria-label="Explore <?php echo esc_attr( $cat['title'] ); ?> programs">
+                        
+                        <!-- Active Accent Bar -->
+                        <div class="rs-pillar-active-bar" aria-hidden="true"></div>
+
+                        <!-- Media Area with Image & Badges -->
                         <div class="rs-pillar-media">
                             <img src="<?php echo esc_url( $cat['image'] ); ?>" alt="<?php echo esc_attr( $cat['title'] ); ?>" loading="lazy">
                             <div class="rs-pillar-overlay"></div>
-                            <?php if ( count( $cat['items'] ) > 0 ) : ?>
-                                <span class="rs-pillar-badge-count"><?php echo count( $cat['items'] ); ?> Programs</span>
+                            
+                            <!-- Discipline Floating Icon Badge -->
+                            <div class="rs-pillar-icon-badge" aria-hidden="true" title="<?php echo esc_attr( $cat['title'] ); ?>">
+                                <?php echo rs_get_category_icon_svg( $cat['slug'] ); ?>
+                            </div>
+
+                            <!-- Live Program Counter Pill -->
+                            <?php if ( $has_progs ) : ?>
+                                <span class="rs-pillar-badge-count">
+                                    <span class="rs-badge-pulse-dot" aria-hidden="true"></span>
+                                    <span><?php echo esc_html( $prog_count ); ?> Programs</span>
+                                </span>
                             <?php else : ?>
-                                <span class="rs-pillar-badge-count" style="background: rgba(243, 106, 33, 0.95); color: #fff;">Upcoming</span>
+                                <span class="rs-pillar-badge-count rs-badge-upcoming">
+                                    <span class="rs-badge-pulse-dot" aria-hidden="true"></span>
+                                    <span>Upcoming</span>
+                                </span>
                             <?php endif; ?>
                         </div>
 
+                        <!-- Content Body -->
                         <div class="rs-pillar-body">
-                            <span class="rs-pillar-tagline"><?php echo esc_html( $cat['tagline'] ); ?></span>
-                            <h2 class="rs-pillar-title"><?php echo esc_html( $cat['title'] ); ?></h2>
+                            <div class="rs-pillar-header-group">
+                                <span class="rs-pillar-tagline"><?php echo esc_html( $cat['tagline'] ); ?></span>
+                                <h2 class="rs-pillar-title"><?php echo esc_html( $cat['title'] ); ?></h2>
+                            </div>
+
                             <p class="rs-pillar-desc"><?php echo esc_html( $cat['text'] ); ?></p>
                             
                             <div class="rs-pillar-action-row">
                                 <span class="rs-pillar-cta-text">
-                                    <span><?php echo count( $cat['items'] ) > 0 ? 'View Programs' : 'Explore Details'; ?></span>
+                                    <span><?php echo $has_progs ? 'Explore Programs' : 'View Details'; ?></span>
                                 </span>
-                                <span class="rs-pillar-chevron" aria-hidden="true">&rarr;</span>
+                                <span class="rs-pillar-chevron" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                                </span>
                             </div>
                         </div>
                     </article>
@@ -1573,10 +1734,11 @@ document.addEventListener('DOMContentLoaded', function () {
         masterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Attach click to all 4 pillar cards
+    // Attach click to all pillar cards
     pillarCards.forEach(function (card) {
         card.addEventListener('click', function () {
             var slug = this.getAttribute('data-category-slug');
+            if (history.replaceState) history.replaceState(null, null, '#' + slug);
             openCategoryCatalog(slug);
         });
 
@@ -1584,14 +1746,16 @@ document.addEventListener('DOMContentLoaded', function () {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 var slug = this.getAttribute('data-category-slug');
+                if (history.replaceState) history.replaceState(null, null, '#' + slug);
                 openCategoryCatalog(slug);
             }
         });
     });
 
-    // Back to 4 Categories Button (Collapses sub-activities view)
+    // Back to Categories Button (Collapses sub-activities view)
     if (backToCategoriesBtn) {
         backToCategoriesBtn.addEventListener('click', function () {
+            if (history.replaceState) history.replaceState(null, null, window.location.pathname);
             masterSection.classList.remove('is-revealed');
             pillarCards.forEach(function (card) { card.classList.remove('is-active-pillar'); });
             var pillarsSection = document.getElementById('pillars-section');
@@ -1605,6 +1769,11 @@ document.addEventListener('DOMContentLoaded', function () {
     catNavButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
             var slug = this.getAttribute('data-cat-nav');
+            if (slug && slug !== 'all' && history.replaceState) {
+                history.replaceState(null, null, '#' + slug);
+            } else if (history.replaceState) {
+                history.replaceState(null, null, window.location.pathname);
+            }
             openCategoryCatalog(slug);
         });
     });
@@ -1944,19 +2113,66 @@ document.addEventListener('DOMContentLoaded', function () {
     if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAllFilters);
     if (emptyResetBtn) emptyResetBtn.addEventListener('click', resetAllFilters);
 
-    // ── 3. Deep Linking via URL Hash (e.g. #yoga, #karate, #gym, #music-dance) ──
-    var hash = window.location.hash ? window.location.hash.replace('#', '').toLowerCase() : '';
-    if (hash) {
-        if (hash === 'yoga' || hash === 'yoga-wellness') {
-            openCategoryCatalog('yoga');
-        } else if (hash === 'gym' || hash === 'fitness-sports') {
-            openCategoryCatalog('gym');
-        } else if (hash === 'karate' || hash === 'martial-arts') {
-            openCategoryCatalog('karate');
-        } else if (hash === 'music-dance' || hash === 'arts-music' || hash === 'dance') {
-            openCategoryCatalog('music-dance');
+    // ── 3. Deep Linking via URL Hash & Query Param (e.g. #yoga, #sports-fitness-martial-arts, etc.) ──
+    function handleCategoryDeepLink() {
+        var rawHash = window.location.hash ? window.location.hash.replace('#', '').toLowerCase().trim() : '';
+        var urlParams = new URLSearchParams(window.location.search);
+        var catParam = (urlParams.get('category') || '').toLowerCase().trim();
+        var targetSlug = rawHash || catParam;
+
+        if (!targetSlug) return;
+
+        var aliasMap = {
+            'yoga': 'yoga',
+            'yoga-wellness': 'yoga',
+            'sports-fitness-martial-arts': 'sports-fitness-martial-arts',
+            'fitness-sports': 'sports-fitness-martial-arts',
+            'fitness': 'sports-fitness-martial-arts',
+            'sports': 'sports-fitness-martial-arts',
+            'gym': 'sports-fitness-martial-arts',
+            'karate': 'sports-fitness-martial-arts',
+            'martial-arts': 'sports-fitness-martial-arts',
+            'music-instrumental-arts': 'music-instrumental-arts',
+            'music': 'music-instrumental-arts',
+            'music-dance': 'music-instrumental-arts',
+            'arts-music': 'music-instrumental-arts',
+            'dance-performing-arts': 'dance-performing-arts',
+            'dance': 'dance-performing-arts',
+            'art-creative-skills': 'art-creative-skills',
+            'art': 'art-creative-skills',
+            'arts': 'art-creative-skills',
+            'culture-education-values': 'culture-education-values',
+            'culture': 'culture-education-values',
+            'tradition': 'culture-education-values',
+            'traditional-therapies-wellness': 'traditional-therapies-wellness',
+            'traditional-therapies': 'traditional-therapies-wellness',
+            'therapy': 'traditional-therapies-wellness',
+            'wellness': 'traditional-therapies-wellness',
+            'counselling-mental-wellbeing': 'counselling-mental-wellbeing',
+            'counselling': 'counselling-mental-wellbeing',
+            'mental-wellbeing': 'counselling-mental-wellbeing'
+        };
+
+        if (aliasMap[targetSlug]) {
+            targetSlug = aliasMap[targetSlug];
+        }
+
+        var matchingCard = document.querySelector('.rs-pillar-card[data-category-slug="' + targetSlug + '"]');
+        if (matchingCard) {
+            openCategoryCatalog(targetSlug, false);
+            setTimeout(function () {
+                var targetAnchor = document.getElementById(targetSlug) || matchingCard;
+                if (targetAnchor) {
+                    targetAnchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 120);
+        } else {
+            openCategoryCatalog(targetSlug, true);
         }
     }
+
+    handleCategoryDeepLink();
+    window.addEventListener('hashchange', handleCategoryDeepLink);
 
     // ── 4. Student Registration Modal Flow ──
     var regModal = document.getElementById('rs-activity-reg-modal');

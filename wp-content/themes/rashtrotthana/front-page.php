@@ -200,6 +200,44 @@
         color: #fff !important;
     }
 
+    /* Nearest Center Button */
+    .rs-btn-nearest-center {
+        display: inline-flex;
+        align-items: center;
+        gap: .55rem;
+        height: 2.9rem;
+        padding: 0 1.45rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #8F171D, #5D1116);
+        color: #fff !important;
+        font-family: 'Poppins', sans-serif;
+        font-size: .86rem;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(93, 17, 22, .24);
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .rs-btn-nearest-center svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .rs-btn-nearest-center:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 26px rgba(93, 17, 22, .34);
+        background: linear-gradient(135deg, #A81B22, #6E1015);
+        color: #fff !important;
+    }
+
     /* 4-Card Horizontal Grid */
     .rs-homepage .rs-center-cards {
         display: grid;
@@ -716,6 +754,38 @@
         background: #8F171D !important;
         box-shadow: 0 12px 26px rgba(179, 27, 27, .38), 0 0 18px rgba(243, 106, 33, .25), inset 0 1px 0 #fff !important;
         color: #fff !important;
+    }
+
+    .rs-homepage .rs-event-footer .rs-card-closed-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 140px !important;
+        min-width: 140px !important;
+        height: 2.55rem !important;
+        padding: 0 1rem !important;
+        border: 1px solid rgba(117, 106, 97, .24) !important;
+        border-radius: 999px !important;
+        background: rgba(117, 106, 97, .09) !important;
+        color: #756a61 !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: .84rem !important;
+        font-weight: 600 !important;
+        line-height: 1 !important;
+        cursor: not-allowed !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .rs-homepage .rs-event-title a {
+        color: inherit !important;
+        text-decoration: none !important;
+        transition: color 180ms ease !important;
+    }
+
+    .rs-homepage .rs-event-title a:hover {
+        color: #8f171d !important;
     }
     @media (max-width: 700px) {
         .rs-homepage .rs-activity-grid,

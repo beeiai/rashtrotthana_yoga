@@ -74,6 +74,10 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
                     <input id="rs-center-search-input" type="search" placeholder="Search by area or center..." autocomplete="off">
                 </form>
+                <button type="button" class="rs-btn-nearest-center" id="rs-nearest-center-btn" aria-label="Find Nearest Center">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+                    <span>Nearest Center</span>
+                </button>
             </div>
         </div>
 
@@ -120,7 +124,9 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
                          data-venue="<?php echo esc_attr( $event['venue'] ); ?>">
                     
                     <div class="rs-event-media">
-                        <img src="<?php echo esc_url( $event['image'] ); ?>" alt="<?php echo esc_attr( $event['title'] ); ?>" loading="lazy">
+                        <a href="<?php echo esc_url( home_url( '/events/#' . $event['id'] ) ); ?>" aria-label="<?php echo esc_attr( $event['title'] ); ?>">
+                            <img src="<?php echo esc_url( $event['image'] ); ?>" alt="<?php echo esc_attr( $event['title'] ); ?>" loading="lazy">
+                        </a>
                         <div class="rs-event-date-badge">
                             <strong><?php echo esc_html( $event['day'] ); ?></strong>
                             <span><?php echo esc_html( $event['month'] ); ?></span>
@@ -140,14 +146,18 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
                             </div>
                         </div>
 
-                        <h3 class="rs-event-title"><?php echo esc_html( $event['title'] ); ?></h3>
+                        <h3 class="rs-event-title"><a href="<?php echo esc_url( home_url( '/events/#' . $event['id'] ) ); ?>"><?php echo esc_html( $event['title'] ); ?></a></h3>
                         <p class="rs-event-desc"><?php echo esc_html( $event['desc'] ); ?></p>
 
                         <div class="rs-event-footer">
                             <span class="rs-event-mode-badge" title="<?php echo esc_attr( $event['mode'] ); ?>"><?php echo esc_html( $event['mode'] ); ?></span>
-                            <a href="<?php echo esc_url( home_url( '/events/#' . $event['id'] ) ); ?>" class="rs-register-btn">
-                                <span>Register Now</span> <span aria-hidden="true">&rarr;</span>
-                            </a>
+                            <?php if ( ! empty( $event['registration_status'] ) && $event['registration_status'] === 'closed' ) : ?>
+                                <span class="rs-card-closed-pill" aria-label="Registration is closed">Closed</span>
+                            <?php else : ?>
+                                <a href="<?php echo esc_url( home_url( '/events/#' . $event['id'] ) ); ?>" class="rs-register-btn" aria-label="Register now for <?php echo esc_attr( $event['title'] ); ?>">
+                                    <span>Register Now</span> <span aria-hidden="true">&rarr;</span>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </article>
