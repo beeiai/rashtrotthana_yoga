@@ -587,13 +587,18 @@
 @media (max-width: 480px) {
   :root {
     --rcht-right:  14px;
-    --rcht-bottom: 80px;
+    --rcht-bottom: 76px;
+    --rcht-toggle-size: 52px;
   }
 
   #rcht-window {
     width: calc(100vw - 28px);
-    max-height: 72vh;
+    max-height: min(520px, 68vh);
     border-radius: var(--rcht-radius-lg);
+  }
+
+  #rcht-input {
+    font-size: 16px !important;
   }
 }
 

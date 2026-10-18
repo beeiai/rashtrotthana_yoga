@@ -1210,11 +1210,35 @@ foreach ( $gallery_events as $event ) {
 }
 
 @media (max-width: 768px) {
+    .rs-gallery-header-section {
+        padding: 2.25rem 0 1.25rem;
+    }
+    .rs-gallery-page-title {
+        font-size: clamp(1.85rem, 6.8vw, 2.4rem);
+    }
+    .rs-gallery-filter-bar {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 6px 12px;
+        border-radius: 14px;
+        margin: 1.25rem 0 2rem;
+    }
+    .rs-gallery-filter-bar::-webkit-scrollbar {
+        display: none;
+    }
     .rs-event-albums-grid {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
     .rs-hub-media-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    .rs-hub-media-item {
+        border-radius: 12px;
     }
     .rs-featured-videos-grid {
         grid-template-columns: 1fr;
@@ -1222,7 +1246,7 @@ foreach ( $gallery_events as $event ) {
     .rs-gallery-subscribe-banner {
         flex-direction: column;
         text-align: center;
-        padding: 1.75rem;
+        padding: 1.5rem 1.25rem;
     }
     .rs-sub-content {
         flex-direction: column;
@@ -1236,7 +1260,8 @@ foreach ( $gallery_events as $event ) {
         width: 100%;
     }
     .rs-event-media-hub {
-        padding: 1.35rem;
+        padding: 1.15rem;
+        border-radius: 18px;
     }
 }
 </style>

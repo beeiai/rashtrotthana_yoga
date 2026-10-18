@@ -751,11 +751,15 @@ unset( $c );
                     <div class="rs-center-modal-actions">
                         <?php 
                         $directions_url = ! empty( $center['map_url'] ) ? $center['map_url'] : ( 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( 'Rashtrotthana Yoga ' . $center['name'] . ' ' . $center['address'] ) );
+                        $enquire_url    = add_query_arg( array(
+                            'topic'  => 'center-inquiry',
+                            'center' => $center['name'] ?? '',
+                        ), home_url( '/contact-us/' ) );
                         ?>
                         <a href="<?php echo esc_url( $directions_url ); ?>" target="_blank" rel="noopener" class="rs-center-modal-directions-btn">
                             <span>Get Directions ↗</span>
                         </a>
-                        <a href="<?php echo esc_url( home_url('/contact-us/') ); ?>" class="rs-center-modal-enquire-btn">
+                        <a href="<?php echo esc_url( $enquire_url ); ?>" class="rs-center-modal-enquire-btn">
                             <span>Enquire Now →</span>
                         </a>
                     </div>
@@ -865,6 +869,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         );
 
+        var directionsUrl = center.map_url || ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Rashtrotthana Yoga ' + center.name + ' ' + (center.address || '')));
+
         var popupContent = 
             '<div class="rs-map-popup-inner">' +
                 '<img src="' + center.image + '" alt="' + center.name + '" class="rs-map-popup-media" loading="lazy">' +
@@ -877,7 +883,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     center.area +
                 '</p>' +
                 '<p class="rs-map-popup-timing">☀ ' + (center.timing_label || center.hours) + '</p>' +
-                '<button type="button" class="rs-map-popup-btn rs-open-center-modal-btn" data-modal="center-modal-' + center.id + '">View Details →</button>' +
+                '<div style="display:flex;gap:6px;margin-top:10px;">' +
+                    '<button type="button" class="rs-map-popup-btn rs-open-center-modal-btn" data-modal="center-modal-' + center.id + '" style="flex:1;margin-top:0;">View Details →</button>' +
+                    '<a href="' + directionsUrl + '" target="_blank" rel="noopener" class="rs-map-popup-btn" style="flex:1;margin-top:0;background:var(--color-maroon);color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Directions ↗</a>' +
+                '</div>' +
             '</div>';
 
         marker.bindPopup(popupContent, { maxWidth: 280, className: 'rs-custom-leaflet-popup' });
@@ -1269,8 +1278,19 @@ document.addEventListener('DOMContentLoaded', function () {
     handleCenterHash();
     window.addEventListener('hashchange', handleCenterHash);
 
-    // Check url params for locate logic from homepage
+    // Check url params for locate logic or search query from homepage
     var urlParams = new URLSearchParams(window.location.search);
+    var initialQuery = urlParams.get('q') || urlParams.get('search');
+    if (initialQuery && searchInput) {
+        searchInput.value = initialQuery;
+        onFilterChange();
+        setTimeout(function() {
+            var dirSection = document.querySelector('.rs-centers-directory');
+            if (dirSection) {
+                dirSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 150);
+    }
     if (urlParams.get('locate') === '1') {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function(position) {

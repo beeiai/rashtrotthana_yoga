@@ -169,6 +169,12 @@ $rs_home_activities = array(
         'image' => content_url( '/uploads/2026/10/Counselling.jpeg' ),
         'link'  => home_url( '/activities/#counselling-mental-wellbeing' ),
     ),
+    array(
+        'name'  => 'Music & Dance',
+        'desc'  => 'Classical Carnatic vocal, instrumental music training, and expressive traditional dance forms.',
+        'image' => content_url( '/uploads/2026/10/Music.jpg' ),
+        'link'  => home_url( '/activities/#arts-music' ),
+    ),
 );
 
 // --- Event Fallbacks (used on homepage until real CPT events are available) ---

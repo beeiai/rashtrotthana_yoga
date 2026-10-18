@@ -1,4 +1,5 @@
-﻿$file = 'wp-content/themes/rashtrotthana/template-parts/home/homepage-sections.php';
+<?php
+$file = 'wp-content/themes/rashtrotthana/template-parts/home/homepage-sections.php';
 $content = file_get_contents($file);
 
 // Remove activity fallback
