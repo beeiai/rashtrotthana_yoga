@@ -843,7 +843,30 @@ get_header();
     <!-- ============================================================
          1. PAGE HEADER SECTION (Clean Title Block & Stats)
          ============================================================ -->
-    <header class="rs-about-header-section">
+    <header class="rs-about-header-section" style="position: relative; overflow: hidden;">
+        <!-- Sacred Geometry Rotating Mandala Watermark -->
+        <div class="rs-mandala-wrap rs-mandala-section" aria-hidden="true">
+            <svg class="rs-mandala-svg" viewBox="0 0 500 500" fill="none" stroke="currentColor">
+                <g class="rs-mandala-outer" stroke="#404E3B" stroke-width="1.2">
+                    <circle cx="250" cy="250" r="235" stroke-dasharray="4 6"/>
+                    <circle cx="250" cy="250" r="215" stroke-width="1"/>
+                    <polygon points="250,35 436,357 64,357"/>
+                    <polygon points="250,465 64,143 436,143"/>
+                </g>
+                <g class="rs-mandala-middle" stroke="#7B9669" stroke-width="1.4">
+                    <circle cx="250" cy="250" r="160"/>
+                    <circle cx="250" cy="170" r="80"/>
+                    <circle cx="250" cy="330" r="80"/>
+                    <circle cx="170" cy="250" r="80"/>
+                    <circle cx="330" cy="250" r="80"/>
+                </g>
+                <g class="rs-mandala-core" stroke="#BAC8B1" stroke-width="1.6" fill="rgba(123, 150, 105, 0.08)">
+                    <circle cx="250" cy="250" r="50"/>
+                    <circle cx="250" cy="250" r="24" fill="rgba(186, 200, 177, 0.25)"/>
+                    <circle cx="250" cy="250" r="6" fill="#404E3B"/>
+                </g>
+            </svg>
+        </div>
         <div class="rs-container">
             <div class="rs-about-title-block">
                 <h1 class="rs-about-page-title">Rooted in Values. Driven by <em>Purpose.</em></h1>

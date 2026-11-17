@@ -142,6 +142,13 @@ body::before {
     .rs-brand img { max-height: 42px !important; }
 }
 </style>
+
+<!-- Ambient Morning Sunlight Caustics Layer -->
+<div class="rs-caustic-layer" aria-hidden="true"></div>
+
+<!-- Interactive Falling Leaves Canvas Layer (Kept strictly in the background) -->
+<canvas id="rs-falling-leaves-canvas" class="rs-falling-leaves-canvas" aria-hidden="true"></canvas>
+
 <header class="rs-site-header">
     <nav class="rs-navbar">
         <div class="rs-container rs-navbar-inner">

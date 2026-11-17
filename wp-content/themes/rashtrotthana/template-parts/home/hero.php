@@ -21,6 +21,39 @@ $hero_images = array(
 ?>
 <section class="rs-hero">
     <div class="rs-container rs-hero-container">
+        <!-- Sacred Geometry Rotating Mandala Watermark -->
+        <div class="rs-mandala-wrap rs-mandala-hero" aria-hidden="true">
+            <svg class="rs-mandala-svg" viewBox="0 0 500 500" fill="none" stroke="currentColor">
+                <!-- Outer Sri Yantra / 16-petaled ring -->
+                <g class="rs-mandala-outer" stroke="#404E3B" stroke-width="1.2">
+                    <circle cx="250" cy="250" r="235" stroke-dasharray="4 6"/>
+                    <circle cx="250" cy="250" r="215" stroke-width="1"/>
+                    <polygon points="250,35 436,357 64,357"/>
+                    <polygon points="250,465 64,143 436,143"/>
+                    <polygon points="250,55 419,348 81,348" stroke-dasharray="2 4"/>
+                    <polygon points="250,445 81,152 419,152" stroke-dasharray="2 4"/>
+                </g>
+                <!-- Middle 12-petaled Sacred Lotus -->
+                <g class="rs-mandala-middle" stroke="#7B9669" stroke-width="1.4">
+                    <circle cx="250" cy="250" r="160"/>
+                    <circle cx="250" cy="170" r="80"/>
+                    <circle cx="250" cy="330" r="80"/>
+                    <circle cx="170" cy="250" r="80"/>
+                    <circle cx="330" cy="250" r="80"/>
+                    <circle cx="193" cy="193" r="80"/>
+                    <circle cx="307" cy="193" r="80"/>
+                    <circle cx="193" cy="307" r="80"/>
+                    <circle cx="307" cy="307" r="80"/>
+                </g>
+                <!-- Core Bindu & Pulsing Sacred Lotus -->
+                <g class="rs-mandala-core" stroke="#BAC8B1" stroke-width="1.6" fill="rgba(123, 150, 105, 0.08)">
+                    <circle cx="250" cy="250" r="50"/>
+                    <circle cx="250" cy="250" r="24" fill="rgba(186, 200, 177, 0.25)"/>
+                    <circle cx="250" cy="250" r="6" fill="#404E3B"/>
+                </g>
+            </svg>
+        </div>
+
         <div class="rs-hero-content">
             <p class="rs-hero-eyebrow">RASHTROTTHANA YOGA</p>
             <h1 class="rs-hero-title">
@@ -43,6 +76,19 @@ $hero_images = array(
             </div>
         </div>
         <div class="rs-hero-visual">
+            <!-- Floating Animated Yoga Asana Badge -->
+            <div class="rs-asana-float-badge rs-asana-float-hero" aria-hidden="true">
+                <div class="rs-asana-icon-wrap">
+                    <svg viewBox="0 0 32 32">
+                        <circle cx="16" cy="7" r="3.2"/>
+                        <path d="M16 11 C12 11 10 13 9 16 C8.5 17.5 9 19 10.5 19 C11.5 19 12 18 12.5 17 C13 18.5 14.5 19.5 16 19.5 C17.5 19.5 19 18.5 19.5 17 C20 18 20.5 19 21.5 19 C23 19 23.5 17.5 23 16 C22 13 20 11 16 11 Z"/>
+                        <path d="M11 20 C8.5 21 6 23 6 25 C6 26.5 7.5 27 9 27 C12 27 14 25.5 16 25.5 C18 25.5 20 27 23 27 C24.5 27 26 26.5 26 25 C26 23 23.5 21 21 20 C19.5 21.5 17.8 22.5 16 22.5 C14.2 22.5 12.5 21.5 11 20 Z"/>
+                    </svg>
+                    <span class="rs-chakra-dot"></span>
+                </div>
+                <span>Harmonizing Body &amp; Mind</span>
+            </div>
+
             <div class="rs-hero-image-wrapper rs-hero-slideshow" data-slide-interval="4000">
                 <div class="rs-hero-slides">
                     <?php foreach ( $hero_images as $index => $img_url ) : ?>
