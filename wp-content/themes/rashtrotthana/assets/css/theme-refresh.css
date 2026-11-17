@@ -49,31 +49,45 @@
    ========================================================================== */
 
 html {
-    background-color: #f5f6f4;
+    background-color: #EAF1EA;
 }
 
 body {
     position: relative;
     min-height: 100vh;
-    background-color: transparent !important;
-    color: var(--color-text) !important;
-}
-
-/* Fixed Full-screen Watercolor Texture Layer */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -9999;
+    background-color: #EAF1EA !important;
     background-image: url('../images/watercolor-bg.jpg') !important;
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
-    pointer-events: none;
+    color: var(--color-text) !important;
+}
+
+/* Fixed Full-screen Botanical Texture Layer */
+body::before {
+    content: "";
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: -1 !important;
+    background-image: url('../images/watercolor-bg.jpg') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    pointer-events: none !important;
+}
+
+@media (min-width: 901px), (min-aspect-ratio: 1/1) {
+    body {
+        background-image: url('../images/watercolor-bg-wide.jpg') !important;
+    }
+    body::before {
+        background-image: url('../images/watercolor-bg-wide.jpg') !important;
+    }
 }
 
 /* Make all page roots completely transparent so watercolor background shines through */

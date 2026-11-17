@@ -233,26 +233,3 @@ section,
 .rs-event-album-card:hover::before {
     opacity: 1 !important;
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   5. AMBIENT SUNLIGHT CAUSTIC SHIFT
-   ────────────────────────────────────────────────────────────────────────── */
-.rs-caustic-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: -1;
-    background: 
-        radial-gradient(ellipse 45% 35% at 20% 15%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
-        radial-gradient(ellipse 55% 45% at 85% 75%, rgba(186, 200, 177, 0.22) 0%, transparent 100%);
-    animation: rs-caustic-drift 14s ease-in-out infinite alternate;
-}
-
-@keyframes rs-caustic-drift {
-    0%   { transform: translate(0, 0) scale(1); opacity: 0.4; }
-    50%  { transform: translate(3vw, 2vh) scale(1.08); opacity: 0.65; }
-    100% { transform: translate(-2vw, 4vh) scale(0.96); opacity: 0.45; }
-}

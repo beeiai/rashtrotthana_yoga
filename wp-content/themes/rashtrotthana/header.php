@@ -108,8 +108,19 @@ if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('rs_greeting
 </script>
 
 <style>
+body {
+    background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/watercolor-bg.jpg?v=' . filemtime( get_template_directory() . '/assets/images/watercolor-bg.jpg' ) ); ?>') !important;
+}
 body::before {
     background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/watercolor-bg.jpg?v=' . filemtime( get_template_directory() . '/assets/images/watercolor-bg.jpg' ) ); ?>') !important;
+}
+@media (min-width: 901px), (min-aspect-ratio: 1/1) {
+    body {
+        background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/watercolor-bg-wide.jpg?v=' . filemtime( get_template_directory() . '/assets/images/watercolor-bg-wide.jpg' ) ); ?>') !important;
+    }
+    body::before {
+        background-image: url('<?php echo esc_url( get_template_directory_uri() . '/assets/images/watercolor-bg-wide.jpg?v=' . filemtime( get_template_directory() . '/assets/images/watercolor-bg-wide.jpg' ) ); ?>') !important;
+    }
 }
 .rs-site-header{position:sticky;top:0;z-index:1100;box-shadow:none}
 /* Scroll-activated navbar liquid glass */
@@ -142,9 +153,6 @@ body::before {
     .rs-brand img { max-height: 42px !important; }
 }
 </style>
-
-<!-- Ambient Morning Sunlight Caustics Layer -->
-<div class="rs-caustic-layer" aria-hidden="true"></div>
 
 <!-- Interactive Falling Leaves Canvas Layer (Kept strictly in the background) -->
 <canvas id="rs-falling-leaves-canvas" class="rs-falling-leaves-canvas" aria-hidden="true"></canvas>
