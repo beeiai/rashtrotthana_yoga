@@ -28,26 +28,28 @@ foreach ( $gallery_events as $event ) {
    Matches Home, Activities, Centers & Events Pages
    ============================================================ */
 :root {
-    --color-maroon: #8F171D;
-    --color-maroon-dark: #6e1015;
-    --color-saffron: #F36A21;
-    --color-gold: #F9B72A;
-    --color-cream: #FFF8EC;
-    --color-sand: #F7EBD7;
-    --color-text: #292522;
-    --color-text-muted: #6b5c53;
+    --color-maroon: #404E3B;
+    --color-maroon-dark: #2e382b;
+    --color-saffron: #7B9669;
+    --color-gold: #BAC8B1;
+    --color-cream: transparent;
+    --color-sand: #E6E6E6;
+    --color-text: #263124;
+    --color-text-muted: #5e6b5a;
 }
 
 /* Base Page Wrapper with Animated Nature Atmosphere */
 .rs-gallery-page {
+
+.rs-gallery-page::before, .rs-gallery-page::after { display: none !important; }
+
+    background: transparent !important;
+    background-image: none !important;
     position: relative;
     isolation: isolate;
     color: var(--color-text);
     font-family: 'Poppins', sans-serif !important;
-    background: 
-        linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") center top / cover fixed no-repeat !important;
-    animation: rs-nature-drift 24s ease-in-out infinite alternate;
+     ?>") center top / cover fixed no-repeat !important;
     min-height: 100vh;
     padding-bottom: 3.5rem;
 }
@@ -79,8 +81,8 @@ foreach ( $gallery_events as $event ) {
     height: 100%;
     border-radius: 0;
     background:
-        radial-gradient(circle at 8% 10%, rgba(249, 183, 42, .18), transparent 26rem),
-        radial-gradient(circle at 92% 16%, rgba(243, 106, 33, .14), transparent 30rem);
+        radial-gradient(circle at 8% 10%, rgba(186, 200, 177, .18), transparent 26rem),
+        radial-gradient(circle at 92% 16%, rgba(123, 150, 105, .14), transparent 30rem);
     filter: none;
     opacity: 1;
 }
@@ -88,7 +90,7 @@ foreach ( $gallery_events as $event ) {
 .rs-gallery-page::after {
     top: 55rem;
     right: -15rem;
-    background: radial-gradient(circle, rgba(249, 183, 42, .24), transparent 68%);
+    background: radial-gradient(circle, rgba(186, 200, 177, .24), transparent 68%);
     animation: rsg-atmosphere-pulse 5s ease-in-out infinite alternate;
 }
 
@@ -103,16 +105,19 @@ foreach ( $gallery_events as $event ) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .rs-gallery-page { animation: none; }
+    .rs-gallery-page {
+    background: transparent !important;
+    background-image: none !important;
+
+}
     .rs-gallery-page::after { animation: none; }
 }
 
 /* Side Margins: Matching Home, Centers, and Events pages exactly */
 .rs-gallery-page .rs-container {
-    width: 100% !important;
-    max-width: none !important;
-    padding-inline: clamp(20px, 4vw, 64px) !important;
-    margin-inline: auto !important;
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
@@ -137,10 +142,10 @@ foreach ( $gallery_events as $event ) {
     gap: .5rem;
     margin-bottom: .85rem;
     padding: .35rem .95rem;
-    border: 1px solid rgba(143, 23, 29, .18);
+    border: 1px solid rgba(64, 78, 59, .18);
     border-radius: 999px;
-    background: rgba(255, 248, 236, .85);
-    box-shadow: 0 4px 14px rgba(143, 23, 29, .06);
+    background: rgba(245, 246, 244, .85);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .06);
     color: var(--color-maroon);
     font-size: .82rem;
     font-weight: 700;
@@ -153,7 +158,7 @@ foreach ( $gallery_events as $event ) {
     height: 8px;
     border-radius: 50%;
     background: var(--color-saffron);
-    box-shadow: 0 0 10px rgba(243, 106, 33, .8);
+    box-shadow: 0 0 10px rgba(123, 150, 105, .8);
     animation: rsg-dot-blink 1.8s ease-in-out infinite;
 }
 
@@ -164,7 +169,7 @@ foreach ( $gallery_events as $event ) {
 
 .rs-gallery-page-title {
     margin: 0 0 1rem;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(2.3rem, 4vw, 3.4rem);
     font-weight: 800;
     line-height: 1.15;
@@ -204,10 +209,10 @@ foreach ( $gallery_events as $event ) {
     border: 1px solid rgba(255, 255, 255, .85);
     border-radius: 999px;
     background: rgba(255, 255, 255, .75);
-    box-shadow: 0 6px 20px rgba(89, 37, 24, .06);
+    box-shadow: 0 6px 20px rgba(64, 78, 59, .06);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-gallery-stat-pill strong {
@@ -234,8 +239,8 @@ foreach ( $gallery_events as $event ) {
     padding: .45rem;
     border-radius: 999px;
     background: rgba(255, 245, 223, .7);
-    border: 1px solid rgba(143, 23, 29, .14);
-    box-shadow: 0 8px 24px rgba(89, 37, 24, .05);
+    border: 1px solid rgba(64, 78, 59, .14);
+    box-shadow: 0 8px 24px rgba(64, 78, 59, .05);
 }
 
 .rs-gallery-tab-btn {
@@ -259,7 +264,7 @@ foreach ( $gallery_events as $event ) {
 .rs-gallery-tab-btn.is-active {
     background: var(--color-maroon);
     color: #fff;
-    box-shadow: 0 4px 14px rgba(143, 23, 29, .28);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .28);
 }
 
 /* ============================================================
@@ -282,7 +287,7 @@ foreach ( $gallery_events as $event ) {
 .rs-gallery-section-header h2 {
     position: relative;
     margin: 0;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(1.85rem, 3vw, 2.5rem);
     font-weight: 800;
     line-height: 1.2;
@@ -330,10 +335,10 @@ foreach ( $gallery_events as $event ) {
     flex-direction: column;
     height: 100%;
     min-height: 490px;
-    border: 1px solid rgba(143, 23, 29, .13) !important;
+    border: 1px solid rgba(64, 78, 59, .13) !important;
     border-radius: 1.25rem;
-    background: rgba(255, 253, 249, .75);
-    box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: rgba(245, 246, 244, .75);
+    box-shadow: 0 14px 34px rgba(64, 78, 59, .08), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     overflow: hidden;
@@ -349,14 +354,14 @@ foreach ( $gallery_events as $event ) {
     width: 4rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 12px rgba(249, 183, 42, .8);
+    box-shadow: 0 0 12px rgba(186, 200, 177, .8);
     content: "";
 }
 
 .rs-event-album-card:hover {
     transform: translateY(-7px);
-    border-color: rgba(243, 106, 33, .48) !important;
-    box-shadow: 0 24px 44px rgba(89, 37, 24, .16), 0 0 20px rgba(249, 183, 42, .14), inset 0 1px 0 #fff;
+    border-color: rgba(123, 150, 105, .48) !important;
+    box-shadow: 0 24px 44px rgba(64, 78, 59, .16), 0 0 20px rgba(186, 200, 177, .14), inset 0 1px 0 #fff;
 }
 
 .rs-album-media {
@@ -406,9 +411,9 @@ foreach ( $gallery_events as $event ) {
     padding: .35rem .75rem;
     border-radius: 999px;
     background: rgba(255, 255, 255, .92);
-    border: 1px solid rgba(143, 23, 29, .15);
-    box-shadow: 0 4px 12px rgba(89, 37, 24, .15);
-    color: #542019;
+    border: 1px solid rgba(64, 78, 59, .15);
+    box-shadow: 0 4px 12px rgba(64, 78, 59, .15);
+    color: #404E3B;
     font-size: .74rem;
     font-weight: 700;
 }
@@ -454,7 +459,7 @@ foreach ( $gallery_events as $event ) {
 
 .rs-album-title {
     margin: 0 0 .55rem;
-    color: #542019;
+    color: #404E3B;
     font-size: 1.18rem;
     font-weight: 700;
     line-height: 1.32;
@@ -482,7 +487,7 @@ foreach ( $gallery_events as $event ) {
     justify-content: space-between;
     margin-top: auto;
     padding-top: .9rem;
-    border-top: 1px solid rgba(143, 23, 29, .1);
+    border-top: 1px solid rgba(64, 78, 59, .1);
 }
 
 .rs-view-album-btn {
@@ -491,19 +496,19 @@ foreach ( $gallery_events as $event ) {
     gap: .45rem;
     padding: .45rem 1.15rem;
     border-radius: 999px;
-    background: #B31B1B;
-    border: 1px solid #B31B1B;
+    background: #7B9669;
+    border: 1px solid #7B9669;
     color: #fff;
     font-size: .82rem;
     font-weight: 700;
-    box-shadow: 0 6px 16px rgba(179, 27, 27, .25);
+    box-shadow: 0 6px 16px rgba(64, 78, 59, .25);
     transition: all 180ms ease;
 }
 
 .rs-event-album-card:hover .rs-view-album-btn {
-    background: #8F171D;
+    background: #404E3B;
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(179, 27, 27, .38);
+    box-shadow: 0 8px 22px rgba(64, 78, 59, .38);
 }
 
 .rs-view-hint {
@@ -516,20 +521,20 @@ foreach ( $gallery_events as $event ) {
    Interactive Event Media Viewer (Revealed on Click)
    ============================================================ */
 .rs-event-media-hub {
-    display: none;
+    display: none !important;
     margin-bottom: 3.5rem;
     padding: 2.25rem 2.25rem 2.5rem;
-    border: 1px solid rgba(143, 23, 29, .18);
+    border: 1px solid rgba(64, 78, 59, .18);
     border-radius: 1.45rem;
-    background: rgba(255, 253, 249, .92);
-    box-shadow: 0 18px 45px rgba(89, 37, 24, .12), inset 0 1px 0 rgba(255, 255, 255, .95);
+    background: rgba(245, 246, 244, .92);
+    box-shadow: 0 18px 45px rgba(64, 78, 59, .12), inset 0 1px 0 rgba(255, 255, 255, .95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     animation: rsg-fade-up 350ms cubic-bezier(.2,.8,.2,1);
 }
 
 .rs-event-media-hub.is-active {
-    display: block;
+    display: block !important;
 }
 
 @keyframes rsg-fade-up {
@@ -545,7 +550,7 @@ foreach ( $gallery_events as $event ) {
     gap: 1rem;
     margin-bottom: 1.75rem;
     padding-bottom: 1.25rem;
-    border-bottom: 1px solid rgba(143, 23, 29, .14);
+    border-bottom: 1px solid rgba(64, 78, 59, .14);
 }
 
 .rs-hub-back-btn {
@@ -554,7 +559,7 @@ foreach ( $gallery_events as $event ) {
     gap: .45rem;
     padding: .5rem 1.15rem;
     border-radius: 999px;
-    border: 1px solid rgba(143, 23, 29, .22);
+    border: 1px solid rgba(64, 78, 59, .22);
     background: #fff;
     color: var(--color-maroon);
     font-size: .82rem;
@@ -566,7 +571,7 @@ foreach ( $gallery_events as $event ) {
 .rs-hub-back-btn:hover {
     background: var(--color-maroon);
     color: #fff;
-    box-shadow: 0 4px 14px rgba(143, 23, 29, .24);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .24);
 }
 
 .rs-hub-event-switcher {
@@ -578,16 +583,16 @@ foreach ( $gallery_events as $event ) {
 .rs-hub-event-switcher label {
     font-size: .84rem;
     font-weight: 600;
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-hub-select {
     height: 2.35rem;
     padding: 0 2rem 0 .95rem;
-    border: 1px solid rgba(143, 23, 29, .2);
+    border: 1px solid rgba(64, 78, 59, .2);
     border-radius: .6rem;
     background: rgba(255, 255, 255, .95) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238F171D' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right .75rem center;
-    color: #542019;
+    color: #404E3B;
     font-family: 'Poppins', sans-serif;
     font-size: .82rem;
     font-weight: 600;
@@ -605,7 +610,7 @@ foreach ( $gallery_events as $event ) {
     margin: 0 0 .5rem;
     font-size: clamp(1.6rem, 2.8vw, 2.2rem);
     font-weight: 800;
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-hub-meta-pills {
@@ -623,7 +628,7 @@ foreach ( $gallery_events as $event ) {
     padding: .3rem .75rem;
     border-radius: 999px;
     background: #fff0d8;
-    color: #a34812;
+    color: #7B9669;
     font-size: .76rem;
     font-weight: 600;
 }
@@ -658,7 +663,7 @@ foreach ( $gallery_events as $event ) {
     gap: .35rem;
     padding: .45rem 1.15rem;
     border-radius: 999px;
-    border: 1px solid rgba(143, 23, 29, .15);
+    border: 1px solid rgba(64, 78, 59, .15);
     background: rgba(255, 255, 255, .7);
     color: #67574c;
     font-size: .82rem;
@@ -671,7 +676,7 @@ foreach ( $gallery_events as $event ) {
     background: var(--color-maroon);
     color: #fff;
     border-color: var(--color-maroon);
-    box-shadow: 0 4px 12px rgba(143, 23, 29, .25);
+    box-shadow: 0 4px 12px rgba(64, 78, 59, .25);
 }
 
 /* Hub Media Grid (Both Photos and Videos) */
@@ -686,8 +691,8 @@ foreach ( $gallery_events as $event ) {
     border-radius: 1.1rem;
     overflow: hidden;
     background: #fff;
-    border: 1px solid rgba(143, 23, 29, .14);
-    box-shadow: 0 8px 22px rgba(89, 37, 24, .06);
+    border: 1px solid rgba(64, 78, 59, .14);
+    box-shadow: 0 8px 22px rgba(64, 78, 59, .06);
     cursor: pointer;
     transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
     display: flex;
@@ -697,7 +702,7 @@ foreach ( $gallery_events as $event ) {
 .rs-hub-media-card:hover {
     transform: translateY(-5px);
     border-color: var(--color-saffron);
-    box-shadow: 0 16px 32px rgba(89, 37, 24, .14);
+    box-shadow: 0 16px 32px rgba(64, 78, 59, .14);
 }
 
 .rs-hub-thumb-wrap {
@@ -822,7 +827,7 @@ foreach ( $gallery_events as $event ) {
     margin: 0 0 .25rem;
     font-size: .94rem;
     font-weight: 700;
-    color: #542019;
+    color: #404E3B;
     line-height: 1.35;
 }
 
@@ -847,10 +852,10 @@ foreach ( $gallery_events as $event ) {
 }
 
 .rs-video-feature-card {
-    border: 1px solid rgba(143, 23, 29, .13);
+    border: 1px solid rgba(64, 78, 59, .13);
     border-radius: 1.2rem;
-    background: rgba(255, 253, 249, .75);
-    box-shadow: 0 10px 28px rgba(89, 37, 24, .06);
+    background: rgba(245, 246, 244, .75);
+    box-shadow: 0 10px 28px rgba(64, 78, 59, .06);
     overflow: hidden;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -862,8 +867,8 @@ foreach ( $gallery_events as $event ) {
 
 .rs-video-feature-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(243, 106, 33, .45);
-    box-shadow: 0 18px 36px rgba(89, 37, 24, .12);
+    border-color: rgba(123, 150, 105, .45);
+    box-shadow: 0 18px 36px rgba(64, 78, 59, .12);
 }
 
 .rs-video-card-thumb {
@@ -897,7 +902,7 @@ foreach ( $gallery_events as $event ) {
     margin: 0 0 .35rem;
     font-size: .96rem;
     font-weight: 700;
-    color: #542019;
+    color: #404E3B;
     line-height: 1.35;
 }
 
@@ -934,10 +939,10 @@ foreach ( $gallery_events as $event ) {
 .rs-gallery-subscribe-banner {
     margin-top: 2rem;
     padding: 2.25rem 2.5rem;
-    border: 1px solid rgba(143, 23, 29, .15);
+    border: 1px solid rgba(64, 78, 59, .15);
     border-radius: 1.35rem;
     background: linear-gradient(135deg, rgba(255, 240, 218, .92), rgba(255, 250, 242, .92));
-    box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 #fff;
+    box-shadow: 0 14px 34px rgba(64, 78, 59, .08), inset 0 1px 0 #fff;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -959,8 +964,8 @@ foreach ( $gallery_events as $event ) {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: rgba(243, 106, 33, .12);
-    border: 1px solid rgba(243, 106, 33, .25);
+    background: rgba(123, 150, 105, .12);
+    border: 1px solid rgba(123, 150, 105, .25);
     color: var(--color-saffron);
     flex-shrink: 0;
 }
@@ -977,7 +982,7 @@ foreach ( $gallery_events as $event ) {
     display: block;
     font-size: 1.25rem;
     font-weight: 800;
-    color: #542019;
+    color: #404E3B;
     margin-bottom: .25rem;
 }
 
@@ -1000,7 +1005,7 @@ foreach ( $gallery_events as $event ) {
     flex: 1;
     height: 2.75rem;
     padding: 0 1.15rem;
-    border: 1px solid rgba(143, 23, 29, .22);
+    border: 1px solid rgba(64, 78, 59, .22);
     border-radius: 999px;
     background: #fff;
     font-size: .85rem;
@@ -1009,7 +1014,7 @@ foreach ( $gallery_events as $event ) {
 
 .rs-sub-form input:focus {
     border-color: var(--color-maroon);
-    box-shadow: 0 0 0 3px rgba(143, 23, 29, .14);
+    box-shadow: 0 0 0 3px rgba(64, 78, 59, .14);
 }
 
 .rs-sub-form button {
@@ -1022,15 +1027,15 @@ foreach ( $gallery_events as $event ) {
     font-size: .84rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(143, 23, 29, .25);
+    box-shadow: 0 6px 18px rgba(64, 78, 59, .25);
     transition: all 180ms ease;
     white-space: nowrap;
 }
 
 .rs-sub-form button:hover {
-    background: #6e1015;
+    background: #2e382b;
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(143, 23, 29, .35);
+    box-shadow: 0 8px 22px rgba(64, 78, 59, .35);
 }
 
 /* ============================================================
@@ -1067,7 +1072,7 @@ foreach ( $gallery_events as $event ) {
     width: 100%;
     max-height: 92vh;
     border-radius: 1.25rem;
-    background: rgba(255, 253, 249, .98);
+    background: rgba(245, 246, 244, .98);
     box-shadow: 0 25px 60px rgba(0, 0, 0, .45);
     overflow: hidden;
     animation: rsg-modal-in 240ms cubic-bezier(.2,.8,.2,1);
@@ -1083,7 +1088,7 @@ foreach ( $gallery_events as $event ) {
     align-items: center;
     justify-content: space-between;
     padding: .85rem 1.4rem;
-    border-bottom: 1px solid rgba(143, 23, 29, .12);
+    border-bottom: 1px solid rgba(64, 78, 59, .12);
     background: rgba(255, 255, 255, .8);
 }
 
@@ -1091,7 +1096,7 @@ foreach ( $gallery_events as $event ) {
     margin: 0;
     font-size: 1rem;
     font-weight: 700;
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-lightbox-close-btn {
@@ -1099,7 +1104,7 @@ foreach ( $gallery_events as $event ) {
     height: 32px;
     border-radius: 50%;
     border: 0;
-    background: rgba(143, 23, 29, .1);
+    background: rgba(64, 78, 59, .1);
     color: var(--color-maroon);
     font-size: 1.3rem;
     line-height: 1;
@@ -1184,7 +1189,7 @@ foreach ( $gallery_events as $event ) {
 .rs-lightbox-footer {
     padding: .95rem 1.4rem;
     background: #fff;
-    border-top: 1px solid rgba(143, 23, 29, .1);
+    border-top: 1px solid rgba(64, 78, 59, .1);
 }
 
 .rs-lightbox-caption {
@@ -1267,74 +1272,60 @@ foreach ( $gallery_events as $event ) {
 </style>
 
 <main class="rs-gallery-page" id="main-content">
-    <!-- Page Header Block (Hero Removed) -->
-    <header class="rs-gallery-header-section">
-        <div class="rs-container">
-            <div class="rs-gallery-title-block">
-                <h1 class="rs-gallery-page-title">Visual Stories &amp; <em>Memories</em></h1>
-                <p class="rs-gallery-page-subtitle">
-                    Explore inspiring moments from our community gatherings, therapeutic intensives, children’s summer camps, and cultural celebrations across our 23+ Bengaluru centers.
-                </p>
-            </div>
-        </div>
-    </header>
-
-    <!-- Interactive Event Media Hub (Revealed when an Event Album is clicked) -->
-    <section class="rs-container">
-        <div class="rs-event-media-hub" id="rs-event-media-hub" role="region" aria-label="Event Media Viewer">
-            <!-- Hub Top Action Bar -->
-            <div class="rs-hub-top-bar">
-                <button type="button" class="rs-hub-back-btn" id="rs-hub-back-btn">
-                    <span aria-hidden="true">&larr;</span>
-                    <span>Back to All Event Albums</span>
-                </button>
-
-                <div class="rs-hub-event-switcher">
-                    <label for="rs-hub-select-dropdown">Switch Event:</label>
-                    <select id="rs-hub-select-dropdown" class="rs-hub-select">
-                        <?php foreach ( $gallery_events as $ev ) : ?>
-                            <option value="<?php echo esc_attr( $ev['id'] ); ?>"><?php echo esc_html( $ev['title'] ); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Hub Header Details -->
-            <div class="rs-hub-header-info">
-                <h2 class="rs-hub-title" id="rs-hub-active-title">Event Title</h2>
-                <div class="rs-hub-meta-pills">
-                    <span class="rs-hub-meta-pill" id="rs-hub-active-date">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <span>Date</span>
-                    </span>
-                    <span class="rs-hub-meta-pill" id="rs-hub-active-venue">
-                        <svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                        <span>Venue</span>
-                    </span>
-                    <span class="rs-hub-meta-pill" id="rs-hub-active-count">
-                        <span>0 Photos • 0 Videos</span>
-                    </span>
-                </div>
-                <p class="rs-hub-desc" id="rs-hub-active-desc">Event description</p>
-            </div>
-
-            <!-- Hub Media Type Filter Tabs -->
-            <div class="rs-hub-type-tabs">
-                <button type="button" class="rs-hub-tab-btn is-active" data-hub-type="all">All Media (<span id="hub-count-all">0</span>)</button>
-                <button type="button" class="rs-hub-tab-btn" data-hub-type="photo">Photos (<span id="hub-count-photos">0</span>)</button>
-                <button type="button" class="rs-hub-tab-btn" data-hub-type="video">Videos (<span id="hub-count-videos">0</span>)</button>
-            </div>
-
-            <!-- Dynamic Media Grid for Selected Event -->
-            <div class="rs-hub-media-grid" id="rs-hub-media-grid">
-                <!-- Dynamically populated via JS when event card is clicked -->
-            </div>
-        </div>
-    </section>
-
     <!-- Main Event Albums Showcase Section -->
     <section class="rs-gallery-section" id="event-albums-section">
         <div class="rs-container">
+            <!-- Interactive Event Media Hub (Revealed when an Event Album is clicked) -->
+            <div class="rs-event-media-hub" id="rs-event-media-hub" role="region" aria-label="Event Media Viewer">
+                <!-- Hub Top Action Bar -->
+                <div class="rs-hub-top-bar">
+                    <button type="button" class="rs-hub-back-btn" id="rs-hub-back-btn">
+                        <span aria-hidden="true">&larr;</span>
+                        <span>Back to All Event Albums</span>
+                    </button>
+
+                    <div class="rs-hub-event-switcher">
+                        <label for="rs-hub-select-dropdown">Switch Event:</label>
+                        <select id="rs-hub-select-dropdown" class="rs-hub-select">
+                            <?php foreach ( $gallery_events as $ev ) : ?>
+                                <option value="<?php echo esc_attr( $ev['id'] ); ?>"><?php echo esc_html( $ev['title'] ); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Hub Header Details -->
+                <div class="rs-hub-header-info">
+                    <h2 class="rs-hub-title" id="rs-hub-active-title">Event Title</h2>
+                    <div class="rs-hub-meta-pills">
+                        <span class="rs-hub-meta-pill" id="rs-hub-active-date">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Date</span>
+                        </span>
+                        <span class="rs-hub-meta-pill" id="rs-hub-active-venue">
+                            <svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Venue</span>
+                        </span>
+                        <span class="rs-hub-meta-pill" id="rs-hub-active-count">
+                            <span>0 Photos • 0 Videos</span>
+                        </span>
+                    </div>
+                    <p class="rs-hub-desc" id="rs-hub-active-desc">Event description</p>
+                </div>
+
+                <!-- Hub Media Type Filter Tabs -->
+                <div class="rs-hub-type-tabs">
+                    <button type="button" class="rs-hub-tab-btn is-active" data-hub-type="all">All Media (<span id="hub-count-all">0</span>)</button>
+                    <button type="button" class="rs-hub-tab-btn" data-hub-type="photo">Photos (<span id="hub-count-photos">0</span>)</button>
+                    <button type="button" class="rs-hub-tab-btn" data-hub-type="video">Videos (<span id="hub-count-videos">0</span>)</button>
+                </div>
+
+                <!-- Dynamic Media Grid for Selected Event -->
+                <div class="rs-hub-media-grid" id="rs-hub-media-grid">
+                    <!-- Dynamically populated via JS when event card is clicked -->
+                </div>
+            </div>
+
             <div class="rs-gallery-section-header">
                 <div>
                     <h2>Event-Wise <em>Photo &amp; Video Albums</em></h2>

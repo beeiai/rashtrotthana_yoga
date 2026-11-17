@@ -1,0 +1,1258 @@
+/* ==========================================================================
+   Rashtrotthana Yoga — Elevra-Style Liquid Glass & Watercolor System
+   Whole Website Effect:
+     • Fixed watercolor background across entire site
+     • Floating grand frosted glass canvas panels for every section
+     • Clean, prominent typography and pill buttons on the glass cards
+     • Nested liquid glass sub-cards (Apple / Elevra reference match)
+     • Floating glass pill navbar & frosted forest glass footer
+   ========================================================================== */
+
+:root {
+    /* Brand Theme Palette from Image */
+    --color-forest: #404E3B;
+    --color-sage: #7B9669;
+    --color-slate-sage: #6C8480;
+    --color-pale-sage: #BAC8B1;
+    --color-neutral-light: #E6E6E6;
+
+    /* Theme Variable Mappings */
+    --color-maroon: #404E3B;
+    --color-maroon-dark: #2e382b;
+    --color-saffron: #7B9669;
+    --color-gold: #BAC8B1;
+    --color-cream: transparent;
+    --color-sand: rgba(230, 230, 230, 0.45);
+    --color-text: #263124;
+    --color-text-muted: #53634f;
+    --color-orange-soft: rgba(186, 200, 177, 0.35);
+    --container-width: 100%;
+
+    /* Glass Surfaces */
+    --glass-bg-canvas: linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(245, 248, 244, 0.36) 50%, rgba(255, 255, 255, 0.48) 100%);
+    --glass-bg-card: linear-gradient(135deg, rgba(255, 255, 255, 0.70) 0%, rgba(230, 235, 228, 0.42) 50%, rgba(255, 255, 255, 0.58) 100%);
+    --glass-bg-card-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.84) 0%, rgba(230, 235, 228, 0.54) 50%, rgba(255, 255, 255, 0.72) 100%);
+    --glass-border-canvas: 1px solid rgba(255, 255, 255, 0.82);
+    --glass-border-card: 1px solid rgba(255, 255, 255, 0.85);
+    --glass-border-card-hover: 1px solid rgba(123, 150, 105, 0.65);
+    --glass-shadow-canvas: 0 24px 60px -10px rgba(64, 78, 59, 0.12), 0 8px 24px rgba(0, 0, 0, 0.03), inset 0 2px 2px rgba(255, 255, 255, 0.95), inset 0 -1px 2px rgba(186, 200, 177, 0.25);
+    --glass-shadow-card: 0 14px 34px -4px rgba(64, 78, 59, 0.09), 0 4px 12px rgba(0, 0, 0, 0.03), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 2px rgba(186, 200, 177, 0.22);
+    --glass-shadow-card-hover: 0 24px 48px -6px rgba(64, 78, 59, 0.18), 0 8px 16px rgba(0, 0, 0, 0.04), inset 0 2px 2px rgba(255, 255, 255, 1), inset 0 -1px 2px rgba(123, 150, 105, 0.35);
+    --glass-blur-canvas: blur(28px) saturate(180%);
+    --glass-blur-card: blur(30px) saturate(190%);
+    --radius-canvas: 32px;
+    --radius-card: 22px;
+}
+
+/* ==========================================================================
+   1. FIXED WATERCOLOR BACKGROUND (WHOLE WEBSITE)
+   ========================================================================== */
+
+html {
+    background-color: #f5f6f4;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    background-color: transparent !important;
+    color: var(--color-text) !important;
+}
+
+/* Fixed Full-screen Watercolor Texture Layer */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -9999;
+    background-image: url('../images/watercolor-bg.jpg') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    pointer-events: none;
+}
+
+/* Make all page roots completely transparent so watercolor background shines through */
+body.home,
+body:not(.home),
+.rs-homepage,
+body.home .rs-homepage,
+body:not(.home) main[class$="-page"],
+.rs-about-page,
+.rs-activities-page,
+.rs-centers-page,
+.rs-contact-page,
+.rs-events-page,
+.rs-gallery-page,
+body.home .rs-hero,
+body.home .rs-values,
+body.home .rs-content-section,
+body.home .rs-centers,
+body.home .rs-stats,
+body.home .rs-founder-section,
+body.home .rs-testimonials,
+body.home .rs-gallery,
+.rs-hero,
+.rs-values,
+.rs-content-section,
+.rs-centers,
+.rs-stats,
+.rs-founder-section {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+body.home .rs-homepage::before,
+body.home .rs-homepage::after,
+.rs-about-page::before,
+.rs-about-page::after,
+.rs-activities-page::before,
+.rs-activities-page::after,
+.rs-centers-page::before,
+.rs-centers-page::after,
+.rs-contact-page::before,
+.rs-contact-page::after,
+.rs-events-page::before,
+.rs-events-page::after,
+.rs-gallery-page::before,
+.rs-gallery-page::after {
+    display: none !important;
+}
+
+/* ==========================================================================
+   2. FLOATING GLASS NAVBAR (REDUCED SIDE MARGINS)
+   ========================================================================== */
+
+.rs-site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1100 !important;
+    width: 100% !important;
+    padding: 10px clamp(12px, 1.8vw, 24px) 2px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+}
+
+.rs-navbar {
+    width: 100% !important;
+    max-width: min(97vw, 1560px) !important;
+    margin: 0 auto !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.76) 0%, rgba(245, 248, 244, 0.50) 100%) !important;
+    box-shadow: 
+        0 12px 30px -4px rgba(64, 78, 59, 0.10),
+        inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95),
+        inset 0 -1px 2px rgba(186, 200, 177, 0.22) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    padding: 6px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+.rs-site-header.is-scrolled .rs-navbar {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(245, 248, 244, 0.68) 100%) !important;
+    box-shadow: 0 16px 40px rgba(64, 78, 59, 0.12), inset 0 1.5px 1.5px #fff !important;
+}
+
+.rs-navbar .rs-container,
+.rs-navbar-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.rs-brand img {
+    max-height: 48px !important;
+    transition: transform 0.25s ease;
+}
+
+.rs-brand:hover img {
+    transform: scale(1.04);
+}
+
+.rs-navigation {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rs-nav-link {
+    color: #404E3B !important;
+    font-size: 0.94rem !important;
+    font-weight: 600 !important;
+    padding: 8px 16px !important;
+    border-radius: 999px !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+}
+
+.rs-nav-link:hover,
+body.home .rs-navigation .rs-nav-link:hover {
+    color: #404E3B !important;
+    background: rgba(123, 150, 105, 0.16) !important;
+    transform: translateY(-1px);
+}
+
+.rs-nav-link.active,
+body.home .rs-navigation .rs-nav-link.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #7B9669 0%, #404E3B 100%) !important;
+    box-shadow: 0 4px 14px rgba(64, 78, 59, 0.25) !important;
+}
+
+@media (max-width: 992px) {
+    .rs-navbar {
+        border-radius: 20px !important;
+        padding: 8px 16px !important;
+    }
+    .rs-navigation {
+        background: rgba(255, 255, 255, 0.94) !important;
+        -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+        backdrop-filter: blur(28px) saturate(190%) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 20px 50px rgba(64, 78, 59, 0.18) !important;
+        padding: 1.5rem !important;
+    }
+}
+
+/* ==========================================================================
+   3. FLOATING GLASS CANVAS PANELS (REDUCED SIDE MARGINS & TIGHT GAPS)
+   ========================================================================== */
+
+/* Universal Section Glass Canvas — Reduced Side Margins (~18-24px) */
+.rs-hero-container,
+.rs-values .rs-container,
+.rs-content-section .rs-container,
+.rs-centers .rs-container,
+.rs-stats .rs-container,
+.rs-founder-section .rs-container,
+.rs-testimonials .rs-container,
+.rs-gallery .rs-container,
+.rs-about-page .rs-container,
+.rs-activities-page .rs-container,
+.rs-centers-page .rs-container,
+.rs-contact-page .rs-container,
+.rs-events-page .rs-container,
+.rs-gallery-page .rs-container,
+body:not(.home) main[class$="-page"] .rs-container,
+body:not(.home) [class*="-hero-inner"],
+body:not(.home) [class*="-numbers"] > div > div,
+body:not(.home) [class*="-filter"] > div > div {
+    position: relative !important;
+    box-sizing: border-box !important;
+    width: calc(100% - clamp(24px, 3.2vw, 44px)) !important;
+    max-width: min(97vw, 1560px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 0.85rem !important;
+    margin-bottom: 0.85rem !important;
+    border-radius: 26px !important;
+    border: var(--glass-border-canvas) !important;
+    padding: clamp(1.75rem, 3vw, 2.75rem) clamp(1.25rem, 3.2vw, 3rem) !important;
+    background: var(--glass-bg-canvas) !important;
+    box-shadow: var(--glass-shadow-canvas) !important;
+    -webkit-backdrop-filter: var(--glass-blur-canvas) !important;
+    backdrop-filter: var(--glass-blur-canvas) !important;
+}
+
+/* Reduced inter-section spacing between homepage sections */
+.rs-section {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+body.home .rs-hero {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+}
+
+.rs-homepage .rs-centers {
+    padding-block: 1rem !important;
+}
+
+.rs-content-section {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.rs-stats {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.rs-founder-section {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.rs-homepage .rs-heading {
+    margin-bottom: 1.15rem !important;
+}
+
+.rs-section-row {
+    margin-bottom: 1.15rem !important;
+}
+
+.rs-centers-top-bar {
+    margin-bottom: 1.15rem !important;
+}
+
+/* ==========================================================================
+   4. HERO SECTION — FULL WIDTH & REDUCED CARD GAP
+   ========================================================================== */
+
+body.home .rs-hero-container {
+    display: grid !important;
+    grid-template-columns: 1.15fr 0.85fr !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+    min-height: 500px !important;
+    overflow: hidden !important;
+}
+
+body.home .rs-hero-content {
+    position: relative !important;
+    z-index: 2 !important;
+    max-width: 620px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+}
+
+body.home .rs-hero-eyebrow {
+    display: inline-block !important;
+    padding: 4px 14px !important;
+    border-radius: 999px !important;
+    background: rgba(123, 150, 105, 0.16) !important;
+    border: 1px solid rgba(123, 150, 105, 0.35) !important;
+    color: #404E3B !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.14em !important;
+    margin-bottom: 1rem !important;
+}
+
+body.home .rs-hero-title {
+    max-width: 600px !important;
+    color: #404E3B !important;
+    font-size: clamp(2.35rem, 3.8vw, 3.4rem) !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.03em !important;
+    margin: 0 0 1.25rem !important;
+    text-shadow: none !important;
+}
+
+body.home .rs-hero-description {
+    max-width: 520px !important;
+    color: #475743 !important;
+    font-size: clamp(1rem, 1.2vw, 1.1rem) !important;
+    line-height: 1.68 !important;
+    margin: 0 0 1.85rem !important;
+    text-shadow: none !important;
+}
+
+/* Hero Pill Action Buttons (Elevra Style) */
+body.home .rs-hero-action-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+    margin-top: 0.5rem !important;
+    flex-wrap: wrap !important;
+}
+
+body.home .rs-hero-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+}
+
+body.home .rs-hero-icon {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    padding: 10px !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 8px 20px rgba(64, 78, 59, 0.12) !important;
+}
+
+/* Hero Visual / Slideshow inside Framed Glass Card */
+body.home .rs-hero-visual {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 460px !important;
+    max-height: 520px !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 16px 40px rgba(64, 78, 59, 0.14) !important;
+}
+
+body.home .rs-hero-image-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 460px !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.home .rs-hero-image-wrapper::after {
+    display: none !important;
+}
+
+body.home .rs-hero-image-wrapper img,
+body.home .rs-hero-slide {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 460px !important;
+    object-fit: cover !important;
+    border-radius: 24px !important;
+}
+
+@media (max-width: 900px) {
+    body.home .rs-hero-container {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        min-height: auto !important;
+    }
+    body.home .rs-hero-visual {
+        min-height: 380px !important;
+        max-height: 420px !important;
+    }
+}
+
+/* ==========================================================================
+   5. NESTED FROSTED LIQUID GLASS SUB-CARDS (APPLE / ELEVRA MATCH)
+   ========================================================================== */
+
+/* Universal Nested Glass Cards */
+.rs-card-liquid-glass,
+.rs-value-card,
+.rs-activity-card,
+.rs-event-card,
+.rs-event-item-card,
+.rs-center-card,
+.rs-locate-card,
+.rs-team-card,
+.rs-testimonial-card,
+.rs-founder-quote-card,
+.rs-directory-card,
+.rs-event-list-card,
+.rs-center-help-card,
+.rs-center-modal-card,
+.rs-center-activity-card,
+.rs-stat-box,
+body.home .rs-value-card,
+body.home .rs-activity-card,
+body.home .rs-event-card,
+body.home .rs-team-card,
+body.home .rs-center-card,
+body:not(.home) article[class*="card"],
+body:not(.home) article[class*="category"],
+body:not(.home) .rs-download-grid article,
+body:not(.home) .rs-news-grid article,
+body:not(.home) .rs-contact-card {
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: var(--radius-card) !important;
+    background: var(--glass-bg-card) !important;
+    border: var(--glass-border-card) !important;
+    box-shadow: var(--glass-shadow-card) !important;
+    -webkit-backdrop-filter: var(--glass-blur-card) !important;
+    backdrop-filter: var(--glass-blur-card) !important;
+    transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 280ms ease, border-color 280ms ease, background 280ms ease !important;
+}
+
+/* Liquid Glass Hover State */
+.rs-card-liquid-glass:hover,
+.rs-value-card:hover,
+.rs-activity-card:hover,
+.rs-event-card:hover,
+.rs-event-item-card:hover,
+.rs-center-card:hover,
+.rs-locate-card:hover,
+.rs-team-card:hover,
+.rs-testimonial-card:hover,
+.rs-founder-quote-card:hover,
+.rs-directory-card:hover,
+.rs-event-list-card:hover,
+.rs-center-help-card:hover,
+.rs-center-modal-card:hover,
+.rs-center-activity-card:hover,
+.rs-stat-box:hover,
+body.home .rs-value-card:hover,
+body.home .rs-activity-card:hover,
+body.home .rs-event-card:hover,
+body.home .rs-team-card:hover,
+body.home .rs-center-card:hover,
+body:not(.home) article[class*="card"]:hover,
+body:not(.home) article[class*="category"]:hover,
+body:not(.home) .rs-download-grid article:hover,
+body:not(.home) .rs-news-grid article:hover,
+body:not(.home) .rs-contact-card:hover {
+    transform: translateY(-8px) !important;
+    background: var(--glass-bg-card-hover) !important;
+    border: var(--glass-border-card-hover) !important;
+    box-shadow: var(--glass-shadow-card-hover) !important;
+}
+
+/* Inner card bodies are fully transparent so the frosted glass shines through */
+.rs-activity-card-body,
+.rs-center-card-body,
+.rs-event-card-body,
+.rs-directory-card-body,
+.rs-homepage .rs-activity-card-body,
+.rs-homepage .rs-center-card-body,
+.rs-homepage .rs-event-item-card,
+.rs-homepage .rs-team-card,
+.rs-homepage .rs-value-card,
+.rs-center-card-body {
+    background: transparent !important;
+}
+
+/* Card Media Headers */
+.rs-activity-card-media,
+.rs-center-card-img-wrap,
+.rs-event-media,
+.rs-event-image,
+.rs-directory-card-media {
+    border-radius: 20px 20px 0 0 !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
+
+/* ==========================================================================
+   REDUCED GAPS BETWEEN HOME PAGE CARDS (Tight & Seamless)
+   ========================================================================== */
+
+/* Values Cards */
+.rs-value-grid,
+.rs-values .rs-value-grid,
+.rs-homepage .rs-value-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 0.85rem !important;
+}
+
+.rs-value-card,
+.rs-homepage .rs-value-card {
+    padding: 1.35rem 1.25rem !important;
+}
+
+/* Activity Cards */
+.rs-activity-grid,
+.rs-homepage .rs-activity-grid {
+    gap: 0.85rem !important;
+    padding: 0.25rem 0.15rem 0.85rem !important;
+}
+
+.rs-homepage .rs-activity-grid > .rs-activity-card {
+    flex: 0 0 min(22rem, 80vw) !important;
+}
+
+/* 3. Center Cards — Identical Size & Uniform Image Area */
+.rs-center-cards,
+.rs-homepage .rs-center-cards {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.85rem !important;
+    align-items: stretch !important;
+}
+
+.rs-center-card,
+.rs-homepage .rs-center-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 345px !important;
+    border-radius: var(--radius-card) !important;
+    overflow: hidden !important;
+}
+
+.rs-center-card-img-wrap,
+.rs-homepage .rs-center-card-img-wrap {
+    width: 100% !important;
+    height: 195px !important;
+    min-height: 195px !important;
+    max-height: 195px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    background: var(--color-sand) !important;
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.rs-center-card-img-wrap img,
+.rs-homepage .rs-center-card-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 195px !important;
+    max-height: 195px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+.rs-center-card-body,
+.rs-homepage .rs-center-card-body {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 1.15rem 1rem 1.25rem !important;
+    background: transparent !important;
+}
+
+.rs-center-card h3,
+.rs-homepage .rs-center-card h3 {
+    margin: 0 0 0.85rem !important;
+    min-height: 2.6rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.rs-center-card .rs-center-button,
+.rs-homepage .rs-center-card .rs-center-button {
+    margin-top: auto !important;
+    width: 100% !important;
+}
+
+/* Event Cards */
+.rs-event-grid,
+.rs-homepage .rs-event-grid {
+    gap: 0.85rem !important;
+    padding: 0.25rem 0.15rem 0.85rem !important;
+}
+
+.rs-homepage .rs-event-grid > * {
+    flex: 0 0 min(20rem, 78vw) !important;
+}
+
+/* Team Cards */
+.rs-team-grid,
+.rs-homepage .rs-team-grid {
+    gap: 0.85rem !important;
+}
+
+/* Stats Cards */
+.rs-stat-grid,
+.rs-homepage .rs-stat-grid {
+    gap: 0.85rem !important;
+}
+
+/* Gallery Grid */
+.rs-gallery-grid,
+.rs-homepage .rs-gallery-grid {
+    gap: 0.85rem !important;
+    padding: 0.25rem 0.15rem 0.85rem !important;
+}
+
+/* Founder Grid */
+.rs-founder-grid {
+    gap: 1.25rem !important;
+}
+
+/* ==========================================================================
+   6. ELEVRA PILL BUTTONS (VIBRANT SAGE + FROSTED GLASS)
+   ========================================================================== */
+
+/* Primary Pill Button (Elevra "Let's Talk" Style) */
+.rs-btn,
+.rs-btn-primary,
+.rs-center-button,
+.rs-register-button,
+.rs-homepage .rs-btn,
+.rs-homepage .rs-center-button,
+.rs-homepage .rs-register-button,
+.rs-homepage .rs-center-card .rs-center-button,
+body.home .rs-btn,
+body.home .rs-center-button,
+body.home .rs-register-button,
+body.home .rs-center-intro .rs-center-button,
+body.home .rs-center-card .rs-center-button,
+body:not(.home) .rs-btn-primary {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    border-radius: 999px !important;
+    padding: 12px 28px !important;
+    background: linear-gradient(135deg, #7B9669 0%, #404E3B 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 10px 26px rgba(64, 78, 59, 0.28) !important;
+    text-shadow: none !important;
+    text-decoration: none !important;
+    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.rs-btn:hover,
+.rs-btn-primary:hover,
+.rs-center-button:hover,
+.rs-register-button:hover,
+.rs-homepage .rs-btn:hover,
+.rs-homepage .rs-center-button:hover,
+.rs-homepage .rs-register-button:hover,
+.rs-homepage .rs-center-card .rs-center-button:hover,
+body.home .rs-btn:hover,
+body.home .rs-center-button:hover,
+body.home .rs-register-button:hover,
+body.home .rs-center-intro .rs-center-button:hover,
+body.home .rs-center-card:hover .rs-center-button,
+body:not(.home) .rs-btn-primary:hover {
+    background: linear-gradient(135deg, #8ca879 0%, #4a5c43 100%) !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 16px 34px rgba(64, 78, 59, 0.38) !important;
+    color: #ffffff !important;
+}
+
+/* Secondary Frosted Glass Pill Button (Elevra "Get in touch" Style) */
+.rs-btn-secondary,
+.rs-outline-link,
+body.home .rs-hero-action-row .rs-btn-secondary,
+body.home .rs-btn-secondary,
+body.home .rs-outline-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    border-radius: 999px !important;
+    padding: 12px 28px !important;
+    background: rgba(255, 255, 255, 0.58) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.88) !important;
+    color: #404E3B !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    box-shadow: 0 8px 24px rgba(64, 78, 59, 0.08), inset 0 1px 2px #fff !important;
+    text-shadow: none !important;
+    text-decoration: none !important;
+    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.rs-btn-secondary:hover,
+.rs-outline-link:hover,
+body.home .rs-hero-action-row .rs-btn-secondary:hover,
+body.home .rs-btn-secondary:hover,
+body.home .rs-outline-link:hover {
+    background: #7B9669 !important;
+    border-color: #7B9669 !important;
+    color: #ffffff !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 14px 30px rgba(123, 150, 105, 0.35) !important;
+}
+
+/* ==========================================================================
+   7. FROSTED DEEP FOREST GLASS FOOTER (REDUCED SIDE MARGINS)
+   ========================================================================== */
+
+.rs-footer,
+body.home .rs-footer,
+body:not(.home) .rs-footer {
+    width: calc(100% - clamp(24px, 3.2vw, 44px)) !important;
+    max-width: min(97vw, 1560px) !important;
+    margin: 1.5rem auto 1.5rem !important;
+    border-radius: 26px !important;
+    border: 1px solid rgba(255, 255, 255, 0.30) !important;
+    padding: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 3.5vw, 3rem) !important;
+    background: linear-gradient(135deg, rgba(64, 78, 59, 0.92) 0%, rgba(45, 56, 41, 0.96) 100%) !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.22) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
+    backdrop-filter: blur(32px) saturate(190%) !important;
+    color: #E6E6E6 !important;
+}
+
+.rs-footer .rs-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.rs-footer a,
+.rs-footer p,
+.rs-footer span,
+.rs-footer-tagline,
+.rs-footer-contact-text,
+.rs-footer-contact-link {
+    color: #E6E6E6 !important;
+}
+
+.rs-footer-contact-link:hover,
+.rs-footer-contact-icon {
+    color: #BAC8B1 !important;
+}
+
+.rs-socials a:hover {
+    background: #f5f6f4 !important;
+    color: #404E3B !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+}
+
+.rs-footer-bottom {
+    border-top: 1px solid rgba(230, 230, 230, 0.20) !important;
+    color: rgba(230, 230, 230, 0.8) !important;
+}
+
+/* ==========================================================================
+   8. HEADINGS & TYPOGRAPHY ON THE GLASS CARDS
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6,
+.rs-heading h2,
+.rs-section-row h2,
+.rs-center-heading h2,
+.rs-centers-heading,
+body.home .rs-heading h2,
+body.home .rs-section-row h2,
+body:not(.home) [class*="-hero"] h1,
+body:not(.home) [class*="-section"] h2,
+body:not(.home) [class*="-directory"] h2,
+body:not(.home) [class*="-categories"] h2,
+body:not(.home) [class*="-heading"] h2,
+body:not(.home) [class*="-section-heading"] h2 {
+    color: #404E3B !important;
+    text-shadow: none !important;
+}
+
+/* Heading Accent Bars */
+.rs-section-row h2::before,
+.rs-heading h2::before,
+.rs-section-row h2::after,
+.rs-heading h2::after,
+body.home .rs-section-row h2::after,
+body.home .rs-heading h2::after,
+body.home .rs-founder-content .rs-about-section-header h2::after,
+body:not(.home) [class*="-section"] h2::before,
+body:not(.home) [class*="-directory"] h2::before,
+body:not(.home) [class*="-categories"] h2::before,
+body:not(.home) [class*="-heading"] h2::before,
+body:not(.home) [class*="-section-heading"] h2::before {
+    background: linear-gradient(90deg, #7B9669, #404E3B) !important;
+}
+
+/* Kickers & Breadcrumbs */
+.rs-kicker,
+.rs-hero-eyebrow,
+.rs-centers-title-col .rs-kicker,
+body.home .rs-kicker,
+body.home .rs-hero-eyebrow,
+body:not(.home) [class*="-kicker"],
+body:not(.home) [class*="-breadcrumb"] {
+    color: #6C8480 !important;
+}
+
+/* ==========================================================================
+   9. GREETING MESSAGE MODAL (3 SECONDS & BACKGROUND BLUR)
+   ========================================================================== */
+
+/* Full-page Background Blur when greeting is active */
+html.rs-greeting-active body > *:not(#rs-greeting-overlay) {
+    filter: blur(14px) brightness(0.92) !important;
+    transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    pointer-events: none !important;
+    user-select: none !important;
+}
+
+body > *:not(#rs-greeting-overlay) {
+    transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rs-greeting-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(64, 78, 59, 0.35);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+}
+
+.rs-greeting-overlay.rs-dismissing {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.rs-greeting-card {
+    position: relative;
+    width: min(92vw, 440px);
+    padding: 2.25rem 2rem 1.6rem;
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(230, 230, 230, 0.48) 50%, rgba(186, 200, 177, 0.35) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.90) !important;
+    box-shadow: 
+        0 26px 60px -10px rgba(64, 78, 59, 0.30),
+        0 8px 24px rgba(0, 0, 0, 0.06),
+        inset 0 2px 2px rgba(255, 255, 255, 0.95),
+        inset 0 -2px 4px rgba(186, 200, 177, 0.3) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(190%) !important;
+    backdrop-filter: blur(32px) saturate(190%) !important;
+    text-align: center;
+    color: #404E3B;
+    transform: translateY(0) scale(1);
+    animation: rsGreetingPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.rs-greeting-overlay.rs-dismissing .rs-greeting-card {
+    transform: translateY(-8px) scale(0.96);
+    transition: transform 0.45s ease;
+}
+
+@keyframes rsGreetingPop {
+    0% { opacity: 0; transform: translateY(18px) scale(0.94); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.rs-greeting-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    color: #404E3B;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rs-greeting-close:hover {
+    background: #404E3B;
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.rs-greeting-icon-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.rs-greeting-lotus {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(186, 200, 177, 0.55));
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 24px rgba(64, 78, 59, 0.22), inset 0 1px 2px #fff;
+    color: #404E3B;
+    animation: rsLotusPulse 3s ease-in-out infinite;
+}
+
+@keyframes rsLotusPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 10px 24px rgba(64, 78, 59, 0.22); }
+    50% { transform: scale(1.05); box-shadow: 0 14px 30px rgba(123, 150, 105, 0.35); }
+}
+
+.rs-greeting-pill {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: rgba(123, 150, 105, 0.16);
+    border: 1px solid rgba(123, 150, 105, 0.35);
+    color: #404E3B;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.65rem;
+}
+
+.rs-greeting-heading {
+    margin: 0 0 0.45rem;
+    color: #404E3B !important;
+    font-size: 1.45rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em;
+}
+
+.rs-greeting-tagline {
+    margin: 0 0 0.35rem;
+    color: #7B9669 !important;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.rs-greeting-sub {
+    margin: 0;
+    color: #5e6b5a !important;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.rs-greeting-timer-wrap {
+    width: 100%;
+    height: 4px;
+    background: rgba(64, 78, 59, 0.12);
+    border-radius: 999px;
+    margin-top: 1.35rem;
+    overflow: hidden;
+}
+
+.rs-greeting-timer-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #7B9669, #404E3B);
+    border-radius: 999px;
+    animation: rsGreetingProgress 3s linear forwards;
+}
+
+@keyframes rsGreetingProgress {
+    0%   { width: 0%; }
+    100% { width: 100%; }
+}
+
+.rs-greeting-hint {
+    margin-top: 0.65rem;
+    font-size: 0.74rem;
+    color: #6C8480;
+}
+
+.rs-greeting-skip {
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 600;
+    color: #404E3B;
+}
+
+/* ==========================================================================
+   10. INNER PAGES ENHANCEMENTS
+   ========================================================================== */
+
+/* Hero Banner on Inner Pages */
+body:not(.home) [class*="-hero"] {
+    background: transparent !important;
+    min-height: auto !important;
+    padding: 1.5rem 0 !important;
+}
+
+body:not(.home) [class*="-hero-inner"] {
+    min-height: 380px !important;
+}
+
+body:not(.home) [class*="-hero-image"] {
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    opacity: 0.35 !important;
+}
+
+/* Floating Stat Strips / Filters */
+body:not(.home) [class*="-numbers"] > div > div,
+body:not(.home) [class*="-options"] > div > div,
+body:not(.home) [class*="-filter"] > div > div,
+body:not(.home) [class*="-tabs"] nav,
+body:not(.home) [class*="-tab-list"] {
+    background: var(--glass-bg-card) !important;
+    border: var(--glass-border-card) !important;
+    border-radius: 24px !important;
+    box-shadow: var(--glass-shadow-card) !important;
+    -webkit-backdrop-filter: var(--glass-blur-card) !important;
+    backdrop-filter: var(--glass-blur-card) !important;
+}
+
+/* Search inputs and forms on inner pages */
+.rs-center-search input,
+.rs-center-search-box input,
+.rs-contact-form input,
+.rs-contact-form textarea,
+.rs-contact-form select {
+    background: rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.95) !important;
+    border-radius: 14px !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    backdrop-filter: blur(14px) !important;
+    box-shadow: inset 0 1px 2px rgba(64, 78, 59, 0.06) !important;
+}
+
+.rs-center-search input:focus,
+.rs-center-search-box input:focus,
+.rs-contact-form input:focus,
+.rs-contact-form textarea:focus,
+.rs-contact-form select:focus {
+    border-color: #7B9669 !important;
+    box-shadow: 0 0 0 3px rgba(123, 150, 105, 0.3) !important;
+}
+
+/* Floating WhatsApp Button */
+.rs-whatsapp-float {
+    background: rgba(255, 255, 255, 0.6) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ==========================================================================
+   NAVBAR: Remove Hover / Active Underline
+   ========================================================================== */
+.rs-nav-link::after,
+.rs-nav-link::before,
+.rs-nav-link:hover::after,
+.rs-nav-link.active::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    border: none !important;
+    height: 0 !important;
+}
+
+/* ==========================================================================
+   FIND A CENTER: Identical Card & Image Dimensions
+   ========================================================================== */
+body.home .rs-center-cards,
+.rs-homepage .rs-center-cards,
+.rs-center-cards {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1.4rem !important;
+    align-items: stretch !important;
+}
+
+body.home .rs-center-card,
+.rs-homepage .rs-center-card,
+.rs-center-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 350px !important;
+    box-sizing: border-box !important;
+}
+
+body.home .rs-center-card-img-wrap,
+.rs-homepage .rs-center-card-img-wrap,
+.rs-center-card-img-wrap {
+    width: 100% !important;
+    height: 195px !important;
+    min-height: 195px !important;
+    max-height: 195px !important;
+    overflow: hidden !important;
+    flex: 0 0 195px !important;
+    position: relative !important;
+    background: rgba(230, 230, 230, 0.45) !important;
+}
+
+body.home .rs-center-card-img-wrap img,
+.rs-homepage .rs-center-card-img-wrap img,
+.rs-center-card-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+body.home .rs-center-card-body,
+.rs-homepage .rs-center-card-body,
+.rs-center-card-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    justify-content: space-between !important;
+    padding: 1.25rem 1.15rem 1.35rem !important;
+}
+
+body.home .rs-center-card h3,
+.rs-homepage .rs-center-card h3,
+.rs-center-card h3 {
+    margin: 0 0 1rem !important;
+    font-size: 1.15rem !important;
+    min-height: 1.6rem !important;
+    color: #404E3B !important;
+}
+
+/* ==========================================================================
+   FOOTER: Headings in White
+   ========================================================================== */
+.rs-footer h2,
+.rs-footer h3,
+.rs-footer h4,
+footer h2,
+footer h3,
+footer h4 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+}
+
+/* ==========================================================================
+   ACTIVITIES: Compact Category Card Titles (Full Visibility)
+   ========================================================================== */
+body:not(.home) .rs-pillars-section .rs-pillar-card h2,
+body:not(.home) .rs-pillar-card .rs-pillar-title,
+body:not(.home) .rs-pillar-title,
+.rs-pillar-card .rs-pillar-title,
+.rs-pillar-card h2.rs-pillar-title,
+.rs-pillar-title {
+    font-size: 1.05rem !important;
+    line-height: 1.3 !important;
+    padding-top: 0 !important;
+    margin: 0 0 6px !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+    word-break: normal !important;
+    min-height: 2.8rem !important;
+    color: #404E3B !important;
+}
+
+body:not(.home) .rs-pillars-section .rs-pillar-card:hover h2,
+body:not(.home) .rs-pillar-card:hover .rs-pillar-title,
+.rs-pillar-card:hover .rs-pillar-title {
+    color: #7B9669 !important;
+}

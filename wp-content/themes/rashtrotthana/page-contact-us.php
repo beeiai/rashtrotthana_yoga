@@ -49,31 +49,27 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
    Matches Home, Activities, Centers & Events Pages
    ============================================================ */
 :root {
-    --color-maroon: #8F171D;
-    --color-maroon-dark: #6e1015;
-    --color-saffron: #F36A21;
-    --color-gold: #F9B72A;
-    --color-cream: #FFF8EC;
-    --color-sand: #F7EBD7;
-    --color-text: #292522;
-    --color-text-muted: #6b5c53;
+    --color-maroon: #404E3B;
+    --color-maroon-dark: #2e382b;
+    --color-saffron: #7B9669;
+    --color-gold: #BAC8B1;
+    --color-cream: transparent;
+    --color-sand: #E6E6E6;
+    --color-text: #263124;
+    --color-text-muted: #5e6b5a;
 }
 
 /* Base Page Wrapper with Animated Nature Atmosphere */
 .rs-contact-page {
+
+.rs-contact-page::before, .rs-contact-page::after { display: none !important; }
+
+    background: transparent !important;
+    background-image: none !important;
     position: relative;
     isolation: isolate;
     overflow-x: hidden;
-    background-color: var(--color-cream) !important;
-    background-image:
-        radial-gradient(circle at 10% 8%, rgba(249, 183, 42, .24), transparent 28rem),
-        radial-gradient(circle at 90% 12%, rgba(243, 106, 33, .16), transparent 32rem),
-        linear-gradient(180deg, rgba(255, 248, 236, .94) 0%, rgba(255, 248, 236, .84) 40%, rgba(255, 248, 236, .96) 100%),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") !important;
-    background-position: center top, center top, center top, center top !important;
-    background-size: auto, auto, auto, 1920px auto !important;
-    background-repeat: no-repeat, no-repeat, no-repeat, repeat-y !important;
-    background-attachment: scroll, scroll, scroll, fixed !important;
+     ?>") !important;
     color: var(--color-text);
     font-family: 'Poppins', sans-serif !important;
     padding-bottom: 3.5rem;
@@ -100,8 +96,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 100%;
     height: 100%;
     background:
-        radial-gradient(circle at 6% 15%, rgba(249, 183, 42, .18), transparent 28rem),
-        radial-gradient(circle at 94% 22%, rgba(243, 106, 33, .14), transparent 32rem);
+        radial-gradient(circle at 6% 15%, rgba(186, 200, 177, .18), transparent 28rem),
+        radial-gradient(circle at 94% 22%, rgba(123, 150, 105, .14), transparent 32rem);
 }
 
 .rs-contact-page::after {
@@ -109,7 +105,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     right: -12rem;
     width: 36rem;
     height: 36rem;
-    background: radial-gradient(circle, rgba(249, 183, 42, .22), transparent 70%);
+    background: radial-gradient(circle, rgba(186, 200, 177, .22), transparent 70%);
     animation: rsc-atmosphere-pulse 5s ease-in-out infinite alternate;
 }
 
@@ -120,10 +116,9 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 
 /* Side Margins: Matching Home, Centers, and Events pages exactly */
 .rs-contact-page .rs-container {
-    width: 100% !important;
-    max-width: none !important;
-    padding-inline: clamp(20px, 4vw, 64px) !important;
-    margin-inline: auto !important;
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
@@ -148,10 +143,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     gap: .5rem;
     margin-bottom: .85rem;
     padding: .35rem .95rem;
-    border: 1px solid rgba(143, 23, 29, .18);
+    border: 1px solid rgba(64, 78, 59, .18);
     border-radius: 999px;
-    background: rgba(255, 248, 236, .85);
-    box-shadow: 0 4px 14px rgba(143, 23, 29, .06);
+    background: rgba(245, 246, 244, .85);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .06);
     color: var(--color-maroon);
     font-size: .82rem;
     font-weight: 700;
@@ -164,7 +159,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     height: 8px;
     border-radius: 50%;
     background: var(--color-saffron);
-    box-shadow: 0 0 10px rgba(243, 106, 33, .8);
+    box-shadow: 0 0 10px rgba(123, 150, 105, .8);
     animation: rsc-dot-blink 1.8s ease-in-out infinite;
 }
 
@@ -175,7 +170,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 
 .rs-contact-page-title {
     margin: 0 0 1rem;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(2.3rem, 4vw, 3.4rem);
     font-weight: 800;
     line-height: 1.15;
@@ -211,10 +206,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     display: flex;
     flex-direction: column;
     padding: 1.45rem 1.35rem;
-    border: 1px solid rgba(143, 23, 29, .14);
+    border: 1px solid rgba(64, 78, 59, .14);
     border-radius: 1.15rem;
-    background: rgba(255, 253, 249, .78);
-    box-shadow: 0 10px 28px rgba(89, 37, 24, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: rgba(245, 246, 244, .78);
+    box-shadow: 0 10px 28px rgba(64, 78, 59, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     text-align: left;
@@ -230,14 +225,14 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 3.5rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 12px rgba(249, 183, 42, .8);
+    box-shadow: 0 0 12px rgba(186, 200, 177, .8);
     content: "";
 }
 
 .rs-contact-channel-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(243, 106, 33, .45);
-    box-shadow: 0 18px 36px rgba(89, 37, 24, .12), 0 0 20px rgba(249, 183, 42, .12), inset 0 1px 0 #fff;
+    border-color: rgba(123, 150, 105, .45);
+    box-shadow: 0 18px 36px rgba(64, 78, 59, .12), 0 0 20px rgba(186, 200, 177, .12), inset 0 1px 0 #fff;
 }
 
 .rs-channel-header {
@@ -254,8 +249,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: rgba(143, 23, 29, .08);
-    border: 1px solid rgba(143, 23, 29, .14);
+    background: rgba(64, 78, 59, .08);
+    border: 1px solid rgba(64, 78, 59, .14);
     color: var(--color-maroon);
     flex-shrink: 0;
     transition: background 180ms ease, color 180ms ease;
@@ -264,7 +259,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 .rs-contact-channel-card:hover .rs-channel-icon-wrap {
     background: var(--color-maroon);
     color: #fff;
-    box-shadow: 0 4px 14px rgba(143, 23, 29, .3);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .3);
 }
 
 .rs-channel-icon-wrap svg {
@@ -281,7 +276,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     margin: 0;
     font-size: 1.05rem;
     font-weight: 700;
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-channel-value {
@@ -307,7 +302,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     gap: .35rem;
     margin-top: auto;
     padding-top: .85rem;
-    border-top: 1px dashed rgba(143, 23, 29, .12);
+    border-top: 1px dashed rgba(64, 78, 59, .12);
     font-size: .8rem;
     font-weight: 700;
     color: var(--color-saffron);
@@ -339,10 +334,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     display: flex;
     flex-direction: column;
     padding: 2.25rem 2.25rem 2rem;
-    border: 1px solid rgba(143, 23, 29, .14);
+    border: 1px solid rgba(64, 78, 59, .14);
     border-radius: 1.35rem;
-    background: rgba(255, 253, 249, .82);
-    box-shadow: 0 16px 36px rgba(89, 37, 24, .08), inset 0 1px 0 rgba(255, 255, 255, .95);
+    background: rgba(245, 246, 244, .82);
+    box-shadow: 0 16px 36px rgba(64, 78, 59, .08), inset 0 1px 0 rgba(255, 255, 255, .95);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 }
@@ -354,7 +349,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 5rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 14px rgba(249, 183, 42, .85);
+    box-shadow: 0 0 14px rgba(186, 200, 177, .85);
     content: "";
 }
 
@@ -364,7 +359,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 
 .rs-form-card-header h2 {
     margin: 0 0 .4rem;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(1.6rem, 2.4vw, 2.1rem);
     font-weight: 800;
     line-height: 1.2;
@@ -408,7 +403,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 .rs-form-field-wrap label {
     font-size: .82rem;
     font-weight: 600;
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-form-field-wrap label span.req {
@@ -421,7 +416,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 100%;
     height: 2.75rem;
     padding: .55rem 1rem;
-    border: 1px solid rgba(143, 23, 29, .22);
+    border: 1px solid rgba(64, 78, 59, .22);
     border-radius: .7rem;
     background: rgba(255, 255, 255, .92);
     color: #4a271f;
@@ -436,7 +431,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 .rs-contact-textarea:focus {
     border-color: var(--color-maroon);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(143, 23, 29, .14);
+    box-shadow: 0 0 0 3px rgba(64, 78, 59, .14);
 }
 
 .rs-contact-input::placeholder,
@@ -470,10 +465,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     min-width: 175px !important;
     height: 2.85rem !important;
     padding: 0 1.65rem !important;
-    border: 1px solid #B31B1B !important;
+    border: 1px solid #7B9669 !important;
     border-radius: 999px !important;
-    background: #B31B1B !important;
-    box-shadow: 0 8px 22px rgba(179, 27, 27, .3), inset 0 1px 0 rgba(255, 255, 255, .4) !important;
+    background: #7B9669 !important;
+    box-shadow: 0 8px 22px rgba(64, 78, 59, .3), inset 0 1px 0 rgba(255, 255, 255, .4) !important;
     color: #fff !important;
     font-family: 'Poppins', sans-serif !important;
     font-size: .88rem !important;
@@ -486,8 +481,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 
 .rs-contact-submit-btn:hover {
     transform: translateY(-2px) !important;
-    background: #8F171D !important;
-    box-shadow: 0 12px 28px rgba(179, 27, 27, .42), 0 0 18px rgba(243, 106, 33, .25), inset 0 1px 0 #fff !important;
+    background: #404E3B !important;
+    box-shadow: 0 12px 28px rgba(64, 78, 59, .42), 0 0 18px rgba(123, 150, 105, .25), inset 0 1px 0 #fff !important;
 }
 
 .rs-contact-submit-btn svg {
@@ -545,10 +540,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(143, 23, 29, .14);
+    border: 1px solid rgba(64, 78, 59, .14);
     border-radius: 1.35rem;
-    background: rgba(255, 253, 249, .82);
-    box-shadow: 0 16px 36px rgba(89, 37, 24, .08);
+    background: rgba(245, 246, 244, .82);
+    box-shadow: 0 16px 36px rgba(64, 78, 59, .08);
     overflow: hidden;
     min-height: 520px;
 }
@@ -558,7 +553,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     align-items: center;
     justify-content: space-between;
     padding: 1.15rem 1.5rem;
-    border-bottom: 1px solid rgba(143, 23, 29, .12);
+    border-bottom: 1px solid rgba(64, 78, 59, .12);
     background: rgba(255, 255, 255, .7);
 }
 
@@ -566,7 +561,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     margin: 0;
     font-size: 1.05rem;
     font-weight: 800;
-    color: #542019;
+    color: #404E3B;
     display: flex;
     align-items: center;
     gap: .5rem;
@@ -614,7 +609,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 6px 12px rgba(89, 37, 24, .3));
+    filter: drop-shadow(0 6px 12px rgba(64, 78, 59, .3));
     cursor: pointer;
     transition: transform 180ms ease;
 }
@@ -625,8 +620,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 }
 
 .rs-leaflet-pin-wrap.is-hq .rs-pin-svg path {
-    fill: #8F171D;
-    stroke: #F9B72A;
+    fill: #404E3B;
+    stroke: #BAC8B1;
     stroke-width: 2;
 }
 
@@ -647,26 +642,26 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 
 /* Custom Leaflet Popup */
 .rs-custom-leaflet-popup .leaflet-popup-content-wrapper {
-    background: rgba(255, 253, 249, .96) !important;
+    background: rgba(245, 246, 244, .96) !important;
     backdrop-filter: blur(14px) !important;
     -webkit-backdrop-filter: blur(14px) !important;
-    border: 1px solid rgba(143, 23, 29, .2) !important;
+    border: 1px solid rgba(64, 78, 59, .2) !important;
     border-radius: 1rem !important;
-    box-shadow: 0 12px 30px rgba(89, 37, 24, .2) !important;
+    box-shadow: 0 12px 30px rgba(64, 78, 59, .2) !important;
     padding: .85rem 1rem !important;
     color: #4a271f !important;
     font-family: 'Poppins', sans-serif !important;
 }
 
 .rs-custom-leaflet-popup .leaflet-popup-tip {
-    background: rgba(255, 253, 249, .96) !important;
+    background: rgba(245, 246, 244, .96) !important;
 }
 
 .rs-map-popup-inner h4 {
     margin: 0 0 .25rem;
     font-size: .96rem;
     font-weight: 800;
-    color: #542019;
+    color: #404E3B;
 }
 
 .rs-map-popup-badge {
@@ -674,7 +669,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     padding: 2px 7px;
     border-radius: 4px;
     background: #fff0d8;
-    color: #a34812;
+    color: #7B9669;
     font-size: .68rem;
     font-weight: 700;
     margin-bottom: .45rem;
@@ -694,7 +689,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     gap: .5rem;
     margin-top: .4rem;
     padding-top: .4rem;
-    border-top: 1px dashed rgba(143, 23, 29, .15);
+    border-top: 1px dashed rgba(64, 78, 59, .15);
 }
 
 .rs-map-popup-phone {
@@ -720,8 +715,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 /* Floating Head Office Overlay Bar at Bottom of Map */
 .rs-map-hq-overlay {
     padding: 1rem 1.4rem;
-    background: rgba(255, 253, 249, .94);
-    border-top: 1px solid rgba(143, 23, 29, .12);
+    background: rgba(245, 246, 244, .94);
+    border-top: 1px solid rgba(64, 78, 59, .12);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -734,7 +729,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 }
 
 .rs-map-hq-info strong {
-    color: #542019;
+    color: #404E3B;
     font-size: .92rem;
     font-weight: 800;
     display: flex;
@@ -755,13 +750,13 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     gap: .4rem;
     padding: .45rem 1.05rem;
     border-radius: 999px;
-    border: 1px solid rgba(143, 23, 29, .22);
+    border: 1px solid rgba(64, 78, 59, .22);
     background: #fff;
     color: var(--color-maroon);
     font-size: .78rem;
     font-weight: 700;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(89, 37, 24, .08);
+    box-shadow: 0 4px 12px rgba(64, 78, 59, .08);
     transition: all 180ms ease;
 }
 
@@ -769,7 +764,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     background: var(--color-maroon);
     color: #fff;
     border-color: var(--color-maroon);
-    box-shadow: 0 6px 18px rgba(143, 23, 29, .24);
+    box-shadow: 0 6px 18px rgba(64, 78, 59, .24);
 }
 
 /* ============================================================
@@ -792,7 +787,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 .rs-section-header-wrap h2 {
     position: relative;
     margin: 0;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(1.85rem, 3vw, 2.5rem);
     font-weight: 800;
     line-height: 1.2;
@@ -830,20 +825,20 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     align-items: center;
     gap: .45rem;
     padding: .55rem 1.25rem;
-    border: 1px solid rgba(143, 23, 29, .25);
+    border: 1px solid rgba(64, 78, 59, .25);
     border-radius: 999px;
     background: rgba(255, 255, 255, .75);
     color: var(--color-maroon);
     font-size: .84rem;
     font-weight: 700;
     transition: all 180ms ease;
-    box-shadow: 0 4px 14px rgba(89, 37, 24, .06);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .06);
 }
 
 .rs-all-centers-btn:hover {
     background: var(--color-maroon);
     color: #fff;
-    box-shadow: 0 8px 22px rgba(143, 23, 29, .25);
+    box-shadow: 0 8px 22px rgba(64, 78, 59, .25);
     transform: translateY(-2px);
 }
 
@@ -860,10 +855,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(143, 23, 29, .13);
+    border: 1px solid rgba(64, 78, 59, .13);
     border-radius: 1.2rem;
-    background: rgba(255, 253, 249, .75);
-    box-shadow: 0 12px 30px rgba(89, 37, 24, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: rgba(245, 246, 244, .75);
+    box-shadow: 0 12px 30px rgba(64, 78, 59, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     overflow: hidden;
@@ -878,14 +873,14 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 3.5rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 12px rgba(249, 183, 42, .8);
+    box-shadow: 0 0 12px rgba(186, 200, 177, .8);
     content: "";
 }
 
 .rs-contact-center-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(243, 106, 33, .45);
-    box-shadow: 0 20px 40px rgba(89, 37, 24, .14), 0 0 18px rgba(249, 183, 42, .12), inset 0 1px 0 #fff;
+    border-color: rgba(123, 150, 105, .45);
+    box-shadow: 0 20px 40px rgba(64, 78, 59, .14), 0 0 18px rgba(186, 200, 177, .12), inset 0 1px 0 #fff;
 }
 
 .rs-contact-center-media {
@@ -932,7 +927,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     margin: 0 0 .5rem;
     font-size: 1.05rem;
     font-weight: 700;
-    color: #542019;
+    color: #404E3B;
     line-height: 1.3;
 }
 
@@ -968,7 +963,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     justify-content: space-between;
     margin-top: auto;
     padding-top: .8rem;
-    border-top: 1px solid rgba(143, 23, 29, .1);
+    border-top: 1px solid rgba(64, 78, 59, .1);
 }
 
 .rs-contact-center-footer a {
@@ -1002,10 +997,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 }
 
 .rs-faq-card {
-    border: 1px solid rgba(143, 23, 29, .13);
+    border: 1px solid rgba(64, 78, 59, .13);
     border-radius: 1.15rem;
-    background: rgba(255, 253, 249, .8);
-    box-shadow: 0 6px 20px rgba(89, 37, 24, .05), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: rgba(245, 246, 244, .8);
+    box-shadow: 0 6px 20px rgba(64, 78, 59, .05), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     overflow: hidden;
@@ -1013,8 +1008,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 }
 
 .rs-faq-card.is-active {
-    border-color: rgba(243, 106, 33, .45);
-    box-shadow: 0 12px 30px rgba(89, 37, 24, .1);
+    border-color: rgba(123, 150, 105, .45);
+    box-shadow: 0 12px 30px rgba(64, 78, 59, .1);
 }
 
 .rs-faq-trigger {
@@ -1026,7 +1021,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     padding: 1.25rem 1.6rem;
     border: none;
     background: transparent;
-    color: #542019;
+    color: #404E3B;
     font-family: 'Poppins', sans-serif;
     font-size: 1.02rem;
     font-weight: 700;
@@ -1047,7 +1042,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    border: 1px solid rgba(143, 23, 29, .2);
+    border: 1px solid rgba(64, 78, 59, .2);
     background: #fff;
     color: var(--color-maroon);
     font-size: 1.25rem;
@@ -1062,7 +1057,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     color: #fff;
     transform: rotate(45deg);
     border-color: var(--color-maroon);
-    box-shadow: 0 4px 12px rgba(143, 23, 29, .25);
+    box-shadow: 0 4px 12px rgba(64, 78, 59, .25);
 }
 
 .rs-faq-body {
@@ -1080,7 +1075,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     color: #67574c;
     font-size: .92rem;
     line-height: 1.65;
-    border-top: 1px dashed rgba(143, 23, 29, .12);
+    border-top: 1px dashed rgba(64, 78, 59, .12);
     padding-top: 1rem;
 }
 
@@ -1090,10 +1085,10 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
 .rs-contact-assistance-banner {
     margin-top: 2rem;
     padding: 2.25rem 2.5rem;
-    border: 1px solid rgba(143, 23, 29, .15);
+    border: 1px solid rgba(64, 78, 59, .15);
     border-radius: 1.35rem;
     background: linear-gradient(135deg, rgba(255, 240, 218, .92), rgba(255, 250, 242, .92));
-    box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 #fff;
+    box-shadow: 0 14px 34px rgba(64, 78, 59, .08), inset 0 1px 0 #fff;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -1115,8 +1110,8 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: rgba(243, 106, 33, .12);
-    border: 1px solid rgba(243, 106, 33, .25);
+    background: rgba(123, 150, 105, .12);
+    border: 1px solid rgba(123, 150, 105, .25);
     color: var(--color-saffron);
     flex-shrink: 0;
 }
@@ -1135,7 +1130,7 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     display: block;
     font-size: 1.25rem;
     font-weight: 800;
-    color: #542019;
+    color: #404E3B;
     margin-bottom: .25rem;
 }
 
@@ -1163,15 +1158,15 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     color: #fff;
     font-size: .86rem;
     font-weight: 700;
-    box-shadow: 0 8px 22px rgba(143, 23, 29, .28);
+    box-shadow: 0 8px 22px rgba(64, 78, 59, .28);
     transition: all 180ms ease;
     white-space: nowrap;
 }
 
 .rs-assistance-call-btn:hover {
-    background: #6e1015;
+    background: #2e382b;
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(143, 23, 29, .4);
+    box-shadow: 0 12px 28px rgba(64, 78, 59, .4);
     color: #fff;
 }
 
@@ -1182,11 +1177,11 @@ $contact_whatsapp = function_exists('get_field') ? (get_field('ry_whatsapp_numbe
     padding: .75rem 1.45rem;
     border-radius: 999px;
     background: #fff;
-    border: 1px solid rgba(143, 23, 29, .2);
+    border: 1px solid rgba(64, 78, 59, .2);
     color: #436928;
     font-size: .86rem;
     font-weight: 700;
-    box-shadow: 0 6px 16px rgba(89, 37, 24, .06);
+    box-shadow: 0 6px 16px rgba(64, 78, 59, .06);
     transition: all 180ms ease;
     white-space: nowrap;
 }
@@ -1570,7 +1565,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var popupHtml = '<div class="rs-map-popup-inner">' +
             '<img src="' + kgNagarCenter.image + '" alt="' + kgNagarCenter.name + '" class="rs-map-popup-media" style="height:100px;width:100%;object-fit:cover;border-radius:10px;margin-bottom:6px;" loading="lazy">' +
             '<h4 style="margin:0 0 4px;font-size:1rem;color:var(--color-maroon);font-weight:700;">' + kgNagarCenter.name + '</h4>' +
-            '<span class="rs-map-popup-badge" style="display:inline-block;padding:2px 8px;background:rgba(243,106,33,0.12);color:var(--color-saffron);border-radius:20px;font-size:0.7rem;font-weight:600;margin-bottom:6px;">Keshavashilpa</span>' +
+            '<span class="rs-map-popup-badge" style="display:inline-block;padding:2px 8px;background:rgba(123, 150, 105,0.12);color:var(--color-saffron);border-radius:20px;font-size:0.7rem;font-weight:600;margin-bottom:6px;">Keshavashilpa</span>' +
             '<p style="margin:0 0 8px;font-size:0.8rem;color:#555;line-height:1.4;">' + kgNagarCenter.address + '</p>' +
             '<div class="rs-map-popup-actions" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">' +
                 '<a href="tel:9482834425" class="rs-map-popup-phone" style="font-size:0.78rem;font-weight:600;color:var(--color-maroon);">☎ 9482834425</a>' +

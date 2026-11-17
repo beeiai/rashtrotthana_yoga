@@ -16,14 +16,21 @@ function rashtrotthana_enqueue_assets() {
         'rashtrotthana-style',
         get_stylesheet_uri(),
         array(),
-        '1.1.0'
+        '1.2.0'
     );
 
     wp_enqueue_style(
         'rashtrotthana-inner-pages',
         get_template_directory_uri() . '/assets/css/inner-pages.css',
         array( 'rashtrotthana-style' ),
-        '2.1.0'
+        '2.2.0'
+    );
+
+    wp_enqueue_style(
+        'rashtrotthana-theme-refresh',
+        get_template_directory_uri() . '/assets/css/theme-refresh.css',
+        array( 'rashtrotthana-style', 'rashtrotthana-inner-pages' ),
+        '1.0.0'
     );
 
     // ── Global Scripts ────────────────────────────────────────────────────────

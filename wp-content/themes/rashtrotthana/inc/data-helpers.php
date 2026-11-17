@@ -845,7 +845,7 @@ function rs_get_gallery_albums() {
                 'date'          => $date,
                 'venue'         => $venue,
                 'desc'          => $desc,
-                'cover_image'   => $cover_url ?: get_template_directory_uri() . '/assets/images/mandala-bg.jpg',
+                'cover_image'   => $cover_url ?: get_template_directory_uri() . '/assets/images/watercolor-bg.jpg',
                 'photos'        => $photos,
                 'videos'        => $videos,
             );

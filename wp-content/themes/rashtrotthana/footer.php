@@ -17,17 +17,17 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
 .rs-footer-logo{display:block;width:auto!important;max-width:140px!important;height:auto!important;overflow:visible!important;margin:0 0 16px 0}
 .rs-footer-logo img{display:block;width:auto!important;max-width:130px!important;max-height:130px!important;height:auto!important;object-fit:contain}
 .rs-footer-tagline{width:100%;margin:0 0 20px!important;text-align:left}
-.rs-footer a, .rs-footer p, .rs-footer span{color:#fae9de}
+.rs-footer a, .rs-footer p, .rs-footer span{color:#E6E6E6}
 .rs-footer-contact-list{display:flex;flex-direction:column;gap:12px;margin:12px 0 20px;}
 .rs-footer-contact-item{display:flex;align-items:flex-start;gap:10px;margin:0;}
-.rs-footer-contact-icon{flex-shrink:0;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;color:#F9B72A;margin-top:2px;}
+.rs-footer-contact-icon{flex-shrink:0;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;color:#BAC8B1;margin-top:2px;}
 .rs-footer-contact-icon svg{width:16px;height:16px;stroke-width:2.2;}
-.rs-footer-contact-text{margin:0;line-height:1.45;font-size:0.92rem;color:#fae9de;}
-.rs-footer-contact-link{display:inline!important;color:#fae9de!important;text-decoration:none;transition:color .2s ease;font-size:0.92rem;line-height:1.45;}
-.rs-footer-contact-link:hover{color:#F9B72A!important;text-decoration:underline}
+.rs-footer-contact-text{margin:0;line-height:1.45;font-size:0.92rem;color:#E6E6E6;}
+.rs-footer-contact-link{display:inline!important;color:#E6E6E6!important;text-decoration:none;transition:color .2s ease;font-size:0.92rem;line-height:1.45;}
+.rs-footer-contact-link:hover{color:#BAC8B1!important;text-decoration:underline}
 .rs-socials{justify-content:flex-start;width:100%;margin-top:0;gap:12px;display:flex;}
-.rs-socials a{display:grid!important;place-items:center;width:34px;height:34px;border-radius:50%;background:#ffffff;color:#4c5661!important;transition:transform .2s ease,background .2s ease,color .2s ease;text-decoration:none}
-.rs-socials a:hover{transform:translateY(-2px);background:#fff8ec;color:#8F171D!important;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.rs-socials a{display:grid!important;place-items:center;width:34px;height:34px;border-radius:50%;background:#ffffff;color:#404E3B!important;transition:transform .2s ease,background .2s ease,color .2s ease;text-decoration:none}
+.rs-socials a:hover{transform:translateY(-2px);background:#f5f6f4;color:#7B9669!important;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .rs-socials svg{width:18px;height:18px}
 .rs-whatsapp-float{position:fixed;right:24px;bottom:24px;z-index:1090;display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:transparent;box-shadow:0 8px 24px rgba(0,0,0,.18),0 4px 12px rgba(37,211,102,.35);transition:transform 220ms cubic-bezier(.34,1.56,.64,1),box-shadow 220ms ease;text-decoration:none;line-height:0}
 .rs-whatsapp-float:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 14px 28px rgba(0,0,0,.22),0 6px 18px rgba(37,211,102,.45)}
@@ -43,7 +43,7 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
             <p class="rs-footer-tagline">To create<br>Sustainable Healthy Society</p>
         </div>
         <div>
-            <h3>Site Map</h3>
+            <h3 style="color: #ffffff !important;">Site Map</h3>
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
             <a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About Us</a>
             <a href="<?php echo esc_url( home_url( '/activities/' ) ); ?>">Activities</a>
@@ -52,7 +52,7 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
             <a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Contact Us</a>
         </div>
         <div>
-            <h3>Connect With Us</h3>
+            <h3 style="color: #ffffff !important;">Connect With Us</h3>
             <div class="rs-footer-contact-list">
                 <div class="rs-footer-contact-item">
                     <span class="rs-footer-contact-icon" aria-hidden="true">
@@ -81,7 +81,7 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
                     <a href="mailto:<?php echo esc_attr( $email ); ?>" class="rs-footer-contact-link"><?php echo esc_html( $email ); ?></a>
                 </div>
             </div>
-            <h3 style="margin-top:16px; font-size:1.1rem;">Follow Us</h3>
+            <h3 style="color: #ffffff !important; margin-top:16px; font-size:1.1rem;">Follow Us</h3>
             <div class="rs-socials" aria-label="Social media links">
                 <a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
                     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>

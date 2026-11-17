@@ -164,7 +164,7 @@ function rs_render_gallery_album_meta_box( $post ) {
             position: absolute;
             top: 4px;
             right: 4px;
-            background: rgba(143, 23, 29, 0.9);
+            background: rgba(64, 78, 59, 0.9);
             color: #fff;
             border: none;
             border-radius: 50%;
