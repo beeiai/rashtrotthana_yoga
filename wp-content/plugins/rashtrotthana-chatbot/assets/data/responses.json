@@ -1,67 +1,2496 @@
-﻿[
-  {
-    "id": "greeting",
-    "keywords": ["hello", "hi", "namaste", "hey", "good morning", "good evening", "greet"],
-    "response": "Namaste \uD83D\uDE4F! Welcome to <b>Rashtrotthana Yoga</b>. I am here to help you with information about our classes, fees, timings, and registration. How can I assist you today?"
-  },
-  {
-    "id": "about",
-    "keywords": ["about", "who are you", "what is rashtrotthana", "organization", "rashtrotthana yoga", "info", "history"],
-    "response": "<b>Rashtrotthana Yoga</b> is a yoga institution dedicated to promoting holistic well-being through the practice of classical yoga. We offer structured programs for all age groups and experience levels, blending traditional wisdom with modern wellness practices."
-  },
-  {
-    "id": "classes",
-    "keywords": ["class", "classes", "course", "courses", "program", "programs", "yoga", "session", "batch", "group"],
-    "response": "We offer a wide range of yoga classes:\n\u2022 <b>Beginner Yoga</b> \u2013 Foundation postures and breathing\n\u2022 <b>Hatha Yoga</b> \u2013 Traditional postures and alignment\n\u2022 <b>Pranayama</b> \u2013 Breathing techniques and breath control\n\u2022 <b>Meditation</b> \u2013 Mindfulness and relaxation practices\n\u2022 <b>Advanced Asana</b> \u2013 For experienced practitioners\n\u2022 <b>Kids Yoga</b> \u2013 Fun and engaging sessions for children\n\u2022 <b>Yoga for Seniors</b> \u2013 Gentle and therapeutic yoga\n\nWould you like to know the timings or fees for any specific class?"
-  },
-  {
-    "id": "fees",
-    "keywords": ["fee", "fees", "cost", "price", "pricing", "charges", "how much", "payment", "pay", "affordable"],
-    "response": "Our fees are designed to be accessible for everyone:\n\u2022 <b>Monthly Membership</b> \u2013 \u20B9 800 per month\n\u2022 <b>Quarterly Plan</b> \u2013 \u20B9 2,100 (3 months)\n\u2022 <b>Half-Yearly Plan</b> \u2013 \u20B9 3,800 (6 months)\n\u2022 <b>Annual Plan</b> \u2013 \u20B9 6,500 (best value!)\n\u2022 <b>Drop-in Session</b> \u2013 \u20B9 200 per class\n\nAll plans include access to group sessions. Contact us for special discounts for students and senior citizens."
-  },
-  {
-    "id": "timings",
-    "keywords": ["time", "timings", "schedule", "timing", "when", "hours", "morning", "evening", "batch", "slots", "duration"],
-    "response": "Our class timings are:\n\u2022 <b>Morning Batch</b> \u2013 5:30 AM, 6:30 AM, 7:30 AM\n\u2022 <b>Evening Batch</b> \u2013 5:00 PM, 6:00 PM, 7:00 PM\n\u2022 <b>Weekend Special</b> \u2013 Saturday &amp; Sunday 8:00 AM\n\nEach session is approximately <b>60 minutes</b> long. Batches are available Monday to Saturday."
-  },
-  {
-    "id": "location",
-    "keywords": ["location", "address", "where", "place", "directions", "map", "how to reach", "reach", "find us", "located"],
-    "response": "\uD83D\uDCCD We are located at:\n<b>Rashtrotthana Yoga Centre</b>\nRashtrotthana Parishat Road,\nMalleshwaram, Bengaluru \u2013 560 003\nKarnataka, India\n\nWe are easily accessible by bus and metro. Look for us near the Malleshwaram 18th Cross stop."
-  },
-  {
-    "id": "register",
-    "keywords": ["register", "registration", "enroll", "enrolment", "join", "admission", "sign up", "signup", "how to join", "start"],
-    "response": "Ready to begin your yoga journey? \uD83C\uDF3F\n\n<b>To register:</b>\n1. Visit our centre in person at Malleshwaram, Bengaluru\n2. Call us to reserve your spot in a batch\n3. Fill out the online registration form on our website\n\nA trial class is available for first-time visitors absolutely <b>free of charge</b>!"
-  },
-  {
-    "id": "contact",
-    "keywords": ["contact", "call", "phone", "number", "email", "reach out", "talk", "speak", "enquiry", "inquiry", "whatsapp"],
-    "response": "\uD83D\uDCDE <b>Contact Us:</b>\n\u2022 Phone: +91-80-XXXX-XXXX\n\u2022 WhatsApp: Available via the chat button on this page\n\u2022 Email: info@rashtrotthana.org\n\nOur team is available Monday to Saturday, 5:30 AM to 8:00 PM."
-  },
-  {
-    "id": "online",
-    "keywords": ["online", "virtual", "zoom", "remote", "home", "digital", "live stream", "streaming"],
-    "response": "Yes! We offer <b>online yoga classes</b> via Zoom for students who cannot attend in person.\n\u2022 Same schedule as our in-person batches\n\u2022 Interactive live sessions with certified instructors\n\u2022 Recorded classes available on request\n\nContact us to get the Zoom link and joining instructions."
-  },
-  {
-    "id": "instructor",
-    "keywords": ["instructor", "teacher", "guru", "trainer", "coach", "qualified", "certified", "expert", "who teaches"],
-    "response": "Our instructors are highly qualified and certified yoga professionals with years of experience in classical yoga traditions. All our teachers hold certifications from recognized yoga institutes and undergo regular training and development."
-  },
-  {
-    "id": "benefits",
-    "keywords": ["benefit", "benefits", "why", "advantage", "health", "wellness", "good", "helps", "improve", "stress"],
-    "response": "Regular yoga practice offers incredible benefits:\n\u2022 \uD83D\uDCAA Improved strength and flexibility\n\u2022 \uD83E\uDDE0 Reduced stress and anxiety\n\u2022 \uD83D\uDCA4 Better sleep quality\n\u2022 \u2764\uFE0F Improved heart health\n\u2022 \uD83C\uDFAF Enhanced focus and concentration\n\u2022 \uD83C\uDF3F Mind-body harmony\n\nStart your journey today with a <b>free trial class</b>!"
-  },
-  {
-    "id": "trial",
-    "keywords": ["trial", "free", "first class", "demo", "try", "sample"],
-    "response": "\uD83C\uDF89 Great news! We offer a <b>FREE trial class</b> for all first-time visitors.\n\nSimply walk in during any of our class timings or contact us to schedule your trial session. No prior experience needed!"
-  },
-  {
-    "id": "thanks",
-    "keywords": ["thank", "thanks", "thank you", "thankyou", "great", "helpful", "awesome", "perfect"],
-    "response": "You're most welcome! \uD83D\uDE4F We are glad we could help. Feel free to ask anytime. <b>Namaste!</b>"
-  }
+[
+    {
+        "id": "all_centres",
+        "category": "Centers",
+        "question": "What are the branches in Bangalore?",
+        "keywords": [
+            "branches in bangalore",
+            "all centres",
+            "bangalore centres",
+            "centres in bangalore",
+            "branches",
+            "list centres",
+            "show centres",
+            "where are your centres"
+        ],
+        "variations": [
+            "What are the branches in Bangalore?",
+            "Where are your centres in Bangalore?",
+            "List all branches",
+            "Show all centres",
+            "Bangalore yoga centres"
+        ],
+        "response": "Here are our Bangalore centres:",
+        "options": [
+            "Sadashivnagar",
+            "Jayanagar",
+            "Kundalahalli",
+            "KG Nagar",
+            "Sunkenahalli / Basavanagudi",
+            "Vijaynagar",
+            "Gayathrinagar",
+            "Kamakshipalya",
+            "Nagarbhavi",
+            "RBI Layout",
+            "Girinagar",
+            "Kalyana Nagar"
+        ],
+        "source": "http://localhost:8881/centers/"
+    },
+    {
+        "id": "enquiry",
+        "category": "Registration",
+        "question": "Yes, Enquire",
+        "keywords": [
+            "yes enquire",
+            "enquire now",
+            "enquiry form",
+            "admission form",
+            "enquiry link",
+            "open enquiry",
+            "submit enquiry",
+            "enquire",
+            "further query",
+            "queries",
+            "admission enquiry",
+            "how to enquire"
+        ],
+        "variations": [
+            "Yes, Enquire",
+            "Enquire now",
+            "I want to enquire",
+            "Enquiry form",
+            "Admission form"
+        ],
+        "response": "We would love to welcome you to Rashtrotthana Yoga! 🙏✨\n\nFor new admissions, class schedules, or any further queries, our friendly team is always here to assist you.\n\nPlease click below to fill out our quick enquiry form, and we'll be delighted to guide you:\n\n👉 <a href=\"https://yogaapp.rashtrotthana.org/Account/Enquiry\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">Open Official Enquiry Form</a>",
+        "options": [
+            "Continue Asking Questions",
+            "Change Centre"
+        ],
+        "source": "https://yogaapp.rashtrotthana.org/Account/Enquiry"
+    },
+    {
+        "id": "fees",
+        "category": "Fees",
+        "question": "What are the fees?",
+        "keywords": [
+            "fee",
+            "fees",
+            "cost",
+            "price",
+            "pricing",
+            "charges",
+            "membership fee",
+            "monthly fee",
+            "quarterly fee",
+            "annual fee",
+            "how much"
+        ],
+        "variations": [
+            "What are the fees?",
+            "How much are the yoga fees?",
+            "Monthly fee",
+            "Quarterly fee",
+            "Annual fee"
+        ],
+        "response": "• <b>Monthly:</b> ₹800\n• <b>Quarterly:</b> ₹2,100\n• <b>Annual:</b> ₹6,500\n• First class is a <b>FREE trial</b>!",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/ongoing-registrations/"
+    },
+    {
+        "id": "free_trial",
+        "category": "Registration",
+        "question": "Is there a free trial class?",
+        "keywords": [
+            "trial",
+            "free trial",
+            "demo",
+            "demo class",
+            "sample class",
+            "first class free"
+        ],
+        "variations": [
+            "Can I attend a free trial class?",
+            "Is trial free?",
+            "Do you have demo class?"
+        ],
+        "response": "• First-time visitors get a <b>FREE trial class</b>.\n• Please wear loose, comfortable cotton clothing and arrive 10 minutes before batch time.",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/ongoing-registrations/"
+    },
+    {
+        "id": "timings",
+        "category": "Timings",
+        "question": "What are the timings?",
+        "keywords": [
+            "timing",
+            "timings",
+            "hours",
+            "schedule",
+            "batch timings",
+            "morning batches",
+            "evening batches"
+        ],
+        "variations": [
+            "What are the timings?",
+            "What are your class timings?",
+            "Batch timings"
+        ],
+        "response": "• <b>Timings:</b> Morning: 5:30 AM – 10:30 AM | Evening: 4:30 PM – 8:00 PM\n• Please select a centre to see its exact batch timings.",
+        "options": [
+            "Sadashivnagar",
+            "Jayanagar",
+            "Kundalahalli",
+            "KG Nagar",
+            "Sunkenahalli / Basavanagudi",
+            "Vijaynagar",
+            "Gayathrinagar",
+            "Kamakshipalya",
+            "Nagarbhavi",
+            "RBI Layout",
+            "Girinagar",
+            "Kalyana Nagar"
+        ],
+        "source": "http://localhost:8881/centers/"
+    },
+    {
+        "id": "about",
+        "category": "About Us",
+        "question": "What is Rashtrotthana Yoga and who founded it?",
+        "keywords": [
+            "about",
+            "history",
+            "founded",
+            "established",
+            "founder",
+            "ajith kumar",
+            "rashtrotthana parishat"
+        ],
+        "variations": [
+            "What is Rashtrotthana Yoga?",
+            "Who founded Rashtrotthana Yoga?",
+            "When was it established?"
+        ],
+        "response": "• Founded in 1972 by <b>Sri Ajith Kumar</b> under Rashtrotthana Parishat.\n• Over 24+ centres across Bengaluru dedicated to holistic health (*Swastha-Susthira Samajanirmanam*).",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/about-us/"
+    },
+    {
+        "id": "contact",
+        "category": "Contact",
+        "question": "How can I contact you?",
+        "keywords": [
+            "contact",
+            "helpline",
+            "phone",
+            "call",
+            "number",
+            "whatsapp",
+            "email",
+            "talk to someone"
+        ],
+        "variations": [
+            "How can I contact you?",
+            "Phone number",
+            "WhatsApp number",
+            "Central helpline"
+        ],
+        "response": "• <b>Helpline:</b> <a href=\"tel:08026644444\" class=\"rcht-blue-link\">080 2664 4444</a> / <a href=\"tel:+919606080778\" class=\"rcht-blue-link\">+91 96060 80778</a>\n• <b>WhatsApp:</b> <a href=\"https://wa.me/919606044453\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">+91 96060 44453</a>\n• <b>Email:</b> <a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>\n• <b>Head Office:</b> Keshavashilpa, KG Nagar, Bengaluru",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/contact-us/"
+    },
+    {
+        "id": "thanks",
+        "category": "Conversational",
+        "question": "Thanks",
+        "keywords": [
+            "thank",
+            "thanks",
+            "thank you",
+            "dhanyavada",
+            "dhanyavadagalu"
+        ],
+        "variations": [
+            "Thank you",
+            "Thanks",
+            "Dhanyavadagalu",
+            "Thank you so much"
+        ],
+        "response": "You are most welcome! 🙏 Wishing you peace and good health. <b>Om Shanti!</b>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/"
+    },
+    {
+        "id": "center_sadashivnagar",
+        "center_id": "sadashivnagar",
+        "category": "Centers",
+        "name": "Sadashivnagar",
+        "question": "Tell me about Sadashivnagar centre.",
+        "keywords": [
+            "sadashivnagar",
+            "sadashivanagar",
+            "sankey tank",
+            "palace orchards",
+            "sadashivnagar",
+            "sadashivnagar"
+        ],
+        "variations": [
+            "Sadashivnagar",
+            "Select Sadashivnagar",
+            "Tell me about Sadashivnagar",
+            "Tell me about Sadashivnagar centre",
+            "Where is Sadashivnagar centre located?",
+            "Where is Sadashivnagar centre?"
+        ],
+        "address": "\"Patanjali Yoga Mandira\", No. 10, 9th Cross, 8th Main, Palace Orchards, Near Sankey Tank, Sadashivnagar, Bengaluru – 560080",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=13.0068,77.5813",
+        "phones": [
+            "7899423350",
+            "080 2361 9000"
+        ],
+        "phones_html": "<a href=\"tel:7899423350\" class=\"rcht-blue-link\">7899423350</a> / <a href=\"tel:08023619000\" class=\"rcht-blue-link\">080 2361 9000</a>",
+        "email": "sadashivanagar@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:sadashivanagar@rashtrotthana.org\" class=\"rcht-blue-link\">sadashivanagar@rashtrotthana.org</a>",
+        "timings": "Morning: 5:40 AM, 5:45 AM, 6:55 AM, 7:00 AM, 7:15 AM, 8:30 AM, 11:00 AM | Evening: 4:45 PM, 5:00 PM, 6:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Yoga for Children, Keyboard, Bharatanatyam, Taekwondo, Bala Samskara Kendra, Bhagavad Gita Class",
+        "response": "• <b>Centre:</b> Sadashivnagar\n• <b>Location:</b> \"Patanjali Yoga Mandira\", No. 10, 9th Cross, 8th Main, Palace Orchards, Near Sankey Tank, Sadashivnagar, Bengaluru – 560080\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=13.0068,77.5813\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/sadashivnagar/"
+    },
+    {
+        "id": "center_jayanagar",
+        "center_id": "jayanagar",
+        "category": "Centers",
+        "name": "Jayanagar",
+        "question": "Tell me about Jayanagar centre.",
+        "keywords": [
+            "jayanagar",
+            "4th block",
+            "jayanagar hq",
+            "head office",
+            "jayanagar",
+            "jayanagar"
+        ],
+        "variations": [
+            "Jayanagar",
+            "Select Jayanagar",
+            "Tell me about Jayanagar",
+            "Tell me about Jayanagar centre",
+            "Where is Jayanagar centre located?",
+            "Where is Jayanagar centre?"
+        ],
+        "address": "36th Cross, 10th Main Road (behind BSNL Telephone Exchange), 4th Block, Jayanagar, Bengaluru – 560041",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9250,77.5938",
+        "phones": [
+            "9481170206",
+            "080 2664 4444"
+        ],
+        "phones_html": "<a href=\"tel:9481170206\" class=\"rcht-blue-link\">9481170206</a> / <a href=\"tel:08026644444\" class=\"rcht-blue-link\">080 2664 4444</a>",
+        "email": "info@rashtrotthanayoga.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthanayoga.org\" class=\"rcht-blue-link\">info@rashtrotthanayoga.org</a>",
+        "timings": "Morning: 5:45 AM, 7:00 AM, 7:20 AM, 8:15 AM, 9:45 AM, 11:00 AM | Evening: 4:30 PM, 6:30 PM, 6:45 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Light Music (Sugama Sangeetha), Carnatic Sangeeta, Bharatanatyam, Tabla, Keyboard, Veena, Violin, Flute, Art Class, Karate, Samskrita Bala Kendra, GYM & Fitness",
+        "response": "• <b>Centre:</b> Jayanagar\n• <b>Location:</b> 36th Cross, 10th Main Road (behind BSNL Telephone Exchange), 4th Block, Jayanagar, Bengaluru – 560041\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9250,77.5938\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/jayanagar/"
+    },
+    {
+        "id": "center_kundalahalli",
+        "center_id": "kundalahalli",
+        "category": "Centers",
+        "name": "Kundalahalli",
+        "question": "Tell me about Kundalahalli centre.",
+        "keywords": [
+            "kundalahalli",
+            "aecs layout",
+            "whitefield",
+            "brookefield",
+            "swimming pool",
+            "kundalahalli",
+            "kundalahalli"
+        ],
+        "variations": [
+            "Kundalahalli",
+            "Select Kundalahalli",
+            "Tell me about Kundalahalli",
+            "Tell me about Kundalahalli centre",
+            "Where is Kundalahalli centre located?",
+            "Where is Kundalahalli centre?"
+        ],
+        "address": "Rashtrotthana Yoga Center, 60 Ft Road, E Block, AECS Layout, Near BBMP Ground, Kundalahalli, Brookefield, Bengaluru – 560037",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9698,77.7199",
+        "phones": [
+            "7975344715",
+            "6366244019"
+        ],
+        "phones_html": "<a href=\"tel:7975344715\" class=\"rcht-blue-link\">7975344715</a> / <a href=\"tel:6366244019\" class=\"rcht-blue-link\">6366244019</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 5:45 AM, 6:30 AM, 8:20 AM, 11:00 AM | Evening: 4:30 PM, 6:45 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Pranayama & Meditation, Prenatal Yoga, Children's Yoga, Semi-Olympic Swimming Pool, Kathak & Kalaripayattu, Hindustani Music, Chess, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> Kundalahalli\n• <b>Location:</b> Rashtrotthana Yoga Center, 60 Ft Road, E Block, AECS Layout, Near BBMP Ground, Kundalahalli, Brookefield, Bengaluru – 560037\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9698,77.7199\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/kundalahalli/"
+    },
+    {
+        "id": "center_kg-nagar",
+        "center_id": "kg-nagar",
+        "category": "Centers",
+        "name": "KG Nagar",
+        "question": "Tell me about KG Nagar centre.",
+        "keywords": [
+            "kg nagar",
+            "kempegowda nagar",
+            "keshavashilpa",
+            "registered office",
+            "main center",
+            "kg-nagar",
+            "kg nagar"
+        ],
+        "variations": [
+            "KG Nagar",
+            "Select KG Nagar",
+            "Tell me about KG Nagar",
+            "Tell me about KG Nagar centre",
+            "Where is KG Nagar centre located?",
+            "Where is KG Nagar centre?"
+        ],
+        "address": "Keshavashilpa, No. 93/1, Kempegowda Nagar, Bengaluru – 560004",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9488,77.5637",
+        "phones": [
+            "9482834425",
+            "080 2664 4444"
+        ],
+        "phones_html": "<a href=\"tel:9482834425\" class=\"rcht-blue-link\">9482834425</a> / <a href=\"tel:08026644444\" class=\"rcht-blue-link\">080 2664 4444</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 5:45 AM, 7:00 AM, 7:30 AM – 10:30 AM | Evening: 4:30 PM, 6:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Children's Yoga, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> KG Nagar\n• <b>Location:</b> Keshavashilpa, No. 93/1, Kempegowda Nagar, Bengaluru – 560004\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9488,77.5637\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/kg-nagar/"
+    },
+    {
+        "id": "center_sunkenahalli",
+        "center_id": "sunkenahalli",
+        "category": "Centers",
+        "name": "Sunkenahalli / Basavanagudi",
+        "question": "Tell me about Sunkenahalli / Basavanagudi centre.",
+        "keywords": [
+            "sunkenahalli",
+            "basavanagudi",
+            "bull temple",
+            "basavangudi",
+            "sunkenahalli",
+            "sunkenahalli / basavanagudi"
+        ],
+        "variations": [
+            "Sunkenahalli / Basavanagudi",
+            "Select Sunkenahalli / Basavanagudi",
+            "Tell me about Sunkenahalli / Basavanagudi",
+            "Tell me about Sunkenahalli / Basavanagudi centre",
+            "Where is Sunkenahalli / Basavanagudi centre located?",
+            "Where is Sunkenahalli / Basavanagudi centre?"
+        ],
+        "address": "#55/A, Bull Temple Road, Sunkenahalli, Near Dodda Ganesha Temple, Basavanagudi, Bengaluru – 560004",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9421,77.5678",
+        "phones": [
+            "9148926940",
+            "6362250617"
+        ],
+        "phones_html": "<a href=\"tel:9148926940\" class=\"rcht-blue-link\">9148926940</a> / <a href=\"tel:6362250617\" class=\"rcht-blue-link\">6362250617</a>",
+        "email": "basavanagudi@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:basavanagudi@rashtrotthana.org\" class=\"rcht-blue-link\">basavanagudi@rashtrotthana.org</a>",
+        "timings": "Morning: 5:00 AM, 6:00 AM, 6:10 AM, 7:20 AM, 8:30 AM, 11:00 AM | Evening: 4:30 PM, 5:00 PM, 6:00 PM, 6:30 PM, 6:45 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Children's Yoga, Light Music (Sugama Sangeetha), Carnatic Sangeetha, Hindustani Sangeetha, Karate, Acupressure & Colour Therapy, Chess, Flute, Violin, Tabla, Veena, Sanskrit, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> Sunkenahalli / Basavanagudi\n• <b>Location:</b> #55/A, Bull Temple Road, Sunkenahalli, Near Dodda Ganesha Temple, Basavanagudi, Bengaluru – 560004\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9421,77.5678\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/sunkenahalli/"
+    },
+    {
+        "id": "center_vijaynagar",
+        "center_id": "vijaynagar",
+        "category": "Centers",
+        "name": "Vijaynagar",
+        "question": "Tell me about Vijaynagar centre.",
+        "keywords": [
+            "vijaynagar",
+            "vijayanagar",
+            "mrcr layout",
+            "marenahalli road",
+            "vijaynagar",
+            "vijaynagar"
+        ],
+        "variations": [
+            "Vijaynagar",
+            "Select Vijaynagar",
+            "Tell me about Vijaynagar",
+            "Tell me about Vijaynagar centre",
+            "Where is Vijaynagar centre located?",
+            "Where is Vijaynagar centre?"
+        ],
+        "address": "Rashtrotthana Yogic Sciences And Research Institute, 21st Cross, 20th Main, MRCR Layout, Namaste Hotel Backside, Marenahalli Road, Vijaynagar, Bengaluru – 560040",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9698,77.5358",
+        "phones": [
+            "6360926332"
+        ],
+        "phones_html": "<a href=\"tel:6360926332\" class=\"rcht-blue-link\">6360926332</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 5:50 AM, 7:00 AM | Evening: 5:30 PM, 6:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Carnatic Sangeeta, Bharatanatyam, Tabla & Keyboard, Taekwondo, Samskrita Bala Kendra, Counseling & Guidance",
+        "response": "• <b>Centre:</b> Vijaynagar\n• <b>Location:</b> Rashtrotthana Yogic Sciences And Research Institute, 21st Cross, 20th Main, MRCR Layout, Namaste Hotel Backside, Marenahalli Road, Vijaynagar, Bengaluru – 560040\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9698,77.5358\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/vijaynagar/"
+    },
+    {
+        "id": "center_gayathrinagar",
+        "center_id": "gayathrinagar",
+        "category": "Centers",
+        "name": "Gayathrinagar",
+        "question": "Tell me about Gayathrinagar centre.",
+        "keywords": [
+            "gayathrinagar",
+            "gayatrinagar",
+            "siddaramanna",
+            "gayathrinagar",
+            "gayathrinagar"
+        ],
+        "variations": [
+            "Gayathrinagar",
+            "Select Gayathrinagar",
+            "Tell me about Gayathrinagar",
+            "Tell me about Gayathrinagar centre",
+            "Where is Gayathrinagar centre located?",
+            "Where is Gayathrinagar centre?"
+        ],
+        "address": "Sri Siddaramanna Yogashrama Trust, 35, 36/1, 7th Main, Gayathrinagar, Bengaluru – 560021",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9982,77.5615",
+        "phones": [
+            "9632518598"
+        ],
+        "phones_html": "<a href=\"tel:9632518598\" class=\"rcht-blue-link\">9632518598</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 6:00 AM – 7:00 AM, 7:15 AM – 8:15 AM | Evening: 5:30 PM – 6:30 PM, 6:30 PM – 7:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Pranayama & Meditation, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> Gayathrinagar\n• <b>Location:</b> Sri Siddaramanna Yogashrama Trust, 35, 36/1, 7th Main, Gayathrinagar, Bengaluru – 560021\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9982,77.5615\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/gayathrinagar/"
+    },
+    {
+        "id": "center_kamakshipalya",
+        "center_id": "kamakshipalya",
+        "category": "Centers",
+        "name": "Kamakshipalya",
+        "question": "Tell me about Kamakshipalya centre.",
+        "keywords": [
+            "kamakshipalya",
+            "basaveshwar nagar",
+            "vinayaka layout",
+            "kamakshipalya",
+            "kamakshipalya"
+        ],
+        "variations": [
+            "Kamakshipalya",
+            "Select Kamakshipalya",
+            "Tell me about Kamakshipalya",
+            "Tell me about Kamakshipalya centre",
+            "Where is Kamakshipalya centre located?",
+            "Where is Kamakshipalya centre?"
+        ],
+        "address": "15, 2nd Main Rd, Vinayaka Layout, 1st Stage, Basaveshwar Nagar, Bengaluru – 560079",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9835,77.5255",
+        "phones": [
+            "9663409607"
+        ],
+        "phones_html": "<a href=\"tel:9663409607\" class=\"rcht-blue-link\">9663409607</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 6:00 AM – 7:00 AM, 7:15 AM – 8:15 AM | Evening: 5:30 PM – 6:30 PM, 6:30 PM – 7:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Pranayama & Meditation, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> Kamakshipalya\n• <b>Location:</b> 15, 2nd Main Rd, Vinayaka Layout, 1st Stage, Basaveshwar Nagar, Bengaluru – 560079\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9835,77.5255\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/kamakshipalya/"
+    },
+    {
+        "id": "center_nagarbhavi",
+        "center_id": "nagarbhavi",
+        "category": "Centers",
+        "name": "Nagarbhavi",
+        "question": "Tell me about Nagarbhavi centre.",
+        "keywords": [
+            "nagarbhavi",
+            "nagarabhavi",
+            "nandagokula",
+            "nagarbhavi",
+            "nagarbhavi"
+        ],
+        "variations": [
+            "Nagarbhavi",
+            "Select Nagarbhavi",
+            "Tell me about Nagarbhavi",
+            "Tell me about Nagarbhavi centre",
+            "Where is Nagarbhavi centre located?",
+            "Where is Nagarbhavi centre?"
+        ],
+        "address": "Nandagokula, #19, 6th Cross, 6th Block, Nagarbhavi, Bengaluru – 560072",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9602,77.5103",
+        "phones": [
+            "9481240776"
+        ],
+        "phones_html": "<a href=\"tel:9481240776\" class=\"rcht-blue-link\">9481240776</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 6:00 AM – 7:00 AM, 7:15 AM – 8:15 AM | Evening: 5:30 PM – 6:30 PM, 6:30 PM – 7:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Pranayama & Meditation, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> Nagarbhavi\n• <b>Location:</b> Nandagokula, #19, 6th Cross, 6th Block, Nagarbhavi, Bengaluru – 560072\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9602,77.5103\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/nagarbhavi/"
+    },
+    {
+        "id": "center_rbi-layout",
+        "center_id": "rbi-layout",
+        "category": "Centers",
+        "name": "RBI Layout",
+        "question": "Tell me about RBI Layout centre.",
+        "keywords": [
+            "rbi layout",
+            "jp nagar",
+            "poornaprajna",
+            "rbi-layout",
+            "rbi layout"
+        ],
+        "variations": [
+            "RBI Layout",
+            "Select RBI Layout",
+            "Tell me about RBI Layout",
+            "Tell me about RBI Layout centre",
+            "Where is RBI Layout centre located?",
+            "Where is RBI Layout centre?"
+        ],
+        "address": "#265, Poornaprajna, 3rd Cross, 11th Main, RBI Layout, JP Nagar 7th Phase, Bengaluru – 560078",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.8894,77.5746",
+        "phones": [
+            "8123523952"
+        ],
+        "phones_html": "<a href=\"tel:8123523952\" class=\"rcht-blue-link\">8123523952</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 6:00 AM – 7:15 AM | Evening: 5:30 PM – 6:45 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Karate, Tabla, Keyboard, Flute, Bharatanatyam, Carnatic Music",
+        "response": "• <b>Centre:</b> RBI Layout\n• <b>Location:</b> #265, Poornaprajna, 3rd Cross, 11th Main, RBI Layout, JP Nagar 7th Phase, Bengaluru – 560078\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.8894,77.5746\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/rbi-layout/"
+    },
+    {
+        "id": "center_girinagar",
+        "center_id": "girinagar",
+        "category": "Centers",
+        "name": "Girinagar / Aksharam",
+        "question": "Tell me about Girinagar / Aksharam centre.",
+        "keywords": [
+            "girinagar",
+            "aksharam",
+            "raghavendra mutt",
+            "girinagar",
+            "girinagar / aksharam"
+        ],
+        "variations": [
+            "Girinagar / Aksharam",
+            "Select Girinagar / Aksharam",
+            "Tell me about Girinagar / Aksharam",
+            "Tell me about Girinagar / Aksharam centre",
+            "Where is Girinagar / Aksharam centre located?",
+            "Where is Girinagar / Aksharam centre?"
+        ],
+        "address": "Raghavendra Mutt, near Aksharam, Girinagar, Bengaluru – 560085",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=12.9372,77.5385",
+        "phones": [
+            "9353095860"
+        ],
+        "phones_html": "<a href=\"tel:9353095860\" class=\"rcht-blue-link\">9353095860</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 7:00 AM, 10:30 AM | Evening: 5:30 PM, 6:30 PM",
+        "programs": "Yoga Classes, Yoga Therapy, Kathak, Rangoli & Traditional Arts, Bala Samskara Kendra",
+        "response": "• <b>Centre:</b> Girinagar / Aksharam\n• <b>Location:</b> Raghavendra Mutt, near Aksharam, Girinagar, Bengaluru – 560085\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=12.9372,77.5385\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/girinagar/"
+    },
+    {
+        "id": "center_kalyana-nagar",
+        "center_id": "kalyana-nagar",
+        "category": "Centers",
+        "name": "Kalyana Nagar",
+        "question": "Tell me about Kalyana Nagar centre.",
+        "keywords": [
+            "kalyana nagar",
+            "kalyannagar",
+            "kalyana-nagar",
+            "kalyana nagar"
+        ],
+        "variations": [
+            "Kalyana Nagar",
+            "Select Kalyana Nagar",
+            "Tell me about Kalyana Nagar",
+            "Tell me about Kalyana Nagar centre",
+            "Where is Kalyana Nagar centre located?",
+            "Where is Kalyana Nagar centre?"
+        ],
+        "address": "Kalyana Nagar, Bengaluru – 560043",
+        "maps_url": "https://www.google.com/maps/search/?api=1&query=Rashtrotthana+Yoga+Kalyana+Nagar+Bengaluru",
+        "phones": [
+            "9481170206",
+            "080 2664 4444"
+        ],
+        "phones_html": "<a href=\"tel:9481170206\" class=\"rcht-blue-link\">9481170206</a> / <a href=\"tel:08026644444\" class=\"rcht-blue-link\">080 2664 4444</a>",
+        "email": "info@rashtrotthana.org",
+        "email_html": "<a href=\"mailto:info@rashtrotthana.org\" class=\"rcht-blue-link\">info@rashtrotthana.org</a>",
+        "timings": "Morning: 6:00 AM – 8:30 AM | Evening: 5:00 PM – 7:30 PM",
+        "programs": "Daily Yoga Classes, Yoga Therapy, Health Consultation",
+        "response": "• <b>Centre:</b> Kalyana Nagar\n• <b>Location:</b> Kalyana Nagar, Bengaluru – 560043\n• <b>Maps:</b> <a href=\"https://www.google.com/maps/search/?api=1&query=Rashtrotthana+Yoga+Kalyana+Nagar+Bengaluru\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">View Location</a>",
+        "options": [
+            "Change Centre",
+            "Yes, Enquire"
+        ],
+        "source": "http://localhost:8881/center/kalyana-nagar/"
+    },
+    {
+        "id": "faq_001",
+        "faq_id": "FAQ001",
+        "category": "General",
+        "intent_id": "institute_name",
+        "question": "What is the name of the institute?",
+        "question_en": "What is the name of the institute?",
+        "answer_en": "Our institute is Rashtrotthana Yogic Sciences and Research Institute. We conduct yoga and other educational, cultural and wellness activities.",
+        "answer_kn": "ನಮ್ಮ ಸಂಸ್ಥೆಯ ಹೆಸರು ರಾಷ್ಟ್ರೋತ್ಥಾನ ಯೋಗ ವಿಜ್ಞಾನ ಮತ್ತು ಸಂಶೋಧನಾ ಸಂಸ್ಥೆ. ಇಲ್ಲಿ ಯೋಗ ಹಾಗೂ ಇತರ ಶೈಕ್ಷಣಿಕ, ಸಾಂಸ್ಕೃತಿಕ ಮತ್ತು ಆರೋಗ್ಯ ಸಂಬಂಧಿತ ಚಟುವಟಿಕೆಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ.",
+        "response": "Our institute is Rashtrotthana Yogic Sciences and Research Institute. We conduct yoga and other educational, cultural and wellness activities.",
+        "response_kn": "ನಮ್ಮ ಸಂಸ್ಥೆಯ ಹೆಸರು ರಾಷ್ಟ್ರೋತ್ಥಾನ ಯೋಗ ವಿಜ್ಞಾನ ಮತ್ತು ಸಂಶೋಧನಾ ಸಂಸ್ಥೆ. ಇಲ್ಲಿ ಯೋಗ ಹಾಗೂ ಇತರ ಶೈಕ್ಷಣಿಕ, ಸಾಂಸ್ಕೃತಿಕ ಮತ್ತು ಆರೋಗ್ಯ ಸಂಬಂಧಿತ ಚಟುವಟಿಕೆಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ.",
+        "keywords": [
+            "institute",
+            "name",
+            "about",
+            "name of institute",
+            "institute name",
+            "about institute",
+            "ಸಂಸ್ಥೆಯ ಹೆಸರು"
+        ],
+        "regex_source": "\\b(name\\s+of\\s+(the\\s+)?institute|institute\\s+name|what\\s+is\\s+your\\s+name|full\\s+name\\s+of\\s+institute)\\b|ಸಂಸ್ಥೆಯ\\s*ಹೆಸರು|ಹೆಸರೇನು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_002",
+        "faq_id": "FAQ002",
+        "category": "General",
+        "intent_id": "activities",
+        "question": "What activities are offered?",
+        "question_en": "What activities are offered?",
+        "answer_en": "Depending on the branch, activities may include yoga, yoga therapy, karate/taekwondo, Bharatanatyam, dance, keyboard/music, Bhagavad Gita classes and special programmes. Please check with your preferred branch for current availability.",
+        "answer_kn": "ಶಾಖೆಗೆ ಅನುಗುಣವಾಗಿ ಯೋಗ, ಯೋಗ ಚಿಕಿತ್ಸೆ, ಕರಾಟೆ/ತೈಕ್ವಾಂಡೋ, ಭರತನಾಟ್ಯ, ನೃತ್ಯ, ಕೀಬೋರ್ಡ್/ಸಂಗೀತ, ಭಗವದ್ಗೀತಾ ತರಗತಿಗಳು ಮತ್ತು ವಿಶೇಷ ಕಾರ್ಯಕ್ರಮಗಳು ಲಭ್ಯವಿರಬಹುದು. ಪ್ರಸ್ತುತ ಲಭ್ಯತೆಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Depending on the branch, activities may include yoga, yoga therapy, karate/taekwondo, Bharatanatyam, dance, keyboard/music, Bhagavad Gita classes and special programmes. Please check with your preferred branch for current availability.",
+        "response_kn": "ಶಾಖೆಗೆ ಅನುಗುಣವಾಗಿ ಯೋಗ, ಯೋಗ ಚಿಕಿತ್ಸೆ, ಕರಾಟೆ/ತೈಕ್ವಾಂಡೋ, ಭರತನಾಟ್ಯ, ನೃತ್ಯ, ಕೀಬೋರ್ಡ್/ಸಂಗೀತ, ಭಗವದ್ಗೀತಾ ತರಗತಿಗಳು ಮತ್ತು ವಿಶೇಷ ಕಾರ್ಯಕ್ರಮಗಳು ಲಭ್ಯವಿರಬಹುದು. ಪ್ರಸ್ತುತ ಲಭ್ಯತೆಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "classes",
+            "courses",
+            "activities",
+            "classes offered",
+            "ಚಟುವಟಿಕೆಗಳು"
+        ],
+        "regex_source": "\\b(what\\s+activities|activities\\s+offered|what\\s+classes\\s+are\\s+offered|courses\\s+offered|what\\s+can\\s+i\\s+learn|activities\\s+available)\\b|ಚಟುವಟಿಕೆಗಳು|ಯಾವ\\s*ತರಗತಿ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_003",
+        "faq_id": "FAQ003",
+        "category": "General",
+        "intent_id": "beginner_suitable",
+        "question": "Is the institute suitable for beginners?",
+        "question_en": "Is the institute suitable for beginners?",
+        "answer_en": "Yes. Beginner-level classes are offered where scheduled. Contact your preferred branch for the next batch details.",
+        "answer_kn": "ಹೌದು. ನಿಗದಿತ ವೇಳಾಪಟ್ಟಿಯಂತೆ ಆರಂಭಿಕ ಹಂತದ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ಮುಂದಿನ ಬ್ಯಾಚ್ ವಿವರಗಳಿಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Yes. Beginner-level classes are offered where scheduled. Contact your preferred branch for the next batch details.",
+        "response_kn": "ಹೌದು. ನಿಗದಿತ ವೇಳಾಪಟ್ಟಿಯಂತೆ ಆರಂಭಿಕ ಹಂತದ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ಮುಂದಿನ ಬ್ಯಾಚ್ ವಿವರಗಳಿಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "beginner",
+            "new student",
+            "beginners",
+            "start yoga",
+            "ಆರಂಭಿಕರು"
+        ],
+        "regex_source": "\\b(suitable\\s+for\\s+beginners|can\\s+beginners\\s+join|i\\s+am\\s+(a\\s+)?beginner|new\\s+to\\s+yoga|never\\s+done\\s+yoga)\\b|ಆರಂಭಿಕರು|ಹೊಸಬರು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_004",
+        "faq_id": "FAQ004",
+        "category": "General",
+        "intent_id": "eligibility",
+        "question": "Who can join yoga classes?",
+        "question_en": "Who can join yoga classes?",
+        "answer_en": "People interested in learning yoga may enquire about suitable classes. Please share the participant's age and any relevant limitations with the branch before joining.",
+        "answer_kn": "ಯೋಗ ಕಲಿಯಲು ಆಸಕ್ತಿ ಇರುವವರು ತರಗತಿಗಳ ಬಗ್ಗೆ ವಿಚಾರಿಸಬಹುದು. ಸೇರುವ ಮೊದಲು ಭಾಗವಹಿಸುವವರ ವಯಸ್ಸು ಮತ್ತು ಯಾವುದೇ ವಿಶೇಷ ಮಿತಿಗಳಿದ್ದರೆ ಶಾಖೆಗೆ ತಿಳಿಸಿ.",
+        "response": "People interested in learning yoga may enquire about suitable classes. Please share the participant's age and any relevant limitations with the branch before joining.",
+        "response_kn": "ಯೋಗ ಕಲಿಯಲು ಆಸಕ್ತಿ ಇರುವವರು ತರಗತಿಗಳ ಬಗ್ಗೆ ವಿಚಾರಿಸಬಹುದು. ಸೇರುವ ಮೊದಲು ಭಾಗವಹಿಸುವವರ ವಯಸ್ಸು ಮತ್ತು ಯಾವುದೇ ವಿಶೇಷ ಮಿತಿಗಳಿದ್ದರೆ ಶಾಖೆಗೆ ತಿಳಿಸಿ.",
+        "keywords": [
+            "who can join",
+            "eligibility",
+            "join yoga",
+            "ಯಾರು ಸೇರಬಹುದು"
+        ],
+        "regex_source": "\\b(who\\s+can\\s+join\\s+yoga|eligibility|who\\s+is\\s+eligible|can\\s+anyone\\s+join|age\\s+limit\\s+for\\s+yoga)\\b|ಯಾರು\\s*ಸೇರಬಹುದು|ಅರ್ಹತೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_005",
+        "faq_id": "FAQ005",
+        "category": "General",
+        "intent_id": "about_institute",
+        "question": "How can I get information about the institute?",
+        "question_en": "How can I get information about the institute?",
+        "answer_en": "Choose your nearest branch or contact the institute's administration team for verified information about courses and services.",
+        "answer_kn": "ನಿಮ್ಮ ಸಮೀಪದ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ಕೋರ್ಸ್‌ಗಳು ಮತ್ತು ಸೇವೆಗಳ ದೃಢೀಕೃತ ಮಾಹಿತಿಗಾಗಿ ಸಂಸ್ಥೆಯ ಆಡಳಿತ ವಿಭಾಗವನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Choose your nearest branch or contact the institute's administration team for verified information about courses and services.",
+        "response_kn": "ನಿಮ್ಮ ಸಮೀಪದ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ಕೋರ್ಸ್‌ಗಳು ಮತ್ತು ಸೇವೆಗಳ ದೃಢೀಕೃತ ಮಾಹಿತಿಗಾಗಿ ಸಂಸ್ಥೆಯ ಆಡಳಿತ ವಿಭಾಗವನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "information",
+            "details",
+            "institute details",
+            "ಮಾಹಿತಿ"
+        ],
+        "regex_source": "\\b(information\\s+about\\s+(the\\s+)?institute|details\\s+about\\s+institute|how\\s+can\\s+i\\s+get\\s+information)\\b|ಸಂಸ್ಥೆಯ\\s*ಮಾಹಿತಿ|ಮಾಹಿತಿ\\s*ಹೇಗೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_006",
+        "faq_id": "FAQ006",
+        "category": "Branches",
+        "intent_id": "branch_count",
+        "question": "How many branches do you have?",
+        "question_en": "How many branches do you have?",
+        "answer_en": "The institute has 20+ branches across Bengaluru. Branch details and available activities may vary. Select a branch to view its contact details and schedule.",
+        "answer_kn": "ಸಂಸ್ಥೆಯು ಬೆಂಗಳೂರಿನಲ್ಲಿ 20ಕ್ಕೂ ಹೆಚ್ಚು ಶಾಖೆಗಳನ್ನು ಹೊಂದಿದೆ. ಶಾಖೆಯ ಪ್ರಕಾರ ಚಟುವಟಿಕೆಗಳು ಮತ್ತು ವಿವರಗಳು ಬದಲಾಗಬಹುದು. ಸಂಪರ್ಕ ವಿವರಗಳು ಮತ್ತು ವೇಳಾಪಟ್ಟಿಗಾಗಿ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "response": "The institute has 20+ branches across Bengaluru. Branch details and available activities may vary. Select a branch to view its contact details and schedule.",
+        "response_kn": "ಸಂಸ್ಥೆಯು ಬೆಂಗಳೂರಿನಲ್ಲಿ 20ಕ್ಕೂ ಹೆಚ್ಚು ಶಾಖೆಗಳನ್ನು ಹೊಂದಿದೆ. ಶಾಖೆಯ ಪ್ರಕಾರ ಚಟುವಟಿಕೆಗಳು ಮತ್ತು ವಿವರಗಳು ಬದಲಾಗಬಹುದು. ಸಂಪರ್ಕ ವಿವರಗಳು ಮತ್ತು ವೇಳಾಪಟ್ಟಿಗಾಗಿ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "keywords": [
+            "branches",
+            "locations",
+            "how many branches",
+            "number of branches",
+            "total centres",
+            "ಎಷ್ಟು ಶಾಖೆಗಳು"
+        ],
+        "regex_source": "\\b(how\\s+many\\s+branches|number\\s+of\\s+branches|total\\s+branches|how\\s+many\\s+centres)\\b|ಎಷ್ಟು\\s*ಶಾಖೆ|ಶಾಖೆಗಳ\\s*ಸಂಖ್ಯೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_007",
+        "faq_id": "FAQ007",
+        "category": "Branches",
+        "intent_id": "nearest_branch",
+        "question": "How do I find the nearest branch?",
+        "question_en": "How do I find the nearest branch?",
+        "answer_en": "Please share your area or locality in Bengaluru. We can help identify a nearby branch.",
+        "answer_kn": "ದಯವಿಟ್ಟು ಬೆಂಗಳೂರಿನಲ್ಲಿರುವ ನಿಮ್ಮ ಪ್ರದೇಶ ಅಥವಾ ಬಡಾವಣೆಯ ಹೆಸರನ್ನು ತಿಳಿಸಿ. ಸಮೀಪದ ಶಾಖೆಯನ್ನು ಗುರುತಿಸಲು ನಾವು ಸಹಾಯ ಮಾಡುತ್ತೇವೆ.",
+        "response": "Please share your area or locality in Bengaluru. We can help identify a nearby branch.",
+        "response_kn": "ದಯವಿಟ್ಟು ಬೆಂಗಳೂರಿನಲ್ಲಿರುವ ನಿಮ್ಮ ಪ್ರದೇಶ ಅಥವಾ ಬಡಾವಣೆಯ ಹೆಸರನ್ನು ತಿಳಿಸಿ. ಸಮೀಪದ ಶಾಖೆಯನ್ನು ಗುರುತಿಸಲು ನಾವು ಸಹಾಯ ಮಾಡುತ್ತೇವೆ.",
+        "keywords": [
+            "near me",
+            "location",
+            "nearest branch",
+            "closest centre",
+            "ಸಮೀಪದ ಶಾಖೆ"
+        ],
+        "regex_source": "\\b(nearest\\s+branch|find\\s+(the\\s+)?nearest|branch\\s+near\\s+me|close\\s+to\\s+me|nearby\\s+branch)\\b|ಸಮೀಪದ\\s*ಶಾಖೆ|ಹತ್ತಿರದ\\s*ಶಾಖೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_008",
+        "faq_id": "FAQ008",
+        "category": "Branches",
+        "intent_id": "choose_branch",
+        "question": "Can I choose any branch?",
+        "question_en": "Can I choose any branch?",
+        "answer_en": "Yes, you may enquire at the branch convenient to you. Class availability, fees and schedules are confirmed by each branch.",
+        "answer_kn": "ಹೌದು, ನಿಮಗೆ ಅನುಕೂಲವಾದ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಬಹುದು. ತರಗತಿಗಳ ಲಭ್ಯತೆ, ಶುಲ್ಕ ಮತ್ತು ವೇಳಾಪಟ್ಟಿಯನ್ನು ಸಂಬಂಧಿತ ಶಾಖೆಯೇ ದೃಢೀಕರಿಸುತ್ತದೆ.",
+        "response": "Yes, you may enquire at the branch convenient to you. Class availability, fees and schedules are confirmed by each branch.",
+        "response_kn": "ಹೌದು, ನಿಮಗೆ ಅನುಕೂಲವಾದ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಬಹುದು. ತರಗತಿಗಳ ಲಭ್ಯತೆ, ಶುಲ್ಕ ಮತ್ತು ವೇಳಾಪಟ್ಟಿಯನ್ನು ಸಂಬಂಧಿತ ಶಾಖೆಯೇ ದೃಢೀಕರಿಸುತ್ತದೆ.",
+        "keywords": [
+            "branch selection",
+            "choose any branch",
+            "ಶಾಖೆ ಆಯ್ಕೆ"
+        ],
+        "regex_source": "\\b(can\\s+i\\s+choose\\s+any\\s+branch|select\\s+any\\s+branch|choose\\s+branch)\\b|ಯಾವುದೇ\\s*ಶಾಖೆ\\s*ಆಯ್ಕೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_009",
+        "faq_id": "FAQ009",
+        "category": "Branches",
+        "intent_id": "course_by_branch",
+        "question": "Are all courses available at every branch?",
+        "question_en": "Are all courses available at every branch?",
+        "answer_en": "Not necessarily. Courses and batch timings differ by branch. Please select a branch to check current availability.",
+        "answer_kn": "ಅಗತ್ಯವಿಲ್ಲ. ಕೋರ್ಸ್‌ಗಳು ಮತ್ತು ಬ್ಯಾಚ್ ಸಮಯಗಳು ಶಾಖೆಯಿಂದ ಶಾಖೆಗೆ ಬದಲಾಗುತ್ತವೆ. ಪ್ರಸ್ತುತ ಲಭ್ಯತೆ ತಿಳಿಯಲು ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "response": "Not necessarily. Courses and batch timings differ by branch. Please select a branch to check current availability.",
+        "response_kn": "ಅಗತ್ಯವಿಲ್ಲ. ಕೋರ್ಸ್‌ಗಳು ಮತ್ತು ಬ್ಯಾಚ್ ಸಮಯಗಳು ಶಾಖೆಯಿಂದ ಶಾಖೆಗೆ ಬದಲಾಗುತ್ತವೆ. ಪ್ರಸ್ತುತ ಲಭ್ಯತೆ ತಿಳಿಯಲು ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "keywords": [
+            "course availability",
+            "courses at every branch",
+            "ಎಲ್ಲಾ ಕೋರ್ಸ್‌ಗಳು"
+        ],
+        "regex_source": "\\b(all\\s+courses\\s+available\\s+at\\s+every\\s+branch|are\\s+all\\s+courses\\s+at\\s+all\\s+branches)\\b|ಎಲ್ಲಾ\\s*ಕೋರ್ಸ್‌ಗಳು|ಪ್ರತಿ\\s*ಶಾಖೆಯಲ್ಲಿ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_010",
+        "faq_id": "FAQ010",
+        "category": "Branches",
+        "intent_id": "branch_contact",
+        "question": "How can I contact a particular branch?",
+        "question_en": "How can I contact a particular branch?",
+        "answer_en": "Select the branch name on this website to view its verified phone number, address and available contact options.",
+        "answer_kn": "ಈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಶಾಖೆಯ ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಅಲ್ಲಿ ದೃಢೀಕೃತ ದೂರವಾಣಿ ಸಂಖ್ಯೆ, ವಿಳಾಸ ಮತ್ತು ಸಂಪರ್ಕ ಆಯ್ಕೆಗಳು ಲಭ್ಯವಿರುತ್ತವೆ.",
+        "response": "Select the branch name on this website to view its verified phone number, address and available contact options.",
+        "response_kn": "ಈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಶಾಖೆಯ ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಅಲ್ಲಿ ದೃಢೀಕೃತ ದೂರವಾಣಿ ಸಂಖ್ಯೆ, ವಿಳಾಸ ಮತ್ತು ಸಂಪರ್ಕ ಆಯ್ಕೆಗಳು ಲಭ್ಯವಿರುತ್ತವೆ.",
+        "keywords": [
+            "phone",
+            "address",
+            "contact",
+            "contact particular branch",
+            "branch contact",
+            "ಶಾಖೆ ಸಂಪರ್ಕ"
+        ],
+        "regex_source": "\\b(how\\s+can\\s+i\\s+contact\\s+a\\s+(particular\\s+)?branch|how\\s+to\\s+contact\\s+branch)\\b|ಶಾಖೆಯನ್ನು\\s*ಸಂಪರ್ಕಿಸುವುದು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_011",
+        "faq_id": "FAQ011",
+        "category": "Branches",
+        "intent_id": "visit_branch",
+        "question": "Can I visit a branch before admission?",
+        "question_en": "Can I visit a branch before admission?",
+        "answer_en": "Yes. You may visit during the branch's working hours. Please contact the branch in advance to confirm a suitable time.",
+        "answer_kn": "ಹೌದು. ಶಾಖೆಯ ಕಾರ್ಯನಿರ್ವಹಣಾ ಸಮಯದಲ್ಲಿ ಭೇಟಿ ನೀಡಬಹುದು. ಸೂಕ್ತ ಸಮಯವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಮುಂಚಿತವಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Yes. You may visit during the branch's working hours. Please contact the branch in advance to confirm a suitable time.",
+        "response_kn": "ಹೌದು. ಶಾಖೆಯ ಕಾರ್ಯನಿರ್ವಹಣಾ ಸಮಯದಲ್ಲಿ ಭೇಟಿ ನೀಡಬಹುದು. ಸೂಕ್ತ ಸಮಯವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಮುಂಚಿತವಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "visit",
+            "enquiry",
+            "visit branch",
+            "visit before admission",
+            "ಭೇಟಿ"
+        ],
+        "regex_source": "\\b(visit\\s+(a\\s+)?branch\\s+before\\s+admission|can\\s+i\\s+visit\\s+(the\\s+)?branch|see\\s+the\\s+centre\\s+first)\\b|ಭೇಟಿ\\s*ನೀಡಬಹುದೇ|ನೇರವಾಗಿ\\s*ಬರಬಹುದೇ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_012",
+        "faq_id": "FAQ012",
+        "category": "Yoga",
+        "intent_id": "beginner_yoga",
+        "question": "Do you offer yoga classes for beginners?",
+        "question_en": "Do you offer yoga classes for beginners?",
+        "answer_en": "Yes. Beginner batches are conducted as per the branch schedule. Contact the branch for the next start date and timings.",
+        "answer_kn": "ಹೌದು. ಶಾಖೆಯ ವೇಳಾಪಟ್ಟಿಯಂತೆ ಆರಂಭಿಕ ಯೋಗ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ಮುಂದಿನ ಬ್ಯಾಚ್ ಪ್ರಾರಂಭದ ದಿನಾಂಕ ಮತ್ತು ಸಮಯಕ್ಕಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Yes. Beginner batches are conducted as per the branch schedule. Contact the branch for the next start date and timings.",
+        "response_kn": "ಹೌದು. ಶಾಖೆಯ ವೇಳಾಪಟ್ಟಿಯಂತೆ ಆರಂಭಿಕ ಯೋಗ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ಮುಂದಿನ ಬ್ಯಾಚ್ ಪ್ರಾರಂಭದ ದಿನಾಂಕ ಮತ್ತು ಸಮಯಕ್ಕಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "beginners",
+            "new batch",
+            "beginner yoga",
+            "yoga for beginners",
+            "ಆರಂಭಿಕ ಯೋಗ"
+        ],
+        "regex_source": "\\b(yoga\\s+classes\\s+for\\s+beginners|beginner\\s+yoga\\s+batch|beginner\\s+classes)\\b|ಆರಂಭಿಕ\\s*ಯೋಗ\\s*ತರಗತಿ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_013",
+        "faq_id": "FAQ013",
+        "category": "Yoga",
+        "intent_id": "intermediate_yoga",
+        "question": "Do you offer intermediate yoga classes?",
+        "question_en": "Do you offer intermediate yoga classes?",
+        "answer_en": "Intermediate classes may be available at selected branches. Please check with your preferred branch.",
+        "answer_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಮಧ್ಯಂತರ ಹಂತದ ಯೋಗ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Intermediate classes may be available at selected branches. Please check with your preferred branch.",
+        "response_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಮಧ್ಯಂತರ ಹಂತದ ಯೋಗ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "intermediate",
+            "intermediate yoga",
+            "advanced yoga",
+            "ಮಧ್ಯಂತರ ಯೋಗ"
+        ],
+        "regex_source": "\\b(intermediate\\s+yoga|intermediate\\s+classes|advanced\\s+yoga)\\b|ಮಧ್ಯಂತರ\\s*ಯೋಗ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_014",
+        "faq_id": "FAQ014",
+        "category": "Yoga",
+        "intent_id": "senior_yoga",
+        "question": "Are there yoga classes for senior citizens?",
+        "question_en": "Are there yoga classes for senior citizens?",
+        "answer_en": "Some branches may offer sessions suitable for senior citizens. Please discuss age, mobility and any health limitations with the branch before enrolment.",
+        "answer_kn": "ಕೆಲವು ಶಾಖೆಗಳಲ್ಲಿ ಹಿರಿಯ ನಾಗರಿಕರಿಗೆ ಸೂಕ್ತವಾದ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ದಾಖಲಾತಿಗೆ ಮೊದಲು ವಯಸ್ಸು, ಚಲನವಲನದ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಆರೋಗ್ಯ ಸಂಬಂಧಿತ ಮಿತಿಗಳ ಬಗ್ಗೆ ಶಾಖೆಯೊಂದಿಗೆ ಚರ್ಚಿಸಿ.",
+        "response": "Some branches may offer sessions suitable for senior citizens. Please discuss age, mobility and any health limitations with the branch before enrolment.",
+        "response_kn": "ಕೆಲವು ಶಾಖೆಗಳಲ್ಲಿ ಹಿರಿಯ ನಾಗರಿಕರಿಗೆ ಸೂಕ್ತವಾದ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ದಾಖಲಾತಿಗೆ ಮೊದಲು ವಯಸ್ಸು, ಚಲನವಲನದ ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಆರೋಗ್ಯ ಸಂಬಂಧಿತ ಮಿತಿಗಳ ಬಗ್ಗೆ ಶಾಖೆಯೊಂದಿಗೆ ಚರ್ಚಿಸಿ.",
+        "keywords": [
+            "senior citizens",
+            "senior yoga",
+            "elderly",
+            "ಹಿರಿಯ ನಾಗರಿಕರು"
+        ],
+        "regex_source": "\\b(senior\\s+citizen|senior\\s+citizens|elderly\\s+yoga|yoga\\s+for\\s+old\\s+people|aged\\s+people)\\b|ಹಿರಿಯ\\s*ನಾಗರಿಕ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_015",
+        "faq_id": "FAQ015",
+        "category": "Yoga",
+        "intent_id": "yoga_therapy",
+        "question": "Do you conduct yoga therapy classes?",
+        "question_en": "Do you conduct yoga therapy classes?",
+        "answer_en": "Yoga therapy sessions are available at selected branches or at specified times. Contact the branch to confirm availability and suitability. Yoga classes are not a substitute for medical care.",
+        "answer_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಅಥವಾ ನಿಗದಿತ ಸಮಯದಲ್ಲಿ ಯೋಗ ಚಿಕಿತ್ಸಾ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ಲಭ್ಯತೆ ಮತ್ತು ಸೂಕ್ತತೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ. ಯೋಗ ತರಗತಿಗಳು ವೈದ್ಯಕೀಯ ಚಿಕಿತ್ಸೆಗೆ ಪರ್ಯಾಯವಲ್ಲ.",
+        "response": "Yoga therapy sessions are available at selected branches or at specified times. Contact the branch to confirm availability and suitability. Yoga classes are not a substitute for medical care.",
+        "response_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಅಥವಾ ನಿಗದಿತ ಸಮಯದಲ್ಲಿ ಯೋಗ ಚಿಕಿತ್ಸಾ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ಲಭ್ಯತೆ ಮತ್ತು ಸೂಕ್ತತೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ. ಯೋಗ ತರಗತಿಗಳು ವೈದ್ಯಕೀಯ ಚಿಕಿತ್ಸೆಗೆ ಪರ್ಯಾಯವಲ್ಲ.",
+        "keywords": [
+            "therapy",
+            "therapeutic yoga",
+            "yoga therapy",
+            "ಯೋಗ ಚಿಕಿತ್ಸೆ"
+        ],
+        "regex_source": "\\b(yoga\\s+therapy|therapeutic\\s+yoga|therapy\\s+classes|therapy\\s+sessions)\\b|ಯೋಗ\\s*ಚಿಕಿತ್ಸೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_016",
+        "faq_id": "FAQ016",
+        "category": "Yoga",
+        "intent_id": "yoga_benefits",
+        "question": "What are the benefits of yoga?",
+        "question_en": "What are the benefits of yoga?",
+        "answer_en": "Regular yoga practice may support flexibility, strength, balance, relaxation and general well-being. Results vary from person to person.",
+        "answer_kn": "ನಿಯಮಿತ ಯೋಗಾಭ್ಯಾಸವು ದೇಹದ ನಮ್ಯತೆ, ಶಕ್ತಿ, ಸಮತೋಲನ, ವಿಶ್ರಾಂತಿ ಮತ್ತು ಸಾಮಾನ್ಯ ಕ್ಷೇಮಕ್ಕೆ ಸಹಾಯ ಮಾಡಬಹುದು. ಫಲಿತಾಂಶಗಳು ವ್ಯಕ್ತಿಯಿಂದ ವ್ಯಕ್ತಿಗೆ ಬದಲಾಗುತ್ತವೆ.",
+        "response": "Regular yoga practice may support flexibility, strength, balance, relaxation and general well-being. Results vary from person to person.",
+        "response_kn": "ನಿಯಮಿತ ಯೋಗಾಭ್ಯಾಸವು ದೇಹದ ನಮ್ಯತೆ, ಶಕ್ತಿ, ಸಮತೋಲನ, ವಿಶ್ರಾಂತಿ ಮತ್ತು ಸಾಮಾನ್ಯ ಕ್ಷೇಮಕ್ಕೆ ಸಹಾಯ ಮಾಡಬಹುದು. ಫಲಿತಾಂಶಗಳು ವ್ಯಕ್ತಿಯಿಂದ ವ್ಯಕ್ತಿಗೆ ಬದಲಾಗುತ್ತವೆ.",
+        "keywords": [
+            "benefits",
+            "health",
+            "benefits of yoga",
+            "advantages",
+            "health benefits",
+            "ಪ್ರಯೋಜನಗಳು"
+        ],
+        "regex_source": "\\b(benefits\\s+of\\s+yoga|why\\s+(should\\s+i\\s+do\\s+)?yoga|advantage\\s+of\\s+yoga|what\\s+does\\s+yoga\\s+do)\\b|ಯೋಗದ\\s*ಪ್ರಯೋಜನ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_017",
+        "faq_id": "FAQ017",
+        "category": "Yoga",
+        "intent_id": "yoga_clothing",
+        "question": "What should I wear for yoga?",
+        "question_en": "What should I wear for yoga?",
+        "answer_en": "Wear clean, comfortable clothing that allows free movement. Follow any additional instructions given by your branch.",
+        "answer_kn": "ಚಲನವಲನಕ್ಕೆ ಅನುಕೂಲವಾಗುವ ಸ್ವಚ್ಛ ಮತ್ತು ಆರಾಮದಾಯಕ ಉಡುಪು ಧರಿಸಿ. ಶಾಖೆಯು ನೀಡುವ ಹೆಚ್ಚುವರಿ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ.",
+        "response": "Wear clean, comfortable clothing that allows free movement. Follow any additional instructions given by your branch.",
+        "response_kn": "ಚಲನವಲನಕ್ಕೆ ಅನುಕೂಲವಾಗುವ ಸ್ವಚ್ಛ ಮತ್ತು ಆರಾಮದಾಯಕ ಉಡುಪು ಧರಿಸಿ. ಶಾಖೆಯು ನೀಡುವ ಹೆಚ್ಚುವರಿ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ.",
+        "keywords": [
+            "dress",
+            "clothes",
+            "what to wear",
+            "dress code",
+            "clothing",
+            "ಉಡುಪು"
+        ],
+        "regex_source": "\\b(what\\s+should\\s+i\\s+wear|wear\\s+for\\s+yoga|dress\\s+code|clothing|clothes\\s+for\\s+yoga|what\\s+to\\s+wear)\\b|ಉಡುಪು|ಬಟ್ಟೆ|ಧರಿಸಬೇಕು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_018",
+        "faq_id": "FAQ018",
+        "category": "Yoga",
+        "intent_id": "bring_to_class",
+        "question": "What should I bring to class?",
+        "question_en": "What should I bring to class?",
+        "answer_en": "Bring a water bottle and any items requested by the branch. Ask the branch whether you should bring your own yoga mat.",
+        "answer_kn": "ನೀರಿನ ಬಾಟಲಿ ಮತ್ತು ಶಾಖೆಯು ಸೂಚಿಸಿದ ಅಗತ್ಯ ವಸ್ತುಗಳನ್ನು ತರಿರಿ. ನಿಮ್ಮದೇ ಯೋಗ ಮ್ಯಾಟ್ ತರಬೇಕೇ ಎಂಬುದನ್ನು ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Bring a water bottle and any items requested by the branch. Ask the branch whether you should bring your own yoga mat.",
+        "response_kn": "ನೀರಿನ ಬಾಟಲಿ ಮತ್ತು ಶಾಖೆಯು ಸೂಚಿಸಿದ ಅಗತ್ಯ ವಸ್ತುಗಳನ್ನು ತರಿರಿ. ನಿಮ್ಮದೇ ಯೋಗ ಮ್ಯಾಟ್ ತರಬೇಕೇ ಎಂಬುದನ್ನು ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "what to bring",
+            "mat",
+            "bring to class",
+            "items",
+            "ಏನು ತರಬೇಕು"
+        ],
+        "regex_source": "\\b(what\\s+should\\s+i\\s+bring|bring\\s+to\\s+class|carry\\s+to\\s+class|water\\s+bottle\\s+and\\s+mat)\\b|ಏನು\\s*ತರಬೇಕು|ತರಗತಿಗೆ\\s*ಏನು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_019",
+        "faq_id": "FAQ019",
+        "category": "Yoga",
+        "intent_id": "food_before_yoga",
+        "question": "Should I eat before yoga class?",
+        "question_en": "Should I eat before yoga class?",
+        "answer_en": "Avoid a heavy meal immediately before practice. For personal dietary or medical advice, consult a qualified healthcare professional.",
+        "answer_kn": "ಯೋಗಾಭ್ಯಾಸಕ್ಕೆ ತಕ್ಷಣ ಮೊದಲು ಭಾರವಾದ ಊಟ ಮಾಡಬೇಡಿ. ವೈಯಕ್ತಿಕ ಆಹಾರ ಅಥವಾ ವೈದ್ಯಕೀಯ ಸಲಹೆಗಾಗಿ ಅರ್ಹ ಆರೋಗ್ಯ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Avoid a heavy meal immediately before practice. For personal dietary or medical advice, consult a qualified healthcare professional.",
+        "response_kn": "ಯೋಗಾಭ್ಯಾಸಕ್ಕೆ ತಕ್ಷಣ ಮೊದಲು ಭಾರವಾದ ಊಟ ಮಾಡಬೇಡಿ. ವೈಯಕ್ತಿಕ ಆಹಾರ ಅಥವಾ ವೈದ್ಯಕೀಯ ಸಲಹೆಗಾಗಿ ಅರ್ಹ ಆರೋಗ್ಯ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "food",
+            "eating",
+            "eat before yoga",
+            "food before class",
+            "empty stomach",
+            "ಆಹಾರ",
+            "ಊಟ"
+        ],
+        "regex_source": "\\b(eat\\s+before\\s+yoga|food\\s+before\\s+(yoga|class)|empty\\s+stomach|meal\\s+before|can\\s+i\\s+eat)\\b|ಊಟ\\s*ಮಾಡಬಹುದೇ|ಆಹಾರ|ತಿನ್ನಬಹುದೇ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_020",
+        "faq_id": "FAQ020",
+        "category": "Yoga",
+        "intent_id": "medical_disclosure",
+        "question": "Can I join if I have a medical condition?",
+        "question_en": "Can I join if I have a medical condition?",
+        "answer_en": "Please consult your doctor before starting and inform the instructor about relevant medical conditions, injuries, pregnancy or movement limitations. The instructor can guide you about class suitability.",
+        "answer_kn": "ಯೋಗ ಆರಂಭಿಸುವ ಮೊದಲು ನಿಮ್ಮ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ. ಸಂಬಂಧಿತ ಆರೋಗ್ಯ ಸಮಸ್ಯೆಗಳು, ಗಾಯಗಳು, ಗರ್ಭಧಾರಣೆ ಅಥವಾ ಚಲನವಲನದ ಮಿತಿಗಳ ಬಗ್ಗೆ ಶಿಕ್ಷಕರಿಗೆ ತಿಳಿಸಿ. ತರಗತಿ ಸೂಕ್ತವೇ ಎಂಬುದರ ಬಗ್ಗೆ ಶಿಕ್ಷಕರು ಮಾರ್ಗದರ್ಶನ ನೀಡಬಹುದು.",
+        "response": "Please consult your doctor before starting and inform the instructor about relevant medical conditions, injuries, pregnancy or movement limitations. The instructor can guide you about class suitability.",
+        "response_kn": "ಯೋಗ ಆರಂಭಿಸುವ ಮೊದಲು ನಿಮ್ಮ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ. ಸಂಬಂಧಿತ ಆರೋಗ್ಯ ಸಮಸ್ಯೆಗಳು, ಗಾಯಗಳು, ಗರ್ಭಧಾರಣೆ ಅಥವಾ ಚಲನವಲನದ ಮಿತಿಗಳ ಬಗ್ಗೆ ಶಿಕ್ಷಕರಿಗೆ ತಿಳಿಸಿ. ತರಗತಿ ಸೂಕ್ತವೇ ಎಂಬುದರ ಬಗ್ಗೆ ಶಿಕ್ಷಕರು ಮಾರ್ಗದರ್ಶನ ನೀಡಬಹುದು.",
+        "keywords": [
+            "injury",
+            "condition",
+            "pregnancy",
+            "medical condition",
+            "health condition",
+            "ಆರೋಗ್ಯ ಸಮಸ್ಯೆ"
+        ],
+        "regex_source": "\\b(medical\\s+condition|health\\s+problem|back\\s+pain|knee\\s+pain|injury|injuries|pregnancy|pregnant|asthma|surgery|bp|diabetes)\\b|ಆರೋಗ್ಯ\\s*ಸಮಸ್ಯೆ|ಗಾಯ|ಗರ್ಭಧಾರಣೆ|ನೋವು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_021",
+        "faq_id": "FAQ021",
+        "category": "Yoga",
+        "intent_id": "missed_classes",
+        "question": "Can I join a class after missing a few days?",
+        "question_en": "Can I join a class after missing a few days?",
+        "answer_en": "Please contact your branch to understand the attendance and make-up class rules applicable to your course.",
+        "answer_kn": "ಕೆಲವು ದಿನ ತರಗತಿಗೆ ಹಾಜರಾಗದಿದ್ದರೆ ಅನ್ವಯಿಸುವ ಹಾಜರಾತಿ ಮತ್ತು ಪರ್ಯಾಯ ತರಗತಿ ನಿಯಮಗಳನ್ನು ತಿಳಿಯಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Please contact your branch to understand the attendance and make-up class rules applicable to your course.",
+        "response_kn": "ಕೆಲವು ದಿನ ತರಗತಿಗೆ ಹಾಜರಾಗದಿದ್ದರೆ ಅನ್ವಯಿಸುವ ಹಾಜರಾತಿ ಮತ್ತು ಪರ್ಯಾಯ ತರಗತಿ ನಿಯಮಗಳನ್ನು ತಿಳಿಯಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "absence",
+            "missed class",
+            "missed classes",
+            "absent",
+            "ಹಾಜರಾಗದಿದ್ದರೆ"
+        ],
+        "regex_source": "\\b(missed\\s+(a\\s+)?class|missing\\s+a\\s+few\\s+days|absent|absence|miss\\s+class|make\\s+up\\s+class)\\b|ಹಾಜರಾಗದಿದ್ದರೆ|ರಜೆ|ತರಗತಿ\\s*ತಪ್ಪಿದರೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_022",
+        "faq_id": "FAQ022",
+        "category": "Yoga",
+        "intent_id": "batch_change",
+        "question": "Can I attend a different batch?",
+        "question_en": "Can I attend a different batch?",
+        "answer_en": "Batch changes depend on seat availability and branch rules. Please get approval from the branch before attending another batch.",
+        "answer_kn": "ಬ್ಯಾಚ್ ಬದಲಾವಣೆ ಆಸನಗಳ ಲಭ್ಯತೆ ಮತ್ತು ಶಾಖೆಯ ನಿಯಮಗಳ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿರುತ್ತದೆ. ಬೇರೆ ಬ್ಯಾಚ್‌ಗೆ ಹಾಜರಾಗುವ ಮೊದಲು ಶಾಖೆಯ ಅನುಮತಿ ಪಡೆಯಿರಿ.",
+        "response": "Batch changes depend on seat availability and branch rules. Please get approval from the branch before attending another batch.",
+        "response_kn": "ಬ್ಯಾಚ್ ಬದಲಾವಣೆ ಆಸನಗಳ ಲಭ್ಯತೆ ಮತ್ತು ಶಾಖೆಯ ನಿಯಮಗಳ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿರುತ್ತದೆ. ಬೇರೆ ಬ್ಯಾಚ್‌ಗೆ ಹಾಜರಾಗುವ ಮೊದಲು ಶಾಖೆಯ ಅನುಮತಿ ಪಡೆಯಿರಿ.",
+        "keywords": [
+            "change timing",
+            "another batch",
+            "change batch",
+            "different batch",
+            "switch timing",
+            "ಬ್ಯಾಚ್ ಬದಲಾವಣೆ"
+        ],
+        "regex_source": "\\b(attend\\s+a\\s+different\\s+batch|change\\s+(my\\s+)?batch|switch\\s+batch|different\\s+batch|change\\s+timing)\\b|ಬೇರೆ\\s*ಬ್ಯಾಚ್|ಬ್ಯಾಚ್\\s*ಬದಲಾವಣೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_023",
+        "faq_id": "FAQ023",
+        "category": "Yoga",
+        "intent_id": "class_days",
+        "question": "Are classes conducted every day?",
+        "question_en": "Are classes conducted every day?",
+        "answer_en": "Class days vary by course and branch. Please check the timetable for your selected branch.",
+        "answer_kn": "ತರಗತಿಗಳ ದಿನಗಳು ಕೋರ್ಸ್ ಮತ್ತು ಶಾಖೆಯ ಪ್ರಕಾರ ಬದಲಾಗುತ್ತವೆ. ಆಯ್ಕೆ ಮಾಡಿದ ಶಾಖೆಯ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಪರಿಶೀಲಿಸಿ.",
+        "response": "Class days vary by course and branch. Please check the timetable for your selected branch.",
+        "response_kn": "ತರಗತಿಗಳ ದಿನಗಳು ಕೋರ್ಸ್ ಮತ್ತು ಶಾಖೆಯ ಪ್ರಕಾರ ಬದಲಾಗುತ್ತವೆ. ಆಯ್ಕೆ ಮಾಡಿದ ಶಾಖೆಯ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಪರಿಶೀಲಿಸಿ.",
+        "keywords": [
+            "daily classes",
+            "weekly",
+            "every day",
+            "class days",
+            "ಪ್ರತಿದಿನ"
+        ],
+        "regex_source": "\\b(conducted\\s+every\\s+day|daily\\s+classes|classes\\s+everyday|which\\s+days|weekend\\s+only|how\\s+many\\s+days\\s+a\\s+week)\\b|ಪ್ರತಿದಿನ|ವಾರದ\\s*ದಿನಗಳು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_024",
+        "faq_id": "FAQ024",
+        "category": "Timings",
+        "intent_id": "class_timings",
+        "question": "What are the yoga class timings?",
+        "question_en": "What are the yoga class timings?",
+        "answer_en": "Timings vary by branch and batch. Select your branch on this website to view the latest timetable or contact the branch.",
+        "answer_kn": "ಯೋಗ ತರಗತಿಗಳ ಸಮಯ ಶಾಖೆ ಮತ್ತು ಬ್ಯಾಚ್‌ಗೆ ಅನುಗುಣವಾಗಿ ಬದಲಾಗುತ್ತದೆ. ಇತ್ತೀಚಿನ ವೇಳಾಪಟ್ಟಿಗಾಗಿ ಈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Timings vary by branch and batch. Select your branch on this website to view the latest timetable or contact the branch.",
+        "response_kn": "ಯೋಗ ತರಗತಿಗಳ ಸಮಯ ಶಾಖೆ ಮತ್ತು ಬ್ಯಾಚ್‌ಗೆ ಅನುಗುಣವಾಗಿ ಬದಲಾಗುತ್ತದೆ. ಇತ್ತೀಚಿನ ವೇಳಾಪಟ್ಟಿಗಾಗಿ ಈ ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "timings",
+            "schedule",
+            "class timings",
+            "timetable",
+            "ಸಮಯ"
+        ],
+        "regex_source": "\\b(what\\s+are\\s+the\\s+yoga\\s+class\\s+timings|general\\s+timings|timetable|schedule\\s+of\\s+classes)\\b|ಯೋಗ\\s*ತರಗತಿಗಳ\\s*ಸಮಯ|ಸಮಯ\\s*ಏನು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_025",
+        "faq_id": "FAQ025",
+        "category": "Timings",
+        "intent_id": "morning_batch",
+        "question": "Are morning batches available?",
+        "question_en": "Are morning batches available?",
+        "answer_en": "Morning batches are available at selected branches, subject to the current timetable. Please check with your branch.",
+        "answer_kn": "ಪ್ರಸ್ತುತ ವೇಳಾಪಟ್ಟಿಗೆ ಅನುಗುಣವಾಗಿ ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಬೆಳಗಿನ ಬ್ಯಾಚ್‌ಗಳು ಲಭ್ಯವಿರುತ್ತವೆ. ನಿಮ್ಮ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Morning batches are available at selected branches, subject to the current timetable. Please check with your branch.",
+        "response_kn": "ಪ್ರಸ್ತುತ ವೇಳಾಪಟ್ಟಿಗೆ ಅನುಗುಣವಾಗಿ ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಬೆಳಗಿನ ಬ್ಯಾಚ್‌ಗಳು ಲಭ್ಯವಿರುತ್ತವೆ. ನಿಮ್ಮ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "morning",
+            "morning batch",
+            "morning classes",
+            "ಬೆಳಗಿನ ಬ್ಯಾಚ್"
+        ],
+        "regex_source": "\\b(morning\\s+batch|morning\\s+batches|morning\\s+classes|early\\s+morning)\\b|ಬೆಳಗಿನ\\s*ಬ್ಯಾಚ್|ಬೆಳಿಗ್ಗೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_026",
+        "faq_id": "FAQ026",
+        "category": "Timings",
+        "intent_id": "evening_batch",
+        "question": "Are evening batches available?",
+        "question_en": "Are evening batches available?",
+        "answer_en": "Evening batches are available at selected branches, subject to the current timetable. Please check with your branch.",
+        "answer_kn": "ಪ್ರಸ್ತುತ ವೇಳಾಪಟ್ಟಿಗೆ ಅನುಗುಣವಾಗಿ ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಸಂಜೆ ಬ್ಯಾಚ್‌ಗಳು ಲಭ್ಯವಿರುತ್ತವೆ. ನಿಮ್ಮ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Evening batches are available at selected branches, subject to the current timetable. Please check with your branch.",
+        "response_kn": "ಪ್ರಸ್ತುತ ವೇಳಾಪಟ್ಟಿಗೆ ಅನುಗುಣವಾಗಿ ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಸಂಜೆ ಬ್ಯಾಚ್‌ಗಳು ಲಭ್ಯವಿರುತ್ತವೆ. ನಿಮ್ಮ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "evening",
+            "evening batch",
+            "evening classes",
+            "ಸಂಜೆ ಬ್ಯಾಚ್"
+        ],
+        "regex_source": "\\b(evening\\s+batch|evening\\s+batches|evening\\s+classes|night\\s+batch)\\b|ಸಂಜೆ\\s*ಬ್ಯಾಚ್|ಸಂಜೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_027",
+        "faq_id": "FAQ027",
+        "category": "Timings",
+        "intent_id": "class_duration",
+        "question": "How long is each yoga class?",
+        "question_en": "How long is each yoga class?",
+        "answer_en": "Class duration depends on the course and batch. Please confirm the duration with your selected branch.",
+        "answer_kn": "ಪ್ರತಿ ಯೋಗ ತರಗತಿಯ ಅವಧಿ ಕೋರ್ಸ್ ಮತ್ತು ಬ್ಯಾಚ್‌ಗೆ ಅನುಗುಣವಾಗಿ ಬದಲಾಗುತ್ತದೆ. ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯಲ್ಲಿ ಅವಧಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+        "response": "Class duration depends on the course and batch. Please confirm the duration with your selected branch.",
+        "response_kn": "ಪ್ರತಿ ಯೋಗ ತರಗತಿಯ ಅವಧಿ ಕೋರ್ಸ್ ಮತ್ತು ಬ್ಯಾಚ್‌ಗೆ ಅನುಗುಣವಾಗಿ ಬದಲಾಗುತ್ತದೆ. ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯಲ್ಲಿ ಅವಧಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+        "keywords": [
+            "duration",
+            "class duration",
+            "how long is class",
+            "ಅವಧಿ"
+        ],
+        "regex_source": "\\b(how\\s+long\\s+is\\s+each\\s+yoga\\s+class|class\\s+duration|duration\\s+of\\s+class|how\\s+many\\s+minutes)\\b|ಅವಧಿ|ಎಷ್ಟು\\s*ಸಮಯದ\\s*ತರಗತಿ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_028",
+        "faq_id": "FAQ028",
+        "category": "Timings",
+        "intent_id": "holiday_schedule",
+        "question": "Are classes open on public holidays?",
+        "question_en": "Are classes open on public holidays?",
+        "answer_en": "Holiday schedules are announced by each branch. Please check the latest notice or contact your branch before visiting.",
+        "answer_kn": "ರಜಾದಿನಗಳ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಪ್ರತಿ ಶಾಖೆಯು ಪ್ರಕಟಿಸುತ್ತದೆ. ಭೇಟಿ ನೀಡುವ ಮೊದಲು ಇತ್ತೀಚಿನ ಸೂಚನೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Holiday schedules are announced by each branch. Please check the latest notice or contact your branch before visiting.",
+        "response_kn": "ರಜಾದಿನಗಳ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಪ್ರತಿ ಶಾಖೆಯು ಪ್ರಕಟಿಸುತ್ತದೆ. ಭೇಟಿ ನೀಡುವ ಮೊದಲು ಇತ್ತೀಚಿನ ಸೂಚನೆಯನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "holiday",
+            "closed",
+            "public holidays",
+            "holiday schedule",
+            "ರಜಾದಿನ"
+        ],
+        "regex_source": "\\b(open\\s+on\\s+public\\s+holidays|holiday\\s+schedule|is\\s+it\\s+closed\\s+on\\s+holidays|sunday\\s+holiday|festivals)\\b|ರಜಾದಿನ|ರಜೆ\\s*ಇರುತ್ತದೆಯೇ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_029",
+        "faq_id": "FAQ029",
+        "category": "Fees",
+        "intent_id": "fee_details",
+        "question": "What is the yoga class fee?",
+        "question_en": "What is the yoga class fee?",
+        "answer_en": "Fees depend on the course, duration and branch. Please contact your selected branch for the current fee structure.",
+        "answer_kn": "ಶುಲ್ಕವು ಕೋರ್ಸ್, ಅವಧಿ ಮತ್ತು ಶಾಖೆಯ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿರುತ್ತದೆ. ಪ್ರಸ್ತುತ ಶುಲ್ಕದ ವಿವರಗಳಿಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Fees depend on the course, duration and branch. Please contact your selected branch for the current fee structure.",
+        "response_kn": "ಶುಲ್ಕವು ಕೋರ್ಸ್, ಅವಧಿ ಮತ್ತು ಶಾಖೆಯ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿರುತ್ತದೆ. ಪ್ರಸ್ತುತ ಶುಲ್ಕದ ವಿವರಗಳಿಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "fees",
+            "price",
+            "charges",
+            "yoga class fee",
+            "fee details",
+            "pricing",
+            "ಶುಲ್ಕ"
+        ],
+        "regex_source": "\\b(what\\s+is\\s+the\\s+yoga\\s+class\\s+fee|fee\\s+structure|fee\\s+details|how\\s+much\\s+fee|pricing\\s+structure)\\b|ತರಗತಿಯ\\s*ಶುಲ್ಕ|ಶುಲ್ಕ\\s*ಎಷ್ಟು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_030",
+        "faq_id": "FAQ030",
+        "category": "Fees",
+        "intent_id": "registration_fee",
+        "question": "Is there an admission or registration fee?",
+        "question_en": "Is there an admission or registration fee?",
+        "answer_en": "Any admission or registration charge, if applicable, will be explained by the branch during enrolment.",
+        "answer_kn": "ಪ್ರವೇಶ ಅಥವಾ ನೋಂದಣಿ ಶುಲ್ಕ ಅನ್ವಯಿಸಿದರೆ, ದಾಖಲಾತಿ ಸಮಯದಲ್ಲಿ ಶಾಖೆಯು ವಿವರಿಸುತ್ತದೆ.",
+        "response": "Any admission or registration charge, if applicable, will be explained by the branch during enrolment.",
+        "response_kn": "ಪ್ರವೇಶ ಅಥವಾ ನೋಂದಣಿ ಶುಲ್ಕ ಅನ್ವಯಿಸಿದರೆ, ದಾಖಲಾತಿ ಸಮಯದಲ್ಲಿ ಶಾಖೆಯು ವಿವರಿಸುತ್ತದೆ.",
+        "keywords": [
+            "admission fee",
+            "registration fee",
+            "ನೋಂದಣಿ ಶುಲ್ಕ"
+        ],
+        "regex_source": "\\b(admission\\s+fee|registration\\s+fee|admission\\s+charges|registration\\s+charge)\\b|ಪ್ರವೇಶ\\s*ಶುಲ್ಕ|ನೋಂದಣಿ\\s*ಶುಲ್ಕ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_031",
+        "faq_id": "FAQ031",
+        "category": "Fees",
+        "intent_id": "payment_methods",
+        "question": "What payment methods are accepted?",
+        "question_en": "What payment methods are accepted?",
+        "answer_en": "Please contact your branch to confirm accepted payment methods, such as cash or available digital payment options.",
+        "answer_kn": "ನಗದು ಅಥವಾ ಲಭ್ಯವಿರುವ ಡಿಜಿಟಲ್ ಪಾವತಿ ಆಯ್ಕೆಗಳಂತಹ ಸ್ವೀಕೃತ ಪಾವತಿ ವಿಧಾನಗಳನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Please contact your branch to confirm accepted payment methods, such as cash or available digital payment options.",
+        "response_kn": "ನಗದು ಅಥವಾ ಲಭ್ಯವಿರುವ ಡಿಜಿಟಲ್ ಪಾವತಿ ಆಯ್ಕೆಗಳಂತಹ ಸ್ವೀಕೃತ ಪಾವತಿ ವಿಧಾನಗಳನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "upi",
+            "cash",
+            "online payment",
+            "payment methods",
+            "mode of payment",
+            "cash or upi",
+            "ಪಾವತಿ ವಿಧಾನ"
+        ],
+        "regex_source": "\\b(payment\\s+methods|accepted\\s+payment|modes\\s+of\\s+payment|can\\s+i\\s+pay\\s+by\\s+cash\\s+or\\s+card)\\b|ಪಾವತಿ\\s*ವಿಧಾನ|ಹೇಗೆ\\s*ಪಾವತಿಸುವುದು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_032",
+        "faq_id": "FAQ032",
+        "category": "Fees",
+        "intent_id": "online_payment",
+        "question": "Can I pay the fees online?",
+        "question_en": "Can I pay the fees online?",
+        "answer_en": "Online payment options may be available. Contact your branch for the official payment details and instructions.",
+        "answer_kn": "ಆನ್‌ಲೈನ್ ಪಾವತಿ ಆಯ್ಕೆಗಳು ಲಭ್ಯವಿರಬಹುದು. ಅಧಿಕೃತ ಪಾವತಿ ವಿವರಗಳು ಮತ್ತು ಸೂಚನೆಗಳಿಗಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Online payment options may be available. Contact your branch for the official payment details and instructions.",
+        "response_kn": "ಆನ್‌ಲೈನ್ ಪಾವತಿ ಆಯ್ಕೆಗಳು ಲಭ್ಯವಿರಬಹುದು. ಅಧಿಕೃತ ಪಾವತಿ ವಿವರಗಳು ಮತ್ತು ಸೂಚನೆಗಳಿಗಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "online",
+            "upi",
+            "pay online",
+            "online payment",
+            "UPI",
+            "ಆನ್‌ಲೈನ್ ಪಾವತಿ"
+        ],
+        "regex_source": "(?=.*\\b(pay|fees|fee)\\b)(?=.*\\b(online|upi|gpay|phonepe)\\b)(?!.*(confirm|failed|deduct|issue))|\\b(can\\s+i\\s+pay\\s+(the\\s+)?fees\\s+online|how\\s+to\\s+pay\\s+online)\\b|ಆನ್‌ಲೈನ್\\s*ಪಾವತಿ(?!.*(ದೃಢೀಕರಣ|ಕಟ್))",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_033",
+        "faq_id": "FAQ033",
+        "category": "Fees",
+        "intent_id": "fee_receipt",
+        "question": "Will I receive a fee receipt?",
+        "question_en": "Will I receive a fee receipt?",
+        "answer_en": "Please request a receipt when making payment. Contact the branch if you need a copy of a previous receipt.",
+        "answer_kn": "ಶುಲ್ಕ ಪಾವತಿಸುವಾಗ ರಸೀದಿಯನ್ನು ಕೇಳಿ. ಹಿಂದಿನ ರಸೀದಿಯ ಪ್ರತಿಯ ಅಗತ್ಯವಿದ್ದರೆ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Please request a receipt when making payment. Contact the branch if you need a copy of a previous receipt.",
+        "response_kn": "ಶುಲ್ಕ ಪಾವತಿಸುವಾಗ ರಸೀದಿಯನ್ನು ಕೇಳಿ. ಹಿಂದಿನ ರಸೀದಿಯ ಪ್ರತಿಯ ಅಗತ್ಯವಿದ್ದರೆ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "receipt",
+            "bill",
+            "fee receipt",
+            "ರಸೀದಿ"
+        ],
+        "regex_source": "\\b(fee\\s+receipt|receive\\s+a\\s+(fee\\s+)?receipt|bill|payment\\s+receipt|copy\\s+of\\s+receipt)\\b|ರಸೀದಿ|ಬಿಲ್",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_034",
+        "faq_id": "FAQ034",
+        "category": "Fees",
+        "intent_id": "refund_policy",
+        "question": "Can I get a refund after paying fees?",
+        "question_en": "Can I get a refund after paying fees?",
+        "answer_en": "Refunds, transfers and cancellations are subject to the institute's applicable fee policy. Please contact the branch administration for review.",
+        "answer_kn": "ಶುಲ್ಕ ಮರುಪಾವತಿ, ವರ್ಗಾವಣೆ ಮತ್ತು ರದ್ದತಿ ಸಂಸ್ಥೆಯ ಅನ್ವಯಿಸುವ ಶುಲ್ಕ ನೀತಿಗೆ ಒಳಪಟ್ಟಿರುತ್ತದೆ. ಪರಿಶೀಲನೆಗಾಗಿ ಶಾಖೆಯ ಆಡಳಿತ ವಿಭಾಗವನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Refunds, transfers and cancellations are subject to the institute's applicable fee policy. Please contact the branch administration for review.",
+        "response_kn": "ಶುಲ್ಕ ಮರುಪಾವತಿ, ವರ್ಗಾವಣೆ ಮತ್ತು ರದ್ದತಿ ಸಂಸ್ಥೆಯ ಅನ್ವಯಿಸುವ ಶುಲ್ಕ ನೀತಿಗೆ ಒಳಪಟ್ಟಿರುತ್ತದೆ. ಪರಿಶೀಲನೆಗಾಗಿ ಶಾಖೆಯ ಆಡಳಿತ ವಿಭಾಗವನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "refund",
+            "cancellation",
+            "money back",
+            "ಮರುಪಾವತಿ"
+        ],
+        "regex_source": "\\b(refund|cancellation|money\\s+back|get\\s+a\\s+refund|cancel\\s+admission)\\b|ಮರುಪಾವತಿ|ರದ್ದತಿ|ಹಣ\\s*ವಾಪಸ್",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_035",
+        "faq_id": "FAQ035",
+        "category": "Fees",
+        "intent_id": "validity_extension",
+        "question": "Can I pause or extend my course validity?",
+        "question_en": "Can I pause or extend my course validity?",
+        "answer_en": "Validity, pause and extension rules depend on the fee plan and institute policy. Please confirm the applicable terms with your branch before payment.",
+        "answer_kn": "ಅವಧಿ, ವಿರಾಮ ಮತ್ತು ವಿಸ್ತರಣೆಯ ನಿಯಮಗಳು ಶುಲ್ಕ ಯೋಜನೆ ಮತ್ತು ಸಂಸ್ಥೆಯ ನೀತಿಯನ್ನು ಅವಲಂಬಿಸಿರುತ್ತವೆ. ಪಾವತಿಸುವ ಮೊದಲು ಅನ್ವಯಿಸುವ ನಿಯಮಗಳನ್ನು ಶಾಖೆಯಲ್ಲಿ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+        "response": "Validity, pause and extension rules depend on the fee plan and institute policy. Please confirm the applicable terms with your branch before payment.",
+        "response_kn": "ಅವಧಿ, ವಿರಾಮ ಮತ್ತು ವಿಸ್ತರಣೆಯ ನಿಯಮಗಳು ಶುಲ್ಕ ಯೋಜನೆ ಮತ್ತು ಸಂಸ್ಥೆಯ ನೀತಿಯನ್ನು ಅವಲಂಬಿಸಿರುತ್ತವೆ. ಪಾವತಿಸುವ ಮೊದಲು ಅನ್ವಯಿಸುವ ನಿಯಮಗಳನ್ನು ಶಾಖೆಯಲ್ಲಿ ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+        "keywords": [
+            "pause",
+            "extend",
+            "validity",
+            "pause course",
+            "extend validity",
+            "validity extension",
+            "ವಿಸ್ತರಣೆ"
+        ],
+        "regex_source": "\\b(pause\\s+or\\s+extend|extend\\s+(my\\s+)?validity|pause\\s+(my\\s+)?course|hold\\s+classes)\\b|ವಿರಾಮ|ವಿಸ್ತರಣೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_036",
+        "faq_id": "FAQ036",
+        "category": "Admission",
+        "intent_id": "admission_process",
+        "question": "How do I enrol in a class?",
+        "question_en": "How do I enrol in a class?",
+        "answer_en": "Select your branch and course, enquire about available batches, complete the registration process and pay the applicable fee as instructed by the branch.",
+        "answer_kn": "ನಿಮ್ಮ ಶಾಖೆ ಮತ್ತು ಕೋರ್ಸ್ ಆಯ್ಕೆಮಾಡಿ, ಲಭ್ಯವಿರುವ ಬ್ಯಾಚ್‌ಗಳ ಬಗ್ಗೆ ವಿಚಾರಿಸಿ, ನೋಂದಣಿ ಪ್ರಕ್ರಿಯೆ ಪೂರ್ಣಗೊಳಿಸಿ ಮತ್ತು ಶಾಖೆಯ ಸೂಚನೆಯಂತೆ ಅನ್ವಯಿಸುವ ಶುಲ್ಕ ಪಾವತಿಸಿ.",
+        "response": "Select your branch and course, enquire about available batches, complete the registration process and pay the applicable fee as instructed by the branch.",
+        "response_kn": "ನಿಮ್ಮ ಶಾಖೆ ಮತ್ತು ಕೋರ್ಸ್ ಆಯ್ಕೆಮಾಡಿ, ಲಭ್ಯವಿರುವ ಬ್ಯಾಚ್‌ಗಳ ಬಗ್ಗೆ ವಿಚಾರಿಸಿ, ನೋಂದಣಿ ಪ್ರಕ್ರಿಯೆ ಪೂರ್ಣಗೊಳಿಸಿ ಮತ್ತು ಶಾಖೆಯ ಸೂಚನೆಯಂತೆ ಅನ್ವಯಿಸುವ ಶುಲ್ಕ ಪಾವತಿಸಿ.",
+        "keywords": [
+            "join",
+            "enrol",
+            "admission",
+            "admission process",
+            "how to join",
+            "ದಾಖಲಾತಿ"
+        ],
+        "regex_source": "\\b(how\\s+do\\s+i\\s+enrol|admission\\s+process|how\\s+to\\s+join\\s+class|how\\s+to\\s+take\\s+admission|enrolment\\s+process)\\b|ದಾಖಲಾತಿ\\s*ಹೇಗೆ|ಸೇರುವುದು\\s*ಹೇಗೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_037",
+        "faq_id": "FAQ037",
+        "category": "Admission",
+        "intent_id": "registration_details",
+        "question": "What details are required for registration?",
+        "question_en": "What details are required for registration?",
+        "answer_en": "The branch will explain the required details. Typically, registration may require the participant's name, age, contact number and other course-related information.",
+        "answer_kn": "ಅಗತ್ಯವಿರುವ ವಿವರಗಳನ್ನು ಶಾಖೆಯು ತಿಳಿಸುತ್ತದೆ. ಸಾಮಾನ್ಯವಾಗಿ ಭಾಗವಹಿಸುವವರ ಹೆಸರು, ವಯಸ್ಸು, ಸಂಪರ್ಕ ಸಂಖ್ಯೆ ಮತ್ತು ಕೋರ್ಸ್‌ಗೆ ಸಂಬಂಧಿಸಿದ ಇತರ ಮಾಹಿತಿಯನ್ನು ಕೇಳಬಹುದು.",
+        "response": "The branch will explain the required details. Typically, registration may require the participant's name, age, contact number and other course-related information.",
+        "response_kn": "ಅಗತ್ಯವಿರುವ ವಿವರಗಳನ್ನು ಶಾಖೆಯು ತಿಳಿಸುತ್ತದೆ. ಸಾಮಾನ್ಯವಾಗಿ ಭಾಗವಹಿಸುವವರ ಹೆಸರು, ವಯಸ್ಸು, ಸಂಪರ್ಕ ಸಂಖ್ಯೆ ಮತ್ತು ಕೋರ್ಸ್‌ಗೆ ಸಂಬಂಧಿಸಿದ ಇತರ ಮಾಹಿತಿಯನ್ನು ಕೇಳಬಹುದು.",
+        "keywords": [
+            "documents",
+            "details",
+            "registration details",
+            "documents required",
+            "ದಾಖಲೆಗಳು"
+        ],
+        "regex_source": "\\b(details\\s+required\\s+for\\s+registration|documents\\s+required|what\\s+is\\s+needed\\s+for\\s+registration)\\b|ದಾಖಲೆಗಳು|ವಿವರಗಳು\\s*ಬೇಕೇ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_038",
+        "faq_id": "FAQ038",
+        "category": "Admission",
+        "intent_id": "online_registration",
+        "question": "Can I register online?",
+        "question_en": "Can I register online?",
+        "answer_en": "Online registration may be available for selected courses or events. Use only the official registration link shared by the institute or branch.",
+        "answer_kn": "ಆಯ್ದ ಕೋರ್ಸ್‌ಗಳು ಅಥವಾ ಕಾರ್ಯಕ್ರಮಗಳಿಗೆ ಆನ್‌ಲೈನ್ ನೋಂದಣಿ ಲಭ್ಯವಿರಬಹುದು. ಸಂಸ್ಥೆ ಅಥವಾ ಶಾಖೆ ಹಂಚಿದ ಅಧಿಕೃತ ನೋಂದಣಿ ಲಿಂಕ್ ಮಾತ್ರ ಬಳಸಿ.",
+        "response": "Online registration may be available for selected courses or events. Use only the official registration link shared by the institute or branch.",
+        "response_kn": "ಆಯ್ದ ಕೋರ್ಸ್‌ಗಳು ಅಥವಾ ಕಾರ್ಯಕ್ರಮಗಳಿಗೆ ಆನ್‌ಲೈನ್ ನೋಂದಣಿ ಲಭ್ಯವಿರಬಹುದು. ಸಂಸ್ಥೆ ಅಥವಾ ಶಾಖೆ ಹಂಚಿದ ಅಧಿಕೃತ ನೋಂದಣಿ ಲಿಂಕ್ ಮಾತ್ರ ಬಳಸಿ.",
+        "keywords": [
+            "register online",
+            "form",
+            "online registration",
+            "ಆನ್‌ಲೈನ್ ನೋಂದಣಿ"
+        ],
+        "regex_source": "\\b(can\\s+i\\s+register\\s+online|online\\s+registration|online\\s+admission\\s+form)\\b|ಆನ್‌ಲೈನ್\\s*ನೋಂದಣಿ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_039",
+        "faq_id": "FAQ039",
+        "category": "Admission",
+        "intent_id": "pre_admission_enquiry",
+        "question": "Can I enquire before joining?",
+        "question_en": "Can I enquire before joining?",
+        "answer_en": "Certainly. You may contact or visit the branch to understand the course, timings, fees and admission process before deciding.",
+        "answer_kn": "ಖಂಡಿತ. ನಿರ್ಧಾರ ಕೈಗೊಳ್ಳುವ ಮೊದಲು ಕೋರ್ಸ್, ಸಮಯ, ಶುಲ್ಕ ಮತ್ತು ಪ್ರವೇಶ ಪ್ರಕ್ರಿಯೆ ತಿಳಿಯಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಬಹುದು ಅಥವಾ ಭೇಟಿ ನೀಡಬಹುದು.",
+        "response": "Certainly. You may contact or visit the branch to understand the course, timings, fees and admission process before deciding.",
+        "response_kn": "ಖಂಡಿತ. ನಿರ್ಧಾರ ಕೈಗೊಳ್ಳುವ ಮೊದಲು ಕೋರ್ಸ್, ಸಮಯ, ಶುಲ್ಕ ಮತ್ತು ಪ್ರವೇಶ ಪ್ರಕ್ರಿಯೆ ತಿಳಿಯಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಬಹುದು ಅಥವಾ ಭೇಟಿ ನೀಡಬಹುದು.",
+        "keywords": [
+            "enquiry",
+            "enquire before joining",
+            "pre admission enquiry",
+            "ವಿಚಾರಣೆ"
+        ],
+        "regex_source": "\\b(enquire\\s+before\\s+joining|can\\s+i\\s+enquire\\s+first|ask\\s+questions\\s+before\\s+admission)\\b|ಸೇರುವ\\s*ಮೊದಲು\\s*ವಿಚಾರಿಸ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_040",
+        "faq_id": "FAQ040",
+        "category": "Children",
+        "intent_id": "kids_yoga",
+        "question": "Do you have yoga classes for children?",
+        "question_en": "Do you have yoga classes for children?",
+        "answer_en": "Children's yoga classes are conducted at selected branches or during scheduled batches. Please check age eligibility and timings with your branch.",
+        "answer_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಅಥವಾ ನಿಗದಿತ ಬ್ಯಾಚ್‌ಗಳಲ್ಲಿ ಮಕ್ಕಳ ಯೋಗ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ವಯೋಮಿತಿ ಮತ್ತು ಸಮಯವನ್ನು ನಿಮ್ಮ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Children's yoga classes are conducted at selected branches or during scheduled batches. Please check age eligibility and timings with your branch.",
+        "response_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಅಥವಾ ನಿಗದಿತ ಬ್ಯಾಚ್‌ಗಳಲ್ಲಿ ಮಕ್ಕಳ ಯೋಗ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ವಯೋಮಿತಿ ಮತ್ತು ಸಮಯವನ್ನು ನಿಮ್ಮ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "children",
+            "kids",
+            "yoga for children",
+            "kids yoga",
+            "ಮಕ್ಕಳ ಯೋಗ"
+        ],
+        "regex_source": "\\b(yoga\\s+(classes\\s+)?for\\s+(children|kids)|kids\\s+yoga|children('?s)?\\s+yoga|yoga\\s+for\\s+kids|(can\\s+)?(kids|children)\\s+join)\\b|ಮಕ್ಕಳ\\s*ಯೋಗ|ಮಕ್ಕಳಿಗೆ\\s*ಯೋಗ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_041",
+        "faq_id": "FAQ041",
+        "category": "Children",
+        "intent_id": "summer_camp",
+        "question": "Do you conduct summer camps?",
+        "question_en": "Do you conduct summer camps?",
+        "answer_en": "Yes. The institute may organise seasonal children's camps with activities such as yoga, shlokas, Bhagavad Gita, art and craft, dance and other learning activities. Announcements will include dates and registration details.",
+        "answer_kn": "ಹೌದು. ಯೋಗ, ಶ್ಲೋಕಗಳು, ಭಗವದ್ಗೀತೆ, ಕಲೆ ಮತ್ತು ಕರಕುಶಲ, ನೃತ್ಯ ಹಾಗೂ ಇತರ ಕಲಿಕಾ ಚಟುವಟಿಕೆಗಳನ್ನು ಒಳಗೊಂಡ ಮಕ್ಕಳ ಶಿಬಿರಗಳನ್ನು ಸಂಸ್ಥೆಯು ಆಯೋಜಿಸಬಹುದು. ದಿನಾಂಕ ಮತ್ತು ನೋಂದಣಿ ವಿವರಗಳನ್ನು ಪ್ರಕಟಣೆಯಲ್ಲಿ ತಿಳಿಸಲಾಗುತ್ತದೆ.",
+        "response": "Yes. The institute may organise seasonal children's camps with activities such as yoga, shlokas, Bhagavad Gita, art and craft, dance and other learning activities. Announcements will include dates and registration details.",
+        "response_kn": "ಹೌದು. ಯೋಗ, ಶ್ಲೋಕಗಳು, ಭಗವದ್ಗೀತೆ, ಕಲೆ ಮತ್ತು ಕರಕುಶಲ, ನೃತ್ಯ ಹಾಗೂ ಇತರ ಕಲಿಕಾ ಚಟುವಟಿಕೆಗಳನ್ನು ಒಳಗೊಂಡ ಮಕ್ಕಳ ಶಿಬಿರಗಳನ್ನು ಸಂಸ್ಥೆಯು ಆಯೋಜಿಸಬಹುದು. ದಿನಾಂಕ ಮತ್ತು ನೋಂದಣಿ ವಿವರಗಳನ್ನು ಪ್ರಕಟಣೆಯಲ್ಲಿ ತಿಳಿಸಲಾಗುತ್ತದೆ.",
+        "keywords": [
+            "camp",
+            "vacation camp",
+            "summer camp",
+            "ಬೇಸಿಗೆ ಶಿಬಿರ"
+        ],
+        "regex_source": "\\b(summer\\s+camp|summer\\s+camps|vacation\\s+camp|holiday\\s+camp)\\b|ಬೇಸಿಗೆ\\s*ಶಿಬಿರ|ಶಿಬಿರ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_042",
+        "faq_id": "FAQ042",
+        "category": "Children",
+        "intent_id": "kids_age",
+        "question": "What is the minimum age for children's classes?",
+        "question_en": "What is the minimum age for children's classes?",
+        "answer_en": "The minimum age depends on the activity and branch. Please share the child's age and the activity you are interested in.",
+        "answer_kn": "ಮಕ್ಕಳ ತರಗತಿಗಳಿಗೆ ಕನಿಷ್ಠ ವಯಸ್ಸು ಚಟುವಟಿಕೆ ಮತ್ತು ಶಾಖೆಯ ಪ್ರಕಾರ ಬದಲಾಗುತ್ತದೆ. ಮಗುವಿನ ವಯಸ್ಸು ಮತ್ತು ಆಸಕ್ತಿಯ ಚಟುವಟಿಕೆಯನ್ನು ತಿಳಿಸಿ.",
+        "response": "The minimum age depends on the activity and branch. Please share the child's age and the activity you are interested in.",
+        "response_kn": "ಮಕ್ಕಳ ತರಗತಿಗಳಿಗೆ ಕನಿಷ್ಠ ವಯಸ್ಸು ಚಟುವಟಿಕೆ ಮತ್ತು ಶಾಖೆಯ ಪ್ರಕಾರ ಬದಲಾಗುತ್ತದೆ. ಮಗುವಿನ ವಯಸ್ಸು ಮತ್ತು ಆಸಕ್ತಿಯ ಚಟುವಟಿಕೆಯನ್ನು ತಿಳಿಸಿ.",
+        "keywords": [
+            "age limit",
+            "minimum age",
+            "age limit for children",
+            "kids age",
+            "ಕನಿಷ್ಠ ವಯಸ್ಸು"
+        ],
+        "regex_source": "\\b(minimum\\s+age\\s+for\\s+children|age\\s+limit\\s+for\\s+kids|how\\s+old\\s+for\\s+children)\\b|ಕನಿಷ್ಠ\\s*ವಯಸ್ಸು|ಮಕ್ಕಳಿಗೆ\\s*ವಯಸ್ಸು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_043",
+        "faq_id": "FAQ043",
+        "category": "Children",
+        "intent_id": "martial_arts",
+        "question": "Do you offer karate or taekwondo?",
+        "question_en": "Do you offer karate or taekwondo?",
+        "answer_en": "Karate or taekwondo classes are offered at selected branches, depending on the current schedule. Please contact the branch for details.",
+        "answer_kn": "ಪ್ರಸ್ತುತ ವೇಳಾಪಟ್ಟಿಗೆ ಅನುಗುಣವಾಗಿ ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಕರಾಟೆ ಅಥವಾ ತೈಕ್ವಾಂಡೋ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ವಿವರಗಳಿಗಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Karate or taekwondo classes are offered at selected branches, depending on the current schedule. Please contact the branch for details.",
+        "response_kn": "ಪ್ರಸ್ತುತ ವೇಳಾಪಟ್ಟಿಗೆ ಅನುಗುಣವಾಗಿ ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಕರಾಟೆ ಅಥವಾ ತೈಕ್ವಾಂಡೋ ತರಗತಿಗಳನ್ನು ನಡೆಸಲಾಗುತ್ತದೆ. ವಿವರಗಳಿಗಾಗಿ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "karate",
+            "taekwondo",
+            "martial arts",
+            "ಕರಾಟೆ"
+        ],
+        "regex_source": "\\b(karate|taekwondo|martial\\s+arts)\\b|ಕರಾಟೆ|ತೈಕ್ವಾಂಡೋ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_044",
+        "faq_id": "FAQ044",
+        "category": "Children",
+        "intent_id": "dance_classes",
+        "question": "Do you offer Bharatanatyam or dance classes?",
+        "question_en": "Do you offer Bharatanatyam or dance classes?",
+        "answer_en": "Bharatanatyam or dance classes may be available at selected branches. Please check the course, age group and batch availability with the branch.",
+        "answer_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಭರತನಾಟ್ಯ ಅಥವಾ ನೃತ್ಯ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ಕೋರ್ಸ್, ವಯೋವರ್ಗ ಮತ್ತು ಬ್ಯಾಚ್ ಲಭ್ಯತೆಯನ್ನು ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Bharatanatyam or dance classes may be available at selected branches. Please check the course, age group and batch availability with the branch.",
+        "response_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಭರತನಾಟ್ಯ ಅಥವಾ ನೃತ್ಯ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ಕೋರ್ಸ್, ವಯೋವರ್ಗ ಮತ್ತು ಬ್ಯಾಚ್ ಲಭ್ಯತೆಯನ್ನು ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "bharatanatyam",
+            "dance",
+            "dance classes",
+            "ಭರತನಾಟ್ಯ"
+        ],
+        "regex_source": "\\b(bharatanatyam|bharatnatyam|dance\\s+classes|classical\\s+dance|kathak)\\b|ಭರತನಾಟ್ಯ|ನೃತ್ಯ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_045",
+        "faq_id": "FAQ045",
+        "category": "Children",
+        "intent_id": "music_classes",
+        "question": "Are keyboard or music classes available?",
+        "question_en": "Are keyboard or music classes available?",
+        "answer_en": "Keyboard and music classes may be offered at selected branches. Contact your preferred branch for current availability and timings.",
+        "answer_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಕೀಬೋರ್ಡ್ ಮತ್ತು ಸಂಗೀತ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ಪ್ರಸ್ತುತ ಲಭ್ಯತೆ ಮತ್ತು ಸಮಯಗಳಿಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Keyboard and music classes may be offered at selected branches. Contact your preferred branch for current availability and timings.",
+        "response_kn": "ಆಯ್ದ ಶಾಖೆಗಳಲ್ಲಿ ಕೀಬೋರ್ಡ್ ಮತ್ತು ಸಂಗೀತ ತರಗತಿಗಳು ಲಭ್ಯವಿರಬಹುದು. ಪ್ರಸ್ತುತ ಲಭ್ಯತೆ ಮತ್ತು ಸಮಯಗಳಿಗಾಗಿ ನಿಮ್ಮ ಆಯ್ಕೆಯ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "keyboard",
+            "music",
+            "music classes",
+            "ಸಂಗೀತ"
+        ],
+        "regex_source": "\\b(keyboard|music\\s+classes|carnatic\\s+music|flute|tabla|piano|singing)\\b|ಕೀಬೋರ್ಡ್|ಸಂಗೀತ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_046",
+        "faq_id": "FAQ046",
+        "category": "Events",
+        "intent_id": "special_programmes",
+        "question": "Does the institute organise special programmes?",
+        "question_en": "Does the institute organise special programmes?",
+        "answer_en": "Yes. Programmes may include International Yoga Day, health awareness sessions, special lectures, cultural events and seasonal celebrations. Details are shared through official announcements.",
+        "answer_kn": "ಹೌದು. ಅಂತರರಾಷ್ಟ್ರೀಯ ಯೋಗ ದಿನ, ಆರೋಗ್ಯ ಜಾಗೃತಿ ಕಾರ್ಯಕ್ರಮಗಳು, ವಿಶೇಷ ಉಪನ್ಯಾಸಗಳು, ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮಗಳು ಮತ್ತು ಹಬ್ಬದ ಆಚರಣೆಗಳನ್ನು ಆಯೋಜಿಸಬಹುದು. ವಿವರಗಳನ್ನು ಅಧಿಕೃತ ಪ್ರಕಟಣೆಗಳ ಮೂಲಕ ಹಂಚಲಾಗುತ್ತದೆ.",
+        "response": "Yes. Programmes may include International Yoga Day, health awareness sessions, special lectures, cultural events and seasonal celebrations. Details are shared through official announcements.",
+        "response_kn": "ಹೌದು. ಅಂತರರಾಷ್ಟ್ರೀಯ ಯೋಗ ದಿನ, ಆರೋಗ್ಯ ಜಾಗೃತಿ ಕಾರ್ಯಕ್ರಮಗಳು, ವಿಶೇಷ ಉಪನ್ಯಾಸಗಳು, ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮಗಳು ಮತ್ತು ಹಬ್ಬದ ಆಚರಣೆಗಳನ್ನು ಆಯೋಜಿಸಬಹುದು. ವಿವರಗಳನ್ನು ಅಧಿಕೃತ ಪ್ರಕಟಣೆಗಳ ಮೂಲಕ ಹಂಚಲಾಗುತ್ತದೆ.",
+        "keywords": [
+            "events",
+            "programmes",
+            "special programmes",
+            "international yoga day",
+            "ವಿಶೇಷ ಕಾರ್ಯಕ್ರಮಗಳು"
+        ],
+        "regex_source": "\\b(special\\s+programmes|special\\s+programs|international\\s+yoga\\s+day|cultural\\s+events|celebrations)\\b|ವಿಶೇಷ\\s*ಕಾರ್ಯಕ್ರಮ|ಯೋಗ\\s*ದಿನ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_047",
+        "faq_id": "FAQ047",
+        "category": "Events",
+        "intent_id": "event_registration",
+        "question": "How can I register for an event?",
+        "question_en": "How can I register for an event?",
+        "answer_en": "Follow the official event announcement and use the registration link or contact details provided there. Some events may require advance registration.",
+        "answer_kn": "ಅಧಿಕೃತ ಕಾರ್ಯಕ್ರಮದ ಪ್ರಕಟಣೆಯನ್ನು ಗಮನಿಸಿ, ಅದರಲ್ಲಿ ನೀಡಿರುವ ನೋಂದಣಿ ಲಿಂಕ್ ಅಥವಾ ಸಂಪರ್ಕ ವಿವರಗಳನ್ನು ಬಳಸಿ. ಕೆಲವು ಕಾರ್ಯಕ್ರಮಗಳಿಗೆ ಮುಂಗಡ ನೋಂದಣಿ ಅಗತ್ಯವಿರಬಹುದು.",
+        "response": "Follow the official event announcement and use the registration link or contact details provided there. Some events may require advance registration.",
+        "response_kn": "ಅಧಿಕೃತ ಕಾರ್ಯಕ್ರಮದ ಪ್ರಕಟಣೆಯನ್ನು ಗಮನಿಸಿ, ಅದರಲ್ಲಿ ನೀಡಿರುವ ನೋಂದಣಿ ಲಿಂಕ್ ಅಥವಾ ಸಂಪರ್ಕ ವಿವರಗಳನ್ನು ಬಳಸಿ. ಕೆಲವು ಕಾರ್ಯಕ್ರಮಗಳಿಗೆ ಮುಂಗಡ ನೋಂದಣಿ ಅಗತ್ಯವಿರಬಹುದು.",
+        "keywords": [
+            "register event",
+            "event registration",
+            "ಕಾರ್ಯಕ್ರಮ ನೋಂದಣಿ"
+        ],
+        "regex_source": "\\b(register\\s+for\\s+an\\s+event|event\\s+registration|participate\\s+in\\s+event)\\b|ಕಾರ್ಯಕ್ರಮಕ್ಕೆ\\s*ನೋಂದಣಿ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_048",
+        "faq_id": "FAQ048",
+        "category": "Events",
+        "intent_id": "event_fee",
+        "question": "Are events free of charge?",
+        "question_en": "Are events free of charge?",
+        "answer_en": "Event fees vary. The official announcement will state whether the programme is free or paid and whether registration is required.",
+        "answer_kn": "ಕಾರ್ಯಕ್ರಮದ ಶುಲ್ಕ ಬದಲಾಗುತ್ತದೆ. ಕಾರ್ಯಕ್ರಮ ಉಚಿತವೇ ಅಥವಾ ಶುಲ್ಕವಿದೆಯೇ ಮತ್ತು ನೋಂದಣಿ ಅಗತ್ಯವಿದೆಯೇ ಎಂಬುದನ್ನು ಅಧಿಕೃತ ಪ್ರಕಟಣೆಯಲ್ಲಿ ತಿಳಿಸಲಾಗುತ್ತದೆ.",
+        "response": "Event fees vary. The official announcement will state whether the programme is free or paid and whether registration is required.",
+        "response_kn": "ಕಾರ್ಯಕ್ರಮದ ಶುಲ್ಕ ಬದಲಾಗುತ್ತದೆ. ಕಾರ್ಯಕ್ರಮ ಉಚಿತವೇ ಅಥವಾ ಶುಲ್ಕವಿದೆಯೇ ಮತ್ತು ನೋಂದಣಿ ಅಗತ್ಯವಿದೆಯೇ ಎಂಬುದನ್ನು ಅಧಿಕೃತ ಪ್ರಕಟಣೆಯಲ್ಲಿ ತಿಳಿಸಲಾಗುತ್ತದೆ.",
+        "keywords": [
+            "free event",
+            "charges",
+            "events free",
+            "free of charge",
+            "event fee",
+            "ಉಚಿತವೇ"
+        ],
+        "regex_source": "\\b(events\\s+free\\s+of\\s+charge|are\\s+events\\s+free|event\\s+fee|charges\\s+for\\s+event)\\b|ಕಾರ್ಯಕ್ರಮ\\s*ಉಚಿತವೇ|ಶುಲ್ಕವಿದೆಯೇ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_049",
+        "faq_id": "FAQ049",
+        "category": "Events",
+        "intent_id": "upcoming_events",
+        "question": "Where can I see upcoming events?",
+        "question_en": "Where can I see upcoming events?",
+        "answer_en": "Please check the institute's website announcements and official communication channels, or contact your branch.",
+        "answer_kn": "ಮುಂಬರುವ ಕಾರ್ಯಕ್ರಮಗಳಿಗಾಗಿ ಸಂಸ್ಥೆಯ ವೆಬ್‌ಸೈಟ್‌ನ ಪ್ರಕಟಣೆಗಳು ಮತ್ತು ಅಧಿಕೃತ ಸಂಪರ್ಕ ಮಾಧ್ಯಮಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ನಿಮ್ಮ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Please check the institute's website announcements and official communication channels, or contact your branch.",
+        "response_kn": "ಮುಂಬರುವ ಕಾರ್ಯಕ್ರಮಗಳಿಗಾಗಿ ಸಂಸ್ಥೆಯ ವೆಬ್‌ಸೈಟ್‌ನ ಪ್ರಕಟಣೆಗಳು ಮತ್ತು ಅಧಿಕೃತ ಸಂಪರ್ಕ ಮಾಧ್ಯಮಗಳನ್ನು ಪರಿಶೀಲಿಸಿ ಅಥವಾ ನಿಮ್ಮ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "calendar",
+            "events",
+            "upcoming events",
+            "events schedule",
+            "ಮುಂಬರುವ ಕಾರ್ಯಕ್ರಮಗಳು"
+        ],
+        "regex_source": "\\b(upcoming\\s+events|future\\s+events|events\\s+calendar|where\\s+can\\s+i\\s+see\\s+upcoming)\\b|ಮುಂಬರುವ\\s*ಕಾರ್ಯಕ್ರಮ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_050",
+        "faq_id": "FAQ050",
+        "category": "Facilities",
+        "intent_id": "parking",
+        "question": "Is parking available?",
+        "question_en": "Is parking available?",
+        "answer_en": "Parking availability differs by branch and may be limited. Please contact the branch before visiting.",
+        "answer_kn": "ಪಾರ್ಕಿಂಗ್ ವ್ಯವಸ್ಥೆ ಶಾಖೆಗೆ ಅನುಗುಣವಾಗಿ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ಸೀಮಿತವಾಗಿರಬಹುದು. ಭೇಟಿ ನೀಡುವ ಮೊದಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Parking availability differs by branch and may be limited. Please contact the branch before visiting.",
+        "response_kn": "ಪಾರ್ಕಿಂಗ್ ವ್ಯವಸ್ಥೆ ಶಾಖೆಗೆ ಅನುಗುಣವಾಗಿ ಬದಲಾಗುತ್ತದೆ ಮತ್ತು ಸೀಮಿತವಾಗಿರಬಹುದು. ಭೇಟಿ ನೀಡುವ ಮೊದಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "vehicle",
+            "parking",
+            "vehicle parking",
+            "car parking",
+            "ಪಾರ್ಕಿಂಗ್"
+        ],
+        "regex_source": "\\b(parking|vehicle\\s+parking|car\\s+parking|bike\\s+parking|is\\s+parking\\s+available)\\b|ಪಾರ್ಕಿಂಗ್|ವಾಹನ\\s*ನಿಲುಗಡೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_051",
+        "faq_id": "FAQ051",
+        "category": "Facilities",
+        "intent_id": "facilities",
+        "question": "Are changing rooms or washrooms available?",
+        "question_en": "Are changing rooms or washrooms available?",
+        "answer_en": "Facilities vary by branch. Please contact the branch to confirm the facilities available at that location.",
+        "answer_kn": "ಸೌಲಭ್ಯಗಳು ಶಾಖೆಯಿಂದ ಶಾಖೆಗೆ ಬದಲಾಗುತ್ತವೆ. ಆ ಸ್ಥಳದಲ್ಲಿ ಲಭ್ಯವಿರುವ ಸೌಲಭ್ಯಗಳನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Facilities vary by branch. Please contact the branch to confirm the facilities available at that location.",
+        "response_kn": "ಸೌಲಭ್ಯಗಳು ಶಾಖೆಯಿಂದ ಶಾಖೆಗೆ ಬದಲಾಗುತ್ತವೆ. ಆ ಸ್ಥಳದಲ್ಲಿ ಲಭ್ಯವಿರುವ ಸೌಲಭ್ಯಗಳನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "washroom",
+            "changing room",
+            "toilet",
+            "facilities",
+            "ಶೌಚಾಲಯ"
+        ],
+        "regex_source": "\\b(changing\\s+rooms|washrooms|washroom|restroom|toilet|facilities\\s+available)\\b|ಶೌಚಾಲಯ|ಸೌಲಭ್ಯ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_052",
+        "faq_id": "FAQ052",
+        "category": "Rules",
+        "intent_id": "footwear_rule",
+        "question": "Can I wear footwear inside the yoga hall?",
+        "question_en": "Can I wear footwear inside the yoga hall?",
+        "answer_en": "Please leave footwear outside the yoga hall and follow the instructions displayed at the branch.",
+        "answer_kn": "ದಯವಿಟ್ಟು ಯೋಗ ಸಭಾಂಗಣದ ಹೊರಗೆ ಪಾದರಕ್ಷೆಗಳನ್ನು ಬಿಡಿ ಮತ್ತು ಶಾಖೆಯಲ್ಲಿ ಪ್ರದರ್ಶಿಸಿರುವ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ.",
+        "response": "Please leave footwear outside the yoga hall and follow the instructions displayed at the branch.",
+        "response_kn": "ದಯವಿಟ್ಟು ಯೋಗ ಸಭಾಂಗಣದ ಹೊರಗೆ ಪಾದರಕ್ಷೆಗಳನ್ನು ಬಿಡಿ ಮತ್ತು ಶಾಖೆಯಲ್ಲಿ ಪ್ರದರ್ಶಿಸಿರುವ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ.",
+        "keywords": [
+            "shoes",
+            "slippers",
+            "footwear",
+            "ಪಾದರಕ್ಷೆ"
+        ],
+        "regex_source": "\\b(wear\\s+footwear|shoes|slippers|chappal|footwear\\s+inside)\\b|ಪಾದರಕ್ಷೆ|ಚಪ್ಪಲಿ|ಶೂ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_053",
+        "faq_id": "FAQ053",
+        "category": "Rules",
+        "intent_id": "mat_rule",
+        "question": "Can I use another student's yoga mat?",
+        "question_en": "Can I use another student's yoga mat?",
+        "answer_en": "Please do not use another student's personal yoga mat. Follow the branch's instructions regarding the use of institute-provided mats or blankets.",
+        "answer_kn": "ದಯವಿಟ್ಟು ಮತ್ತೊಬ್ಬ ವಿದ್ಯಾರ್ಥಿಯ ವೈಯಕ್ತಿಕ ಯೋಗ ಮ್ಯಾಟ್ ಬಳಸಬೇಡಿ. ಸಂಸ್ಥೆಯ ಮ್ಯಾಟ್ ಅಥವಾ ಹೊದಿಕೆಗಳ ಬಳಕೆಯ ಕುರಿತು ಶಾಖೆಯ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ.",
+        "response": "Please do not use another student's personal yoga mat. Follow the branch's instructions regarding the use of institute-provided mats or blankets.",
+        "response_kn": "ದಯವಿಟ್ಟು ಮತ್ತೊಬ್ಬ ವಿದ್ಯಾರ್ಥಿಯ ವೈಯಕ್ತಿಕ ಯೋಗ ಮ್ಯಾಟ್ ಬಳಸಬೇಡಿ. ಸಂಸ್ಥೆಯ ಮ್ಯಾಟ್ ಅಥವಾ ಹೊದಿಕೆಗಳ ಬಳಕೆಯ ಕುರಿತು ಶಾಖೆಯ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ.",
+        "keywords": [
+            "yoga mat",
+            "mat rule",
+            "share mat",
+            "ಮ್ಯಾಟ್"
+        ],
+        "regex_source": "\\b(another\\s+student('?s)?\\s+yoga\\s+mat|use\\s+another\\s+mat|share\\s+mat|mat\\s+rule)\\b|ಇನ್ನೊಬ್ಬರ\\s*ಮ್ಯಾಟ್|ಮ್ಯಾಟ್\\s*ನಿಯಮ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_054",
+        "faq_id": "FAQ054",
+        "category": "Rules",
+        "intent_id": "valuables",
+        "question": "Can I bring valuables to class?",
+        "question_en": "Can I bring valuables to class?",
+        "answer_en": "Please avoid bringing valuables. Keep your belongings safe. Ask the branch about its arrangements for personal belongings.",
+        "answer_kn": "ದಯವಿಟ್ಟು ಬೆಲೆಬಾಳುವ ವಸ್ತುಗಳನ್ನು ತರಬೇಡಿ. ನಿಮ್ಮ ವಸ್ತುಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಇಟ್ಟುಕೊಳ್ಳಿ. ವೈಯಕ್ತಿಕ ವಸ್ತುಗಳ ವ್ಯವಸ್ಥೆಯ ಬಗ್ಗೆ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "response": "Please avoid bringing valuables. Keep your belongings safe. Ask the branch about its arrangements for personal belongings.",
+        "response_kn": "ದಯವಿಟ್ಟು ಬೆಲೆಬಾಳುವ ವಸ್ತುಗಳನ್ನು ತರಬೇಡಿ. ನಿಮ್ಮ ವಸ್ತುಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಇಟ್ಟುಕೊಳ್ಳಿ. ವೈಯಕ್ತಿಕ ವಸ್ತುಗಳ ವ್ಯವಸ್ಥೆಯ ಬಗ್ಗೆ ಶಾಖೆಯಲ್ಲಿ ವಿಚಾರಿಸಿ.",
+        "keywords": [
+            "belongings",
+            "valuables",
+            "gold",
+            "ಬೆಲೆಬಾಳುವ ವಸ್ತುಗಳು"
+        ],
+        "regex_source": "\\b(bring\\s+valuables|valuables\\s+to\\s+class|gold|jewelry|safe\\s+belongings|personal\\s+belongings)\\b|ಬೆಲೆಬಾಳುವ\\s*ವಸ್ತು|ಚಿನ್ನ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_055",
+        "faq_id": "FAQ055",
+        "category": "Rules",
+        "intent_id": "late_arrival",
+        "question": "What should I do if I am late?",
+        "question_en": "What should I do if I am late?",
+        "answer_en": "Please enter quietly and follow the instructor's directions. Repeated late arrival may affect your practice and the class.",
+        "answer_kn": "ತಡವಾಗಿ ಬಂದರೆ ಶಾಂತವಾಗಿ ಒಳಗೆ ಬಂದು ಶಿಕ್ಷಕರ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ. ಪದೇಪದೇ ತಡವಾಗಿ ಬರುವುದು ನಿಮ್ಮ ಅಭ್ಯಾಸ ಮತ್ತು ತರಗತಿಗೆ ಅಡಚಣೆಯಾಗಬಹುದು.",
+        "response": "Please enter quietly and follow the instructor's directions. Repeated late arrival may affect your practice and the class.",
+        "response_kn": "ತಡವಾಗಿ ಬಂದರೆ ಶಾಂತವಾಗಿ ಒಳಗೆ ಬಂದು ಶಿಕ್ಷಕರ ಸೂಚನೆಗಳನ್ನು ಪಾಲಿಸಿ. ಪದೇಪದೇ ತಡವಾಗಿ ಬರುವುದು ನಿಮ್ಮ ಅಭ್ಯಾಸ ಮತ್ತು ತರಗತಿಗೆ ಅಡಚಣೆಯಾಗಬಹುದು.",
+        "keywords": [
+            "late",
+            "delay",
+            "late arrival",
+            "if late",
+            "ತಡವಾಗಿ"
+        ],
+        "regex_source": "\\b(if\\s+i\\s+am\\s+late|late\\s+arrival|what\\s+if\\s+i\\s+am\\s+late|late\\s+to\\s+class|delay)\\b|ತಡವಾಗಿ|ತಡವಾದರೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_056",
+        "faq_id": "FAQ056",
+        "category": "Support",
+        "intent_id": "feedback_complaint",
+        "question": "How can I give feedback or make a complaint?",
+        "question_en": "How can I give feedback or make a complaint?",
+        "answer_en": "Please contact the branch manager or administration team. Share the branch name and a brief description so the team can assist you.",
+        "answer_kn": "ಪ್ರತಿಕ್ರಿಯೆ ಅಥವಾ ದೂರು ನೀಡಲು ಶಾಖಾ ವ್ಯವಸ್ಥಾಪಕರನ್ನು ಅಥವಾ ಆಡಳಿತ ವಿಭಾಗವನ್ನು ಸಂಪರ್ಕಿಸಿ. ಸಹಾಯ ಮಾಡಲು ಶಾಖೆಯ ಹೆಸರು ಮತ್ತು ವಿಷಯದ ಸಂಕ್ಷಿಪ್ತ ವಿವರವನ್ನು ತಿಳಿಸಿ.",
+        "response": "Please contact the branch manager or administration team. Share the branch name and a brief description so the team can assist you.",
+        "response_kn": "ಪ್ರತಿಕ್ರಿಯೆ ಅಥವಾ ದೂರು ನೀಡಲು ಶಾಖಾ ವ್ಯವಸ್ಥಾಪಕರನ್ನು ಅಥವಾ ಆಡಳಿತ ವಿಭಾಗವನ್ನು ಸಂಪರ್ಕಿಸಿ. ಸಹಾಯ ಮಾಡಲು ಶಾಖೆಯ ಹೆಸರು ಮತ್ತು ವಿಷಯದ ಸಂಕ್ಷಿಪ್ತ ವಿವರವನ್ನು ತಿಳಿಸಿ.",
+        "keywords": [
+            "complaint",
+            "feedback",
+            "grievance",
+            "ದೂರು",
+            "ಪ್ರತಿಕ್ರಿಯೆ"
+        ],
+        "regex_source": "\\b(give\\s+feedback|make\\s+a\\s+complaint|file\\s+complaint|grievance|feedback)\\b|ಪ್ರತಿಕ್ರಿಯೆ|ದೂರು",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_057",
+        "faq_id": "FAQ057",
+        "category": "Support",
+        "intent_id": "human_support",
+        "question": "I want to speak to a staff member. What should I do?",
+        "question_en": "I want to speak to a staff member. What should I do?",
+        "answer_en": "Please select your branch and use the displayed phone number or contact form. The branch team will assist you during working hours.",
+        "answer_kn": "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ, ಅಲ್ಲಿ ನೀಡಿರುವ ದೂರವಾಣಿ ಸಂಖ್ಯೆ ಅಥವಾ ಸಂಪರ್ಕ ಫಾರ್ಮ್ ಬಳಸಿ. ಕಾರ್ಯನಿರ್ವಹಣಾ ಸಮಯದಲ್ಲಿ ಶಾಖೆಯ ಸಿಬ್ಬಂದಿ ಸಹಾಯ ಮಾಡುತ್ತಾರೆ.",
+        "response": "Please select your branch and use the displayed phone number or contact form. The branch team will assist you during working hours.",
+        "response_kn": "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಶಾಖೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ, ಅಲ್ಲಿ ನೀಡಿರುವ ದೂರವಾಣಿ ಸಂಖ್ಯೆ ಅಥವಾ ಸಂಪರ್ಕ ಫಾರ್ಮ್ ಬಳಸಿ. ಕಾರ್ಯನಿರ್ವಹಣಾ ಸಮಯದಲ್ಲಿ ಶಾಖೆಯ ಸಿಬ್ಬಂದಿ ಸಹಾಯ ಮಾಡುತ್ತಾರೆ.",
+        "keywords": [
+            "staff",
+            "talk to person",
+            "speak to staff",
+            "talk to human",
+            "ಸಿಬ್ಬಂದಿ"
+        ],
+        "regex_source": "\\b(speak\\s+to\\s+a\\s+staff|talk\\s+to\\s+(a\\s+)?person|human\\s+support|talk\\s+to\\s+staff|customer\\s+care)\\b|ಸಿಬ್ಬಂದಿ\\s*ಮಾತನಾಡು|ವ್ಯಕ್ತಿಯೊಂದಿಗೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_058",
+        "faq_id": "FAQ058",
+        "category": "Support",
+        "intent_id": "fallback",
+        "question": "The chatbot does not have the answer I need. What can I do?",
+        "question_en": "The chatbot does not have the answer I need. What can I do?",
+        "answer_en": "We would love to help you with that! 🙏✨\n\nFor this specific detail or any further queries, our friendly team will be glad to assist you personally.\n\nFeel free to connect with us through our quick enquiry form:\n\n👉 <a href=\"https://yogaapp.rashtrotthana.org/Account/Enquiry\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">Open Official Enquiry Form</a>",
+        "answer_kn": "ನಿಮಗೆ ಸಹಾಯ ಮಾಡಲು ನಾವು ಸದಾ ಸಂತೋಷಪಡುತ್ತೇವೆ! 🙏✨\n\nಹೆಚ್ಚಿನ ವಿವರಗಳು ಅಥವಾ ನಿಮ್ಮ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳಿಗೆ ನಮ್ಮ ತಂಡವು ನಿಮಗೆ ಪ್ರೀತಿಯಿಂದ ಮಾರ್ಗದರ್ಶನ ನೀಡುತ್ತದೆ.\n\nದಯವಿಟ್ಟು ನಮ್ಮ ಅಧಿಕೃತ ವಿಚಾರಣೆ ಫಾರ್ಮ್ ಮೂಲಕ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ:\n\n👉 <a href=\"https://yogaapp.rashtrotthana.org/Account/Enquiry\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">ಅಧಿಕೃತ ವಿಚಾರಣೆ ಫಾರ್ಮ್ ತೆರೆಯಿರಿ</a>",
+        "response": "We would love to help you with that! 🙏✨\n\nFor this specific detail or any further queries, our friendly team will be glad to assist you personally.\n\nFeel free to connect with us through our quick enquiry form:\n\n👉 <a href=\"https://yogaapp.rashtrotthana.org/Account/Enquiry\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">Open Official Enquiry Form</a>",
+        "response_kn": "ನಿಮಗೆ ಸಹಾಯ ಮಾಡಲು ನಾವು ಸದಾ ಸಂತೋಷಪಡುತ್ತೇವೆ! 🙏✨\n\nಹೆಚ್ಚಿನ ವಿವರಗಳು ಅಥವಾ ನಿಮ್ಮ ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳಿಗೆ ನಮ್ಮ ತಂಡವು ನಿಮಗೆ ಪ್ರೀತಿಯಿಂದ ಮಾರ್ಗದರ್ಶನ ನೀಡುತ್ತದೆ.\n\nದಯವಿಟ್ಟು ನಮ್ಮ ಅಧಿಕೃತ ವಿಚಾರಣೆ ಫಾರ್ಮ್ ಮೂಲಕ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ:\n\n👉 <a href=\"https://yogaapp.rashtrotthana.org/Account/Enquiry\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"rcht-blue-link\">ಅಧಿಕೃತ ವಿಚಾರಣೆ ಫಾರ್ಮ್ ತೆರೆಯಿರಿ</a>",
+        "keywords": [
+            "unknown",
+            "not answered",
+            "fallback",
+            "ಉತ್ತರ ದೊರಕಲಿಲ್ಲ"
+        ],
+        "regex_source": "\\b(does\\s+not\\s+have\\s+the\\s+answer|unknown\\s+answer|answer\\s+not\\s+found)\\b|ಉತ್ತರ\\s*ದೊರಕಲಿಲ್ಲ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_059",
+        "faq_id": "FAQ059",
+        "category": "Support",
+        "intent_id": "update_contact",
+        "question": "How can I update my contact details?",
+        "question_en": "How can I update my contact details?",
+        "answer_en": "Please contact the branch where you registered. The team will explain the process for updating your details.",
+        "answer_kn": "ನೀವು ನೋಂದಾಯಿಸಿಕೊಂಡಿರುವ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ. ನಿಮ್ಮ ಸಂಪರ್ಕ ವಿವರಗಳನ್ನು ನವೀಕರಿಸುವ ವಿಧಾನವನ್ನು ಸಿಬ್ಬಂದಿ ತಿಳಿಸುತ್ತಾರೆ.",
+        "response": "Please contact the branch where you registered. The team will explain the process for updating your details.",
+        "response_kn": "ನೀವು ನೋಂದಾಯಿಸಿಕೊಂಡಿರುವ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ. ನಿಮ್ಮ ಸಂಪರ್ಕ ವಿವರಗಳನ್ನು ನವೀಕರಿಸುವ ವಿಧಾನವನ್ನು ಸಿಬ್ಬಂದಿ ತಿಳಿಸುತ್ತಾರೆ.",
+        "keywords": [
+            "change phone",
+            "details",
+            "update contact",
+            "update details",
+            "ಸಂಪರ್ಕ ವಿವರ"
+        ],
+        "regex_source": "\\b(update\\s+(my\\s+)?contact\\s+details|change\\s+(my\\s+)?phone\\s+number|update\\s+details|change\\s+address)\\b|ಸಂಪರ್ಕ\\s*ವಿವರ\\s*ನವೀಕರಣ|ಫೋನ್\\s*ನಂಬರ್\\s*ಬದಲಾವಣೆ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_060",
+        "faq_id": "FAQ060",
+        "category": "Support",
+        "intent_id": "payment_issue",
+        "question": "I made an online payment but have not received confirmation. What should I do?",
+        "question_en": "I made an online payment but have not received confirmation. What should I do?",
+        "answer_en": "Please do not make a duplicate payment immediately. Contact the branch with the payment date, amount and transaction reference. Do not share your PIN or OTP.",
+        "answer_kn": "ತಕ್ಷಣ ಮತ್ತೊಮ್ಮೆ ಪಾವತಿ ಮಾಡಬೇಡಿ. ಪಾವತಿ ದಿನಾಂಕ, ಮೊತ್ತ ಮತ್ತು ವಹಿವಾಟಿನ ಉಲ್ಲೇಖ ಸಂಖ್ಯೆಯೊಂದಿಗೆ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ. ನಿಮ್ಮ PIN ಅಥವಾ OTP ಹಂಚಿಕೊಳ್ಳಬೇಡಿ.",
+        "response": "Please do not make a duplicate payment immediately. Contact the branch with the payment date, amount and transaction reference. Do not share your PIN or OTP.",
+        "response_kn": "ತಕ್ಷಣ ಮತ್ತೊಮ್ಮೆ ಪಾವತಿ ಮಾಡಬೇಡಿ. ಪಾವತಿ ದಿನಾಂಕ, ಮೊತ್ತ ಮತ್ತು ವಹಿವಾಟಿನ ಉಲ್ಲೇಖ ಸಂಖ್ಯೆಯೊಂದಿಗೆ ಶಾಖೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ. ನಿಮ್ಮ PIN ಅಥವಾ OTP ಹಂಚಿಕೊಳ್ಳಬೇಡಿ.",
+        "keywords": [
+            "payment failed",
+            "confirmation",
+            "payment issue",
+            "confirmation not received",
+            "ಹಣ ಕಟ್ ಆಗಿದೆ"
+        ],
+        "regex_source": "\\b(not\\s+received\\s+confirmation|confirmation|payment\\s+failed|money\\s+deducted|transaction\\s+(failed|pending|reference)|duplicate\\s+payment|payment\\s+issue)\\b|ಹಣ\\s*ಕಟ್|ಪಾವತಿ\\s*ದೃಢೀಕರಣ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_061",
+        "faq_id": "FAQ061",
+        "category": "Support",
+        "intent_id": "certificate",
+        "question": "How do I get a certificate?",
+        "question_en": "How do I get a certificate?",
+        "answer_en": "Certificate availability and eligibility depend on the course or programme. Please contact your branch or programme coordinator.",
+        "answer_kn": "ಪ್ರಮಾಣಪತ್ರದ ಲಭ್ಯತೆ ಮತ್ತು ಅರ್ಹತೆ ಕೋರ್ಸ್ ಅಥವಾ ಕಾರ್ಯಕ್ರಮದ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿರುತ್ತದೆ. ನಿಮ್ಮ ಶಾಖೆ ಅಥವಾ ಕಾರ್ಯಕ್ರಮ ಸಂಯೋಜಕರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "response": "Certificate availability and eligibility depend on the course or programme. Please contact your branch or programme coordinator.",
+        "response_kn": "ಪ್ರಮಾಣಪತ್ರದ ಲಭ್ಯತೆ ಮತ್ತು ಅರ್ಹತೆ ಕೋರ್ಸ್ ಅಥವಾ ಕಾರ್ಯಕ್ರಮದ ಮೇಲೆ ಅವಲಂಬಿತವಾಗಿರುತ್ತದೆ. ನಿಮ್ಮ ಶಾಖೆ ಅಥವಾ ಕಾರ್ಯಕ್ರಮ ಸಂಯೋಜಕರನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "keywords": [
+            "certificate",
+            "completion",
+            "completion certificate",
+            "certification",
+            "ಪ್ರಮಾಣಪತ್ರ"
+        ],
+        "regex_source": "\\b(get\\s+a\\s+certificate|course\\s+certificate|completion\\s+certificate|certification)\\b|ಪ್ರಮಾಣಪತ್ರ|ಸರ್ಟಿಫಿಕೇಟ್",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    },
+    {
+        "id": "faq_062",
+        "faq_id": "FAQ062",
+        "category": "Support",
+        "intent_id": "suggestion",
+        "question": "Can I share a suggestion for improving classes?",
+        "question_en": "Can I share a suggestion for improving classes?",
+        "answer_en": "Yes. We welcome suggestions. Please share your feedback with the branch manager or through the website contact form.",
+        "answer_kn": "ಹೌದು. ನಿಮ್ಮ ಸಲಹೆಗಳನ್ನು ನಾವು ಸ್ವಾಗತಿಸುತ್ತೇವೆ. ದಯವಿಟ್ಟು ಶಾಖಾ ವ್ಯವಸ್ಥಾಪಕರಿಗೆ ಅಥವಾ ವೆಬ್‌ಸೈಟ್‌ನ ಸಂಪರ್ಕ ಫಾರ್ಮ್ ಮೂಲಕ ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಹಂಚಿಕೊಳ್ಳಿ.",
+        "response": "Yes. We welcome suggestions. Please share your feedback with the branch manager or through the website contact form.",
+        "response_kn": "ಹೌದು. ನಿಮ್ಮ ಸಲಹೆಗಳನ್ನು ನಾವು ಸ್ವಾಗತಿಸುತ್ತೇವೆ. ದಯವಿಟ್ಟು ಶಾಖಾ ವ್ಯವಸ್ಥಾಪಕರಿಗೆ ಅಥವಾ ವೆಬ್‌ಸೈಟ್‌ನ ಸಂಪರ್ಕ ಫಾರ್ಮ್ ಮೂಲಕ ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಹಂಚಿಕೊಳ್ಳಿ.",
+        "keywords": [
+            "suggestion",
+            "improve",
+            "suggestions",
+            "improve classes",
+            "ಸಲಹೆ"
+        ],
+        "regex_source": "\\b(share\\s+a\\s+suggestion|suggestion\\s+for\\s+improving|give\\s+suggestion|improve\\s+classes)\\b|ಸಲಹೆ|ಅಭಿಪ್ರಾಯ",
+        "regex_flags": "i",
+        "options": [
+            "All Bangalore Centres",
+            "Yes, Enquire"
+        ],
+        "options_kn": [
+            "ಎಲ್ಲಾ ಬೆಂಗಳೂರು ಶಾಖೆಗಳು",
+            "ವಿಚಾರಣೆ"
+        ]
+    }
 ]
