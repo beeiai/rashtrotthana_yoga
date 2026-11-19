@@ -3205,6 +3205,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+    // Deep Linking to specific event via URL hash (e.g., #12th-idy, #chess-tournament)
+    function handleEventHash() {
+        var hash = window.location.hash ? window.location.hash.replace('#', '').trim() : '';
+        if (!hash) return;
+        if (eventsMap[hash]) {
+            setTimeout(function () {
+                openEventDetailModal(hash);
+            }, 100);
+        } else {
+            var targetCard = document.getElementById(hash);
+            if (targetCard) {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }
+    handleEventHash();
+    window.addEventListener('hashchange', handleEventHash);
 });
 </script>
 

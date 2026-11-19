@@ -2,10 +2,6 @@
    Homepage Effects v2 — Additive layer only
    ============================================================ */
 
-/* -------------------------------------------------------
-   0. Reduced-motion guard
-   ------------------------------------------------------- */
-@media (prefers-reduced-motion: no-preference) {
 
 /* -------------------------------------------------------
    1. Hero – floating ambient orbs
@@ -452,8 +448,6 @@ body.home .rs-hero-title {
     pointer-events: none;
     animation: rse-float 12s ease-in-out infinite 3s;
 }
-
-} /* end @media prefers-reduced-motion: no-preference */
 
 .rse-cursor-dot, .rse-cursor-ring {
     display: none !important;

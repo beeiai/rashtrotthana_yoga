@@ -901,7 +901,7 @@ $faq_query = new WP_Query( [
                         $fid        = get_the_ID();
                         $question   = get_the_title();
                         $answer     = get_the_content();
-                        $menu_order = (int) $post->menu_order;
+                        $menu_order = (int) get_post_field( 'menu_order', $fid );
                         $status     = get_post_status( $fid );
                 ?>
                 <tr class="radm-faq-row" data-title="<?php echo esc_attr( strtolower( $question . ' ' . wp_strip_all_tags( $answer ) ) ); ?>" id="faq-row-<?php echo esc_attr( $fid ); ?>">

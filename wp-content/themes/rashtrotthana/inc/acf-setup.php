@@ -55,6 +55,13 @@ function ry_register_acf_field_groups() {
                 'type' => 'text',
             ),
             array(
+                'key' => 'field_ry_whatsapp_number',
+                'label' => 'WhatsApp Number',
+                'name' => 'ry_whatsapp_number',
+                'type' => 'text',
+                'default_value' => '+91 96060 44453',
+            ),
+            array(
                 'key' => 'field_ry_email_primary',
                 'label' => 'Primary Email',
                 'name' => 'ry_email_primary',
