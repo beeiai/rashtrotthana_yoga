@@ -49,13 +49,13 @@
    ========================================================================== */
 
 html {
-    background-color: #EAF1EA;
+    background-color: #FCFBF9;
 }
 
 body {
     position: relative;
     min-height: 100vh;
-    background-color: #EAF1EA !important;
+    background-color: #FCFBF9 !important;
     background-image: url('../images/watercolor-bg.jpg') !important;
     background-size: cover !important;
     background-position: center center !important;
@@ -896,11 +896,14 @@ body:not(.home) [class*="-breadcrumb"] {
    ========================================================================== */
 
 /* Full-page Background Blur when greeting is active */
-html.rs-greeting-active body > *:not(#rs-greeting-overlay) {
+html.rs-greeting-active body > *:not(#rs-greeting-overlay):not(.rs-site-header) {
     filter: blur(14px) brightness(0.92) !important;
     transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    pointer-events: none !important;
-    user-select: none !important;
+}
+
+/* Ensure site header navigation is ALWAYS fully interactive and clickable */
+.rs-site-header {
+    pointer-events: auto !important;
 }
 
 body > *:not(#rs-greeting-overlay) {

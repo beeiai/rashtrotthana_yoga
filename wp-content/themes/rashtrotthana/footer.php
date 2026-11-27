@@ -49,6 +49,7 @@ $whatsapp_num  = function_exists('get_field') ? (get_field('ry_whatsapp_number',
             <a href="<?php echo esc_url( home_url( '/activities/' ) ); ?>">Activities</a>
             <a href="<?php echo esc_url( home_url( '/centers/' ) ); ?>">Centers</a>
             <a href="<?php echo esc_url( home_url( '/events/' ) ); ?>">Events</a>
+            <a href="<?php echo esc_url( home_url( '/gallery/' ) ); ?>">Gallery</a>
             <a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Contact Us</a>
         </div>
         <div>

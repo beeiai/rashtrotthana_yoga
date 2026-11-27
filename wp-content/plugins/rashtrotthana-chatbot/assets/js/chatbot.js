@@ -646,11 +646,15 @@
   }
 
   /* ── Event Listeners ─────────────────────────────────────── */
-  toggle.addEventListener('click', function () {
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
     if (isOpen) { closeChat(); } else { openChat(); }
   });
 
-  closeBtn.addEventListener('click', closeChat);
+  closeBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    closeChat();
+  });
   if (expandBtn) {
     expandBtn.addEventListener('click', toggleFullscreen);
   }
@@ -665,6 +669,15 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && isOpen) closeChat();
+  });
+
+  /* Close chat when clicking outside */
+  document.addEventListener('click', function (e) {
+    if (isOpen && window_ && toggle) {
+      if (!window_.contains(e.target) && !toggle.contains(e.target)) {
+        closeChat();
+      }
+    }
   });
 
   quickBtns.forEach(function (btn) {

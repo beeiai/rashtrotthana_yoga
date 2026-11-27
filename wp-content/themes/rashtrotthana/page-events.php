@@ -3092,6 +3092,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (errorEl) {
                     errorEl.textContent = 'Network or server error. Please try again.';
                     errorEl.style.display = 'block';
+                }
             });
         });
     }

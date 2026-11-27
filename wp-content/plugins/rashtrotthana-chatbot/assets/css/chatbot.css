@@ -52,6 +52,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 12px;
+  pointer-events: none !important; /* CRITICAL: Never block clicks on page behind widget */
 }
 
 /* ── Toggle Button ─────────────────────────────────────────── */
@@ -71,15 +72,17 @@
   white-space: nowrap;
   box-shadow: 0 8px 28px rgba(0,0,0,.14);
   border: 1px solid rgba(0,0,0,.06);
-  pointer-events: none;
+  pointer-events: none !important;
   opacity: 0;
+  visibility: hidden;
   transform: translateY(8px) scale(.92);
   transform-origin: bottom right;
-  transition: opacity .35s ease, transform .35s ease;
+  transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
 }
 
 #rcht-tooltip.rcht-tooltip-visible {
   opacity: 1;
+  visibility: visible;
   transform: translateY(0) scale(1);
 }
 
@@ -107,6 +110,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto !important; /* Interactive even though parent #rcht-widget is pointer-events: none */
   /* Warm saffron-to-golden yoga brand gradient */
   background: linear-gradient(145deg, #ff6b2b 0%, #f59e0b 60%, #ef4444 100%);
   color: #fff;
@@ -223,14 +227,15 @@
   background: var(--rcht-bg);
   border-radius: var(--rcht-radius-xl);
   box-shadow: var(--rcht-shadow-lg);
-  display: flex;
+  display: none !important;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--rcht-border);
   /* Hidden state */
   opacity: 0;
+  visibility: hidden !important;
   transform: translateY(16px) scale(.97);
-  pointer-events: none;
+  pointer-events: none !important;
   transition:
     opacity var(--rcht-transition),
     transform var(--rcht-transition),
@@ -239,9 +244,11 @@
 }
 
 #rcht-window.rcht-open {
+  display: flex !important;
+  visibility: visible !important;
   opacity: 1;
   transform: translateY(0) scale(1);
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 /* ── Fullscreen / Full Page Expansion Mode ─────────────────── */

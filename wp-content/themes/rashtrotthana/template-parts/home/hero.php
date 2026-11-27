@@ -304,6 +304,17 @@ $hero_images = array(
 .rs-hero-slide-dots {
     z-index: 6 !important;
 }
+.rs-hero-slide-dots button {
+    position: relative !important;
+    touch-action: manipulation !important;
+    cursor: pointer !important;
+}
+.rs-hero-slide-dots button::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: -12px !important;
+    cursor: pointer !important;
+}
 </style>
 
 <script>

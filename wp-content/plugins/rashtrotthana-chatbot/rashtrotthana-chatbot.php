@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'RCHT_VERSION',    '1.7.1' );
+define( 'RCHT_VERSION',    '1.7.2' );
 define( 'RCHT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'RCHT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

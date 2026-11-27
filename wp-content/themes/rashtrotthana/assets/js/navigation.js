@@ -12,15 +12,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     button.addEventListener('click', function (e) {
+      e.preventDefault();
       e.stopPropagation();
       const isOpen = !menu.classList.contains('is-open');
       setNavState(isOpen);
     });
 
-    // Close when tapping any navigation link
+    // Handle tapping navigation links
     menu.querySelectorAll('.rs-nav-link').forEach(function (link) {
-      link.addEventListener('click', function () {
-        setNavState(false);
+      link.addEventListener('click', function (e) {
+        var href = link.getAttribute('href');
+        var isLocalAnchor = href && (href.startsWith('#') || (href.includes('#') && href.split('#')[0] === window.location.pathname));
+        if (isLocalAnchor) {
+          setNavState(false);
+        } else {
+          // For full page transitions, do not set display:none synchronously
+          // so that touch/mobile browsers do not abort the navigation
+          button.setAttribute('aria-expanded', 'false');
+          button.classList.remove('is-active');
+        }
       });
     });
 

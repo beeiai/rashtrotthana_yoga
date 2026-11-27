@@ -10,9 +10,12 @@
 
 <!-- Site Greeting Overlay (Appears only once on first visit, not on other pages) -->
 <script>
-if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('rs_greeting_shown')) {
-    document.write('<style>#rs-greeting-overlay{display:none!important}</style>');
-}
+try {
+    if ((typeof localStorage !== 'undefined' && localStorage.getItem('rs_greeting_shown')) ||
+        (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('rs_greeting_shown'))) {
+        document.write('<style>#rs-greeting-overlay{display:none!important}</style>');
+    }
+} catch (e) {}
 </script>
 <div id="rs-greeting-overlay" class="rs-greeting-overlay" role="dialog" aria-modal="true" aria-label="Welcome to Rashtrotthana Yoga">
     <div class="rs-greeting-card">
@@ -43,14 +46,15 @@ if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('rs_greeting
     var overlay = document.getElementById('rs-greeting-overlay');
     if (!overlay) return;
 
-    // Show ONLY ONCE on first visit; never again when navigating between pages
+    // Show ONLY ONCE on first visit; never again when navigating between pages or across tabs
     try {
-        if (sessionStorage.getItem('rs_greeting_shown')) {
+        if (localStorage.getItem('rs_greeting_shown') || sessionStorage.getItem('rs_greeting_shown')) {
             if (overlay && overlay.parentNode) {
                 overlay.parentNode.removeChild(overlay);
             }
             return;
         }
+        localStorage.setItem('rs_greeting_shown', '1');
         sessionStorage.setItem('rs_greeting_shown', '1');
     } catch (e) {}
 
@@ -62,16 +66,26 @@ if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('rs_greeting
         if (dismissed) return;
         dismissed = true;
         document.documentElement.classList.remove('rs-greeting-active');
+        try {
+            localStorage.setItem('rs_greeting_shown', '1');
+            sessionStorage.setItem('rs_greeting_shown', '1');
+        } catch (e) {}
         overlay.classList.add('rs-dismissing');
         setTimeout(function() {
             if (overlay && overlay.parentNode) {
                 overlay.parentNode.removeChild(overlay);
             }
-        }, 520);
+        }, 320);
     }
 
     // Auto-dismiss after 3 seconds (3000ms)
     var autoTimer = setTimeout(dismissGreeting, 3000);
+
+    // Dismiss instantly on scroll so page is never blocked
+    window.addEventListener('scroll', function() {
+        clearTimeout(autoTimer);
+        dismissGreeting();
+    }, { passive: true, once: true });
 
     var closeBtn = document.getElementById('rs-greeting-close');
     if (closeBtn) {
@@ -99,10 +113,8 @@ if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('rs_greeting
     });
 
     window.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            clearTimeout(autoTimer);
-            dismissGreeting();
-        }
+        clearTimeout(autoTimer);
+        dismissGreeting();
     });
 })();
 </script>
