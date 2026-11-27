@@ -9,13 +9,15 @@
    Centers Page — Synced Background with Homepage & About Us
    ============================================================ */
 .rs-centers-page {
+
+.rs-centers-page::before, .rs-centers-page::after { display: none !important; }
+
+    background: transparent !important;
+    background-image: none !important;
     position: relative;
     isolation: isolate;
     color: var(--color-text);
-    background: 
-        linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") center top / cover fixed no-repeat !important;
-    animation: rs-nature-drift 24s ease-in-out infinite alternate;
+     ?>") center top / cover fixed no-repeat !important;
 }
 .rs-centers-page::before,
 .rs-centers-page::after {
@@ -35,14 +37,14 @@
     width: 100%; height: 100%;
     border-radius: 0;
     background:
-        radial-gradient(circle at 8% 8%, rgba(249, 183, 42, .18), transparent 26rem),
-        radial-gradient(circle at 92% 16%, rgba(243, 106, 33, .14), transparent 30rem);
+        radial-gradient(circle at 8% 8%, rgba(186, 200, 177, .18), transparent 26rem),
+        radial-gradient(circle at 92% 16%, rgba(123, 150, 105, .14), transparent 30rem);
     filter: none;
     opacity: 1;
 }
 .rs-centers-page::after {
     top: 55rem; right: -15rem;
-    background: radial-gradient(circle, rgba(249, 183, 42, .22), transparent 68%);
+    background: radial-gradient(circle, rgba(186, 200, 177, .22), transparent 68%);
     animation: rsa-atmosphere-pulse 5s ease-in-out infinite alternate;
 }
 @keyframes rs-nature-drift {
@@ -54,7 +56,11 @@
     100% { opacity: .6;  transform: scale(1.08); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .rs-centers-page { animation: none; }
+    .rs-centers-page {
+    background: transparent !important;
+    background-image: none !important;
+
+}
     .rs-centers-page::after { animation: none; }
 }
 </style>

@@ -1,0 +1,235 @@
+/* ==========================================================================
+   theme-animations.css
+   Rashtrotthana Yoga — Botanical & Yogic Visual System
+   
+   Contents:
+     1. Canvas Botanical Falling Leaves Layer (Strictly in Background)
+     2. Sacred Geometry Rotating Mandalas (Sri Yantra & Lotus Patterns)
+     3. Floating Animated Yoga Asana Silhouettes (Levitation & Chakra Glow)
+     4. Apple Liquid Glass Dynamic Specular Sheen (Real-time Refraction)
+     5. Ambient Sunlight Caustic Shift
+   ========================================================================== */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   1. CANVAS BOTANICAL FALLING LEAVES LAYER (STRICTLY IN BACKGROUND)
+   ────────────────────────────────────────────────────────────────────────── */
+.rs-falling-leaves-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    pointer-events: none !important;
+    z-index: 0 !important; /* Strictly in the background behind all cards and content */
+    display: block !important;
+}
+
+/* Ensure all content, sections, and glass cards sit above the leaves layer */
+.rs-site-header,
+main,
+section,
+.rs-container,
+.rs-hero,
+.rs-values,
+.rs-activities,
+.rs-centers,
+.rs-stats,
+.rs-events,
+.rs-testimonials,
+.rs-gallery,
+.rs-founder-section,
+.rs-center-card,
+.rs-activity-card,
+.rs-value-card,
+.rs-pillar-card,
+.rs-event-card,
+.rs-event-item-card,
+.rs-team-card,
+.rs-footer {
+    position: relative;
+    z-index: 2;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   2. SACRED GEOMETRY ROTATING MANDALAS (ETHEREAL WATERMARKS)
+   ────────────────────────────────────────────────────────────────────────── */
+.rs-mandala-wrap {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.rs-mandala-hero {
+    top: -8%;
+    right: -6%;
+    width: clamp(340px, 45vw, 680px);
+    height: clamp(340px, 45vw, 680px);
+    opacity: 0.16;
+}
+
+.rs-mandala-section {
+    bottom: -15%;
+    left: -8%;
+    width: clamp(280px, 35vw, 520px);
+    height: clamp(280px, 35vw, 520px);
+    opacity: 0.12;
+}
+
+.rs-mandala-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.rs-mandala-outer {
+    transform-origin: 250px 250px;
+    animation: rs-rotate-counter 95s linear infinite;
+}
+
+.rs-mandala-middle {
+    transform-origin: 250px 250px;
+    animation: rs-rotate-clock 65s linear infinite;
+}
+
+.rs-mandala-core {
+    transform-origin: 250px 250px;
+    animation: rs-mandala-pulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes rs-rotate-clock {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes rs-rotate-counter {
+    from { transform: rotate(360deg); }
+    to   { transform: rotate(0deg); }
+}
+
+@keyframes rs-mandala-pulse {
+    0%   { transform: scale(0.94); opacity: 0.65; }
+    100% { transform: scale(1.06); opacity: 1; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. FLOATING ANIMATED YOGA ASANA MOTIFS
+   ────────────────────────────────────────────────────────────────────────── */
+.rs-asana-float-badge {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 3;
+    animation: rs-asana-levitate 6s ease-in-out infinite alternate;
+}
+
+.rs-asana-float-hero {
+    bottom: 24px;
+    left: 28px;
+    padding: 10px 18px 10px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(245, 248, 244, 0.65));
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 26px rgba(64, 78, 59, 0.12), inset 0 1px 1px #fff;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    gap: 10px;
+    color: #404E3B;
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.rs-asana-icon-wrap {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rs-asana-icon-wrap svg {
+    width: 26px;
+    height: 26px;
+    fill: #404E3B;
+    filter: drop-shadow(0 2px 5px rgba(123, 150, 105, 0.4));
+}
+
+.rs-chakra-dot {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #7B9669;
+    box-shadow: 0 0 10px 3px #7B9669;
+    animation: rs-chakra-pulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes rs-asana-levitate {
+    0%   { transform: translateY(0px) rotate(0deg); }
+    50%  { transform: translateY(-8px) rotate(0.8deg); }
+    100% { transform: translateY(2px) rotate(-0.5deg); }
+}
+
+@keyframes rs-chakra-pulse {
+    0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; box-shadow: 0 0 4px 1px #7B9669; }
+    50%  { transform: translate(-50%, -50%) scale(1.4); opacity: 1; box-shadow: 0 0 12px 4px #BAC8B1; }
+    100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; box-shadow: 0 0 6px 2px #7B9669; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   4. APPLE LIQUID GLASS SPECULAR REFLECTION (DYNAMIC CURSOR SHEEN)
+   ────────────────────────────────────────────────────────────────────────── */
+.rs-center-card,
+.rs-activity-card,
+.rs-value-card,
+.rs-pillar-card,
+.rs-event-card,
+.rs-event-item-card,
+.rs-team-card,
+.rs-founder-quote-card,
+.rs-event-album-card {
+    position: relative !important;
+}
+
+.rs-center-card::before,
+.rs-activity-card::before,
+.rs-value-card::before,
+.rs-pillar-card::before,
+.rs-event-card::before,
+.rs-event-item-card::before,
+.rs-team-card::before,
+.rs-founder-quote-card::before,
+.rs-event-album-card::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    border-radius: inherit !important;
+    background: radial-gradient(
+        circle 320px at var(--mouse-x, -999px) var(--mouse-y, -999px),
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.12) 45%,
+        transparent 75%
+    ) !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transition: opacity 280ms ease !important;
+    z-index: 10 !important;
+}
+
+.rs-center-card:hover::before,
+.rs-activity-card:hover::before,
+.rs-value-card:hover::before,
+.rs-pillar-card:hover::before,
+.rs-event-card:hover::before,
+.rs-event-item-card:hover::before,
+.rs-team-card:hover::before,
+.rs-founder-quote-card:hover::before,
+.rs-event-album-card:hover::before {
+    opacity: 1 !important;
+}

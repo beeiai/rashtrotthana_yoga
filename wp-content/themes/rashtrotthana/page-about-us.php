@@ -15,31 +15,27 @@ get_header();
    Matches Home, Activities, Centers, Events & Gallery Pages
    ============================================================ */
 :root {
-    --color-maroon: #8F171D;
-    --color-maroon-dark: #6e1015;
-    --color-saffron: #F36A21;
-    --color-gold: #F9B72A;
-    --color-cream: #FFF8EC;
-    --color-sand: #F7EBD7;
-    --color-text: #292522;
-    --color-text-muted: #6b5c53;
+    --color-maroon: #404E3B;
+    --color-maroon-dark: #2e382b;
+    --color-saffron: #7B9669;
+    --color-gold: #BAC8B1;
+    --color-cream: transparent;
+    --color-sand: #E6E6E6;
+    --color-text: #263124;
+    --color-text-muted: #5e6b5a;
 }
 
 /* Base Page Wrapper with Animated Nature Atmosphere */
 .rs-about-page {
+
+.rs-about-page::before, .rs-about-page::after { display: none !important; }
+
+    background: transparent !important;
+    background-image: none !important;
     position: relative;
     isolation: isolate;
     overflow-x: hidden;
-    background-color: var(--color-cream) !important;
-    background-image:
-        radial-gradient(circle at 10% 8%, rgba(249, 183, 42, .24), transparent 28rem),
-        radial-gradient(circle at 90% 12%, rgba(243, 106, 33, .16), transparent 32rem),
-        linear-gradient(180deg, rgba(255, 248, 236, .94) 0%, rgba(255, 248, 236, .84) 40%, rgba(255, 248, 236, .96) 100%),
-        url("<?php echo esc_url( get_template_directory_uri() . '/assets/images/mandala-bg.jpg' ); ?>") !important;
-    background-position: center top, center top, center top, center top !important;
-    background-size: auto, auto, auto, 1920px auto !important;
-    background-repeat: no-repeat, no-repeat, no-repeat, repeat-y !important;
-    background-attachment: scroll, scroll, scroll, fixed !important;
+     ?>") !important;
     color: var(--color-text);
     font-family: 'Poppins', sans-serif !important;
     padding-bottom: 3.5rem;
@@ -66,8 +62,8 @@ get_header();
     width: 100%;
     height: 100%;
     background:
-        radial-gradient(circle at 6% 15%, rgba(249, 183, 42, .18), transparent 28rem),
-        radial-gradient(circle at 94% 22%, rgba(243, 106, 33, .14), transparent 32rem);
+        radial-gradient(circle at 6% 15%, rgba(186, 200, 177, .18), transparent 28rem),
+        radial-gradient(circle at 94% 22%, rgba(123, 150, 105, .14), transparent 32rem);
 }
 
 .rs-about-page::after {
@@ -75,7 +71,7 @@ get_header();
     right: -12rem;
     width: 36rem;
     height: 36rem;
-    background: radial-gradient(circle, rgba(249, 183, 42, .22), transparent 70%);
+    background: radial-gradient(circle, rgba(186, 200, 177, .22), transparent 70%);
     animation: rsa-atmosphere-pulse 5s ease-in-out infinite alternate;
 }
 
@@ -86,10 +82,9 @@ get_header();
 
 /* Side Margins: Matching Home, Centers, and Events pages exactly */
 .rs-about-page .rs-container {
-    width: 100% !important;
-    max-width: none !important;
-    padding-inline: clamp(20px, 4vw, 64px) !important;
-    margin-inline: auto !important;
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
@@ -114,10 +109,10 @@ get_header();
     gap: .5rem;
     margin-bottom: .85rem;
     padding: .35rem .95rem;
-    border: 1px solid rgba(143, 23, 29, .18);
+    border: 1px solid rgba(64, 78, 59, .18);
     border-radius: 999px;
-    background: rgba(255, 248, 236, .85);
-    box-shadow: 0 4px 14px rgba(143, 23, 29, .06);
+    background: rgba(245, 246, 244, .85);
+    box-shadow: 0 4px 14px rgba(64, 78, 59, .06);
     color: var(--color-maroon);
     font-size: .82rem;
     font-weight: 700;
@@ -130,7 +125,7 @@ get_header();
     height: 8px;
     border-radius: 50%;
     background: var(--color-saffron);
-    box-shadow: 0 0 10px rgba(243, 106, 33, .8);
+    box-shadow: 0 0 10px rgba(123, 150, 105, .8);
     animation: rsa-dot-blink 1.8s ease-in-out infinite;
 }
 
@@ -141,7 +136,7 @@ get_header();
 
 .rs-about-page-title {
     margin: 0 0 1rem;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(2.3rem, 4vw, 3.4rem);
     font-weight: 800;
     line-height: 1.15;
@@ -190,10 +185,10 @@ get_header();
     border: 1px solid rgba(255, 255, 255, .85);
     border-radius: 999px;
     background: rgba(255, 255, 255, .78);
-    box-shadow: 0 4px 16px rgba(89, 37, 24, .06);
+    box-shadow: 0 4px 16px rgba(64, 78, 59, .06);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    color: #542019;
+    color: #404E3B;
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -235,7 +230,7 @@ get_header();
 .rs-about-section-header h2 {
     position: relative;
     margin: 0;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(1.85rem, 3vw, 2.5rem);
     font-weight: 800;
     line-height: 1.2;
@@ -291,7 +286,7 @@ get_header();
 }
 
 .rs-background-content p strong {
-    color: #542019;
+    color: #404E3B;
 }
 
 /* Motto Card */
@@ -299,10 +294,10 @@ get_header();
     position: relative;
     margin-top: 2rem;
     padding: 1.45rem 1.65rem;
-    border: 1px solid rgba(143, 23, 29, .15);
+    border: 1px solid rgba(64, 78, 59, .15);
     border-radius: 1.2rem;
-    background: rgba(255, 253, 249, .82);
-    box-shadow: 0 12px 30px rgba(89, 37, 24, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: rgba(245, 246, 244, .82);
+    box-shadow: 0 12px 30px rgba(64, 78, 59, .07), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     display: flex;
@@ -317,7 +312,7 @@ get_header();
     width: 4rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 12px rgba(249, 183, 42, .8);
+    box-shadow: 0 0 12px rgba(186, 200, 177, .8);
     content: "";
 }
 
@@ -328,8 +323,8 @@ get_header();
     width: 52px;
     height: 52px;
     border-radius: 14px;
-    background: rgba(243, 106, 33, .12);
-    border: 1px solid rgba(243, 106, 33, .25);
+    background: rgba(123, 150, 105, .12);
+    border: 1px solid rgba(123, 150, 105, .25);
     color: var(--color-saffron);
     flex-shrink: 0;
 }
@@ -346,7 +341,7 @@ get_header();
     font-size: .98rem;
     font-weight: 700;
     line-height: 1.55;
-    color: #542019;
+    color: #404E3B;
 }
 
 /* Framed Visual Image */
@@ -354,8 +349,8 @@ get_header();
     position: relative;
     border-radius: 1.35rem;
     overflow: hidden;
-    border: 1px solid rgba(143, 23, 29, .14);
-    box-shadow: 0 16px 38px rgba(89, 37, 24, .1), inset 0 1px 0 rgba(255, 255, 255, .9);
+    border: 1px solid rgba(64, 78, 59, .14);
+    box-shadow: 0 16px 38px rgba(64, 78, 59, .1), inset 0 1px 0 rgba(255, 255, 255, .9);
     background: var(--color-sand);
 }
 
@@ -366,7 +361,7 @@ get_header();
     width: 5rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 14px rgba(249, 183, 42, .85);
+    box-shadow: 0 0 14px rgba(186, 200, 177, .85);
     content: "";
 }
 
@@ -405,9 +400,9 @@ get_header();
     right: 8%;
     height: 3px;
     background: linear-gradient(90deg, 
-        rgba(143, 23, 29, .2) 0%, 
-        rgba(243, 106, 33, .5) 50%, 
-        rgba(249, 183, 42, .6) 100%
+        rgba(64, 78, 59, .2) 0%, 
+        rgba(123, 150, 105, .5) 50%, 
+        rgba(186, 200, 177, .6) 100%
     );
     z-index: 1;
     border-radius: 999px;
@@ -439,13 +434,13 @@ get_header();
     width: 78px;
     height: 78px;
     border-radius: 50%;
-    background: rgba(255, 253, 249, .95);
-    border: 2px solid rgba(143, 23, 29, .22);
+    background: rgba(245, 246, 244, .95);
+    border: 2px solid rgba(64, 78, 59, .22);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1.25rem;
-    box-shadow: 0 8px 24px rgba(89, 37, 24, .1), inset 0 1px 0 #fff;
+    box-shadow: 0 8px 24px rgba(64, 78, 59, .1), inset 0 1px 0 #fff;
     color: var(--color-maroon);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -456,7 +451,7 @@ get_header();
     background: var(--color-maroon);
     border-color: var(--color-gold);
     color: #fff;
-    box-shadow: 0 12px 30px rgba(143, 23, 29, .35), 0 0 18px rgba(249, 183, 42, .3);
+    box-shadow: 0 12px 30px rgba(64, 78, 59, .35), 0 0 18px rgba(186, 200, 177, .3);
     transform: scale(1.12);
 }
 
@@ -473,11 +468,11 @@ get_header();
     padding: .35rem .95rem;
     border-radius: 999px;
     background: #fff0d8;
-    color: #a34812;
+    color: #7B9669;
     font-size: .86rem;
     font-weight: 800;
     margin-bottom: .65rem;
-    border: 1px solid rgba(243, 106, 33, .2);
+    border: 1px solid rgba(123, 150, 105, .2);
     transition: all 180ms ease;
 }
 
@@ -529,9 +524,9 @@ get_header();
     position: relative;
     padding: 1.35rem 1.6rem;
     border-radius: 1.15rem;
-    background: rgba(255, 253, 249, .8);
-    border: 1px solid rgba(143, 23, 29, .13);
-    box-shadow: 0 10px 28px rgba(89, 37, 24, .06), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: rgba(245, 246, 244, .8);
+    border: 1px solid rgba(64, 78, 59, .13);
+    box-shadow: 0 10px 28px rgba(64, 78, 59, .06), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
@@ -544,14 +539,14 @@ get_header();
     width: 3.5rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 10px rgba(249, 183, 42, .8);
+    box-shadow: 0 0 10px rgba(186, 200, 177, .8);
     content: "";
 }
 
 .rs-history-step-card:hover {
     transform: translateX(6px);
-    border-color: rgba(243, 106, 33, .45);
-    box-shadow: 0 16px 36px rgba(89, 37, 24, .12);
+    border-color: rgba(123, 150, 105, .45);
+    box-shadow: 0 16px 36px rgba(64, 78, 59, .12);
 }
 
 /* Step Node Dot */
@@ -565,14 +560,14 @@ get_header();
     border-radius: 50%;
     background: #fff;
     border: 3px solid var(--color-maroon);
-    box-shadow: 0 0 0 3px rgba(143, 23, 29, .15);
+    box-shadow: 0 0 0 3px rgba(64, 78, 59, .15);
     transition: all 200ms ease;
 }
 
 .rs-history-step-card:hover::before {
     background: var(--color-saffron);
     border-color: #fff;
-    box-shadow: 0 0 0 4px rgba(243, 106, 33, .4);
+    box-shadow: 0 0 0 4px rgba(123, 150, 105, .4);
     transform: scale(1.25);
 }
 
@@ -580,7 +575,7 @@ get_header();
     margin: 0 0 .4rem;
     font-size: 1.15rem;
     font-weight: 700;
-    color: #542019;
+    color: #404E3B;
     transition: color 180ms ease;
 }
 
@@ -608,10 +603,10 @@ get_header();
     position: relative;
     overflow: hidden;
     padding: .85rem .85rem 1.25rem;
-    border: 1px solid rgba(143, 23, 29, .15) !important;
+    border: 1px solid rgba(64, 78, 59, .15) !important;
     border-radius: 1.15rem;
-    background: linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(255, 248, 236, .75));
-    box-shadow: 0 14px 34px rgba(89, 37, 24, .08), inset 0 1px 0 rgba(255, 255, 255, .9);
+    background: linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(245, 246, 244, .75));
+    box-shadow: 0 14px 34px rgba(64, 78, 59, .08), inset 0 1px 0 rgba(255, 255, 255, .9);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
@@ -625,14 +620,14 @@ get_header();
     width: 4rem;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
-    box-shadow: 0 0 12px rgba(249, 183, 42, .8);
+    box-shadow: 0 0 12px rgba(186, 200, 177, .8);
     content: "";
 }
 
 .rs-team-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(243, 106, 33, .48) !important;
-    box-shadow: 0 22px 42px rgba(89, 37, 24, .14), inset 0 1px 0 rgba(255, 255, 255, .9);
+    border-color: rgba(123, 150, 105, .48) !important;
+    box-shadow: 0 22px 42px rgba(64, 78, 59, .14), inset 0 1px 0 rgba(255, 255, 255, .9);
 }
 
 .rs-team-card img {
@@ -651,7 +646,7 @@ get_header();
 
 .rs-team-card h3 {
     margin: .95rem .35rem .25rem;
-    color: #542019;
+    color: #404E3B;
     font-size: 1.15rem;
     font-weight: 700;
     line-height: 1.25;
@@ -684,7 +679,7 @@ get_header();
     width: auto;
     max-width: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 16px 36px rgba(89, 37, 24, .16));
+    filter: drop-shadow(0 16px 36px rgba(64, 78, 59, .16));
     border-radius: 50%;
 }
 
@@ -714,8 +709,8 @@ get_header();
     align-self: center;
     border-radius: 1.35rem;
     overflow: hidden;
-    border: 1px solid rgba(143, 23, 29, .14);
-    box-shadow: 0 16px 38px rgba(89, 37, 24, .1), inset 0 1px 0 rgba(255, 255, 255, .9);
+    border: 1px solid rgba(64, 78, 59, .14);
+    box-shadow: 0 16px 38px rgba(64, 78, 59, .1), inset 0 1px 0 rgba(255, 255, 255, .9);
     background: #1a0808;
 }
 
@@ -811,10 +806,10 @@ get_header();
 }
 
 .rs-history-slide-dots button.is-active {
-    background: var(--color-gold, #F9B72A);
+    background: var(--color-gold, #BAC8B1);
     border-color: #fff;
     transform: scale(1.35);
-    box-shadow: 0 0 10px rgba(249, 183, 42, 0.85);
+    box-shadow: 0 0 10px rgba(186, 200, 177, 0.85);
 }
 
 @media (max-width: 1024px) {
@@ -848,7 +843,30 @@ get_header();
     <!-- ============================================================
          1. PAGE HEADER SECTION (Clean Title Block & Stats)
          ============================================================ -->
-    <header class="rs-about-header-section">
+    <header class="rs-about-header-section" style="position: relative; overflow: hidden;">
+        <!-- Sacred Geometry Rotating Mandala Watermark -->
+        <div class="rs-mandala-wrap rs-mandala-section" aria-hidden="true">
+            <svg class="rs-mandala-svg" viewBox="0 0 500 500" fill="none" stroke="currentColor">
+                <g class="rs-mandala-outer" stroke="#404E3B" stroke-width="1.2">
+                    <circle cx="250" cy="250" r="235" stroke-dasharray="4 6"/>
+                    <circle cx="250" cy="250" r="215" stroke-width="1"/>
+                    <polygon points="250,35 436,357 64,357"/>
+                    <polygon points="250,465 64,143 436,143"/>
+                </g>
+                <g class="rs-mandala-middle" stroke="#7B9669" stroke-width="1.4">
+                    <circle cx="250" cy="250" r="160"/>
+                    <circle cx="250" cy="170" r="80"/>
+                    <circle cx="250" cy="330" r="80"/>
+                    <circle cx="170" cy="250" r="80"/>
+                    <circle cx="330" cy="250" r="80"/>
+                </g>
+                <g class="rs-mandala-core" stroke="#BAC8B1" stroke-width="1.6" fill="rgba(123, 150, 105, 0.08)">
+                    <circle cx="250" cy="250" r="50"/>
+                    <circle cx="250" cy="250" r="24" fill="rgba(186, 200, 177, 0.25)"/>
+                    <circle cx="250" cy="250" r="6" fill="#404E3B"/>
+                </g>
+            </svg>
+        </div>
         <div class="rs-container">
             <div class="rs-about-title-block">
                 <h1 class="rs-about-page-title">Rooted in Values. Driven by <em>Purpose.</em></h1>

@@ -8,18 +8,14 @@
    1. PAGE BACKGROUND — warm cream with ambient orb gradients
    ---------------------------------------------------------- */
 body:not(.home) {
-    background: #fffaf2;
+    background: transparent !important;
 }
 
 body:not(.home) main[class$="-page"] {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background:
-        radial-gradient(circle at 90% 6%,  rgba(249,183,42,.16),  transparent 30rem),
-        radial-gradient(circle at 5%  70%, rgba(143,23,29,.08),   transparent 24rem),
-        radial-gradient(circle at 55% 110%,rgba(243,106,33,.10),  transparent 28rem),
-        #fffaf2;
+    background: transparent !important;
 }
 
 /* ----------------------------------------------------------
@@ -29,20 +25,20 @@ body:not(.home) .rs-site-header {
     position: sticky;
     top: 0;
     z-index: 1100;
-    box-shadow: 0 3px 14px rgba(67,27,15,.10);
+    box-shadow: 0 3px 14px rgba(64, 78, 59,.10);
 }
 
 body:not(.home) .rs-navbar {
-    background: rgba(255, 248, 236, .78);
-    border-bottom: 1px solid rgba(143, 23, 29, .14);
+    background: rgba(245, 246, 244, .78);
+    border-bottom: 1px solid rgba(64, 78, 59, .14);
     -webkit-backdrop-filter: blur(22px) saturate(145%);
     backdrop-filter: blur(22px) saturate(145%);
     transition: box-shadow 300ms ease, border-color 300ms ease;
 }
 
 body:not(.home) .rs-navbar.is-scrolled {
-    box-shadow: 0 8px 32px rgba(67,27,15,.14);
-    border-color: rgba(143,23,29,.22);
+    box-shadow: 0 8px 32px rgba(64, 78, 59,.14);
+    border-color: rgba(64, 78, 59,.22);
 }
 
 /* ----------------------------------------------------------
@@ -76,11 +72,11 @@ body:not(.home) [class*="-hero"] h1 {
     line-height: 1.04 !important;
     letter-spacing: -.045em !important;
     text-wrap: balance;
-    color: #420e12;
+    color: #404E3B;
     -webkit-text-fill-color: unset !important;
     background: none !important;
     background-clip: unset !important;
-    text-shadow: 0 2px 20px rgba(255,248,236,.85), 0 0 50px rgba(143,23,29,.10);
+    text-shadow: 0 2px 20px rgba(245, 246, 244,.85), 0 0 50px rgba(64, 78, 59,.10);
 }
 
 body:not(.home) [class*="-hero"] h1 em {
@@ -121,7 +117,7 @@ body:not(.home) [class*="-hero"] button {
 body:not(.home) [class*="-hero"] a:hover,
 body:not(.home) [class*="-hero"] button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(143,23,29,.22);
+    box-shadow: 0 12px 24px rgba(64, 78, 59,.22);
 }
 
 /* ----------------------------------------------------------
@@ -132,10 +128,10 @@ body:not(.home) [class*="-options"] > div > div,
 body:not(.home) [class*="-filter"] > div > div,
 body:not(.home) [class*="-tabs"] nav,
 body:not(.home) [class*="-tab-list"] {
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 16px;
     background: rgba(255,253,249,.96);
-    box-shadow: 0 14px 32px rgba(83,37,16,.09);
+    box-shadow: 0 14px 32px rgba(64, 78, 59,.09);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
 }
@@ -162,7 +158,7 @@ body:not(.home) main [class*="-activities-heading"] p {
     text-transform: uppercase;
 }
 
-body:not(.home) [class*="-section"] h2,
+body:not(.home) [class*="-section"] h2:not(.rs-pillar-title),
 body:not(.home) [class*="-directory"] h2,
 body:not(.home) [class*="-categories"] h2,
 body:not(.home) [class*="-resources"] h2,
@@ -172,7 +168,7 @@ body:not(.home) [class*="-section-heading"] h2 {
     position: relative;
     margin: 0 0 8px;
     padding-top: 18px;
-    color: #542019;
+    color: #404E3B;
     font-size: clamp(1.9rem, 3.2vw, 2.8rem) !important;
     font-family: 'Poppins',sans-serif !important;
     line-height: 1.12;
@@ -221,10 +217,10 @@ body:not(.home) .rs-download-grid article,
 body:not(.home) .rs-news-grid article {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 16px;
     background: rgba(255,253,249,.95);
-    box-shadow: 0 12px 32px rgba(84,35,10,.08);
+    box-shadow: 0 12px 32px rgba(64, 78, 59,.08);
     transition: transform 240ms cubic-bezier(.25,.8,.25,1), box-shadow 240ms ease, border-color 240ms ease;
 }
 
@@ -233,8 +229,8 @@ body:not(.home) article[class*="category"]:hover,
 body:not(.home) .rs-download-grid article:hover,
 body:not(.home) .rs-news-grid article:hover {
     transform: translateY(-7px);
-    border-color: rgba(243,106,33,.50);
-    box-shadow: 0 22px 44px rgba(84,35,10,.15);
+    border-color: rgba(123, 150, 105,.50);
+    box-shadow: 0 22px 44px rgba(64, 78, 59,.15);
 }
 
 /* Shimmer sweep on card hover */
@@ -287,7 +283,7 @@ body:not(.home) .rs-video-grid article:hover img {
 /* Card heading color */
 body:not(.home) article[class*="card"] h3,
 body:not(.home) article[class*="category"] h3 {
-    color: #542019;
+    color: #404E3B;
     line-height: 1.25;
 }
 
@@ -295,18 +291,18 @@ body:not(.home) article[class*="category"] h3 {
    7. ACTIVITY CATEGORY CARDS (activities page)
    ---------------------------------------------------------- */
 body:not(.home) .rs-activity-category {
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 16px;
     padding: 28px 24px;
     background: rgba(255,253,249,.95);
-    box-shadow: 0 12px 32px rgba(84,35,10,.08);
+    box-shadow: 0 12px 32px rgba(64, 78, 59,.08);
     transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
 }
 
 body:not(.home) .rs-activity-category:hover {
     transform: translateY(-7px);
-    border-color: rgba(243,106,33,.50);
-    box-shadow: 0 22px 44px rgba(84,35,10,.15);
+    border-color: rgba(123, 150, 105,.50);
+    box-shadow: 0 22px 44px rgba(64, 78, 59,.15);
 }
 
 body:not(.home) .rs-activity-category > i {
@@ -320,12 +316,12 @@ body:not(.home) .rs-activity-category > i {
     color: var(--color-maroon);
     font-size: 1.6rem;
     font-style: normal;
-    border: 1px solid rgba(143,23,29,.14);
+    border: 1px solid rgba(64, 78, 59,.14);
 }
 
 body:not(.home) .rs-activity-category h3 {
     margin: 0 0 10px;
-    color: #542019;
+    color: #404E3B;
     font-size: 1.18rem !important;
     font-family: 'Poppins',sans-serif !important;
     line-height: 1.25;
@@ -352,7 +348,7 @@ body:not(.home) .rs-activity-category > a {
     gap: 6px;
     padding: 8px 16px;
     border-radius: 999px;
-    border: 1px solid rgba(143,23,29,.22);
+    border: 1px solid rgba(64, 78, 59,.22);
     color: var(--color-maroon);
     font-size: .78rem;
     font-weight: 700;
@@ -386,13 +382,13 @@ body:not(.home) .rs-photo-grid .rs-media-item {
     aspect-ratio: 1 / .82;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 10px 26px rgba(82,38,18,.09);
+    box-shadow: 0 10px 26px rgba(64, 78, 59,.09);
     transition: transform 240ms ease, box-shadow 240ms ease;
 }
 
 body:not(.home) .rs-photo-grid .rs-media-item:hover {
     transform: translateY(-4px) scale(1.015);
-    box-shadow: 0 18px 36px rgba(82,38,18,.15);
+    box-shadow: 0 18px 36px rgba(64, 78, 59,.15);
 }
 
 body:not(.home) .rs-photo-grid .rs-media-item img {
@@ -418,17 +414,17 @@ body:not(.home) .rs-video-grid {
 
 body:not(.home) .rs-video-grid article {
     overflow: hidden;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 16px;
     background: rgba(255,253,249,.95);
-    box-shadow: 0 12px 30px rgba(84,35,10,.08);
+    box-shadow: 0 12px 30px rgba(64, 78, 59,.08);
     transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
 }
 
 body:not(.home) .rs-video-grid article:hover {
     transform: translateY(-5px);
-    border-color: rgba(243,106,33,.48);
-    box-shadow: 0 20px 40px rgba(84,35,10,.14);
+    border-color: rgba(123, 150, 105,.48);
+    box-shadow: 0 20px 40px rgba(64, 78, 59,.14);
 }
 
 /* ----------------------------------------------------------
@@ -479,7 +475,7 @@ body:not(.home) .rs-news-grid article:hover > img {
 
 body:not(.home) .rs-event-list-body h3,
 body:not(.home) .rs-news-grid h3 {
-    color: #542019;
+    color: #404E3B;
     font-size: 1.1rem !important;
     line-height: 1.28;
     font-family: 'Poppins',sans-serif !important;
@@ -506,18 +502,18 @@ body:not(.home) .rs-resource-category-grid button {
     min-height: 190px;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 16px;
     background: rgba(255,253,249,.95);
-    box-shadow: 0 12px 30px rgba(82,38,18,.08);
+    box-shadow: 0 12px 30px rgba(64, 78, 59,.08);
     transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
 }
 
 body:not(.home) .rs-resource-category-grid button:hover,
 body:not(.home) .rs-resource-category-grid button.is-active {
     transform: translateY(-6px);
-    border-color: rgba(243,106,33,.5);
-    box-shadow: 0 22px 42px rgba(82,38,18,.14);
+    border-color: rgba(123, 150, 105,.5);
+    box-shadow: 0 22px 42px rgba(64, 78, 59,.14);
 }
 
 body:not(.home) .rs-featured-grid,
@@ -567,7 +563,7 @@ body:not(.home) .rs-download-grid article > a {
 body:not(.home) .rs-directory-card {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 14px;
     background: rgba(255,253,249,.96);
     box-shadow: 0 10px 26px rgba(75,43,18,.07);
@@ -576,7 +572,7 @@ body:not(.home) .rs-directory-card {
 
 body:not(.home) .rs-directory-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(243,106,33,.45);
+    border-color: rgba(123, 150, 105,.45);
     box-shadow: 0 18px 36px rgba(75,43,18,.13);
 }
 
@@ -602,17 +598,17 @@ body:not(.home) .rs-about-journey article {
     position: relative;
     overflow: hidden;
     padding: 26px 22px 24px;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 16px;
     background: rgba(255,253,249,.96);
-    box-shadow: 0 10px 26px rgba(84,35,10,.07);
+    box-shadow: 0 10px 26px rgba(64, 78, 59,.07);
     transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
 }
 
 body:not(.home) .rs-about-journey article:hover {
     transform: translateY(-6px);
-    border-color: rgba(243,106,33,.48);
-    box-shadow: 0 20px 40px rgba(84,35,10,.13);
+    border-color: rgba(123, 150, 105,.48);
+    box-shadow: 0 20px 40px rgba(64, 78, 59,.13);
 }
 
 body:not(.home) .rs-about-icon {
@@ -625,12 +621,12 @@ body:not(.home) .rs-about-icon {
     background: linear-gradient(135deg, rgba(255,227,190,.9), rgba(255,200,140,.7));
     color: var(--color-maroon);
     font-size: 1.4rem;
-    border: 1px solid rgba(143,23,29,.14);
+    border: 1px solid rgba(64, 78, 59,.14);
 }
 
 body:not(.home) .rs-about-journey h3 {
     margin: 0 0 8px;
-    color: #542019 !important;
+    color: #404E3B !important;
     font-size: 1.25rem !important;
     font-family: 'Poppins',sans-serif !important;
 }
@@ -650,10 +646,10 @@ body:not(.home) .rs-about-message {
     align-items: center;
     margin-top: 56px;
     padding: 36px;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 20px;
-    background: linear-gradient(145deg, rgba(255,255,255,.85), rgba(255,248,236,.7));
-    box-shadow: 0 16px 44px rgba(84,35,10,.09);
+    background: linear-gradient(145deg, rgba(255,255,255,.85), rgba(245, 246, 244,.7));
+    box-shadow: 0 16px 44px rgba(64, 78, 59,.09);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
 }
@@ -676,7 +672,7 @@ body:not(.home) .rs-about-quote-mark {
 body:not(.home) .rs-about-message blockquote {
     margin: 0 0 20px;
     padding: 0;
-    color: #3d2418;
+    color: #404E3B;
     font-size: 1.05rem;
     font-style: italic;
     line-height: 1.7;
@@ -686,7 +682,7 @@ body:not(.home) .rs-about-message blockquote {
 
 body:not(.home) .rs-about-signature strong {
     display: block;
-    color: #542019;
+    color: #404E3B;
     font-size: 1rem;
     font-family: 'Poppins',sans-serif;
 }
@@ -710,14 +706,14 @@ body:not(.home) .rs-contact-options article {
 }
 
 body:not(.home) .rs-contact-options article:hover {
-    background: rgba(255,248,236,.6);
+    background: rgba(245, 246, 244,.6);
     transform: none;
 }
 
 body:not(.home) .rs-contact-message form input,
 body:not(.home) .rs-contact-message form select,
 body:not(.home) .rs-contact-message form textarea {
-    border-color: rgba(143,23,29,.18);
+    border-color: rgba(64, 78, 59,.18);
     border-radius: 10px;
     background: rgba(255,255,255,.88);
     transition: border-color 180ms ease, box-shadow 180ms ease;
@@ -727,7 +723,7 @@ body:not(.home) .rs-contact-message form input:focus,
 body:not(.home) .rs-contact-message form select:focus,
 body:not(.home) .rs-contact-message form textarea:focus {
     border-color: var(--color-maroon);
-    box-shadow: 0 0 0 4px rgba(143,23,29,.10);
+    box-shadow: 0 0 0 4px rgba(64, 78, 59,.10);
     outline: 0;
 }
 
@@ -739,7 +735,7 @@ body:not(.home) .rs-contact-center-grid {
 
 body:not(.home) .rs-contact-center-grid article {
     overflow: hidden;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     border-radius: 14px;
     background: rgba(255,253,249,.96);
     box-shadow: 0 8px 20px rgba(75,42,18,.07);
@@ -748,7 +744,7 @@ body:not(.home) .rs-contact-center-grid article {
 
 body:not(.home) .rs-contact-center-grid article:hover {
     transform: translateY(-4px);
-    border-color: rgba(243,106,33,.45);
+    border-color: rgba(123, 150, 105,.45);
     box-shadow: 0 16px 32px rgba(75,42,18,.13);
 }
 
@@ -763,22 +759,22 @@ body:not(.home) .rs-contact-center-grid article:hover img {
 /* FAQ details/summary styling */
 body:not(.home) .rs-contact-faq details {
     border-radius: 10px;
-    border: 1px solid rgba(143,23,29,.12);
+    border: 1px solid rgba(64, 78, 59,.12);
     background: rgba(255,253,249,.96);
     margin-bottom: 10px;
     transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
 body:not(.home) .rs-contact-faq details[open] {
-    border-color: rgba(243,106,33,.35);
-    box-shadow: 0 8px 22px rgba(84,35,10,.08);
+    border-color: rgba(123, 150, 105,.35);
+    box-shadow: 0 8px 22px rgba(64, 78, 59,.08);
 }
 
 body:not(.home) .rs-contact-faq summary {
     padding: 14px 18px;
     font-size: .88rem;
     font-weight: 600;
-    color: #542019;
+    color: #404E3B;
     border-radius: 10px;
 }
 
@@ -797,8 +793,8 @@ body:not(.home) [class*="-finder"] > div > div,
 body:not(.home) [class*="-help"] > div > div {
     border-radius: 16px;
     background: linear-gradient(110deg, #fff4e0, #fff9ef, #fff0d8);
-    border: 1px solid rgba(243,106,33,.16);
-    box-shadow: 0 10px 28px rgba(84,35,10,.07);
+    border: 1px solid rgba(123, 150, 105,.16);
+    box-shadow: 0 10px 28px rgba(64, 78, 59,.07);
 }
 
 /* ----------------------------------------------------------
@@ -814,7 +810,7 @@ body:not(.home) [class*="-center-button"] {
 body:not(.home) a[class*="primary"]:hover,
 body:not(.home) button[class*="primary"]:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 26px rgba(143,23,29,.28) !important;
+    box-shadow: 0 10px 26px rgba(64, 78, 59,.28) !important;
 }
 
 body:not(.home) .rs-btn {

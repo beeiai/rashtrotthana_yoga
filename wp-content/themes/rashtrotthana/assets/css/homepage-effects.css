@@ -16,7 +16,7 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
-    background: radial-gradient(circle, rgba(249,183,42,.20) 0%, rgba(243,106,33,.10) 55%, transparent 76%);
+    background: radial-gradient(circle, rgba(186, 200, 177,.20) 0%, rgba(123, 150, 105,.10) 55%, transparent 76%);
     animation: rse-float 14s ease-in-out infinite;
 }
 
@@ -32,7 +32,7 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(circle, rgba(143,23,29,.10) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(64, 78, 59,.10) 0%, transparent 70%);
     animation: rse-float 10s ease-in-out infinite reverse;
 }
 
@@ -54,16 +54,16 @@ body.home .rs-hero-title {
     background: none !important;
     background-clip: unset !important;
     -webkit-background-clip: unset !important;
-    color: #550000 !important;
+    color: #404E3B !important;
     text-shadow:
-        0 2px 16px rgba(255,248,236,.9),
-        0 0 40px rgba(143,23,29,.14);
+        0 2px 16px rgba(230, 230, 230,.9),
+        0 0 40px rgba(64, 78, 59,.14);
     animation: rse-title-glow 5s ease-in-out infinite;
 }
 
 @keyframes rse-title-glow {
-    0%, 100% { text-shadow: 0 2px 16px rgba(255,248,236,.9), 0 0 40px rgba(143,23,29,.12); }
-    50%       { text-shadow: 0 2px 20px rgba(255,248,236,1),  0 0 55px rgba(143,23,29,.22); }
+    0%, 100% { text-shadow: 0 2px 16px rgba(230, 230, 230,.9), 0 0 40px rgba(64, 78, 59,.12); }
+    50%       { text-shadow: 0 2px 20px rgba(230, 230, 230,1),  0 0 55px rgba(64, 78, 59,.22); }
 }
 
 /* -------------------------------------------------------
@@ -97,8 +97,8 @@ body.home .rs-hero-title {
 }
 
 @keyframes rse-glow-pulse {
-    0%, 100% { box-shadow: 18px 20px 0 rgba(143,23,29,.10), 0 25px 55px rgba(87,36,13,.15); }
-    50%       { box-shadow: 20px 22px 0 rgba(143,23,29,.20), 0 34px 72px rgba(87,36,13,.28); }
+    0%, 100% { box-shadow: 18px 20px 0 rgba(64, 78, 59,.10), 0 25px 55px rgba(64, 78, 59,.15); }
+    50%       { box-shadow: 20px 22px 0 rgba(64, 78, 59,.20), 0 34px 72px rgba(64, 78, 59,.28); }
 }
 
 /* -------------------------------------------------------
@@ -175,7 +175,7 @@ body.home .rs-hero-title {
 .rs-activity-card .rse-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(143,23,29,.30) 100%);
+    background: linear-gradient(to bottom, transparent 50%, rgba(64, 78, 59,.30) 100%);
     z-index: 1;
     opacity: 0;
     transition: opacity 340ms ease;
@@ -211,7 +211,7 @@ body.home .rs-hero-title {
 .rs-gallery-grid img:hover {
     transform: scale(1.07) !important;
     filter: brightness(1.07) saturate(1.14);
-    box-shadow: 0 14px 32px rgba(67,48,28,.24);
+    box-shadow: 0 14px 32px rgba(64, 78, 59,.24);
 }
 
 /* -------------------------------------------------------
@@ -246,7 +246,7 @@ body.home .rs-hero-title {
 }
 
 .rs-btn-primary:hover {
-    box-shadow: 0 10px 28px rgba(143,23,29,.34) !important;
+    box-shadow: 0 10px 28px rgba(64, 78, 59,.34) !important;
 }
 
 /* -------------------------------------------------------
@@ -277,8 +277,8 @@ body.home .rs-hero-title {
 }
 
 .rs-team-card:hover {
-    border-color: rgba(243,106,33,.52) !important;
-    box-shadow: 0 18px 38px rgba(82,38,18,.17) !important;
+    border-color: rgba(123, 150, 105,.52) !important;
+    box-shadow: 0 18px 38px rgba(64, 78, 59,.17) !important;
 }
 
 /* -------------------------------------------------------
@@ -289,8 +289,8 @@ body.home .rs-hero-title {
 }
 
 .rs-center-card:hover {
-    border-color: rgba(243,106,33,.48) !important;
-    box-shadow: 0 22px 44px rgba(67,48,28,.20) !important;
+    border-color: rgba(123, 150, 105,.48) !important;
+    box-shadow: 0 22px 44px rgba(64, 78, 59,.20) !important;
 }
 
 /* -------------------------------------------------------
@@ -308,7 +308,7 @@ body.home .rs-hero-title {
     top: 50%;
     width: 70%;
     height: 200%;
-    background: radial-gradient(ellipse, rgba(249,183,42,.08) 0%, transparent 65%);
+    background: radial-gradient(ellipse, rgba(186, 200, 177,.08) 0%, transparent 65%);
     transform: translate(-50%, -50%);
     pointer-events: none;
     animation: rse-halo 8s ease-in-out infinite;
@@ -327,7 +327,7 @@ body.home .rs-hero-title {
 }
 
 .rs-stat-grid > div:not(.rs-stat-heading):hover strong {
-    color: #c3371c;
+    color: #7B9669;
 }
 
 /* -------------------------------------------------------
@@ -343,7 +343,7 @@ body.home .rs-hero-title {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(243,106,33,.22), transparent);
+    background: linear-gradient(90deg, transparent, rgba(123, 150, 105,.22), transparent);
     transform: translateX(-100%);
     animation: rse-sweep 4.5s ease-in-out infinite 1s;
 }
@@ -390,7 +390,7 @@ body.home .rs-hero-title {
    22. Fancy gradient border on focused inputs
    ------------------------------------------------------- */
 .rs-center-search input:focus {
-    box-shadow: 0 0 0 3px rgba(243,106,33,.22) !important;
+    box-shadow: 0 0 0 3px rgba(123, 150, 105,.22) !important;
 }
 
 /* -------------------------------------------------------
@@ -412,10 +412,10 @@ body.home .rs-hero-title {
     z-index: -1;
     background: linear-gradient(
         135deg,
-        rgba(249,183,42,.0) 0%,
-        rgba(243,106,33,.6) 40%,
-        rgba(143,23,29,.4) 70%,
-        rgba(249,183,42,.0) 100%
+        rgba(186, 200, 177,.0) 0%,
+        rgba(123, 150, 105,.6) 40%,
+        rgba(64, 78, 59,.4) 70%,
+        rgba(186, 200, 177,.0) 100%
     );
     background-size: 300% 300%;
     animation: rse-border-spin 6s linear infinite;
@@ -444,7 +444,7 @@ body.home .rs-hero-title {
     width: 340px;
     height: 340px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(249,183,42,.10) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(186, 200, 177,.10) 0%, transparent 70%);
     pointer-events: none;
     animation: rse-float 12s ease-in-out infinite 3s;
 }

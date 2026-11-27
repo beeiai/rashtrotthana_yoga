@@ -162,9 +162,9 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
                     </div>
                 </article>
             <?php endforeach; else : ?>
-                <div class="rs-events-empty-state" style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 2.75rem 1.5rem; background: #fff8f5; border-radius: 16px; border: 1px dashed rgba(143, 23, 29, 0.28);">
-                    <p style="margin: 0; font-size: 1.15rem; color: #5d1116; font-weight: 600;">There are no events available right now.</p>
-                    <p style="margin: 0.5rem 0 0; font-size: 0.92rem; color: #7a5c58;">Please check back soon for upcoming workshops, retreats, and celebrations.</p>
+                <div class="rs-events-empty-state" style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 2.75rem 1.5rem; background: rgba(230, 230, 230, 0.4); border-radius: 16px; border: 1px dashed rgba(64, 78, 59, 0.28);">
+                    <p style="margin: 0; font-size: 1.15rem; color: #404E3B; font-weight: 600;">There are no events available right now.</p>
+                    <p style="margin: 0.5rem 0 0; font-size: 0.92rem; color: #6C8480;">Please check back soon for upcoming workshops, retreats, and celebrations.</p>
                 </div>
             <?php endif; ?>
         </div>
@@ -180,7 +180,7 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
 
             <div class="rs-founder-content">
                 <div class="rs-about-section-header">
-                    <h2><?php echo esc_html( $rs_founder['title'] ); ?> <em>Founder</em></h2>
+                    <h2><?php echo esc_html( $rs_founder['title'] ); ?></h2>
                     <p class="rs-about-section-desc"><?php echo esc_html( $rs_founder['subtitle'] ); ?></p>
                 </div>
 
@@ -217,7 +217,7 @@ $home_events = function_exists( 'rs_get_events' ) ? rs_get_events() : array();
                     </a>
                 <?php endforeach;
             else : ?>
-                <div class="rs-gallery-empty-state" style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 2.5rem 1.5rem; background: #fff8f5; border-radius: 16px; border: 1px dashed rgba(143, 23, 29, 0.28);">
+                <div class="rs-gallery-empty-state" style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 2.5rem 1.5rem; background: rgba(230, 230, 230, 0.4); border-radius: 16px; border: 1px dashed rgba(64, 78, 59, 0.28);">
                     <p style="margin: 0; font-size: 1.05rem; color: #5d1116; font-weight: 600;">Gallery photos will appear here once uploaded to the media library.</p>
                 </div>
             <?php endif; ?>
